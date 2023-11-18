@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1728888408477196}
+  m_IsPrefabParent: 1
+--- !u!1 &1728888408477196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4012388461021220}
+  - component: {fileID: 114729877220749926}
+  m_Layer: 0
+  m_Name: emptyChunk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4012388461021220
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1728888408477196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114729877220749926
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1728888408477196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d08641dda24f14bbab5f3d36e45300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilesMasks:
+    serializedVersion: 2
+    m_Bits: 1792
+  chunkColor: {r: 1, g: 1, b: 1, a: 1}
+  loaded: 0
+  chunkBiome: dumby
+  ChunkGrid: []
+  TileGrid: 
+  TileGridRotation: 
+  LightMap: []
+  TileObject: []
+  ID: 0
+  childId: 0
+  tilesToChunk: 0
+  entitiesSpawnTime: 0
+  liquidTileGrid: 
+  grassObject: {fileID: 1349882380421944, guid: 0237245838412a8438afe9831b6fdd0e,
+    type: 2}
+  fireObject: {fileID: 1774782936830166, guid: cd062fb7db861eb498646a4970687d29, type: 2}
+  doorObject: {fileID: 1288251155577116, guid: 3084c1fcd1cb90c4a9e2df7d56f8a4e5, type: 2}
+  resourceGrabberObject: {fileID: 1146909955889306, guid: b1eb08a54fe3f5441b94cd8f841d89f4,
+    type: 2}
+  waterFrames:
+  - {fileID: 21300000, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300002, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300004, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300006, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300008, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300010, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300012, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300014, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300016, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300018, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300020, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300022, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300024, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+  - {fileID: 21300026, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}

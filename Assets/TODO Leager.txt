@@ -1,0 +1,1 @@
+planet save file = "worldname/dim" + x;
