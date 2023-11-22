@@ -419,7 +419,6 @@ public class MenuController : MonoBehaviour {
         }
         Debug.Log("===EXITED TO MAIN MENU===");
         Destroy(GameObject.Find("SaveObject"));
-        GameManager.gameManagerReference = null;
         SceneManager.LoadScene("MainMenu");
         
     }

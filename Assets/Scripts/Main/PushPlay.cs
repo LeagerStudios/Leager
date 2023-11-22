@@ -20,6 +20,7 @@ public class PushPlay : MonoBehaviour
 
     void Start()
     {
+        GameManager.gameManagerReference = null;
         System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
         menuThemeAudio.Play();

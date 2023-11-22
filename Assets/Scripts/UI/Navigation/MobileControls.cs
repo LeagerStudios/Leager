@@ -16,7 +16,7 @@ public class MobileControls : MonoBehaviour {
 
     void Update ()
     {
-        if (!GameManager.gameManagerReference.InGame)
+        if (!GameManager.gameManagerReference.InGame || !GameManager.gameManagerReference.player.alive)
         {
             SetOverlay("Null");
         }
