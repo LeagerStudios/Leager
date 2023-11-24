@@ -3,58 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PackupMenuController : MonoBehaviour, IOnCollisionEnterReporter
+public class PackupMenuController : MonoBehaviour
 {
-    [SerializeField] GameObject collisionDetector;
     [SerializeField] GameObject itemPackedPrefab;
-    [SerializeField] GameObject arrowButtons;
-    [SerializeField] RectTransform rectTransform;
-    [SerializeField] RectTransform canvasRect;
     [SerializeField] RectTransform viewport;
-    Transform follower;
-    PlanetMenuController invoker;
+    [SerializeField] RectTransform coreReporter;
+    [SerializeField] public RectTransform planetPanel;
 
     List<string> items = new List<string>();
 
+    int currentCore = 0;
 
-    public void InvokeMenu(Transform followTo, PlanetMenuController self, List<string> items)
+    public void InvokePanel(List<string> items)
     {
-        rectTransform = GetComponent<RectTransform>();
-        viewport = (RectTransform)rectTransform.GetChild(1).GetChild(1).GetChild(1);
-        canvasRect = GameObject.Find("Canvas").GetComponent<RectTransform>();
-        follower = followTo;
-        invoker = self;
         this.items = items;
 
-        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(follower.transform.position);
-        Vector2 FollowerScreenPosition = new Vector2((ViewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
-                                                     (ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
-
         UpdatePackedItems();
-        rectTransform.anchoredPosition = FollowerScreenPosition;
     }
 
 
     void Update()
     {
-        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(follower.transform.position);
-        Vector2 FollowerScreenPosition = new Vector2((ViewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
-                                                     (ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
-
-        rectTransform.anchoredPosition = FollowerScreenPosition;
-
-        if (follower.GetComponent<SpriteRenderer>().sprite != GameManager.gameManagerReference.tiles[89])
+        if (GInput.GetKeyDown(KeyCode.E))
         {
             Close();
         }
-
-        arrowButtons.SetActive(items.Count > 3);
     }
 
     public void Close()
     {
-        invoker.gameObject.SetActive(true);
-        Destroy(gameObject);
+        StackBar.stackBarController.InventoryDeployed = false;
+        planetPanel.gameObject.SetActive(true);
+        planetPanel.GetComponent<PlanetMenuController>().GoToPlanet();
+        gameObject.SetActive(false);
     }
 
     public void MovePackedItems(int move)
@@ -62,18 +43,18 @@ public class PackupMenuController : MonoBehaviour, IOnCollisionEnterReporter
         viewport.anchoredPosition = new Vector2(0, Mathf.Clamp(viewport.anchoredPosition.y + (move * 15), 0, -viewport.GetChild(viewport.childCount - 1).GetComponent<RectTransform>().anchoredPosition.y));
     }
 
-    public void Packup()
+    public void AddToPackup(string stuff, int item)
     {
-        GameObject e = Instantiate(collisionDetector, follower.transform.position - Vector3.up, Quaternion.identity);
-        e.GetComponent<OnCollisionEnterDetector>().InvokeObj(this, Vector2.one, "DroppedItem");
-    }
+        if (GameManager.gameManagerReference.tileType[item] == "core")
+        {
 
-    public void AddToPackup(string stuff)
-    {
-        items.Add(stuff);
-        invoker.items = items;
-
-        UpdatePackedItems();
+        }
+        else
+        {
+            items.Add(stuff);
+            planetPanel.GetComponent<PlanetMenuController>().items = items;
+            UpdatePackedItems();
+        }
     }
 
     public void UpdatePackedItems()
@@ -99,12 +80,5 @@ public class PackupMenuController : MonoBehaviour, IOnCollisionEnterReporter
                 }
             }
         }
-    }
-
-    public void Call(Collider2D collision)
-    {
-        DroppedItemController item = collision.transform.GetComponent<DroppedItemController>();
-        AddToPackup(System.Array.IndexOf(GameManager.gameManagerReference.tiles, item.GetComponent<SpriteRenderer>().sprite) + ":" + item.amount + ";");
-        item.amount = 0;
     }
 }

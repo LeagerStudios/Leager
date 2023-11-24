@@ -7,15 +7,17 @@ public class PlanetMenuController : MonoBehaviour {
     public ResourceLauncher targetResourceLauncher;
 
     RectTransform rectTransform;
-    [SerializeField] GameObject packMenu;
     [SerializeField] RectTransform planetPanelRectTransform;
     [SerializeField] RectTransform planetPanelViewportRectTransform;
     [SerializeField] RectTransform planetPanelPropertiesRectTransform;
     [SerializeField] RectTransform planetPanelButtonsRectTransform;
+    [SerializeField] public RectTransform subPanel;
 
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
     public List<string> items = new List<string>();
+    int currentCore = 0;
+
     public bool planetSelectionFocused = true;
     public int planetFocused = -1;
 
@@ -101,15 +103,11 @@ public class PlanetMenuController : MonoBehaviour {
         planetFocused = -1;
     }
 
-    public void OpenPackagerMenu()
+    public void OpenPackagerPanel()
     {
         GameManager.gameManagerReference.InGame = true;
-        if (GameObject.Find("PackupMenu") == null)
-        {
-            GameObject a = Instantiate(packMenu, GameObject.Find("UI Menus").transform);
-            a.name = "Packup";
-            a.GetComponent<PackupMenuController>().InvokeMenu(targetResourceLauncher.transform.parent, this, items);
-        }
+        subPanel.gameObject.SetActive(true);
+        subPanel.GetComponent<PackupMenuController>().InvokePanel(items);
         gameObject.SetActive(false);
     }
 
