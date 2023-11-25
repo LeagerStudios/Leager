@@ -20,7 +20,6 @@ public enum Projectiles : int
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager gameManagerReference;
     [SerializeField] private bool inGame = false;
     [SerializeField] private bool playerFocused = false;
