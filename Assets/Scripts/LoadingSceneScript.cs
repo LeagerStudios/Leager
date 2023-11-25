@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class LoadingSceneScript : MonoBehaviour {
-
+public class LoadingSceneScript : MonoBehaviour 
+{
     [SerializeField] GameObject loadingBar;
     [SerializeField] GameObject loadingBarBg;
     [SerializeField] GameObject loadingTxt;
