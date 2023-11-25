@@ -8,6 +8,8 @@ public class PackupMenuController : MonoBehaviour
     [SerializeField] GameObject itemPackedPrefab;
     [SerializeField] RectTransform viewport;
     [SerializeField] RectTransform coreReporter;
+    [SerializeField] RectTransform blockedViewport;
+    [SerializeField] RectTransform eToLaunch;
     [SerializeField] public RectTransform planetPanel;
 
     List<string> items = new List<string>();
@@ -18,21 +20,45 @@ public class PackupMenuController : MonoBehaviour
     {
         this.items = items;
 
+        StackBar.stackBarController.InventoryDeployed = true;
+        StackBar.stackBarController.planetaryLoading = this;
         UpdatePackedItems();
     }
 
 
     void Update()
     {
-        if (GInput.GetKeyDown(KeyCode.E))
+        if(!StackBar.stackBarController.InventoryDeployed && StackBar.stackBarController.planetaryLoading == null)
         {
-            Close();
+            gameObject.SetActive(false);
+        }
+
+        if(currentCore == 0)
+        {
+            blockedViewport.gameObject.SetActive(true);
+            eToLaunch.gameObject.SetActive(false);
+            coreReporter.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[0];
+            coreReporter.GetChild(1).GetComponent<Text>().text = "[No core selected]";
+        }
+        else
+        {
+            blockedViewport.gameObject.SetActive(false);
+            eToLaunch.gameObject.SetActive(true);
+
+            if (GInput.GetKeyDown(KeyCode.E))
+            {
+                Close();
+            }
+
+            coreReporter.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[currentCore];
+            coreReporter.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[currentCore];
         }
     }
 
     public void Close()
     {
         StackBar.stackBarController.InventoryDeployed = false;
+        StackBar.stackBarController.planetaryLoading = null;
         planetPanel.gameObject.SetActive(true);
         planetPanel.GetComponent<PlanetMenuController>().GoToPlanet();
         gameObject.SetActive(false);
@@ -43,18 +69,32 @@ public class PackupMenuController : MonoBehaviour
         viewport.anchoredPosition = new Vector2(0, Mathf.Clamp(viewport.anchoredPosition.y + (move * 15), 0, -viewport.GetChild(viewport.childCount - 1).GetComponent<RectTransform>().anchoredPosition.y));
     }
 
-    public void AddToPackup(string stuff, int item)
+    public string AddToPackup(int item, int amount)
     {
+
         if (GameManager.gameManagerReference.tileType[item] == "core")
         {
-
+            int previousCore = currentCore;
+            currentCore = item;
+            return previousCore + ":1";
         }
-        else
+        else if (currentCore != 0)
         {
-            items.Add(stuff);
-            planetPanel.GetComponent<PlanetMenuController>().items = items;
-            UpdatePackedItems();
+            if (currentCore != 0)
+            {
+                int finalAmount = amount;
+                items.Add(item + ":" + finalAmount + ";");
+                planetPanel.GetComponent<PlanetMenuController>().items = items;
+                UpdatePackedItems();
+                return "0:0";
+            }
+            else
+            {
+                return item + ":" + amount;
+            }
         }
+
+        return item + ":" + amount;
     }
 
     public void UpdatePackedItems()
@@ -76,7 +116,8 @@ public class PackupMenuController : MonoBehaviour
                     GameObject gameObject = Instantiate(itemPackedPrefab, viewport);
                     gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -30) + 35f);
                     gameObject.transform.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[tile];
-                    gameObject.transform.GetChild(1).GetComponent<Text>().text = tileAmount + "";
+                    gameObject.transform.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[tile];
+                    gameObject.transform.GetChild(2).GetComponent<Text>().text = tileAmount + "";
                 }
             }
         }

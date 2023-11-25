@@ -42,7 +42,41 @@ public class InventoryArrowController : MonoBehaviour {
 
         UpdatePosition(dir);
 
-        if (GInput.GetKeyDown(KeyCode.Return) && StackBar.stackBarController.InventoryDeployed  && gameManager.InGame && gameManager.player.alive) DragSelectedItem();
+        if (GInput.GetKeyDown(KeyCode.Return) && StackBar.stackBarController.InventoryDeployed && gameManager.InGame && gameManager.player.alive)
+        {
+            if (StackBar.stackBarController.planetaryLoading == null)
+            {
+                DragSelectedItem();
+            }
+            else
+            {
+                if (idxPos < 9)
+                {
+                    tilePorting = StackBar.stackBarController.StackBarGrid[idxPos];
+                    tilePortingAmount = StackBar.stackBarController.StackItemAmount[idxPos];
+                }
+                else
+                {
+                    tilePorting = InventoryBar.inventoryBarController.InventoryBarGrid[idxPos - 9];
+                    tilePortingAmount = InventoryBar.inventoryBarController.InventoryItemAmount[idxPos - 9];
+                }
+
+                string returnn = StackBar.stackBarController.planetaryLoading.AddToPackup(tilePorting, tilePortingAmount);
+                string[] decomposed = returnn.Split(':');
+                int finalItem = System.Convert.ToInt32(decomposed[0]);
+                int finalAmount = System.Convert.ToInt32(decomposed[1]);
+
+
+                if (idxPos < 9)
+                {
+                    StackBar.AsignNewStack(idxPos, finalItem, finalAmount);
+                }
+                else
+                {
+                    InventoryBar.AsignNewStack(idxPos - 9, finalItem, finalAmount);
+                }
+            }
+        }
 	}
 
     public void UpdatePosition(Vector2 dir)

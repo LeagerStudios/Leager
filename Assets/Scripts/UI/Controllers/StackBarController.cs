@@ -8,6 +8,7 @@ public class StackBarController : MonoBehaviour {
     public int idx = 1;
     public int currentItem = 0;
     public bool InventoryDeployed = false;
+    public PackupMenuController planetaryLoading = null;
     public GameManager gameManager;
     public GameObject InventoryBar;
     public Text itemText;
@@ -40,6 +41,7 @@ public class StackBarController : MonoBehaviour {
                 if (InventoryDeployed)
                 {
                     InventoryDeployed = false;
+                    planetaryLoading = null;
                 }
                 else
                 {
