@@ -75,6 +75,8 @@ public class InventoryArrowController : MonoBehaviour {
                 {
                     InventoryBar.AsignNewStack(idxPos - 9, finalItem, finalAmount);
                 }
+                tilePorting = -1;
+                tilePortingAmount = 0;
             }
         }
 	}

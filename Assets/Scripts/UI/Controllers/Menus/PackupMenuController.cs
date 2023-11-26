@@ -28,9 +28,20 @@ public class PackupMenuController : MonoBehaviour
 
     void Update()
     {
-        if(!StackBar.stackBarController.InventoryDeployed && StackBar.stackBarController.planetaryLoading == null)
+        if ((!StackBar.stackBarController.InventoryDeployed && StackBar.stackBarController.planetaryLoading == null) || GInput.GetKeyDown(KeyCode.Q))
         {
-            gameObject.SetActive(false);
+            if (GInput.GetKeyDown(KeyCode.Q))
+            {
+                if (currentCore != 0)
+                    if (!StackBar.AddItem(currentCore)) ManagingFunctions.DropItem(currentCore, GameManager.gameManagerReference.player.transform.position);
+
+                currentCore = 0;
+                StackBar.stackBarController.InventoryDeployed = false;
+                StackBar.stackBarController.planetaryLoading = null;
+                gameObject.SetActive(false);
+            }
+            else
+                gameObject.SetActive(false);
         }
 
         if(currentCore == 0)
@@ -84,7 +95,7 @@ public class PackupMenuController : MonoBehaviour
             {
                 int finalAmount = amount;
                 items.Add(item + ":" + finalAmount + ";");
-                planetPanel.GetComponent<PlanetMenuController>().items = items;
+                planetPanel.GetComponent<PlanetMenuController>().Items = items;
                 UpdatePackedItems();
                 return "0:0";
             }
@@ -101,7 +112,7 @@ public class PackupMenuController : MonoBehaviour
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if (i > viewport.childCount - 1)
+            if (i > viewport.childCount - 2)
             {
                 string text = items[i];
                 text = text.Remove(text.Length - 1);
@@ -114,7 +125,7 @@ public class PackupMenuController : MonoBehaviour
                 if (tileAmount > 0)
                 {
                     GameObject gameObject = Instantiate(itemPackedPrefab, viewport);
-                    gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -30) + 35f);
+                    gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -50) + 145.5f);
                     gameObject.transform.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[tile];
                     gameObject.transform.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[tile];
                     gameObject.transform.GetChild(2).GetComponent<Text>().text = tileAmount + "";

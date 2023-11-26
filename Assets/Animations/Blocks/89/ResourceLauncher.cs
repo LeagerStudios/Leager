@@ -5,14 +5,31 @@ using UnityEngine;
 public class ResourceLauncher : MonoBehaviour {
 
     public GameObject packPrefab;
-    public PackageBlock target;
     public bool spawn;
     public bool animationPlayed = false;
+
+    public List<string> Items
+    {
+        get
+        {
+            return GetComponent<TileProperties>().storedItems;
+        }
+        set
+        {
+            GetComponent<TileProperties>().storedItems = value;
+        }
+    }
 
 	void Start ()
     {
         transform.eulerAngles = transform.parent.eulerAngles;
         transform.localPosition = new Vector2(0, 0.5f);
+
+        TileProperties properties = gameObject.AddComponent<TileProperties>();
+        properties.parentTile = 89;
+        properties.associatedTile = transform.parent.gameObject;
+        properties.canDropStoredItems = true;
+
         StartCoroutine(PlaceAnimation());
 	}
 
@@ -27,11 +44,6 @@ public class ResourceLauncher : MonoBehaviour {
             //target = a.GetComponent<PackageBlock>();
             //target.target = this;
             //a.transform.position = transform.position + Vector3.one * 10;
-        }
-
-        if (target != null)
-        {
-            transform.eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(transform.position, target.transform.position));
         }
     }
 
@@ -69,11 +81,6 @@ public class ResourceLauncher : MonoBehaviour {
         }
 
         animationPlayed = true;
-    }
-
-    public void Receive(string content)
-    {
-        target = null;
     }
 
     IEnumerator PlaceAnimation()

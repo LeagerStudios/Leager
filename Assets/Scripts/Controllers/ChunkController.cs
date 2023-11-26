@@ -296,6 +296,27 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void TileMod(int e)
     {
+        if (TileObject[e].GetComponentInChildren<TileProperties>())
+        {
+            TileProperties tileProperties = TileObject[e].GetComponentInChildren<TileProperties>();
+
+            if(tileProperties.parentTile != TileGrid[e])
+            {
+                if (tileProperties.canDropStoredItems)
+                {
+                    foreach(string item in tileProperties.storedItems)
+                    {
+                        string text = item;
+                        if (text[text.Length - 1] == ';')
+                            text = text.Remove(item.Length - 1);
+                        int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
+                    }
+                }
+
+                Destroy(tileProperties);
+            }
+        }
+
         if (TileObject[e].transform.childCount > 0)
         {
             for (int i = 0; i < TileObject[e].transform.childCount; i++)

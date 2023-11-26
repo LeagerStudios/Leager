@@ -16,24 +16,6 @@ public class PackageBlock : MonoBehaviour {
 	
 	void Update ()
     {
-        if(target == null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            if(time < 1f)
-            {
-                time += 1 / Vector2.Distance(target.transform.position, startPos);
-                transform.position = Vector2.Lerp(startPos, target.transform.position, time);
-            }
-            else
-            {
-                transform.position = target.transform.position;
-                target.Receive("");
-                Destroy(this);
-            }
-        }
-       
+    
 	}
 }

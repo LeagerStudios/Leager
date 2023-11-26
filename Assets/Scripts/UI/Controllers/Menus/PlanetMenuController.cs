@@ -15,8 +15,17 @@ public class PlanetMenuController : MonoBehaviour {
 
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
-    public List<string> items = new List<string>();
-    int currentCore = 0;
+    public List<string> Items
+    {
+        get
+        {
+            return targetResourceLauncher.Items;
+        }
+        set
+        {
+            targetResourceLauncher.Items = value;
+        }
+    }
 
     public bool planetSelectionFocused = true;
     public int planetFocused = -1;
@@ -107,7 +116,7 @@ public class PlanetMenuController : MonoBehaviour {
     {
         GameManager.gameManagerReference.InGame = true;
         subPanel.gameObject.SetActive(true);
-        subPanel.GetComponent<PackupMenuController>().InvokePanel(items);
+        subPanel.GetComponent<PackupMenuController>().InvokePanel(Items);
         gameObject.SetActive(false);
     }
 
@@ -118,14 +127,14 @@ public class PlanetMenuController : MonoBehaviour {
         GameManager.gameManagerReference.player.onControl = false;
 
         string resources = "";
-        if (items.Count < 1)
+        if (Items.Count < 1)
         {
             resources = "null";
         }
         else
-            for (int i = 0; i < items.Count; i++)
+            for (int i = 0; i < Items.Count; i++)
             {
-                resources = resources + items[i];
+                resources = resources + Items[i];
             }
 
         MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher);
