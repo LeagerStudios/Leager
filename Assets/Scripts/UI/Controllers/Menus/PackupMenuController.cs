@@ -22,26 +22,51 @@ public class PackupMenuController : MonoBehaviour
 
         StackBar.stackBarController.InventoryDeployed = true;
         StackBar.stackBarController.planetaryLoading = this;
-        UpdatePackedItems();
+
+        RefreshPackedItems();
     }
 
 
     void Update()
     {
-        if ((!StackBar.stackBarController.InventoryDeployed && StackBar.stackBarController.planetaryLoading == null) || GInput.GetKeyDown(KeyCode.Q))
+        if ((!StackBar.stackBarController.InventoryDeployed && StackBar.stackBarController.planetaryLoading == null) || GInput.GetKeyDown(KeyCode.Q) || planetPanel.GetComponent<PlanetMenuController>().targetResourceLauncher == null)
         {
-            if (GInput.GetKeyDown(KeyCode.Q))
+            if (currentCore != 0)
             {
-                if (currentCore != 0)
-                    if (!StackBar.AddItem(currentCore)) ManagingFunctions.DropItem(currentCore, GameManager.gameManagerReference.player.transform.position);
+                if (!StackBar.AddItem(currentCore)) GameManager.gameManagerReference.player.PlayerRelativeDrop(currentCore, 1);
 
-                currentCore = 0;
-                StackBar.stackBarController.InventoryDeployed = false;
-                StackBar.stackBarController.planetaryLoading = null;
-                gameObject.SetActive(false);
+                if (planetPanel.GetComponent<PlanetMenuController>().targetResourceLauncher != null)
+                {
+                    foreach (string item in items)
+                    {
+                        string text = item;
+                        text = text.Remove(item.Length - 1);
+                        int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
+
+                        int toDrop = datas[1];
+                        for (int i = 0; i < datas[1]; i++)
+                        {
+                            bool booleanBool = StackBar.AddItem(datas[0]);
+                            if (!booleanBool)
+                            {
+                                break;
+                            }
+                            toDrop--;
+                        }
+
+                        if (toDrop > 0)
+                        {
+                            GameManager.gameManagerReference.player.PlayerRelativeDrop(datas[0], toDrop);
+                        }
+                    }
+                    planetPanel.GetComponent<PlanetMenuController>().Items = null;
+                }
             }
-            else
-                gameObject.SetActive(false);
+
+            currentCore = 0;
+            StackBar.stackBarController.InventoryDeployed = false;
+            StackBar.stackBarController.planetaryLoading = null;
+            gameObject.SetActive(false);
         }
 
         if(currentCore == 0)
@@ -96,7 +121,7 @@ public class PackupMenuController : MonoBehaviour
                 int finalAmount = amount;
                 items.Add(item + ":" + finalAmount + ";");
                 planetPanel.GetComponent<PlanetMenuController>().Items = items;
-                UpdatePackedItems();
+                RefreshPackedItems();
                 return "0:0";
             }
             else
@@ -106,6 +131,15 @@ public class PackupMenuController : MonoBehaviour
         }
 
         return item + ":" + amount;
+    }
+
+    public void RefreshPackedItems()
+    {
+        for (int i = 1; i < viewport.childCount; i++)
+        {
+            Destroy(viewport.GetChild(i).gameObject);
+        }
+        Invoke("UpdatePackedItems", Time.deltaTime);
     }
 
     public void UpdatePackedItems()
@@ -125,7 +159,7 @@ public class PackupMenuController : MonoBehaviour
                 if (tileAmount > 0)
                 {
                     GameObject gameObject = Instantiate(itemPackedPrefab, viewport);
-                    gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -50) + 145.5f);
+                    gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -50) + 147.5f);
                     gameObject.transform.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[tile];
                     gameObject.transform.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[tile];
                     gameObject.transform.GetChild(2).GetComponent<Text>().text = tileAmount + "";

@@ -310,6 +310,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         if (text[text.Length - 1] == ';')
                             text = text.Remove(item.Length - 1);
                         int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
+                        GameObject droppedItem = ManagingFunctions.DropItem(datas[0], TileObject[e].transform.position, datas[1]);
+                        droppedItem.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-3, 3), 6);
                     }
                 }
 
