@@ -15,6 +15,7 @@ public class PackupMenuController : MonoBehaviour
     List<string> items = new List<string>();
 
     int currentCore = 0;
+    int coreCapacity = 0;
 
     public void InvokePanel(List<string> items)
     {
