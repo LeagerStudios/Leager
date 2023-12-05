@@ -16,6 +16,7 @@ public class PackupMenuController : MonoBehaviour
 
     int currentCore = 0;
     int coreCapacity = 0;
+    int usedCapacity = 0;
 
     public void InvokePanel(List<string> items)
     {
@@ -38,29 +39,7 @@ public class PackupMenuController : MonoBehaviour
 
                 if (planetPanel.GetComponent<PlanetMenuController>().targetResourceLauncher != null)
                 {
-                    foreach (string item in items)
-                    {
-                        string text = item;
-                        text = text.Remove(item.Length - 1);
-                        int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
-
-                        int toDrop = datas[1];
-                        for (int i = 0; i < datas[1]; i++)
-                        {
-                            bool booleanBool = StackBar.AddItem(datas[0]);
-                            if (!booleanBool)
-                            {
-                                break;
-                            }
-                            toDrop--;
-                        }
-
-                        if (toDrop > 0)
-                        {
-                            GameManager.gameManagerReference.player.PlayerRelativeDrop(datas[0], toDrop);
-                        }
-                    }
-                    planetPanel.GetComponent<PlanetMenuController>().Items = null;
+                    DropStored();
                 }
             }
 
@@ -113,6 +92,10 @@ public class PackupMenuController : MonoBehaviour
         {
             int previousCore = currentCore;
             currentCore = item;
+            DropStored();
+
+            planetPanel.GetComponent<PlanetMenuController>().Items = null;
+
             return previousCore + ":1";
         }
         else if (currentCore != 0)
@@ -132,6 +115,33 @@ public class PackupMenuController : MonoBehaviour
         }
 
         return item + ":" + amount;
+    }
+    
+    public void DropStored()
+    {
+        foreach (string item in items)
+        {
+            string text = item;
+            text = text.Remove(item.Length - 1);
+            int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
+
+            int toDrop = datas[1];
+            for (int i = 0; i < datas[1]; i++)
+            {
+                bool booleanBool = StackBar.AddItem(datas[0]);
+                if (!booleanBool)
+                {
+                    break;
+                }
+                toDrop--;
+            }
+
+            if (toDrop > 0)
+            {
+                GameManager.gameManagerReference.player.PlayerRelativeDrop(datas[0], toDrop);
+            }
+        }
+        planetPanel.GetComponent<PlanetMenuController>().Items = null;
     }
 
     public void RefreshPackedItems()

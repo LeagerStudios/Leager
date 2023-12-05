@@ -30606,7 +30606,6 @@ MonoBehaviour:
   subPanel: {fileID: 1754530255}
   planetPrefab: {fileID: 954422096}
   planets: []
-  items: []
   planetSelectionFocused: 1
   planetFocused: -1
 --- !u!1 &2104632347
