@@ -67,7 +67,7 @@ public class PackupMenuController : MonoBehaviour
             }
 
             coreReporter.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[currentCore];
-            coreReporter.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[currentCore];
+            coreReporter.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[currentCore] + " (" + usedCapacity + "/" + coreCapacity + ")";
         }
     }
 
@@ -93,8 +93,9 @@ public class PackupMenuController : MonoBehaviour
             int previousCore = currentCore;
             currentCore = item;
             DropStored();
-
-            planetPanel.GetComponent<PlanetMenuController>().Items = null;
+            coreCapacity = GameManager.gameManagerReference.GetCapacityOfCore(item);
+            
+            planetPanel.GetComponent<PlanetMenuController>().Items = new List<string>();
 
             return previousCore + ":1";
         }
@@ -104,6 +105,7 @@ public class PackupMenuController : MonoBehaviour
             {
                 int finalAmount = amount;
                 items.Add(item + ":" + finalAmount + ";");
+                usedCapacity += finalAmount;
                 planetPanel.GetComponent<PlanetMenuController>().Items = items;
                 RefreshPackedItems();
                 return "0:0";
@@ -141,7 +143,8 @@ public class PackupMenuController : MonoBehaviour
                 GameManager.gameManagerReference.player.PlayerRelativeDrop(datas[0], toDrop);
             }
         }
-        planetPanel.GetComponent<PlanetMenuController>().Items = null;
+        usedCapacity = 0;
+        planetPanel.GetComponent<PlanetMenuController>().Items = new List<string>();
     }
 
     public void RefreshPackedItems()

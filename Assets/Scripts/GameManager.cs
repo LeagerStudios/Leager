@@ -466,6 +466,24 @@ public class GameManager : MonoBehaviour
         savingText.SetActive(isSavingData);
     }
 
+    public int GetCapacityOfCore(int core)
+    {
+        int result = 0;
+        switch (core)
+        {
+            case 96:
+                result = 200;
+                break;
+            case 97:
+                result = 450;
+                break;
+            case 100:
+                result = 755;
+                break;
+        }
+        return result;
+    }
+
     public GameObject ExtractPooledTile(Vector2 position)
     {
         if (poolTiles.Count > 0)
