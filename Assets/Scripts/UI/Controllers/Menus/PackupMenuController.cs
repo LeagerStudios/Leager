@@ -94,7 +94,8 @@ public class PackupMenuController : MonoBehaviour
             currentCore = item;
             DropStored();
             coreCapacity = GameManager.gameManagerReference.GetCapacityOfCore(item);
-            
+            usedCapacity = 0;
+
             planetPanel.GetComponent<PlanetMenuController>().Items = new List<string>();
 
             return previousCore + ":1";
@@ -104,11 +105,14 @@ public class PackupMenuController : MonoBehaviour
             if (currentCore != 0)
             {
                 int finalAmount = amount;
+                int restAmount = Mathf.Clamp((usedCapacity + finalAmount) - coreCapacity, 0, 2147483647);
+                finalAmount -= restAmount;
+
                 items.Add(item + ":" + finalAmount + ";");
                 usedCapacity += finalAmount;
                 planetPanel.GetComponent<PlanetMenuController>().Items = items;
                 RefreshPackedItems();
-                return "0:0";
+                return item + ":" + restAmount;
             }
             else
             {

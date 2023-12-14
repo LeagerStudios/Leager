@@ -66,6 +66,8 @@ public class InventoryArrowController : MonoBehaviour {
                 int finalItem = System.Convert.ToInt32(decomposed[0]);
                 int finalAmount = System.Convert.ToInt32(decomposed[1]);
 
+                if (finalAmount == 0)
+                    finalItem = 0;
 
                 if (idxPos < 9)
                 {

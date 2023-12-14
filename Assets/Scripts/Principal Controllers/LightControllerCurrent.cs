@@ -13,8 +13,7 @@ public class LightControllerCurrent : MonoBehaviour
     public GameObject[] loadedChunks;
     public Camera minimapCamera;
     public UnityEngine.UI.Dropdown lightStyleDropdown;
-    public List<Vector2> renderLights = new List<Vector2>();
-    public List<float> renderLightIntensity = new List<float>();
+    public float[,] renderLights;
     public Vector3 previousPosition;
 
     public int lightDist = 30;
@@ -72,7 +71,7 @@ public class LightControllerCurrent : MonoBehaviour
         if (renderized && renderQueue.Count > 0)
         {
             transform.position = renderQueue.Peek();
-            renderQueue.Dequeue();
+            renderQueue = new Queue<Vector3>();
             RenderizeTexture();
         }
         else if(renderized && renderQueue.Count < 1)
@@ -92,25 +91,35 @@ public class LightControllerCurrent : MonoBehaviour
     public void DrawLights()
     {
 
-
         lightEcoTexture = new EcoTexture(lightDist, lightDist);
         lightEcoTexture.FillWith(Color.black);
 
         int index = 0;
 
-        foreach (Vector2 renderLight in renderLights)
+        foreach (float renderLight in renderLights)
         {
-            Vector2 rendLight = renderLight;
-            rendLight += Vector2.one * (lightDist / 2);
-            float intensity = renderLightIntensity[index];
-            Color thisColorLight = lightEcoTexture.GetPixel((int)rendLight.x, (int)rendLight.y);
+            //Vector2Int rendLight = ManagingFunctions.EntireDivision(index, 1/*???*/).ConvertToVector2();
+            //rendLight += Vector2Int.one * (lightDist / 2);
+            //float intensity = renderLights[index];
 
-            //if (thisColorLight.a > 1 - intensity)
-            for (int nx = (int)rendLight.x - lightRadius; nx < (int)rendLight.x + lightRadius + 1; nx++)
+            //DrawOn("light", rendLight, intensity);
+            //index++;
+
+            //Now this is 100% broken :)
+        }
+        renderized = true;
+        renderizingLight = false;
+    }
+
+    private void DrawOn(string toDraw, Vector2Int rendLight, float intensity)
+    {
+        if (toDraw == "light")
+        {
+            for (int nx = rendLight.x - lightRadius; nx < rendLight.x + lightRadius + 1; nx++)
             {
-                for (int ny = (int)rendLight.y - lightRadius; ny < (int)rendLight.y + lightRadius + 1; ny++)
+                for (int ny = rendLight.y - lightRadius; ny < rendLight.y + lightRadius + 1; ny++)
                 {
-                    float dist = Vector2.Distance(new Vector2(nx, ny), new Vector2((int)rendLight.x, (int)rendLight.y));
+                    float dist = Vector2.Distance(new Vector2(nx, ny), new Vector2(rendLight.x, rendLight.y));
                     if (dist < lightDist)
                     {
                         Color gettedColor = lightEcoTexture.GetPixel(nx, ny);
@@ -144,26 +153,48 @@ public class LightControllerCurrent : MonoBehaviour
                     }
                 }
             }
-            index++;
         }
-        renderized = true;
-        renderizingLight = false;
+        else if(toDraw == "dot")
+        {
+            Color gettedColor = lightEcoTexture.GetPixel(rendLight.x, rendLight.y);
+            float alphaIntensity = 1 - intensity;
+
+            if (intensity > 1)
+            {
+                alphaIntensity = (1 - alphaIntensity) * GameManager.gameManagerReference.dayLuminosity;
+            }
+            else
+            {
+                alphaIntensity = (1 - alphaIntensity) * intensity;
+            }
+            alphaIntensity = 1 - alphaIntensity;
+
+            if (gettedColor.r >= 0f)
+            {
+                if (gettedColor.a > alphaIntensity)
+                {
+                    if (intensity > 1) lightEcoTexture.SetPixel(rendLight.x, rendLight.y, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
+                    else lightEcoTexture.SetPixel(rendLight.x, rendLight.y, 0, 0, 0, 1f - intensity);
+                }
+            }
+        }
     }
 
     private void UpdateLight(Vector3 lightPosition)
     {
         renderizingLight = true;
         if (MenuController.menuController.miniMapOn)
-            lightDist = (int)minimapCamera.orthographicSize * 2 + (lightRadius * 2) + 4;
+            lightDist = (int)minimapCamera.orthographicSize * 2 + (lightRadius * 3);
         else
             lightDist = 32;
 
 
         UpdateLights(lightPosition);
 
-        ThreadStart lightDrawRef = new ThreadStart(DrawLights);
-        Thread lightRender = new Thread(lightDrawRef);
-        lightRender.Start();
+        //ThreadStart lightDrawRef = new ThreadStart(DrawLights);
+        //Thread lightRender = new Thread(lightDrawRef);
+        //lightRender.Start();
+        DrawLights();
     }
 
     public void RenderizeTexture()
@@ -184,8 +215,7 @@ public class LightControllerCurrent : MonoBehaviour
 
     private void UpdateLights(Vector2 lightPosition)
     {
-        renderLights = new List<Vector2>();
-        renderLightIntensity = new List<float>();
+        renderLights = new float[lightDist, lightDist];
 
         if (loadedChunks.Length > 0)
         {
@@ -206,7 +236,6 @@ public class LightControllerCurrent : MonoBehaviour
                 }
 
                 gameChunksToRead.Add(GameManager.gameManagerReference.chunkContainer.transform.GetChild(chunkToLoad).gameObject);
-                //Debug.LogError(i * 16);
                 relative.Add(i * 16);
             }
 
@@ -220,12 +249,8 @@ public class LightControllerCurrent : MonoBehaviour
                 {
                     if (chunkController.LightMap[i] > 0)
                     {
-                        //if (Vector2.Distance(chunkController.TileObject[i].transform.position, lightPosition) < lightDist + lightRadius + 4)
-                        //{
-                            Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
-                            renderLights.Add(lightPos);
-                            renderLightIntensity.Add(chunkController.LightMap[i]);
-                        //}
+                        Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
+                        renderLights[(int)lightPos.x, (int)lightPos.y] = chunkController.LightMap[i];
                     }
                 }
 
