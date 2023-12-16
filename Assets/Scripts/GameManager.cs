@@ -1112,7 +1112,7 @@ public class GameManager : MonoBehaviour
 
         for (int e = 0; e < WorldWidth; e++)
         {
-            SpawnChunk(e, System.Convert.ToSingle("0." + e), lastSpawnedIdx, e, worldBiomes[e]);
+            SpawnChunk(e, System.Convert.ToSingle("0." + e), lastSpawnedIdx, e, worldBiomes[e], e * 16);
             lastSpawnedIdx += 16 * WorldHeight;
         }
 
@@ -1121,32 +1121,19 @@ public class GameManager : MonoBehaviour
         {
             GameChunks[i] = chunkContainer.transform.GetChild(i).gameObject;
             chunkContainer.transform.GetChild(i).gameObject.SetActive(false);
-
-            if(i == 0)
-            {
-                GameObject falseChunkObj = Instantiate(falseChunk, Vector3.zero, Quaternion.identity);
-                falseChunkObj.GetComponent<FalseChunkController>().rootChunk = GameChunks[i].GetComponent<ChunkController>();
-                falseChunkObj.name = "FalseChunk" + i;
-            }
-            if(i == chunkContainer.transform.childCount - 1)
-            {
-                GameObject falseChunkObj = Instantiate(falseChunk, Vector3.zero, Quaternion.identity);
-                falseChunkObj.GetComponent<FalseChunkController>().rootChunk = GameChunks[i].GetComponent<ChunkController>();
-                falseChunkObj.name = "FalseChunk" + i;
-            }
         }
 
         Debug.Log("===ENDED MAP GENERATION===");
         Debug.Log("");
     }
 
-    void SpawnChunk(int chunkX, float chunkIdx, int spawnedIdxs, int childId, string chunkBiome)
+    void SpawnChunk(int chunkX, float chunkIdx, int spawnedIdxs, int childId, string chunkBiome, int orgXpos)
     {
         float tileName = 0 + chunkIdx;
         int tileIdx = 0;
         GameObject newChunk = Instantiate(emptyChunk, new Vector3(chunkX * 16, 0, 0), Quaternion.identity);
         newChunk.name = "Chunk" + chunkIdx;
-        newChunk.GetComponent<ChunkController>().CreateChunk(WorldHeight, chunkIdx, childId, chunkBiome);
+        newChunk.GetComponent<ChunkController>().CreateChunk(WorldHeight, chunkIdx, childId, chunkBiome, orgXpos);
         newChunk.GetComponent<ChunkController>().chunkColor = ManagingFunctions.HexToColor(currentHexPlanetColor);
         newChunk.transform.parent = chunkContainer.transform;
 
@@ -1247,6 +1234,15 @@ public class GameManager : MonoBehaviour
         }
 
         LoadedChunks = gameChunksLoaded.ToArray();
+        UpdateChunksRelPos();
+    }
+
+    public void UpdateChunksRelPos()
+    {
+        foreach(GameObject chunk in LoadedChunks)
+        {
+            chunk.GetComponent<ChunkController>().UpdateChunkPos();
+        }
     }
 
     public void ChangeBrush(int entryTile, GameObject tile)

@@ -17,6 +17,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public float ID;
     public int childId;
     public int tilesToChunk;
+    public int orgX;
     GameManager manager;
     PlayerController player;
     public const float entitiesSpawnTimeConstant = 3f;
@@ -33,7 +34,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     [SerializeField] Sprite[] waterFrames;
 
-    public void CreateChunk(int h, float id, int cId, string chunkBiomeParam)
+    public void CreateChunk(int h, float id, int cId, string chunkBiomeParam, int orgXpos)
     {
         loaded = false;
         ID = id;
@@ -43,6 +44,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         TileObject = new GameObject[h * 16];
         LightMap = new float[h * 16];
         manager = GameManager.gameManagerReference;
+        orgX = orgXpos;
         player = GameObject.Find("Lecter").GetComponent<PlayerController>();
         childId = cId;
         tilesToChunk = (manager.WorldHeight * 16) * childId;
@@ -56,6 +58,28 @@ public class ChunkController : MonoBehaviour, ITimerCall
         TileGrid[(int)Mathf.Floor(i)] = t;
         TileGridRotation[(int)Mathf.Floor(i)] = r;
         TileObject[(int)Mathf.Floor(i)] = o;
+    }
+
+    public void UpdateChunkPos()
+    {
+        float playerx = manager.player.transform.position.x;
+        float nearest = 999999f;
+        int nearestPos = orgX;
+
+        for (int i = -1; i < 2; i++)
+        {
+            float scan = orgX + ((manager.WorldWidth * 16) * i);
+            float dist = Mathf.Abs(playerx - scan);
+
+            if (dist < nearest)
+            {
+                nearest = dist;
+                nearestPos = (int)scan;
+            }
+        }
+
+
+        transform.position = new Vector2(nearestPos, 0);
     }
 
     public void UpdateChunk()
