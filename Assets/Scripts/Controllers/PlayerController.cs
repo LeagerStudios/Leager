@@ -455,7 +455,6 @@ public class PlayerController : MonoBehaviour, IDamager {
         deathScreenController.StartDeath();
         animations.SetBool("killed", true);
         Time.timeScale = 0.75f;
-        yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(2);
         if (GetComponent<SpriteRenderer>().enabled)
         {
@@ -521,7 +520,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             for (int i = 0;i < 10; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
         }
         if(armType == "bow")
@@ -549,7 +548,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             for (int i = 0; i < 12; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
         }
         transform.GetChild(0).eulerAngles = Vector3.zero;

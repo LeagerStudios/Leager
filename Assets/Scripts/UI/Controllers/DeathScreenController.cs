@@ -73,7 +73,7 @@ public class DeathScreenController : MonoBehaviour {
             Color color = image.color;
             color.a += 1f / 120f;
             image.color = color;
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
             if (called) yield break;
         }
     }
@@ -100,7 +100,7 @@ public class DeathScreenController : MonoBehaviour {
             Color color = image.color;
             color.a -= 1f / 180f;
             image.color = color;
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
         }
 
         yield return new WaitForSeconds(0.7f);

@@ -36,7 +36,6 @@ public class PushPlay : MonoBehaviour
             GameObject.Find("SaveObject").GetComponent<ComponetSaver>();
         }
 
-        Application.targetFrameRate = 60;
         Debug.Log("Leager version: " + Application.version);
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);

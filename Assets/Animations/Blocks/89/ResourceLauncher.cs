@@ -66,7 +66,7 @@ public class ResourceLauncher : MonoBehaviour {
             {
                 child.transform.Translate(Vector2.up * speed * Time.deltaTime);
                 speed += Time.deltaTime * 10;
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
         }
         else if(state == "antenna")
@@ -76,7 +76,7 @@ public class ResourceLauncher : MonoBehaviour {
             {
                 transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(transform.eulerAngles.z, -20f, 0.4f);
                 t += Time.deltaTime;
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
         }
 

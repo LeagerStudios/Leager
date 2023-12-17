@@ -679,8 +679,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
             tileY = 0;
             tileX++;
-            //if (Mathf.Abs(transform.position.x - player.transform.position.x) > 30)
-            //    yield return new WaitForEndOfFrame();
         }
 
         loaded = true;

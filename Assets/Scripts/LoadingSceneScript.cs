@@ -107,7 +107,7 @@ public class LoadingSceneScript : MonoBehaviour
     public void UpdateResolution()
     {
         Resolution resolution = Screen.resolutions[Screen.resolutions.Length - 1];
-        Screen.SetResolution(resolution.width, resolution.height, true);
+        Screen.SetResolution(resolution.width * 2, resolution.height * 2, true);
     }
 
     IEnumerator Freeze()
@@ -122,7 +122,7 @@ public class LoadingSceneScript : MonoBehaviour
         for(int i = 0;i < 10; i++)
         {
             loadingBar.GetComponent<RectTransform>().localScale = new Vector2(loadingBar.GetComponent<RectTransform>().localScale.x - 0.1f, 1f);
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
         }
 
         loadingBar.GetComponent<RectTransform>().localScale = new Vector2(0f, 1f);
@@ -142,7 +142,7 @@ public class LoadingSceneScript : MonoBehaviour
             for (int i2 = 0; i2 < 10; i2++)
             {
                 loadingBar.GetComponent<RectTransform>().localScale = new Vector2(loadingBar.GetComponent<RectTransform>().localScale.x + 0.01f, 1f);
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
 
             if (loadingTxt.GetComponent<Text>().text != "Loading With Default Configuration")
@@ -173,7 +173,7 @@ public class LoadingSceneScript : MonoBehaviour
             color = loadingTxt.GetComponent<Text>().color;
             color.a -= 0.02f;
             loadingTxt.GetComponent<Text>().color = color;
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
         }
 
         Debug.Log("===ENDED INITIAL LOADING===");

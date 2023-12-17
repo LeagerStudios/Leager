@@ -192,6 +192,10 @@ public class CommandController : MonoBehaviour {
             {
                 GameManager.gameManagerReference.player.skin = System.Convert.ToInt32(input[1]);
             }
+            else if (input[0] == "customres")
+            {
+                Screen.SetResolution(System.Convert.ToInt32(input[1]), System.Convert.ToInt32(input[2]), Screen.fullScreen);
+            }
             else
             {
                 Debug.Log("unrecognized");

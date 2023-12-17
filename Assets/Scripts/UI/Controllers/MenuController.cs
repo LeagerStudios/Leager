@@ -229,7 +229,7 @@ public class MenuController : MonoBehaviour {
 
         while (!from.animationPlayed)
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
         }
 
         LoadingPlanetScreen.SetActive(true);
@@ -469,7 +469,6 @@ public class MenuController : MonoBehaviour {
             if (i == resolutions.Length - 1)
             {
                 currentRes = i;
-                UpdateResolution(currentRes);
             }
         }
 

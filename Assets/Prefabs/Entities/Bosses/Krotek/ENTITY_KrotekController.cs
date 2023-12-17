@@ -491,14 +491,14 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
         if(side == "left")
         {
             leftAnt.GetComponent<Animator>().SetBool("hearedSound", true);
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
             leftAnt.GetComponent<Animator>().SetBool("hearedSound", false);
             if (!rotatingFace) StartCoroutine(LookTo("left"));
         }
         else
         {
             rightAnt.GetComponent<Animator>().SetBool("hearedSound", true);
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.01666f);
             rightAnt.GetComponent<Animator>().SetBool("hearedSound", false);
             if (!rotatingFace) StartCoroutine(LookTo("right"));
         }
@@ -583,13 +583,13 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
             for(int i = 0;i < framesToTakeStep / 2; i++)
             {
                 rightKnee.transform.Translate(new Vector2(-(rightKneePosition * 3) /framesToTakeStep, 1f / framesToTakeStep));
-                yield return new WaitForEndOfFrame();
+                yield return new  WaitForSeconds(0.01666f);
             }
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 rightKnee.transform.Translate(new Vector2(-(rightKneePosition * 3) / framesToTakeStep, -1f / framesToTakeStep));
                 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             if (rightGrounded) PlaySound(0);
             rightKnee.GetComponent<Rigidbody2D>().simulated = true;
@@ -598,13 +598,13 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 leftKnee.transform.Translate(new Vector2(-(rightKneePosition * 3) / framesToTakeStep, 1f / framesToTakeStep));
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 leftKnee.transform.Translate(new Vector2(-(rightKneePosition * 3) / framesToTakeStep, -1f / framesToTakeStep));
                 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             if (leftGrounded) PlaySound(1);
             leftKnee.GetComponent<Rigidbody2D>().simulated = true;
@@ -615,13 +615,13 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 leftKnee.transform.Translate(new Vector2(rightKneePosition * 3 / framesToTakeStep, 2f / framesToTakeStep));
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 leftKnee.transform.Translate(new Vector2(rightKneePosition * 3 / framesToTakeStep, -2f / framesToTakeStep));
                 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             if (leftGrounded) PlaySound(0);
             leftKnee.GetComponent<Rigidbody2D>().simulated = true;
@@ -630,18 +630,18 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 rightKnee.transform.Translate(new Vector2(rightKneePosition * 3 / framesToTakeStep, 2f / framesToTakeStep));
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             for (int i = 0; i < framesToTakeStep / 2; i++)
             {
                 rightKnee.transform.Translate(new Vector2(rightKneePosition * 3 / framesToTakeStep, -2f / framesToTakeStep));
                 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(0.01666f);
             }
             if (rightGrounded) PlaySound(1);
             rightKnee.GetComponent<Rigidbody2D>().simulated = true;
         }
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.01666f);
         walking = false;
     }
 

@@ -142,15 +142,8 @@ public class GameManager : MonoBehaviour
     }
 
     void Start()
-    {
-        List<string> toEncrypt = new List<string>();
-        toEncrypt.Add("hola");
-        toEncrypt.Add("wenas");
-        toEncrypt.Add("compra leager");
-       
-
+    {  
         //Setup
-        Application.targetFrameRate = 60;
         skyboxColor = Camera.main.backgroundColor;
         Time.timeScale = 1.0f;
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
