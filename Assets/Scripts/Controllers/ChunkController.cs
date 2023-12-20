@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public Color chunkColor;
     public bool loaded = false;
     public string chunkBiome = "dumby";
-    bool loading = false;
+    public bool loading = false;
     public float[] ChunkGrid;
     public int[] TileGrid;
     public int[] TileGridRotation;
@@ -58,6 +59,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
         TileGrid[(int)Mathf.Floor(i)] = t;
         TileGridRotation[(int)Mathf.Floor(i)] = r;
         TileObject[(int)Mathf.Floor(i)] = o;
+
+        o.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[t];
     }
 
     public void UpdateChunkPos()
@@ -84,7 +87,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void UpdateChunk()
     {
-        if (loaded)
+        if (loaded && !loading)
         {
             for (int e = 0; e < TileGrid.Length; e++)
             {
@@ -310,11 +313,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     }
                 }
             }
-        }
-        else if (!loading && !loaded)
-        {
-            /*StartCoroutine(*/
-            SpawnChunk()/*)*/;
         }
     }
 
@@ -652,9 +650,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
         }
     }
 
-    public /*IEnumerator*/void SpawnChunk()
+    public IEnumerator SpawnChunk()
     {
         loading = true;
+        int counter = 0;
         int tileX = 0;
         int tileY = 0;
         float tileName = 0 + ID;
@@ -675,6 +674,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 tileY++;
                 tileName++;
                 tileIdx++;
+
+                if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= TileGrid.Length / 60)
+                {
+                    yield return new WaitForEndOfFrame();
+                    counter = 0;
+                }
+                counter++;
             }
 
             tileY = 0;
@@ -686,22 +692,46 @@ public class ChunkController : MonoBehaviour, ITimerCall
         UpdateChunk();
     }
 
-    public void DestroyChunk()
+    public void DestroyCunk()
     {
-        //for(int e = 0; e < TileObject.Length; e++)
-        //{
-        //    manager.AddTileToPool(TileObject[e]);
-        //    TileObject[e] = null;
-        //}
+        if(!loading && loaded)
+        {
+            StartCoroutine(DestroyCunkIE());
+        }
+    }
 
-        //ChunkGrid = new float[manager.WorldHeight * 16];
-        //TileObject = new GameObject[manager.WorldHeight * 16];
-        //LightMap = new float[manager.WorldHeight * 16];
-        //loaded = false;
+    private IEnumerator DestroyCunkIE()
+    {
+        loading = true;
+        int counter = 0;
+
+        for(int e = 0; e < TileGrid.Length; e++)
+        {
+            manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
+        }
+
+        for (int e = 0; e < TileObject.Length; e++)
+        {
+            GameObject obj = TileObject[e];
+
+
+            Destroy(obj);
+
+            if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= TileGrid.Length / 60)
+            {
+                yield return new WaitForEndOfFrame();
+                counter = 0;
+            }
+            counter++;
+        }
+
+        loaded = false;
+        loading = false;
+        gameObject.SetActive(false);
     }
 
     void Update () {
-        if (manager.InGame && loaded)
+        if (manager.InGame && loaded && !loading)
         {
             if (manager.doingAnAction)
             {
@@ -745,6 +775,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
             }
+        }
+        else if (!loading && !loaded)
+        {
+            StartCoroutine(SpawnChunk());
         }
     }
 

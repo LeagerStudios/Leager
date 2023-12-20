@@ -92,8 +92,7 @@ public class CommandController : MonoBehaviour {
                 }
                 else if(input.Length == 2)
                 {
-                    int intValue = 0;
-                    bool isInt = int.TryParse(input[1], out intValue);
+                    bool isInt = int.TryParse(input[1], out int intValue);
                     if (isInt)
                     {
                         if (GameManager.gameManagerReference.entitiesContainer.transform.childCount > intValue)

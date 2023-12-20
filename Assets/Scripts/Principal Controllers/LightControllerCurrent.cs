@@ -215,19 +215,20 @@ public class LightControllerCurrent : MonoBehaviour
             foreach (GameObject loadedChunk in gameChunksToRead)
             {
                 ChunkController chunkController = loadedChunk.GetComponent<ChunkController>();
-
-                for (int i = 0; i < chunkController.LightMap.Length; i++)
-                {
-                    if (chunkController.LightMap[i] > 0)
+                if (!chunkController.loading)
+                    for (int i = 0; i < chunkController.LightMap.Length; i++)
                     {
-                        if (Vector2.Distance(chunkController.TileObject[i].transform.position, lightPosition) < lightDist + lightRadius * 2)
+                        if (chunkController.LightMap[i] > 0)
                         {
-                            Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
-                            renderLights.Add(lightPos);
-                            renderLightIntensity.Add(chunkController.LightMap[i]);
+                            if (chunkController.TileObject[i] != null)
+                                if (Vector2.Distance(chunkController.TileObject[i].transform.position, lightPosition) < lightDist + lightRadius * 2)
+                                {
+                                    Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
+                                    renderLights.Add(lightPos);
+                                    renderLightIntensity.Add(chunkController.LightMap[i]);
+                                }
                         }
                     }
-                }
 
                 e++;
             }

@@ -686,10 +686,12 @@ public class GameManager : MonoBehaviour
             {
                 if (entity.entityBase != null && entity.saveToFile)
                 {
-                    List<string> toEncrypt = new List<string>();
-                    toEncrypt.Add(entity.EntityType + ";");
-                    toEncrypt.Add(entity.entityBase.Hp + ";");
-                    toEncrypt.Add(entity.transform.position.x + ";" + entity.transform.position.y);
+                    List<string> toEncrypt = new List<string>
+                    {
+                        entity.EntityType + ";",
+                        entity.entityBase.Hp + ";",
+                        entity.transform.position.x + ";" + entity.transform.position.y
+                    };
                     entities.Add(string.Join("", toEncrypt.ToArray()));
                 }
             }
@@ -1157,7 +1159,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < 20; i++)
             {
-                yield return new WaitForSeconds(3);
+                yield return new WaitForSeconds(1);
                 UpdateChunksActive();
                 entitiesContainer.GetComponent<EntitiesManager>().UpdateEntities(LoadedChunks);
                 LightController.lightController.AddRenderQueue(Camera.main.transform.position);
@@ -1198,7 +1200,9 @@ public class GameManager : MonoBehaviour
         {
             if (!gameChunksToLoad.Contains(chunk) && chunk.activeInHierarchy)
             {
-                chunk.SetActive(false);
+                ChunkController chunkC = chunk.GetComponent<ChunkController>();
+                if (!chunkC.loading)
+                    chunk.GetComponent<ChunkController>().DestroyCunk();
                 chunksDeactived++;
             }
         }
