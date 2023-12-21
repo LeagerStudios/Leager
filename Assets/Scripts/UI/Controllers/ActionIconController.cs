@@ -70,19 +70,19 @@ public class ActionIconController : MonoBehaviour
         {
             posVector.y += 320 * Time.deltaTime;
             rectTransform.position = posVector;
-            yield return new WaitForSeconds(0.01666f);
+            yield return new WaitForSeconds(0.016f);
         }
         for (int frame = 0; frame < 4; frame++)
         {
             posVector.y -= 320 * Time.deltaTime;
             rectTransform.position = posVector;
-            yield return new WaitForSeconds(0.01666f);
+            yield return new WaitForSeconds(0.016f);
         }
         for (int frame = 0; frame < 2; frame++)
         {
             posVector.y += 160 * Time.deltaTime;
             rectTransform.position = posVector;
-            yield return new WaitForSeconds(0.01666f);
+            yield return new WaitForSeconds(0.016f);
         }
 
         rectTransform.anchoredPosition = origPos;

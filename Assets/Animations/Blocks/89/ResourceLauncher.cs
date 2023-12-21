@@ -47,16 +47,17 @@ public class ResourceLauncher : MonoBehaviour {
         }
     }
 
-    public void TriggerAnimation(string state)
+    public void TriggerAnimation(string state, Sprite core)
     {
-        StartCoroutine(IETriggerAnimation(state));
+        StartCoroutine(IETriggerAnimation(state, core));
     }
 
-    IEnumerator IETriggerAnimation(string state)
+    IEnumerator IETriggerAnimation(string state, Sprite core)
     {
         if (state == "packagelaunch")
         {
             GameObject child = Instantiate(packPrefab, transform);
+            child.GetComponent<SpriteRenderer>().sprite = core;
             child.transform.position = transform.position + (Vector3.up * 0.5f);
             float speed = 10f;
 
@@ -64,9 +65,10 @@ public class ResourceLauncher : MonoBehaviour {
 
             while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 10f)
             {
-                child.transform.Translate(Vector2.up * speed * Time.deltaTime);
+                child.transform.position += Vector3.up * speed * Time.deltaTime;
+                child.transform.eulerAngles += Vector3.forward * speed * Time.deltaTime;
                 speed += Time.deltaTime * 10;
-                yield return new WaitForSeconds(0.01666f);
+                yield return new WaitForEndOfFrame();
             }
         }
         else if(state == "antenna")
@@ -76,7 +78,7 @@ public class ResourceLauncher : MonoBehaviour {
             {
                 transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(transform.eulerAngles.z, -20f, 0.4f);
                 t += Time.deltaTime;
-                yield return new WaitForSeconds(0.01666f);
+                yield return new WaitForSeconds(0.016f);
             }
         }
 

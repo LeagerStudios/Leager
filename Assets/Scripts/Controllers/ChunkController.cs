@@ -735,7 +735,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (manager.doingAnAction)
             {
-                if (manager.doingAnAction && Mathf.Abs(player.transform.position.x - transform.position.x) < System.Convert.ToInt32(GameObject.Find("MenuFunctions").GetComponent<MenuController>().ChunkUpdateNotifier.text) || !manager.Generated)
+                if (manager.doingAnAction && Mathf.Abs(player.transform.position.x - transform.position.x) < 99 || !manager.Generated)
                 {
                     if (GInput.GetMouseButton(0))
                     {

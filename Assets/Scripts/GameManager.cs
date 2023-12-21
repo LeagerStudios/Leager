@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
     public bool isLorePlanet = true;
     public bool isSavingData = false;
     public string persistentDataPath = "null";
+    public int tileSpawnRate = 0;
 
     //Lists
     List<GameObject> poolTiles = new List<GameObject>();

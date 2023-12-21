@@ -54,6 +54,14 @@ public class PushPlay : MonoBehaviour
         string worldName = WorldPanelController.worldPanelController.newWorldName.GetComponent<InputField>().text;
         if (worldName == "miler sucks")
         {
+            Application.OpenURL("https://www.youtube.com/watch?v=8xMagakTNtI&t=0s");
+        }
+        else if (worldName == "mbsucks")
+        {
+            
+        }
+        else if (worldName == "gofredeb")
+        {
             
         }
         else
@@ -74,9 +82,11 @@ public class PushPlay : MonoBehaviour
             int port = System.Convert.ToInt32(WorldPanelController.worldPanelController.multiplayerPort.GetComponent<InputField>().text);
             Debug.Log("Trying to connect to server: " + port);
 
-            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            formData.Add(new MultipartFormDataSection("user", DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData[0]));
-            formData.Add(new MultipartFormDataSection("port", port + ""));
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+            {
+                new MultipartFormDataSection("user", DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData[0]),
+                new MultipartFormDataSection("port", port + "")
+            };
 
             StartCoroutine(GetDataFromURL("http://188.171.182.27/game/database/servers/joinServer.php", "joinServer", formData));
         }

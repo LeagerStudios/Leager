@@ -520,7 +520,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             for (int i = 0;i < 10; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
-                yield return new WaitForSeconds(0.01666f);
+                yield return new WaitForSeconds(0.016f);
             }
         }
         if(armType == "bow")
@@ -548,7 +548,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             for (int i = 0; i < 12; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
-                yield return new WaitForSeconds(0.01666f);
+                yield return new WaitForSeconds(0.016f);
             }
         }
         transform.GetChild(0).eulerAngles = Vector3.zero;

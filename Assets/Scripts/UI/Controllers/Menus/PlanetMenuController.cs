@@ -13,6 +13,10 @@ public class PlanetMenuController : MonoBehaviour {
     [SerializeField] RectTransform planetPanelButtonsRectTransform;
     [SerializeField] public RectTransform subPanel;
 
+    [SerializeField] GameObject goToPlanetButton;
+    [SerializeField] GameObject connectButton;
+    [SerializeField] GameObject connectButtonText;
+
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
     public List<string> Items
@@ -37,6 +41,7 @@ public class PlanetMenuController : MonoBehaviour {
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
         {
             planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("25FF00FF"), 50));
+            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 250));
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
         else
@@ -79,11 +84,6 @@ public class PlanetMenuController : MonoBehaviour {
             }
 
         planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
-
-        if (planetFocused != -1)
-        {
-            planetPanelButtonsRectTransform.GetChild(0).GetComponent<Button>().interactable = planets[planetFocused].planetName != GameManager.gameManagerReference.currentPlanetName;
-        }
     }
 
     public void FocusPlanet(int idx)
@@ -92,6 +92,8 @@ public class PlanetMenuController : MonoBehaviour {
 
         planetSelectionFocused = false;
 
+        bool isThis = GameManager.gameManagerReference.currentPlanetName == planets[idx].planetName;
+        bool isExplored = /*"HELP MEEE"*/false;
         RectTransform planetDataRectTransform = planetPanelPropertiesRectTransform.GetChild(1).GetComponent<RectTransform>();
 
         planetDataRectTransform.GetChild(0).GetComponent<Image>().color = planets[idx].planetColor.Color;
@@ -101,7 +103,10 @@ public class PlanetMenuController : MonoBehaviour {
 
         RectTransform propertiesRectTransform = planetPanelPropertiesRectTransform.GetChild(2).GetComponent<RectTransform>();
 
-        propertiesRectTransform.GetChild(0).gameObject.SetActive(GameManager.gameManagerReference.currentPlanetName == planets[idx].planetName);
+
+        propertiesRectTransform.GetChild(0).gameObject.SetActive(isThis);
+        connectButtonText.gameObject.SetActive(!isExplored);
+        connectButton.GetComponent<Button>().interactable = isExplored && planets[planetFocused].planetName != GameManager.gameManagerReference.currentPlanetName;
         propertiesRectTransform.GetChild(1).GetComponent<Text>().text = "Size: " + planets[idx].wordSize;
 
     }
@@ -137,7 +142,7 @@ public class PlanetMenuController : MonoBehaviour {
                 resources = resources + Items[i];
             }
 
-        MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher);
+        MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher, GameManager.gameManagerReference.tiles[subPanel.GetComponent<PackupMenuController>().currentCore]);
         gameObject.SetActive(false);
     }
 

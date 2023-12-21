@@ -76,14 +76,14 @@ public class CanDoActionIconController : MonoBehaviour
             posVector.x += 4 * Time.deltaTime;
             posVector.y += 4 * Time.deltaTime;
             rectTransform.localScale = posVector;
-            yield return new WaitForSeconds(0.01666f);
+            yield return new WaitForSeconds(0.016f);
         }
         for (int frame = 0; frame < 2; frame++)
         {
             posVector.x -= 4 * Time.deltaTime;
             posVector.y -= 4 * Time.deltaTime;
             rectTransform.localScale = posVector;
-            yield return new WaitForSeconds(0.01666f);
+            yield return new WaitForSeconds(0.016f);
         }
         rectTransform.localScale = origScale;
     }

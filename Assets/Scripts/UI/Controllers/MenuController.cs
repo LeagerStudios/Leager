@@ -73,8 +73,10 @@ public class MenuController : MonoBehaviour {
         {
             fpsOn = false;
         }
+
+        ChunkUpdateNotifier.text = System.Convert.ToString(ChunkUpdateSlider.value);
     }
-	
+
 	void Update () {
 
         if (GInput.GetKeyDown(KeyCode.Escape))
@@ -124,7 +126,7 @@ public class MenuController : MonoBehaviour {
         FpsText.SetActive(fpsOn);
         FpsText.GetComponent<Text>().text = Mathf.Floor(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
 
-        ChunkUpdateNotifier.text = System.Convert.ToString(ChunkUpdateSlider.value);
+       
 
         MiniMap.SetActive(miniMapOn);
         MiniMapCamera.SetActive(miniMapOn);
@@ -170,6 +172,13 @@ public class MenuController : MonoBehaviour {
         }
     }
 
+    public void UpdateTileSpawnRate()
+    {
+        int val = (int)ChunkUpdateSlider.value;
+        ChunkUpdateNotifier.text = val + "";
+        gameManager.tileSpawnRate = val;
+    }
+
     public void MenuDeploy()
     {
         if (!settingsMenu.activeInHierarchy && !planetMenu.activeInHierarchy)
@@ -196,12 +205,12 @@ public class MenuController : MonoBehaviour {
         }
     }
 
-    public void PlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from)
+    public void PlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite core)
     {
-        StartCoroutine(IEPlanetaryTravel(planet, resources, from));
+        StartCoroutine(IEPlanetaryTravel(planet, resources, from, core));
     }
 
-    public IEnumerator IEPlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from)
+    public IEnumerator IEPlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite core)
     {
         yield return new WaitForSeconds(1);
         Debug.Log("==GOING TO LOCATION: " + planet.planetName + " WITH " + resources + " RESOURCES");
@@ -225,11 +234,11 @@ public class MenuController : MonoBehaviour {
 
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { state }, "worldEnterAnimation");
 
-        from.TriggerAnimation(state);
+        from.TriggerAnimation(state, core);
 
         while (!from.animationPlayed)
         {
-            yield return new WaitForSeconds(0.01666f);
+            yield return new WaitForSeconds(0.016f);
         }
 
         LoadingPlanetScreen.SetActive(true);
@@ -432,7 +441,7 @@ public class MenuController : MonoBehaviour {
 
     public void UpdateRenderChunkDistance(int idx)
     {
-        int[] list = { 1, 3, 5, 10, 20, 40 };
+        int[] list = { 3, 5, 10, 20, 40 };
         chunkLoadDistance = list[idx] * 20;
         chunksOnEachSide = list[idx];
         Debug.Log("(OPTIONS)==CHUNKS ACTIVATED SET TO: " + idx + ". EQUALS: " + list[idx] + ".==");

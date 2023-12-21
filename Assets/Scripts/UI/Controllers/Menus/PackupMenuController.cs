@@ -14,7 +14,7 @@ public class PackupMenuController : MonoBehaviour
 
     List<string> items = new List<string>();
 
-    int currentCore = 0;
+    public int currentCore = 0;
     int coreCapacity = 0;
     int usedCapacity = 0;
 
