@@ -5,6 +5,7 @@ using UnityEngine;
 public class ResourceLauncher : MonoBehaviour {
 
     public GameObject packPrefab;
+    public GameObject firePrefab;
     public bool spawn;
     public bool animationPlayed = false;
 
@@ -36,15 +37,8 @@ public class ResourceLauncher : MonoBehaviour {
 
     void Update()
     {
-        //ManagingFunctions.DropItem(7, transform.parent.position + new Vector3(Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad) * 0.7f, Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad) * -0.7f), 1, 1f);
-        if (spawn)
-        {
-            spawn = false;
-            //GameObject a = Instantiate(packPrefab);
-            //target = a.GetComponent<PackageBlock>();
-            //target.target = this;
-            //a.transform.position = transform.position + Vector3.one * 10;
-        }
+        if (Input.GetKeyDown(KeyCode.K))
+            TriggerAnimation("packagelaunch", GameManager.gameManagerReference.tiles[97]);
     }
 
     public void TriggerAnimation(string state, Sprite core)
@@ -57,21 +51,53 @@ public class ResourceLauncher : MonoBehaviour {
         if (state == "packagelaunch")
         {
             GameObject child = Instantiate(packPrefab, transform);
+            GameObject child2 = Instantiate(firePrefab, child.transform);
+            GameObject child3 = Instantiate(firePrefab, child.transform);
+            GameObject child4 = Instantiate(firePrefab, child.transform);
             child.GetComponent<SpriteRenderer>().sprite = core;
-            child.transform.position = transform.position + (Vector3.up * 0.5f);
-            float speed = 10f;
+            child.transform.position = transform.position + (Vector3.up * 0.75f);
+            child2.transform.localPosition = new Vector2(0f, -0.5f);
+            child3.transform.localPosition = new Vector2(0.5f, -0.5f);
+            child4.transform.localPosition = new Vector2(-0.5f, -0.5f);
+            CoreFire fire = child2.GetComponent<CoreFire>();
+            fire.minSize = 0f;
+            fire.rotPerSec = 2f;
+            CoreFire fire3 = child3.GetComponent<CoreFire>();
+            fire.minSize = 0f;
+            fire.rotPerSec = 1f;
+            CoreFire fire4 = child4.GetComponent<CoreFire>();
+            fire.minSize = 0f;
+            fire.rotPerSec = 1f;
+            float speed = 0f;
 
             Camera.main.GetComponent<CameraController>().focus = child;
-
-            while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 10f)
+            float counter = 0f;
+            while (counter < 2)
             {
                 child.transform.position += Vector3.up * speed * Time.deltaTime;
-                child.transform.eulerAngles += Vector3.forward * speed * Time.deltaTime;
+
+                if (speed < 2)
+                {
+                    speed += Time.deltaTime;
+                }
+
+                counter += speed * Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+
+            fire.endOnNext = true;
+            fire3.endOnNext = true;
+            fire4.endOnNext = true;
+
+            while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 15f)
+            {
+                child.transform.position += Vector3.up * speed * Time.deltaTime;
+                child.transform.eulerAngles += Vector3.forward * speed * 30 * Time.deltaTime;
                 speed += Time.deltaTime * 10;
                 yield return new WaitForEndOfFrame();
             }
         }
-        else if(state == "antenna")
+        else if (state == "antenna")
         {
             float t = 0f;
             while (t < 1f)

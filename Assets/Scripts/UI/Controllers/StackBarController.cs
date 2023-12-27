@@ -36,7 +36,7 @@ public class StackBarController : MonoBehaviour {
             {
                 StackBar.ChangeStackBarIdx(idx + 1);
             }
-            if (GInput.GetKeyDown(KeyCode.E))
+            if (GInput.GetKeyDown(KeyCode.E) && planetaryLoading == null)
             {
                 if (InventoryDeployed)
                 {

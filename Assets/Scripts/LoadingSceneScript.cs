@@ -82,7 +82,7 @@ public class LoadingSceneScript : MonoBehaviour
             }
             else
             {
-                loadingTxt.GetComponent<Text>().text = "Loading With Default Configuration";
+
                 DataSaver.ModifyTxt(Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt", craftingT1DefaultConfig);
             }
             StartCoroutine(TasksBeforeStart(DataSaver.version));
@@ -119,7 +119,7 @@ public class LoadingSceneScript : MonoBehaviour
     IEnumerator TasksBeforeStart(string version)
     {
 
-        for(int i = 0;i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             loadingBar.GetComponent<RectTransform>().localScale = new Vector2(loadingBar.GetComponent<RectTransform>().localScale.x - 0.1f, 1f);
             yield return new WaitForSeconds(0.016f);
@@ -135,21 +135,18 @@ public class LoadingSceneScript : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        string[] randomMessage = { "The Loading Time is Long, Isn't It?", "Loading, loading, loading...", "Waiting for the Loadingbar to Reach the End", "Writing stupid Phrases", "Undoing Stuff", Application.version + ", Cool version, Right?", "You Don't Know How to Play? Read the Instructions.", ":)", "JifteDev is Life", "Go to Eat a Waffle While this Loads", "Creating the Creator", "Waiting a Good Idea", "Go to The Sur and Craft a Core", "Get Ready to Play", "Programming Useless Mechanics", "Miler is slow", "[something has to be put in here]" };
+
+
+        loadingTxt.GetComponent<Text>().text = randomMessage[Random.Range(0, randomMessage.Length)];
+        Debug.Log("Load Text:" + loadingTxt.GetComponent<Text>().text);
+
         for (int i = 0; i < 10; i++)
         {
-            string[] randomMessages = { "...Writing Logs...", "...Writing Chunks State...", "...Loading...", "...Updating Settings...", "...Importing Libraries...", "...Checking Date...", "You are in " + Application.version, "...Checking Status...", ""};
-
             for (int i2 = 0; i2 < 10; i2++)
             {
                 loadingBar.GetComponent<RectTransform>().localScale = new Vector2(loadingBar.GetComponent<RectTransform>().localScale.x + 0.01f, 1f);
                 yield return new WaitForSeconds(0.016f);
-            }
-
-            if (loadingTxt.GetComponent<Text>().text != "Loading With Default Configuration")
-            {
-                loadingTxt.GetComponent<Text>().text = randomMessages[Random.Range(0, randomMessages.Length - 1)];
-                Debug.Log("Load Text:" + loadingTxt.GetComponent<Text>().text);
-                yield return new WaitForSeconds(Random.Range(0.3f, 0.4f));
             }
         }
 

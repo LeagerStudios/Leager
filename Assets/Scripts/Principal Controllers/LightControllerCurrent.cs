@@ -105,7 +105,6 @@ public class LightControllerCurrent : MonoBehaviour
             float intensity = renderLightIntensity[index];
             Color thisColorLight = lightEcoTexture.GetPixel((int)rendLight.x, (int)rendLight.y);
 
-            //if (thisColorLight.a > 1 - intensity)
             for (int nx = (int)rendLight.x - lightRadius; nx < (int)rendLight.x + lightRadius + 1; nx++)
             {
                 for (int ny = (int)rendLight.y - lightRadius; ny < (int)rendLight.y + lightRadius + 1; ny++)

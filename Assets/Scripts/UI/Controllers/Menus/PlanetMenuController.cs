@@ -19,6 +19,7 @@ public class PlanetMenuController : MonoBehaviour {
 
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
+    public List<string> lorePlanets = new List<string> { "Korenz", "Dua" };
     public List<string> Items
     {
         get
@@ -50,7 +51,7 @@ public class PlanetMenuController : MonoBehaviour {
 
             foreach(PlanetData planet in planets)
             {
-                if (planet.planetName != "Korenz")
+                if (!lorePlanets.Contains(planet.planetName))
                 {
                     RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
                     newPlanet.anchoredPosition = new Vector2(0f, 197.5f - (newPlanet.GetSiblingIndex() * 50f));
@@ -93,7 +94,14 @@ public class PlanetMenuController : MonoBehaviour {
         planetSelectionFocused = false;
 
         bool isThis = GameManager.gameManagerReference.currentPlanetName == planets[idx].planetName;
-        bool isExplored = /*"HELP MEEE"*/false;
+        bool isExplored;
+        if (planets[idx].planetName == "Korenz")
+        {
+            isExplored = true;
+        }
+        else
+            isExplored = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/" + planets[idx].planetName);
+
         RectTransform planetDataRectTransform = planetPanelPropertiesRectTransform.GetChild(1).GetComponent<RectTransform>();
 
         planetDataRectTransform.GetChild(0).GetComponent<Image>().color = planets[idx].planetColor.Color;
@@ -107,6 +115,7 @@ public class PlanetMenuController : MonoBehaviour {
         propertiesRectTransform.GetChild(0).gameObject.SetActive(isThis);
         connectButtonText.gameObject.SetActive(!isExplored);
         connectButton.GetComponent<Button>().interactable = isExplored && planets[planetFocused].planetName != GameManager.gameManagerReference.currentPlanetName;
+        goToPlanetButton.GetComponent<Button>().interactable = planets[planetFocused].planetName != GameManager.gameManagerReference.currentPlanetName;
         propertiesRectTransform.GetChild(1).GetComponent<Text>().text = "Size: " + planets[idx].wordSize;
 
     }
@@ -175,6 +184,7 @@ public class PlanetMenuController : MonoBehaviour {
         }
     }
 }
+
 
 [System.Serializable]
 public class PlanetData

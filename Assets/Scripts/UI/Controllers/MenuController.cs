@@ -216,7 +216,7 @@ public class MenuController : MonoBehaviour {
         Debug.Log("==GOING TO LOCATION: " + planet.planetName + " WITH " + resources + " RESOURCES");
         string state = "null";
 
-        if ((DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName) || planet.planetName == "Korenz") && resources == "null")
+        if ((DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName) || planet.planetName == "Korenz") && core == gameManager.tiles[0])
         {
             state = "antenna";
         }

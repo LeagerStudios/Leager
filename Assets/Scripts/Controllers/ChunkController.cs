@@ -675,7 +675,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 tileName++;
                 tileIdx++;
 
-                if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= TileGrid.Length / 60)
+                if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= manager.tileSpawnRate)
                 {
                     yield return new WaitForEndOfFrame();
                     counter = 0;
@@ -717,7 +717,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
             Destroy(obj);
 
-            if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= TileGrid.Length / 60)
+            if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= manager.tileSpawnRate)
             {
                 yield return new WaitForEndOfFrame();
                 counter = 0;

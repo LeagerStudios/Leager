@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool playerFocused = false;
     public int seed = 0;
     public int frameTimer = 0;
+    public int framesAddedThisFrame = 0;
 
     public GameObject[] EntitiesGameObject;
     public GameObject[] ProjectilesGameObject;
