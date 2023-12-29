@@ -76,6 +76,7 @@ public class MainCameraController : MonoBehaviour {
                 break;
         }
 
+        focusY = canvas.GetComponent<RectTransform>().localPosition.y;
         canvas.GetComponent<RectTransform>().localPosition = Vector2.Lerp(canvas.GetComponent<RectTransform>().localPosition, new Vector2(focusX, focusY), 0.2f);
     }
 

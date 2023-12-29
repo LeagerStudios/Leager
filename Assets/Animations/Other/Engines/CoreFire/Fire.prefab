@@ -92,7 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c9aeba6e7804b64b9971d206fae992e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSize: 1
-  maxSize: 2
+  minSize: 0
+  maxSize: 1
   t: 0
   rotPerSec: 1
+  endOnNext: 0

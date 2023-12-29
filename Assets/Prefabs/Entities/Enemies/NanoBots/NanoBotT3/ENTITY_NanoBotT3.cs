@@ -75,7 +75,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
     public void Boom()
     {
         animator.enabled = false;
-        Instantiate(explosion, transform.position, Quaternion.identity).transform.localScale = new Vector3(3, 3, 1);
+        Instantiate(explosion, transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
         Invoke("Despawn", 0.3f);
 
         foreach (EntityCommonScript entity in manager.entitiesContainer.GetComponentsInChildren<EntityCommonScript>())
@@ -95,7 +95,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             {
                 if (entity.gameObject.GetComponent<PlayerController>() != null)
                 {
-                    entity.gameObject.GetComponent<PlayerController>().LoseHp(15, true, 5f, true);
+                    entity.gameObject.GetComponent<PlayerController>().LoseHp(15, true, 1.5f, true);
                 }
             }
         }

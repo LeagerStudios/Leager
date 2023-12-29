@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class CoreFire : MonoBehaviour
 {
-    public float minSize = 1;
-    public float maxSize = 2;
+    public float minSize = 0;
+    public float maxSize = 1;
     public float t;
     public float rotPerSec = 1;
     public bool endOnNext = false;
+
+    private void Start()
+    {
+        transform.localScale = new Vector3(minSize, minSize, 1);
+    }
 
     void Update()
     {
@@ -24,7 +29,7 @@ public class CoreFire : MonoBehaviour
         }
 
 
-        float x = Mathf.Lerp(minSize, maxSize, Mathf.Sin(t * Mathf.Deg2Rad));
+        float x = Mathf.Lerp(minSize, maxSize, Mathf.Abs(Mathf.Sin(t * Mathf.Deg2Rad)));
         
         transform.localScale = new Vector3(x, x, 1);
     }

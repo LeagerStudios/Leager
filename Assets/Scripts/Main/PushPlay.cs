@@ -48,6 +48,11 @@ public class PushPlay : MonoBehaviour
 
     }
 
+    public void OpenSocialMedia(string link)
+    {
+        Application.OpenURL(link);
+    }
+
 
     public void StartNewGame()
     {
@@ -56,13 +61,9 @@ public class PushPlay : MonoBehaviour
         {
             Application.OpenURL("https://www.youtube.com/watch?v=8xMagakTNtI&t=0s");
         }
-        else if (worldName == "mbsucks")
-        {
-            
-        }
         else if (worldName == "gofredeb")
         {
-            
+            Application.OpenURL("https://www.youtube.com/watch?v=rNlyF43Te6U");
         }
         else
             StartCoroutine(LoadNewWorld(1f));

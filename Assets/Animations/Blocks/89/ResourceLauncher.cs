@@ -37,8 +37,7 @@ public class ResourceLauncher : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-            TriggerAnimation("packagelaunch", GameManager.gameManagerReference.tiles[97]);
+        
     }
 
     public void TriggerAnimation(string state, Sprite core)
@@ -46,56 +45,101 @@ public class ResourceLauncher : MonoBehaviour {
         StartCoroutine(IETriggerAnimation(state, core));
     }
 
-    IEnumerator IETriggerAnimation(string state, Sprite core)
+    IEnumerator IETriggerAnimation(string state, Sprite core, bool cameraFocus = true)
     {
         if (state == "packagelaunch")
         {
+            int coreTile = System.Array.IndexOf(GameManager.gameManagerReference.tiles, core);
             GameObject child = Instantiate(packPrefab, transform);
-            GameObject child2 = Instantiate(firePrefab, child.transform);
-            GameObject child3 = Instantiate(firePrefab, child.transform);
-            GameObject child4 = Instantiate(firePrefab, child.transform);
             child.GetComponent<SpriteRenderer>().sprite = core;
-            child.transform.position = transform.position + (Vector3.up * 0.75f);
-            child2.transform.localPosition = new Vector2(0f, -0.5f);
-            child3.transform.localPosition = new Vector2(0.5f, -0.5f);
-            child4.transform.localPosition = new Vector2(-0.5f, -0.5f);
-            CoreFire fire = child2.GetComponent<CoreFire>();
-            fire.minSize = 0f;
-            fire.rotPerSec = 2f;
-            CoreFire fire3 = child3.GetComponent<CoreFire>();
-            fire.minSize = 0f;
-            fire.rotPerSec = 1f;
-            CoreFire fire4 = child4.GetComponent<CoreFire>();
-            fire.minSize = 0f;
-            fire.rotPerSec = 1f;
-            float speed = 0f;
 
-            Camera.main.GetComponent<CameraController>().focus = child;
-            float counter = 0f;
-            while (counter < 2)
+            if (coreTile == 96)
             {
-                child.transform.position += Vector3.up * speed * Time.deltaTime;
+                GameObject child3 = Instantiate(firePrefab, child.transform);
+                GameObject child4 = Instantiate(firePrefab, child.transform);
 
-                if (speed < 2)
+                child.transform.position = transform.position + (Vector3.up * 0.75f);
+                child3.transform.localPosition = new Vector2(0.5f, -0.5f);
+                child4.transform.localPosition = new Vector2(-0.5f, -0.5f);
+                CoreFire fire3 = child3.GetComponent<CoreFire>();
+                fire3.maxSize = 0.5f;
+                CoreFire fire4 = child4.GetComponent<CoreFire>();
+                fire4.maxSize = 0.5f;
+                float speed = 0f;
+
+                if (cameraFocus)
+                    Camera.main.GetComponent<CameraController>().focus = child;
+                float counter = 0f;
+                while (counter < 2.5f)
                 {
-                    speed += Time.deltaTime;
+                    child.transform.position += Vector3.up * speed * Time.deltaTime;
+
+                    if (speed < 2)
+                    {
+                        speed += Time.deltaTime;
+                    }
+
+                    counter += speed * Time.deltaTime;
+                    yield return new WaitForEndOfFrame();
                 }
+                fire3.endOnNext = true;
+                fire4.endOnNext = true;
 
-                counter += speed * Time.deltaTime;
-                yield return new WaitForEndOfFrame();
+                while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 15f)
+                {
+                    child.transform.position += Vector3.up * speed * Time.deltaTime;
+                    child.transform.eulerAngles += Vector3.forward * speed * 30 * Time.deltaTime;
+                    speed += Time.deltaTime * 10;
+                    yield return new WaitForEndOfFrame();
+                }
             }
-
-            fire.endOnNext = true;
-            fire3.endOnNext = true;
-            fire4.endOnNext = true;
-
-            while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 15f)
+            else if (coreTile == 97)
             {
-                child.transform.position += Vector3.up * speed * Time.deltaTime;
-                child.transform.eulerAngles += Vector3.forward * speed * 30 * Time.deltaTime;
-                speed += Time.deltaTime * 10;
-                yield return new WaitForEndOfFrame();
+                GameObject child2 = Instantiate(firePrefab, child.transform);
+                GameObject child3 = Instantiate(firePrefab, child.transform);
+                GameObject child4 = Instantiate(firePrefab, child.transform);
+
+                child.transform.position = transform.position + (Vector3.up * 0.75f);
+                child2.transform.localPosition = new Vector2(0f, -0.5f);
+                child3.transform.localPosition = new Vector2(0.5f, -0.5f);
+                child4.transform.localPosition = new Vector2(-0.5f, -0.5f);
+                CoreFire fire = child2.GetComponent<CoreFire>();
+                fire.maxSize = 1.5f;
+                CoreFire fire3 = child3.GetComponent<CoreFire>();
+                fire3.maxSize = 0.5f;
+                CoreFire fire4 = child4.GetComponent<CoreFire>();
+                fire4.maxSize = 0.5f;
+                float speed = 0f;
+
+                if (cameraFocus)
+                    Camera.main.GetComponent<CameraController>().focus = child;
+                float counter = 0f;
+                while (counter < 2.5f)
+                {
+                    child.transform.position += Vector3.up * speed * Time.deltaTime;
+
+                    if (speed < 2)
+                    {
+                        speed += Time.deltaTime;
+                    }
+
+                    counter += speed * Time.deltaTime;
+                    yield return new WaitForEndOfFrame();
+                }
+                fire.endOnNext = true;
+                fire3.endOnNext = true;
+                fire4.endOnNext = true;
+
+                while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 15f)
+                {
+                    child.transform.position += Vector3.up * speed * Time.deltaTime;
+                    child.transform.eulerAngles += Vector3.forward * speed * 30 * Time.deltaTime;
+                    speed += Time.deltaTime * 10;
+                    yield return new WaitForEndOfFrame();
+                }
             }
+
+            Destroy(child);
         }
         else if (state == "antenna")
         {
@@ -110,6 +154,7 @@ public class ResourceLauncher : MonoBehaviour {
 
         animationPlayed = true;
     }
+
 
     IEnumerator PlaceAnimation()
     {

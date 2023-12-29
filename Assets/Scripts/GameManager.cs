@@ -24,8 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool inGame = false;
     [SerializeField] private bool playerFocused = false;
     public int seed = 0;
+    public float frameTimerAdder = 0f;
     public int frameTimer = 0;
-    public int framesAddedThisFrame = 0;
+    public bool addedFrameThisFrame = false;
 
     public GameObject[] EntitiesGameObject;
     public GameObject[] ProjectilesGameObject;
@@ -274,7 +275,18 @@ public class GameManager : MonoBehaviour
 
         if (inGame)
         {
-            frameTimer++;
+            addedFrameThisFrame = false;
+            frameTimerAdder += Time.deltaTime;
+
+            if (frameTimerAdder > 0.016f)
+            {
+                while (frameTimerAdder >= 0.016f)
+                {
+                    frameTimerAdder -= 0.016f;
+                }
+                addedFrameThisFrame = true;
+                frameTimer++;
+            }
 
             dayFloat += Time.deltaTime * 60;
 
@@ -1286,7 +1298,8 @@ public class GameManager : MonoBehaviour
                 }
                 else if (toolUsing == tileDefaultBrokeTool[entryTile] && lastTileBrush == tile)
                 {
-                    breakingTime -= (toolUsingEfficency - ToolEfficency[entryTile]);
+                    if (addedFrameThisFrame)
+                        breakingTime -= (toolUsingEfficency - ToolEfficency[entryTile]);
                 }
                 else
                 {
