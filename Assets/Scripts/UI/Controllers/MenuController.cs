@@ -11,6 +11,7 @@ public class MenuController : MonoBehaviour {
     public bool UIActive = true;
     public bool miniMapOn = true;
     public bool fpsOn = false;
+    public bool vSync = true;
     public int chunkLoadDistance;
     public int chunksOnEachSide;
     public bool devInterface = false;
@@ -28,7 +29,9 @@ public class MenuController : MonoBehaviour {
     [SerializeField] GameObject MiniMapCamera;
     [SerializeField] GameObject MiniMapButton;
     [SerializeField] GameObject FpsButton;
+    [SerializeField] Dropdown FPSDropdown;
     [SerializeField] GameObject FpsText;
+    [SerializeField] GameObject VSyncButton;
     [SerializeField] GameObject LoadingPlanetScreen;
     [SerializeField] DeathScreenController deathScreenController;
 
@@ -74,7 +77,18 @@ public class MenuController : MonoBehaviour {
             fpsOn = false;
         }
 
+        if (DataSaver.LoadStats(Application.persistentDataPath + @"/settings/vsync.lgrsd").SavedData[0] == "true")
+        {
+            vSync = true;
+        }
+        else
+        {
+            vSync = false;
+        }
+        QualitySettings.vSyncCount = System.Convert.ToInt32(vSync);
+
         ChunkUpdateNotifier.text = System.Convert.ToString(ChunkUpdateSlider.value);
+        Application.targetFrameRate = 60;
     }
 
 	void Update () {
@@ -153,6 +167,17 @@ public class MenuController : MonoBehaviour {
             FpsButton.transform.GetChild(0).GetComponent<Text>().text = "Off";
         }
 
+        if (vSync && VSyncButton.activeInHierarchy)
+        {
+            VSyncButton.GetComponent<Image>().color = Color.green;
+            VSyncButton.transform.GetChild(0).GetComponent<Text>().text = "On";
+        }
+        else
+        {
+            VSyncButton.GetComponent<Image>().color = Color.red;
+            VSyncButton.transform.GetChild(0).GetComponent<Text>().text = "Off";
+        }
+
 
         if (GInput.leagerInput.platform == "Mobile")
         {
@@ -197,7 +222,7 @@ public class MenuController : MonoBehaviour {
 
     public void PlanetMenuDeploy(ResourceLauncher resourceLauncher)
     {
-        if (gameManager.InGame)
+        if (gameManager.InGame && !planetMenu.GetComponent<PlanetMenuController>().subPanel.gameObject.activeInHierarchy)
         {
             gameManager.InGame = false;
             planetMenu.GetComponent<PlanetMenuController>().targetResourceLauncher = resourceLauncher;
@@ -465,6 +490,12 @@ public class MenuController : MonoBehaviour {
         Screen.SetResolution(Screen.width, Screen.height, !Screen.fullScreen);
     }
 
+    public void SetFPS(int idx)
+    {
+        string value = FPSDropdown.options[idx].text;
+        Application.targetFrameRate = System.Convert.ToInt32(value);
+    }
+
     public void SetResolutionDropdown()
     {
         List<string> options = new List<string>();
@@ -514,5 +545,12 @@ public class MenuController : MonoBehaviour {
             fpsOn = true;
             DataSaver.SaveStats(new string[] { "on" }, Application.persistentDataPath + @"/settings/fps.lgrsd");
         }
+    }
+
+    public void ActivateVSync()
+    {
+        vSync = !vSync;
+        QualitySettings.vSyncCount = System.Convert.ToInt32(vSync);
+        DataSaver.SaveStats(new string[] { fpsOn.ToString() }, Application.persistentDataPath + @"/settings/vsync.lgrsd");
     }
 }

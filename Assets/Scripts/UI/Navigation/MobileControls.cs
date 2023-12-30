@@ -5,6 +5,7 @@ using UnityEngine;
 public class MobileControls : MonoBehaviour {
 
     public Transform[] childs;
+    public GameObject subPlanetMenu;
 
     void Start()
     {
@@ -16,9 +17,13 @@ public class MobileControls : MonoBehaviour {
 
     void Update ()
     {
-        if (!GameManager.gameManagerReference.InGame || !GameManager.gameManagerReference.player.alive)
+        if ((!GameManager.gameManagerReference.InGame)|| !GameManager.gameManagerReference.player.alive)
         {
             SetOverlay("Null");
+        }
+        else if (subPlanetMenu.activeInHierarchy)
+        {
+            SetOverlay("SubPlanetMenu");
         }
         else if (StackBar.stackBarController.InventoryDeployed)
         {

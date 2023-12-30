@@ -36,7 +36,7 @@ public class WorkItemController : MonoBehaviour {
                         if (canInteract[tileSelected] == true)
                         {
                             workIcon.GetComponent<SpriteRenderer>().sprite = spritesRenders[tileSelected];
-                            if (GInput.GetMouseButtonDown(1))
+                            if (GInput.GetMouseButtonDown(1) || GInput.leagerInput.platform == "Mobile")
                             {
                                 DisplayForTile(tileSelected, rayHit);
                             }
