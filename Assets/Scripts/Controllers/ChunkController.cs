@@ -687,8 +687,9 @@ public class ChunkController : MonoBehaviour, ITimerCall
             tileX++;
         }
 
-        loaded = true;
+        
         loading = false;
+        loaded = true;
         UpdateChunk();
     }
 
@@ -725,8 +726,9 @@ public class ChunkController : MonoBehaviour, ITimerCall
             counter++;
         }
 
-        loaded = false;
+    
         loading = false;
+        loaded = false;
         gameObject.SetActive(false);
     }
 

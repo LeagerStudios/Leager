@@ -80,7 +80,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
 
         foreach (EntityCommonScript entity in manager.entitiesContainer.GetComponentsInChildren<EntityCommonScript>())
         {
-            if (Vector2.Distance(entity.transform.position, transform.position) < 3)
+            if (Vector2.Distance(entity.transform.position, transform.position) < 4f)
             {
                 if (entity.gameObject.GetComponent<IDamager>() != null)
                 {
@@ -91,7 +91,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
 
         foreach (EntityCommonScript entity in manager.dummyObjects.GetComponentsInChildren<EntityCommonScript>())
         {
-            if (Vector2.Distance(entity.transform.position, transform.position) < 2f)
+            if (Vector2.Distance(entity.transform.position, transform.position) < 4f)
             {
                 if (entity.gameObject.GetComponent<PlayerController>() != null)
                 {

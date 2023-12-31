@@ -1557,7 +1557,7 @@ public class GameManager : MonoBehaviour
 
                     if (Random.Range(0, 3) == 0)
                     {
-                        ManagingFunctions.DropItem(getTile, new Vector2(dx, dy));
+                        ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2(dx, dy)), new Vector2(dx, dy));
                     }
 
                     if (!chunks2Update.Contains(c))
