@@ -539,9 +539,24 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        catch (System.Exception ex)
+        catch
         {
-            Debug.Log("==NOT IMPORTED RESOURCES== " + ex.Message + " " + ex.ToString());
+            Debug.Log("==DIDNT IMPORT RESOURCES==");
+        }
+    }
+
+    public int CheckForIncomingCore()
+    {
+        try
+        {
+            string core = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("core")[0];
+
+            return System.Convert.ToInt32(core);
+        }
+        catch
+        {
+            Debug.Log("==DIDNT GET INCOMING CORE==");
+            return -1;
         }
     }
 
@@ -1502,5 +1517,56 @@ public class GameManager : MonoBehaviour
                 else StackBar.AddItem(78);
                 break;
         }
+    }
+
+    public ChunkController SetTileAt(int idx, int tile, bool updateChunk = true)
+    {
+        try
+        {
+            if (idx < 0)
+            {
+                idx += allMapGrid.Length;
+            }
+            if (idx > allMapGrid.Length - 1)
+            {
+                idx -= allMapGrid.Length;
+            }
+            ChunkController chunk = chunkContainer.transform.GetChild((int)ManagingFunctions.EntireDivision(idx, WorldHeight * 16).cocient).GetComponent<ChunkController>();
+            chunk.TileGrid[idx - chunk.tilesToChunk] = tile;
+            return chunk;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public void TileExplosionAt(int x, int y, int radius, int strength, bool dropBlocks = true)
+    {
+        List<ChunkController> chunks2Update = new List<ChunkController>();
+
+        for (int dx = x - radius; dx < x + radius + 1; dx++)
+        {
+            for (int dy = y - radius; dy < y + radius + 1; dy++)
+            {
+                int getTile = GetTileAt(dx * WorldHeight + dy);
+
+                if (Vector2.Distance(new Vector2(dx, dy), new Vector2(x, y)) < radius)
+                {
+                    ChunkController c = SetTileAt(dx * WorldHeight + dy, 0, false);
+
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        ManagingFunctions.DropItem(getTile, new Vector2(dx, dy));
+                    }
+
+                    if (!chunks2Update.Contains(c))
+                        chunks2Update.Add(c);
+                }
+            }
+        }
+
+        foreach (ChunkController chunk in chunks2Update)
+            chunk.UpdateChunk();
     }
 }

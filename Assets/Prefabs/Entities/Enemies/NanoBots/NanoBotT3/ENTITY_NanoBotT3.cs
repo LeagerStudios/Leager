@@ -99,6 +99,8 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
                 }
             }
         }
+
+        manager.TileExplosionAt((int)transform.position.x, (int)transform.position.y, 3, 5);
     }
 
     public override void Despawn()
