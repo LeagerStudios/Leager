@@ -441,9 +441,6 @@ public class GameManager : MonoBehaviour
                     }
 
                 }
-
-
-                //SendUpdateToAllChunks();
             }
 
             if (GInput.GetKeyDown(KeyCode.F2))
@@ -1238,26 +1235,27 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject chunk in gameChunksToLoad)
         {
-            if (!firstLimitPlaced)
-            {
-                chunksLimits.GetChild(0).transform.position = new Vector2(chunk.transform.position.x, WorldHeight / 2);
-                chunksLimits.GetChild(0).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
-                firstLimitPlaced = true;
-            }
+            //if (!firstLimitPlaced)
+            //{
+            //    chunksLimits.GetChild(0).transform.position = new Vector2(chunk.transform.position.x, WorldHeight / 2);
+            //    firstLimitPlaced = true;
+            //}
 
             if (!previousChunks.Contains(chunk) && !chunk.activeInHierarchy)
             {
                 chunk.SetActive(true);
-                chunk.GetComponent<ChunkController>().UpdateChunk();
                 chunksActived++;
             }
 
-            chunksLimits.GetChild(1).transform.position = new Vector2(chunk.transform.position.x + 16, WorldHeight / 2);
-            chunksLimits.GetChild(1).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
+            //chunksLimits.GetChild(1).transform.position = new Vector2(chunk.transform.position.x + 16, WorldHeight / 2);
+            
 
             gameChunksLoaded.Add(chunk);
 
         }
+
+        chunksLimits.GetChild(0).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
+        chunksLimits.GetChild(1).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
 
         LoadedChunks = gameChunksLoaded.ToArray();
         UpdateChunksRelPos();
@@ -1268,6 +1266,7 @@ public class GameManager : MonoBehaviour
         foreach(GameObject chunk in LoadedChunks)
         {
             chunk.GetComponent<ChunkController>().UpdateChunkPos();
+            chunk.GetComponent<ChunkController>().UpdateWalls();
         }
     }
 

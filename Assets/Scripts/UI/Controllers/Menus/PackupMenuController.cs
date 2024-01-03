@@ -149,6 +149,8 @@ public class PackupMenuController : MonoBehaviour
         }
         usedCapacity = 0;
         planetPanel.GetComponent<PlanetMenuController>().Items = new List<string>();
+        items = new List<string>();
+        RefreshPackedItems();
     }
 
     public void RefreshPackedItems()

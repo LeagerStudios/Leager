@@ -85,6 +85,37 @@ public class ChunkController : MonoBehaviour, ITimerCall
         transform.position = new Vector2(nearestPos, 0);
     }
 
+    public void UpdateWalls()
+    {
+        int sibling = transform.GetSiblingIndex();
+        if (sibling > 0)
+        {
+            if (!transform.parent.GetChild(sibling - 1).GetComponent<ChunkController>().loaded)
+            {
+                manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
+            }
+        }
+        else
+        {
+            if (!transform.parent.GetChild(manager.WorldWidth - 1).GetComponent<ChunkController>().loaded)
+            {
+                manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
+            }
+        }
+
+        if (sibling < manager.WorldWidth)
+        {
+            manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
+        }
+        else
+        {
+            if (!transform.parent.GetChild(0).GetComponent<ChunkController>().loaded)
+            {
+                manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
+            }
+        }
+    }
+
     public void UpdateChunk()
     {
         if (loaded && !loading)
@@ -314,6 +345,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
             }
         }
+
+        UpdateWalls();
     }
 
     public void TileMod(int e)
