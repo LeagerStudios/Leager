@@ -140,7 +140,7 @@ public class ResourceLauncher : MonoBehaviour {
             }
             else if (coreTile == 100)
             {
-                child.transform.localScale = Vector3.one * 2;
+                
                 float speed = 10f;
 
                 if (cameraFocus)
@@ -154,19 +154,29 @@ public class ResourceLauncher : MonoBehaviour {
                     yield return new WaitForEndOfFrame();
                 }
 
+                child.transform.localScale = Vector3.one * 2;
+
                 GameObject child2 = Instantiate(firePrefab, child.transform);
                 GameObject child3 = Instantiate(firePrefab, child.transform);
                 GameObject child4 = Instantiate(firePrefab, child.transform);
+                GameObject child5 = Instantiate(firePrefab, child.transform);
+                GameObject child6 = Instantiate(firePrefab, child.transform);
 
-                child2.transform.localPosition = new Vector2(0f, -0.5f);
-                child3.transform.localPosition = new Vector2(1f, -0.5f);
-                child4.transform.localPosition = new Vector2(-1f, -0.5f);
+                child2.transform.localPosition = new Vector2(0f, -0.25f);
+                child3.transform.localPosition = new Vector2(0.25f, -0.25f);
+                child4.transform.localPosition = new Vector2(-0.25f, -0.25f);
+                child5.transform.localPosition = new Vector2(0.5f, -0.25f);
+                child6.transform.localPosition = new Vector2(-0.5f, -0.25f);
                 CoreFire fire = child2.GetComponent<CoreFire>();
-                fire.maxSize = 1.5f;
+                fire.maxSize = 0.6f;
                 CoreFire fire3 = child3.GetComponent<CoreFire>();
-                fire3.maxSize = 1.5f;
+                fire3.maxSize = 0.6f;
                 CoreFire fire4 = child4.GetComponent<CoreFire>();
-                fire4.maxSize = 1.5f;
+                fire4.maxSize = 0.6f;
+                CoreFire fire5 = child5.GetComponent<CoreFire>();
+                fire5.maxSize = 0.25f;
+                CoreFire fire6 = child6.GetComponent<CoreFire>();
+                fire6.maxSize = 0.25f;
 
 
                 while (child.transform.position.y < GameManager.gameManagerReference.WorldHeight + 15f)
