@@ -6,8 +6,11 @@ public class ResourceLauncher : MonoBehaviour {
 
     public GameObject packPrefab;
     public GameObject firePrefab;
+    public GameObject explosion;
     public bool spawn;
     public bool animationPlayed = false;
+    public GameObject playingCore = null;
+    [SerializeField] LayerMask blockMask;
 
     public List<string> Items
     {
@@ -37,7 +40,30 @@ public class ResourceLauncher : MonoBehaviour {
 
     void Update()
     {
-        
+        if (playingCore != null)
+            if (playingCore.GetComponent<SpriteRenderer>().enabled)
+                if (Physics2D.Raycast(playingCore.transform.position, Vector2.up, 0.6f, blockMask))
+                {
+                    Instantiate(explosion, playingCore.transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
+                    StopAllCoroutines();
+                    playingCore.GetComponent<SpriteRenderer>().enabled = false;
+
+                    foreach (SpriteRenderer a in playingCore.transform.GetComponentsInChildren<SpriteRenderer>()) { a.enabled = false; }
+
+                    MenuController.menuController.CancelTravel();
+
+                    Invoke("ReturnCamFocus", 1.5f);
+                }
+    }
+
+    public void ReturnCamFocus()
+    {
+        PlayerController player = GameManager.gameManagerReference.player;
+
+        Camera.main.GetComponent<CameraController>().focus = player.gameObject;
+        Destroy(playingCore);
+        player.onControl = true;
+        MenuController.menuController.UIActive = true;
     }
 
     public void TriggerAnimation(string state, Sprite core)
@@ -52,6 +78,7 @@ public class ResourceLauncher : MonoBehaviour {
             int coreTile = System.Array.IndexOf(GameManager.gameManagerReference.tiles, core);
             GameObject child = Instantiate(packPrefab, transform);
             child.GetComponent<SpriteRenderer>().sprite = core;
+            playingCore = child;
 
             if (coreTile == 96)
             {
@@ -147,6 +174,16 @@ public class ResourceLauncher : MonoBehaviour {
                     Camera.main.GetComponent<CameraController>().focus = child;
                 while (speed > -1f)
                 {
+                    child.transform.position += Vector3.up * speed * Time.deltaTime;
+
+                    speed += Time.deltaTime * Physics2D.gravity.y;
+
+                    yield return new WaitForEndOfFrame();
+                }
+
+                while (child.transform.localScale.x < 2f)
+                {
+                    child.transform.localScale += Vector3.one * 10 * Time.deltaTime;
                     child.transform.position += Vector3.up * speed * Time.deltaTime;
 
                     speed += Time.deltaTime * Physics2D.gravity.y;

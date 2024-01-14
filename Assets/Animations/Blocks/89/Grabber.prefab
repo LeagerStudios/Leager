@@ -95,5 +95,10 @@ MonoBehaviour:
   packPrefab: {fileID: 1454255807321408, guid: ff227e99611559b439a75705cc51b962, type: 3}
   firePrefab: {fileID: 1057892237317143119, guid: acd6455bd645a224e8e2eca92bd67154,
     type: 3}
+  explosion: {fileID: 1564098840317786, guid: abd96f05004ee9e41a2e45f84bb9b52c, type: 3}
   spawn: 0
   animationPlayed: 0
+  playingCore: {fileID: 0}
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 256

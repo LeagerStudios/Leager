@@ -100,7 +100,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             }
         }
 
-        manager.TileExplosionAt((int)transform.position.x, (int)transform.position.y, 3, 5);
+        manager.TileExplosionAt((int)transform.position.x, (int)transform.position.y, 3, 4);
     }
 
     public override void Despawn()
@@ -125,13 +125,14 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
 
     public override void Kill(string[] args)
     {
-        animator.SetBool("makeboom", true);
+        animator.SetBool("dead", true);
+        Invoke("Despawn", 1f);
     }
 
     void Update()
     {
         if (manager == null) manager = GameManager.gameManagerReference;
-        if (manager.InGame && HP > 0) AiFrame();
+        if (manager.InGame && HP > 0 && !animator.GetBool("makeboom")) AiFrame();
     }
 
     public override void AiFrame()
@@ -248,9 +249,9 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) > 20) Despawn();
         }
 
-        if (Vector2.Distance(manager.player.transform.position, transform.position) < 1 && !animator.GetBool("dead") && followingPlayer)
+        if (Vector2.Distance(manager.player.transform.position, transform.position) < 1 && !animator.GetBool("dead") && !animator.GetBool("makeboom") && followingPlayer)
         {
-            manager.player.LoseHp(5);
+            animator.SetBool("makeboom", true);
         }
     }
 
@@ -261,7 +262,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
         Vector2 pos = new Vector2(transform.position.x, transform.position.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, blockMask)) Grounded = true;
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, blockMask))
+        if (Grounded)
         {
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
         }

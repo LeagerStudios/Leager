@@ -13,7 +13,6 @@ public class WorldPanelController : MonoBehaviour {
     [SerializeField] public GameObject newWorldSeed;
     [SerializeField] public GameObject newWorldButton;
     [SerializeField] public Button newWorldMenuButton;
-    [SerializeField] public GameObject verySmallWorldButton;
     [SerializeField] GameObject AdvertText1;
     [SerializeField] GameObject AdvertText2;
 
@@ -93,7 +92,6 @@ public class WorldPanelController : MonoBehaviour {
             AdvertText1.SetActive(false);
             AdvertText2.SetActive(false);
         }
-        verySmallWorldButton.SetActive(Application.isEditor);
 
     }
 

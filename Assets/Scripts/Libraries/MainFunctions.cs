@@ -30,7 +30,7 @@ public static class ManagingFunctions
         }
     }
 
-    public static int ParseBoolToInt(bool value,bool inverted)
+    public static int ParseBoolToInt(bool value,bool inverted = false)
     {
         if (value && !inverted)
         {

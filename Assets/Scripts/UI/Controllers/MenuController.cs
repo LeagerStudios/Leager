@@ -36,6 +36,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] DeathScreenController deathScreenController;
 
     GameManager gameManager;
+    public Coroutine travelCoroutine;
     private void Awake()
     {
         menuController = this;
@@ -232,7 +233,13 @@ public class MenuController : MonoBehaviour {
 
     public void PlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite core)
     {
-        StartCoroutine(IEPlanetaryTravel(planet, resources, from, core));
+        travelCoroutine = StartCoroutine(IEPlanetaryTravel(planet, resources, from, core));
+    }
+
+    public void CancelTravel()
+    {
+        if (travelCoroutine != null)
+            StopCoroutine(travelCoroutine);
     }
 
     public IEnumerator IEPlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite core)

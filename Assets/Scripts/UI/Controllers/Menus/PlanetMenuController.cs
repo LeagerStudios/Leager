@@ -152,6 +152,7 @@ public class PlanetMenuController : MonoBehaviour {
             }
 
         MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher, GameManager.gameManagerReference.tiles[subPanel.GetComponent<PackupMenuController>().currentCore]);
+        subPanel.GetComponent<PackupMenuController>().currentCore = 0;
         gameObject.SetActive(false);
     }
 

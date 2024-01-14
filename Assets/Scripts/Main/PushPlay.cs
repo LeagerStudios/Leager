@@ -4,18 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using UnityEngine.Audio;
 
 public class PushPlay : MonoBehaviour
 {
     public static PushPlay main;
+    public AudioMixer gameAudio;
     [SerializeField] Slider loadingSlider;
+    [SerializeField] Slider bgmSlider;
     [SerializeField] GameObject loadingTexts;
     [SerializeField] public Button multiplayerButton;
     [SerializeField] NetworkController networkController;
     [SerializeField] GameObject transition;
     [SerializeField] AudioSource menuThemeAudio;
     bool gettingData = false;
-
 
 
     void Start()
@@ -37,6 +39,14 @@ public class PushPlay : MonoBehaviour
         }
 
         Debug.Log("Leager version: " + Application.version);
+
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/bgmvol.lgrsd"))
+        {
+            bgmSlider.value = System.Convert.ToSingle(DataSaver.ReadTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd")[0]);
+            BGMVol(bgmSlider.value);
+        }
+        else
+            DataSaver.CreateTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd", new string[] { System.Convert.ToString(1f) });
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");
@@ -75,6 +85,14 @@ public class PushPlay : MonoBehaviour
         StartCoroutine(LoadExistentWorld(1f, WorldPanelController.worldIndex));
     }
 
+    public void BGMVol(float vol)
+    {
+        float db = 20 * Mathf.Log10(vol);
+        gameAudio.SetFloat("BGM", db);
+
+        DataSaver.ModifyTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd", new string[] { System.Convert.ToString(vol) });
+    }
+
     public void ConnectToExternalGame()
     {
         try
@@ -89,7 +107,7 @@ public class PushPlay : MonoBehaviour
                 new MultipartFormDataSection("port", port + "")
             };
 
-            StartCoroutine(GetDataFromURL("http://188.171.182.27/game/database/servers/joinServer.php", "joinServer", formData));
+            StartCoroutine(GetDataFromURL("http://localhost/game/database/servers/joinServer.php", "joinServer", formData));
         }
         catch(System.Exception ex)
         {

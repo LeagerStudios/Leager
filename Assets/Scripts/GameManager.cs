@@ -1550,11 +1550,11 @@ public class GameManager : MonoBehaviour
             {
                 int getTile = GetTileAt(dx * WorldHeight + dy);
 
-                if (Vector2.Distance(new Vector2(dx, dy), new Vector2(x, y)) < radius)
+                if (Vector2.Distance(new Vector2(dx, dy), new Vector2(x, y)) < radius && ToolEfficency[getTile] < strength)
                 {
                     ChunkController c = SetTileAt(dx * WorldHeight + dy, 0, false);
 
-                    if (Random.Range(0, 3) == 0)
+                    if (Random.Range(0, 2) == 0 && dropBlocks)
                     {
                         ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2(dx, dy)), new Vector2(dx, dy));
                     }
