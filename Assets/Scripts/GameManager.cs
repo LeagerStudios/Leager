@@ -1203,7 +1203,6 @@ public class GameManager : MonoBehaviour
 
         int chunksActived = 0;
         int chunksDeactived = 0;
-        bool firstLimitPlaced = false;
 
         int playerChunk = (int)Mathf.Floor(player.transform.position.x / 16f);
 
@@ -1241,7 +1240,7 @@ public class GameManager : MonoBehaviour
             //    firstLimitPlaced = true;
             //}
 
-            if (!previousChunks.Contains(chunk) && !chunk.activeInHierarchy)
+            if (!chunk.activeInHierarchy)
             {
                 chunk.SetActive(true);
                 chunksActived++;

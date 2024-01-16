@@ -24,6 +24,11 @@ public class CommandController : MonoBehaviour {
 	
 
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(GameManager.gameManagerReference.player.transform.position.x, 80));
+        }
+
         if (!commandEnabled)
         {
             if (GInput.GetKeyDown(KeyCode.F12) && GameManager.gameManagerReference.InGame)
@@ -32,9 +37,11 @@ public class CommandController : MonoBehaviour {
                 GameManager.gameManagerReference.InGame = false;
                 command = "";
             }
-        }
 
-        if (commandEnabled)
+            background.enabled = false;
+            text.enabled = false;
+        }
+        else
         {
             if(writebarFrame < 10)
             {
@@ -66,12 +73,6 @@ public class CommandController : MonoBehaviour {
             if (commandEnabled && !GInput.GetKeyDown(KeyCode.Backspace)) command = command + Input.inputString;
             text.text = "/" + command + writebar;
             
-        }
-        else
-        {
-            
-            background.enabled = false;
-            text.enabled = false;
         }
 	}
 
