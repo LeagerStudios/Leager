@@ -140,7 +140,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
                         }
-                        else if(!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f))
+                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f))
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 10);
                         }
@@ -148,7 +148,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
                     }
                     else
                     {
-                        if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.79f, true))
+                        if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
                         {
                             rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
                         }
@@ -159,7 +159,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
                     }
 
 
-                    
+
                 }
 
                 if (damaged)
@@ -243,7 +243,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         {
             if (Vector2.Distance(transform.position, Camera.main.transform.position) > 20) Despawn();
         }
-            
+
         if (followingPlayer)
         {
             if (followingPlayer.transform.position.y < transform.position.y - 1)
@@ -251,11 +251,11 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
                 manager.DropOn(transform.position - Vector3.up * 0.8f, 0.5f);
             }
 
-                if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 1 && !dead && followingPlayer != null)
-                {
-                    followingPlayer.LoseHp(3);
-                }
+            if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 1 && !dead && followingPlayer != null)
+            {
+                followingPlayer.LoseHp(3);
             }
+        }
     }
 
 
