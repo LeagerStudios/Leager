@@ -446,7 +446,11 @@ public class PlayerController : MonoBehaviour, IDamager {
             DeathFase();
         }
     }
-    
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    Debug.Log("heya", collision.gameObject);
+    //}
 
     IEnumerator Kill()
     {

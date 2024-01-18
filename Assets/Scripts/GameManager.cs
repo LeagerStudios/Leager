@@ -1227,7 +1227,7 @@ public class GameManager : MonoBehaviour
             {
                 ChunkController chunkC = chunk.GetComponent<ChunkController>();
                 if (!chunkC.loading)
-                    chunk.GetComponent<ChunkController>().DestroyCunk();
+                    chunk.GetComponent<ChunkController>().DestroyChunk();
                 chunksDeactived++;
             }
         }

@@ -88,7 +88,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public void UpdateWalls()
     {
         int sibling = transform.GetSiblingIndex();
-        if (sibling > 0)
+        if (transform.position.x > 0)
         {
             if (!transform.parent.GetChild(sibling - 1).GetComponent<ChunkController>().loaded)
             {
@@ -103,9 +103,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
         }
 
-        if (sibling < manager.WorldWidth)
+        if (transform.position.x < manager.WorldWidth * 16 - 16f)
         {
-            manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
+            if (!transform.parent.GetChild(sibling + 1).GetComponent<ChunkController>().loaded)
+            {
+                manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
+            }
+
         }
         else
         {
@@ -651,7 +655,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == "#")//Nano1
                 {
-                    if (Random.Range(0, (int)(250 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
+                    if (Random.Range(0, (int)(170 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
                     {
                         if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
                         {
@@ -726,7 +730,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         UpdateChunk();
     }
 
-    public void DestroyCunk()
+    public void DestroyChunk()
     {
         if(!loading && loaded)
         {

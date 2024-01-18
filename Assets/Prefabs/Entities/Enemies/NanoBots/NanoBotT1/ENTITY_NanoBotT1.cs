@@ -76,7 +76,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
                 GameObject g = Instantiate(particle, transform.position, Quaternion.identity);
                 g.GetComponent<ParticleController>().Spawn();
             }
-            int drops = Random.Range(0, 3);
+            int drops = Random.Range(1, 3);
             ManagingFunctions.DropItem(65, transform.position, drops);
         }
         Destroy(gameObject);
