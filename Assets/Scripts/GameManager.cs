@@ -1262,10 +1262,11 @@ public class GameManager : MonoBehaviour
 
     public void UpdateChunksRelPos()
     {
-        foreach(GameObject chunk in LoadedChunks)
+        foreach (GameObject chunk in LoadedChunks)
         {
             chunk.GetComponent<ChunkController>().UpdateChunkPos();
-            chunk.GetComponent<ChunkController>().UpdateWalls();
+            if (chunk.GetComponent<ChunkController>().loaded)
+                chunk.GetComponent<ChunkController>().UpdateWalls();
         }
     }
 

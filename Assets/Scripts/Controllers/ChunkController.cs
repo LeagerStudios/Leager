@@ -88,35 +88,25 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public void UpdateWalls()
     {
         int sibling = transform.GetSiblingIndex();
-        if (transform.position.x > 0)
+        int sPlus = sibling + 1;
+        int sMinus = sibling - 1;
+
+        if (sMinus < 0)
         {
-            if (!transform.parent.GetChild(sibling - 1).GetComponent<ChunkController>().loaded)
-            {
-                manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
-            }
+            sMinus += manager.WorldWidth;
         }
-        else
+        if (sPlus >= manager.WorldWidth)
         {
-            if (!transform.parent.GetChild(manager.WorldWidth - 1).GetComponent<ChunkController>().loaded)
-            {
-                manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
-            }
+            sPlus -= manager.WorldWidth;
         }
 
-        if (transform.position.x < manager.WorldWidth * 16 - 16f)
+        if (!transform.parent.GetChild(sMinus).GetComponent<ChunkController>().loaded)
         {
-            if (!transform.parent.GetChild(sibling + 1).GetComponent<ChunkController>().loaded)
-            {
-                manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
-            }
-
+            manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
         }
-        else
+        if (!transform.parent.GetChild(sPlus).GetComponent<ChunkController>().loaded)
         {
-            if (!transform.parent.GetChild(0).GetComponent<ChunkController>().loaded)
-            {
-                manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
-            }
+            manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
         }
     }
 
@@ -348,9 +338,9 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     }
                 }
             }
-        }
 
-        UpdateWalls();
+            UpdateWalls();
+        }
     }
 
     public void TileMod(int e)
