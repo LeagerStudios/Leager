@@ -1932,7 +1932,6 @@ MonoBehaviour:
   newWorldSeed: {fileID: 276601363}
   newWorldButton: {fileID: 197452734}
   newWorldMenuButton: {fileID: 826442775}
-  verySmallWorldButton: {fileID: 0}
   AdvertText1: {fileID: 1632559666}
   AdvertText2: {fileID: 2028479622}
   multiplayerIp: {fileID: 362242460}
@@ -7666,7 +7665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fa5f83e0decac4a803f59ce5b592bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platform: PC
+  platform: Mobile
   keys: 
 --- !u!1 &1140661049
 GameObject:

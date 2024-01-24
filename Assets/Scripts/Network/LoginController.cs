@@ -46,11 +46,13 @@ public class LoginController : MonoBehaviour {
         {
             string[] logginSession = DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData;
 
-            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            formData.Add(new MultipartFormDataSection("user", logginSession[0]));
-            formData.Add(new MultipartFormDataSection("pass", logginSession[1]));
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+            {
+                new MultipartFormDataSection("user", logginSession[0]),
+                new MultipartFormDataSection("pass", logginSession[1])
+            };
 
-            StartCoroutine(GetDataFromURL("http://localhost/game/database/login.php", "userLogin", formData));
+            StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "userLogin", formData));
         }
     }
 
@@ -60,7 +62,7 @@ public class LoginController : MonoBehaviour {
         formData.Add(new MultipartFormDataSection("user", loginUserField.text));
         formData.Add(new MultipartFormDataSection("pass", loginPassField.text));
 
-        StartCoroutine(GetDataFromURL("http://localhost/game/database/login.php", "login", formData));
+        StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "login", formData));
     }
 
     public void LogOff()
@@ -81,7 +83,7 @@ public class LoginController : MonoBehaviour {
         else
             formData.Add(new MultipartFormDataSection("nick", signinNickField.text));
 
-        StartCoroutine(GetDataFromURL("http://localhost/game/database/signin.php", "signin", formData));
+        StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/signin.php", "signin", formData));
     }
 
     void URLCallback(string data, string requestType)

@@ -13,7 +13,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
     [SerializeField] GameObject explosion;
     GameManager manager;
 
-    public bool followingPlayer = false;
+    public PlayerController followingPlayer;
     float HpMax = 15f;
     float HP = 15f;
 
@@ -137,16 +137,126 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
 
     public override void AiFrame()
     {
-        if (followingPlayer && !manager.player.alive) followingPlayer = false;
+        bool lookingToSide = animator.GetBool("lookingSide");
+        bool moving = animator.GetBool("isMoving");
+        bool dead = animator.GetBool("dead");
+        bool damaged = animator.GetBool("damaged");
 
-        if (animator.GetBool("lookingSide"))
+        if (followingPlayer != null)
         {
-            if (animator.GetBool("isMoving") == false)
+            if (!followingPlayer.alive) followingPlayer = null;
+        }
+
+
+        if (lookingToSide)
+        {
+            if (!moving)
             {
                 if (Random.Range(0, 250) == 0)
                 {
                     animator.SetBool("isMoving", true);
-                    if (Random.Range(0, 2) == 0)
+                    moving = true;
+                }
+            }
+            else
+            {
+                if (!dead && !damaged)
+                {
+                    if (CheckGrounded())
+                    {
+                        rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+
+                        int boolint = ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX);
+
+                        if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.up, true))
+                        {
+                            rb2D.velocity = new Vector2(rb2D.velocity.x, 13f);
+                        }
+                        else if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.zero))
+                        {
+                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
+                        }
+                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f))
+                        {
+                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10);
+                        }
+
+                    }
+                    else
+                    {
+                        if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
+                        {
+                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                        }
+                        else
+                        {
+                            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
+                        }
+                    }
+
+
+
+                }
+
+                if (damaged)
+                {
+                    rb2D.velocity = new Vector2(Mathf.Clamp(transform.position.x - manager.player.transform.position.x, -1, 1) * 3, rb2D.velocity.y);
+                }
+
+                if (Random.Range(0, 85) == 0 && !followingPlayer)
+                {
+                    animator.SetBool("lookingSide", false);
+                    lookingToSide = false;
+                }
+            }
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+            moving = false;
+        }
+
+        if (!moving)
+            if (Random.Range(0, 100) == 0)
+            {
+                animator.SetBool("lookingSide", true);
+                lookingToSide = true;
+
+                if (Random.Range(0, 2) == 0)
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else
+                {
+                    spriteRenderer.flipX = false;
+                }
+            }
+
+        GameObject nearestPlayer = null;
+        float nearestDist = 999999f;
+
+        for (int i = 0; i < manager.dummyObjects.childCount; i++)
+        {
+            GameObject player = manager.dummyObjects.GetChild(i).gameObject;
+            if (Vector2.Distance(player.transform.position, transform.position) < nearestDist)
+            {
+                nearestDist = Vector2.Distance(player.transform.position, transform.position);
+                nearestPlayer = player;
+            }
+        }
+
+        if (nearestPlayer != null)
+            if (Vector2.Distance(nearestPlayer.transform.position, transform.position) < 15 && nearestPlayer.GetComponent<PlayerController>().alive)
+            {
+                followingPlayer = nearestPlayer.GetComponent<PlayerController>();
+                animator.SetBool("isMoving", true);
+                animator.SetBool("lookingSide", true);
+                moving = true;
+                lookingToSide = true;
+
+                if (Mathf.Repeat(manager.frameTimer, 10) == 0)
+                {
+                    if (Mathf.Sign(followingPlayer.transform.position.x - transform.position.x) < 0)
                     {
                         spriteRenderer.flipX = true;
                     }
@@ -158,119 +268,61 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             }
             else
             {
-                if (CheckGrounded() && !animator.GetBool("dead") && !animator.GetBool("damaged"))
-                {
-                    if (!Physics2D.Raycast(transform.position, Vector2.right * Mathf.Clamp(rb2D.velocity.x, -1, 1), 0.8f, blockMask))
-                    {
-                        if (!spriteRenderer.flipX)
-                        {
-                            rb2D.velocity = new Vector2(2, rb2D.velocity.y);
-                        }
-                        else
-                        {
-                            rb2D.velocity = new Vector2(-2, rb2D.velocity.y);
-                        }
-
-                        if (followingPlayer && manager.player.transform.position.y < transform.position.y - 1)
-                        {
-                            manager.DropOn(transform.position - Vector3.up * 0.8f, 0.5f);
-                        }
-                    }
-                    else if (rb2D.velocity.y == 0 && CheckGrounded())
-                    {
-                        rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
-                    }
-                }
-                else if (!Physics2D.Raycast(transform.position - new Vector3(0, 0.4f, 0), Vector2.right * Mathf.Clamp(rb2D.velocity.x, -1, 1), 0.75f, blockMask) && !animator.GetBool("dead") && !animator.GetBool("damaged"))
-                {
-                    if (!spriteRenderer.flipX)
-                    {
-                        rb2D.velocity = new Vector2(2, rb2D.velocity.y);
-                    }
-                    else
-                    {
-                        rb2D.velocity = new Vector2(-2, rb2D.velocity.y);
-                    }
-                }
-
-                if (animator.GetBool("damaged"))
-                {
-                    rb2D.velocity = new Vector2(Mathf.Clamp(transform.position.x - manager.player.transform.position.x, -1, 1) * 3, rb2D.velocity.y);
-                }
-
-                if (Random.Range(0, 85) == 0 && !followingPlayer)
-                {
-                    animator.SetBool("lookingSide", false);
-                }
+                followingPlayer = null;
             }
-        }
         else
         {
-            animator.SetBool("isMoving", false);
-        }
-
-        if (animator.GetBool("isMoving") == false)
-            if (Random.Range(0, 100) == 0)
-            {
-                animator.SetBool("lookingSide", true);
-                if (Random.Range(0, 2) == 0)
-                {
-                    spriteRenderer.flipX = true;
-                }
-                else
-                {
-                    spriteRenderer.flipX = false;
-                }
-            }
-
-        if (Vector2.Distance(manager.player.transform.position, transform.position) < 15 && manager.player.alive)
-        {
-            followingPlayer = true;
-            animator.SetBool("isMoving", true);
-            if (Mathf.Repeat(manager.frameTimer, 10) == 0)
-            {
-                if (Mathf.Sign(manager.player.transform.position.x - transform.position.x) < 0)
-                {
-                    spriteRenderer.flipX = true;
-                }
-                else
-                {
-                    spriteRenderer.flipX = false;
-                }
-            }
-        }
-        else
-        {
-            followingPlayer = false;
+            followingPlayer = null;
         }
 
         if (Random.Range(0, 1000) == 0)
         {
-            if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) > 20) Despawn();
+            if (Vector2.Distance(transform.position, Camera.main.transform.position) > 20) Despawn();
         }
 
-        if (Vector2.Distance(manager.player.transform.position, transform.position) < 1 && !animator.GetBool("dead") && !animator.GetBool("makeboom") && followingPlayer)
+        if (followingPlayer)
         {
-            animator.SetBool("makeboom", true);
+            if (followingPlayer.transform.position.y < transform.position.y - 1)
+            {
+                manager.DropOn(transform.position - Vector3.up * 0.8f, 0.5f);
+            }
+
+            if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 1 && !dead && !animator.GetBool("makeboom") && followingPlayer)
+            {
+                animator.SetBool("makeboom", true);
+            }
         }
     }
 
     public bool CheckGrounded()
     {
-        bool Grounded = false;
-        float raycastDistance = 0.85f;
-        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        return SendRaycast(0.85f, Vector2.down, Vector2.zero);
+    }
 
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, blockMask)) Grounded = true;
-        if (Grounded)
+    public bool SendRaycast(float raycastDist, Vector2 raycastDir, Vector2 localOffset, bool ignoreSlabs = false)
+    {
+        bool colliding = false;
+        Vector2 startpos = (Vector2)transform.position + localOffset;
+
+        if (ignoreSlabs)
         {
-            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
+            RaycastHit2D rayHit = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
+            if (rayHit)
+                colliding = rayHit.transform.GetComponent<PlatformEffector2D>() == null;
+            else colliding = false;
+        }
+        else
+            colliding = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
+
+        if (colliding)
+        {
+            Debug.DrawRay(startpos, raycastDir * raycastDist, Color.green);
         }
         else
         {
-            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
+            Debug.DrawRay(startpos, raycastDir * raycastDist, Color.red);
         }
 
-        return Grounded;
+        return colliding;
     }
 }

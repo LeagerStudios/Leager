@@ -107,7 +107,7 @@ public class PushPlay : MonoBehaviour
                 new MultipartFormDataSection("port", port + "")
             };
 
-            StartCoroutine(GetDataFromURL("http://localhost/game/database/servers/joinServer.php", "joinServer", formData));
+            StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/servers/joinServer.php", "joinServer", formData));
         }
         catch(System.Exception ex)
         {
