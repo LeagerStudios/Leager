@@ -105,7 +105,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
 
     public override void Despawn()
     {
-        if (animator.GetBool("dead"))
+        if (animator.GetBool("dead") && !animator.GetBool("makeboom"))
         {
             for (int i = 0; i < 20; i++)
             {

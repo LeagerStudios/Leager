@@ -288,7 +288,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             StackBar.LoseItem();
         }
 
-        if (GInput.GetMouseButtonDown(0) && gameManager.usingArm)
+        if (GInput.GetMouseButtonDown(0) && gameManager.usingArm && !gameManager.cancelPlacing)
         {
             StartCoroutine(ArmAnimation(gameManager.armUsing));
 

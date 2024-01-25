@@ -265,8 +265,16 @@ public class CraftMenuController : MonoBehaviour
                 StackBar.QuitItems(idx, currentTileAmounts[i]);
             }
         }
+        int temp = tileSelectedAmount;
 
+        Debug.Log("x" + tileSelectedAmount);
+        while (StackBar.AddItem(tileSelected) && tileSelectedAmount > 0)
+            tileSelectedAmount--;
 
-        ManagingFunctions.DropItem(tileSelected, follower.transform.position, tileSelectedAmount);
+        Debug.Log("y" + tileSelectedAmount);
+        if (tileSelectedAmount > 0)
+            GameManager.gameManagerReference.player.PlayerRelativeDrop(tileSelected, tileSelectedAmount);
+
+        tileSelectedAmount = temp;
     }
 }
