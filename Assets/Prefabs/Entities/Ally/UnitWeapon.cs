@@ -2,16 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitWeapon : MonoBehaviour
+public abstract class UnitWeapon
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    Vector2 targetPosition;
 }

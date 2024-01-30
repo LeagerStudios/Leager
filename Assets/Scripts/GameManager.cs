@@ -10,7 +10,12 @@ public enum Biomes : int
 
 public enum Entities : int
 {
-    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, AntiLaser = 4, NanoBotT3 = 5,
+    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, AntiLaser = 4, NanoBotT3 = 5, x = 7
+}
+
+public enum UnitEntities : int
+{
+    Darkn = 6,
 }
 
 public enum Projectiles : int

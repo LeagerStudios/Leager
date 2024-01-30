@@ -13,8 +13,7 @@ public class LightControllerCurrent : MonoBehaviour
     public GameObject[] loadedChunks;
     public Camera minimapCamera;
     public UnityEngine.UI.Dropdown lightStyleDropdown;
-    public List<Vector2> renderLights = new List<Vector2>();
-    public List<float> renderLightIntensity = new List<float>();
+    public Dictionary<Vector2, float> renderLights = new Dictionary<Vector2, float>();
     public Vector3 previousPosition;
 
     public int lightDist = 30;
@@ -98,11 +97,11 @@ public class LightControllerCurrent : MonoBehaviour
 
         int index = 0;
 
-        foreach (Vector2 renderLight in renderLights)
+        foreach (KeyValuePair<Vector2, float> renderLight in renderLights)
         {
-            Vector2 rendLight = renderLight;
+            Vector2 rendLight = renderLight.Key;
             rendLight += Vector2.one * (lightDist / 2);
-            float intensity = renderLightIntensity[index];
+            float intensity = renderLight.Value;
             Color thisColorLight = lightEcoTexture.GetPixel((int)rendLight.x, (int)rendLight.y);
 
             for (int nx = (int)rendLight.x - lightRadius; nx < (int)rendLight.x + lightRadius + 1; nx++)
@@ -153,9 +152,9 @@ public class LightControllerCurrent : MonoBehaviour
     {
         renderizingLight = true;
         if (MenuController.menuController.miniMapOn)
-            lightDist = (int)minimapCamera.orthographicSize + (lightRadius * 3);
+            lightDist = (int)minimapCamera.orthographicSize / 2 * 4 + (lightRadius * 3);
         else
-            lightDist = 32;
+            lightDist = 34;
 
 
         UpdateLights(lightPosition);
@@ -183,8 +182,7 @@ public class LightControllerCurrent : MonoBehaviour
 
     private void UpdateLights(Vector2 lightPosition)
     {
-        renderLights = new List<Vector2>();
-        renderLightIntensity = new List<float>();
+        renderLights = new Dictionary<Vector2, float>();
 
         if (loadedChunks.Length > 0)
         {
@@ -223,8 +221,7 @@ public class LightControllerCurrent : MonoBehaviour
                                 if (Vector2.Distance(chunkController.TileObject[i].transform.position, lightPosition) < lightDist + lightRadius * 2)
                                 {
                                     Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
-                                    renderLights.Add(lightPos);
-                                    renderLightIntensity.Add(chunkController.LightMap[i]);
+                                    renderLights.Add(lightPos, chunkController.LightMap[i]);
                                 }
                         }
                     }
