@@ -64,7 +64,10 @@ public class LightControllerCurrent : MonoBehaviour
         if (renderQueue.Count > 0 && !renderizingLight && !renderized)
         {
             renderizingLight = true;
-            UpdateLight(renderQueue.Peek());
+            Vector3 x = renderQueue.Peek();
+            renderQueue = new Queue<Vector3>();
+            renderQueue.Enqueue(x);
+            UpdateLight(x);
         }
 
 
@@ -90,8 +93,6 @@ public class LightControllerCurrent : MonoBehaviour
 
     public void DrawLights()
     {
-
-
         lightEcoTexture = new EcoTexture(lightDist, lightDist);
         lightEcoTexture.FillWith(Color.black);
 
@@ -103,46 +104,65 @@ public class LightControllerCurrent : MonoBehaviour
             rendLight += Vector2.one * (lightDist / 2);
             float intensity = renderLight.Value;
             Color thisColorLight = lightEcoTexture.GetPixel((int)rendLight.x, (int)rendLight.y);
-
-            for (int nx = (int)rendLight.x - lightRadius; nx < (int)rendLight.x + lightRadius + 1; nx++)
+            bool didPoint = false;
+            if (intensity > 1)
             {
-                for (int ny = (int)rendLight.y - lightRadius; ny < (int)rendLight.y + lightRadius + 1; ny++)
+                float secondIntensity = -1f;
+                if (renderLights.TryGetValue(rendLight - Vector2.one, out secondIntensity))
                 {
-                    float dist = Vector2.Distance(new Vector2(nx, ny), new Vector2((int)rendLight.x, (int)rendLight.y));
-                    if (dist < lightDist)
-                    {
-                        Color gettedColor = lightEcoTexture.GetPixel(nx, ny);
-                        dist = Mathf.Clamp(dist, 0f, lightRadius);
-                        float alphaIntensity = dist / lightRadius;
-                        if (intensity > 1)
-                        {
-                            alphaIntensity = (1 - alphaIntensity) * GameManager.gameManagerReference.dayLuminosity;
-                        }
-                        else
-                        {
-                            alphaIntensity = (1 - alphaIntensity) * intensity;
-                        }
-                        alphaIntensity = 1 - alphaIntensity;
-
-
-                        if (gettedColor.r >= 0f)
-                        {
-                            if (gettedColor.a > alphaIntensity)
-                            {
-                                if (dist > 1.5f)
+                    if (secondIntensity > 1)
+                        if (renderLights.TryGetValue(rendLight - Vector2.left, out secondIntensity))
+                            if (secondIntensity > 1)
+                                if (renderLights.TryGetValue(rendLight - Vector2.right, out secondIntensity))
                                 {
-                                    Color color = Color.black;
-                                    color.a = alphaIntensity;
-                                    lightEcoTexture.SetPixel(nx, ny, color.r, color.g, color.b, color.a);
+                                    lightEcoTexture.SetPixel((int)rendLight.x, (int)rendLight.y, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
+                                    didPoint = true;
                                 }
-                                else if (intensity > 1) lightEcoTexture.SetPixel(nx, ny, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
-                                else lightEcoTexture.SetPixel(nx, ny, 0, 0, 0, 1f - intensity);
+                                    
+                }
+            }
+            if(!didPoint)
+            {
+                for (int nx = (int)rendLight.x - lightRadius; nx < (int)rendLight.x + lightRadius + 1; nx++)
+                {
+                    for (int ny = (int)rendLight.y - lightRadius; ny < (int)rendLight.y + lightRadius + 1; ny++)
+                    {
+                        float dist = Vector2.Distance(new Vector2(nx, ny), new Vector2((int)rendLight.x, (int)rendLight.y));
+                        if (dist < lightDist)
+                        {
+                            Color gettedColor = lightEcoTexture.GetPixel(nx, ny);
+                            dist = Mathf.Clamp(dist, 0f, lightRadius);
+                            float alphaIntensity = dist / lightRadius;
+                            if (intensity > 1)
+                            {
+                                alphaIntensity = (1 - alphaIntensity) * GameManager.gameManagerReference.dayLuminosity;
+                            }
+                            else
+                            {
+                                alphaIntensity = (1 - alphaIntensity) * intensity;
+                            }
+                            alphaIntensity = 1 - alphaIntensity;
+
+
+                            if (gettedColor.r >= 0f)
+                            {
+                                if (gettedColor.a > alphaIntensity)
+                                {
+                                    if (dist > 1.5f)
+                                    {
+                                        Color color = Color.black;
+                                        color.a = alphaIntensity;
+                                        lightEcoTexture.SetPixel(nx, ny, color.r, color.g, color.b, color.a);
+                                    }
+                                    else if (intensity > 1) lightEcoTexture.SetPixel(nx, ny, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
+                                    else lightEcoTexture.SetPixel(nx, ny, 0, 0, 0, 1f - intensity);
+                                }
                             }
                         }
                     }
                 }
+                index++;
             }
-            index++;
         }
         renderized = true;
         renderizingLight = false;

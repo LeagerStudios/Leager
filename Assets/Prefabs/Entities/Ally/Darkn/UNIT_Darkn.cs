@@ -55,6 +55,10 @@ public class UNIT_Darkn : EntityBase, IDamager
 
     public override void AiFrame()
     {
+        if (Vector2.Distance(targetPosition, transform.position) > 0.5)
+            targetVelocity = Vector2.ClampMagnitude((targetPosition - (Vector2)transform.position) * 20, 30);
+        else
+            targetVelocity = Vector2.zero;
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, targetVelocity, 0.8f * Time.deltaTime);
         transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.3f));
 
@@ -66,12 +70,6 @@ public class UNIT_Darkn : EntityBase, IDamager
             if (fireZone.transform.childCount > 0)
                 if (!fireZone.transform.GetChild(0).GetComponent<CoreFire>().endOnNext)
                     fireZone.transform.GetChild(0).GetComponent<CoreFire>().endOnNext = true;
-
-        if(Physics2D.Raycast(transform.position, Vector2.up, 1f, blockMask))
-        {
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
     }
 
 
@@ -79,8 +77,8 @@ public class UNIT_Darkn : EntityBase, IDamager
     {
         transform.parent.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         transform.position = spawnPos;
-        transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
-        transform.GetChild(1).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+        transform.GetChild(0).GetComponent<DamagersCollision>().target = this;
+        transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
         weapons = GetComponentsInChildren<UnitWeapon>();
 
         return this;
