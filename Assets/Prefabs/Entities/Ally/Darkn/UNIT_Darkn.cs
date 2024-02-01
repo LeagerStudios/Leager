@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UNIT_Darkn : EntityBase, IDamager
+public class UNIT_Darkn : UnitBase, IDamager
 {
     public Rigidbody2D rb2d;
     [SerializeField] GameObject fireParticle;
@@ -11,7 +11,7 @@ public class UNIT_Darkn : EntityBase, IDamager
     [SerializeField] LayerMask blockMask;
     public Vector2 targetVelocity;
     public Vector2 targetPosition;
-    public UnitWeapon[] weapons;
+    bool beingControlled = false;
     float HpMax = 32;
     float HP = 32;
 
@@ -37,6 +37,13 @@ public class UNIT_Darkn : EntityBase, IDamager
         }
     }
 
+    public override bool BeingControlled
+    {
+        get { return beingControlled; }
+
+        set { beingControlled = value; }
+    }
+
     void Update()
     {
         if (GameManager.gameManagerReference.InGame)
@@ -45,7 +52,7 @@ public class UNIT_Darkn : EntityBase, IDamager
 
     public static void StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)UnitEntities.Darkn], Vector2.zero, Quaternion.identity).transform.GetChild(0).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
+        Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)UnitEntities.Darkn], Vector2.zero, Quaternion.identity).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
     }
 
     void Start()
@@ -75,11 +82,10 @@ public class UNIT_Darkn : EntityBase, IDamager
 
     public override EntityBase Spawn(string[] args, Vector2 spawnPos)
     {
-        transform.parent.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
+        transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         transform.position = spawnPos;
         transform.GetChild(0).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
-        weapons = GetComponentsInChildren<UnitWeapon>();
 
         return this;
     }
@@ -95,28 +101,19 @@ public class UNIT_Darkn : EntityBase, IDamager
         Hp = Hp - damageDeal;
     }
 
+    public override void SetTargetPosition(Vector2 targetPos)
+    {
+        targetPosition = targetPos;
+    }
+
     public override void Kill(string[] args)
     {
         if (args != null)
         {
             if (args[0] == "dead")
             {
-                float shortestDist = 9999999;
-                int segmentShortestDist = 0;
-
-                for (int i = 0; i < transform.parent.childCount; i++)
-                {
-                    Transform indexSegment = transform.parent.GetChild(i);
-                    if (Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.position) < shortestDist)
-                    {
-                        shortestDist = Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.position);
-                        segmentShortestDist = i;
-                    }
-                }
-                Transform targetSegment = transform.parent.GetChild(segmentShortestDist);
-
-                ManagingFunctions.DropItem(65, targetSegment.position, Random.Range(20, 40));
-                ManagingFunctions.DropItem(34, targetSegment.position, Random.Range(5, 10));
+                ManagingFunctions.DropItem(31, transform.position, Random.Range(1, 4));
+                ManagingFunctions.DropItem(93, transform.position, Random.Range(2, 5));
                 Despawn();
             }
         }

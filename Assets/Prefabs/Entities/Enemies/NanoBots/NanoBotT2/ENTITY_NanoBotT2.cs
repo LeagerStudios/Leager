@@ -56,7 +56,7 @@ public class ENTITY_NanoBotT2 : EntityBase, IDamager
         transform.GetChild(0).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
-        active = true;
+        Active = true;
         return this;
     }
 

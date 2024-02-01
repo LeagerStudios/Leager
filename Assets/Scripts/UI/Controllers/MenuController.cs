@@ -361,7 +361,7 @@ public class MenuController : MonoBehaviour {
 
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { gameManager.worldRootName + "/" + planet.planetName }, "worldName");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "newPlanet" }, "worldLoadType");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.chunkSize + "", "110" }, "newWorldSize");
+        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.chunkSize + "", "160" }, "newWorldSize");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.ColorToHex() }, "planetColor");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.planetName }, "planetName");
 

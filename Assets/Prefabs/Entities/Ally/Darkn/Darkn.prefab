@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9115139505576673568}
   - component: {fileID: 7099890847994999616}
+  - component: {fileID: 3340087945840558394}
   m_Layer: 0
   m_Name: DamageBox
   m_TagString: Untagged
@@ -44,6 +45,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 2662883963005854071}
+--- !u!58 &3340087945840558394
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4800237715838775114}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 069c94f5df2e85a43b33baaaf9297d0a, type: 2}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &5644879634192473716
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +199,7 @@ MonoBehaviour:
     m_Bits: 256
   targetVelocity: {x: 0, y: 0}
   targetPosition: {x: 0, y: 0}
+  weapons: []
 --- !u!114 &2662883963005854071
 MonoBehaviour:
   m_ObjectHideFlags: 0

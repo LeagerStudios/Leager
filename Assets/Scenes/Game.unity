@@ -14086,6 +14086,7 @@ MonoBehaviour:
   - {fileID: 1121028424981056, guid: b4eb43100466c9c498c6c7e9e0403589, type: 3}
   - {fileID: 1167045723135262, guid: 3cb6c9e10f8a2274194042d269747b50, type: 3}
   - {fileID: 1029631959894262, guid: 771f2de9be0f6574082d76156ae62e15, type: 3}
+  - {fileID: 7791379123253765221, guid: 178aa65c6f9e00543b3d591db722ffdf, type: 3}
   ProjectilesGameObject:
   - {fileID: 1178076033168696, guid: 11c3d9f514e79734a8282212f28d68b0, type: 3}
   - {fileID: 1254184956392732, guid: f85a6f2133d3243469bff370fe848613, type: 3}
@@ -15705,8 +15706,6 @@ MonoBehaviour:
   loadedChunks: []
   minimapCamera: {fileID: 292}
   lightStyleDropdown: {fileID: 868}
-  renderLights: []
-  renderLightIntensity: []
   previousPosition: {x: 0, y: 0, z: 0}
   lightDist: 30
   lightStyle: 0
