@@ -32,8 +32,9 @@ public class PROJECTILE_Arrow : ProjectileBase
 
     public override void Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {
-        transform.eulerAngles = new Vector3(0, 0, dir);
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
+        transform.eulerAngles = new Vector3(0, 0, dir);
+        
         damage += extraDamage;
         this.procedence = procedence;
         flying = true;

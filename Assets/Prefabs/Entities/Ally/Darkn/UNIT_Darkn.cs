@@ -98,7 +98,10 @@ public class UNIT_Darkn : UnitBase, IDamager
 
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
-        Hp = Hp - damageDeal;
+        if (procedence.EntityFamily != "yellow")
+        {
+            Hp -= damageDeal;
+        }
     }
 
     public override void SetTargetPosition(Vector2 targetPos)
