@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour, IDamager {
     public bool killing = false;
     public bool alive = true;
     public bool onControl = true;
+    public bool isMain = true;
     public int HP;
     public int MaxHP;
     GameManager gameManager;

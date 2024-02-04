@@ -18,6 +18,8 @@ public class WorldPanelController : MonoBehaviour {
 
     [SerializeField] public InputField multiplayerIp;
     [SerializeField] public InputField multiplayerPort;
+    [SerializeField] public InputField multiplayerUsername;
+
     [SerializeField] public Button multiplayerWorldButton;
 
     public List<string> listOfLoadedWorlds;

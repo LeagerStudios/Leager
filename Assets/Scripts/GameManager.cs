@@ -589,9 +589,9 @@ public class GameManager : MonoBehaviour
                 {
                     entityBase = ENTITY_NanoBotT3.StaticSpawn(null, spawnPos);
                 }
-                if (entityType == "antilaser")
+                if (entityType == "darkn")
                 {
-                    entityBase = ENTITY_AntiLaser.StaticSpawn(null, spawnPos);
+                    entityBase = UNIT_Darkn.StaticSpawn(null, spawnPos);
                 }
 
                 if (entityBase != null)

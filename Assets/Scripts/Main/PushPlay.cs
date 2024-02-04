@@ -73,7 +73,7 @@ public class PushPlay : MonoBehaviour
         }
         else if (worldName == "gofredeb")
         {
-            Application.OpenURL("https://www.youtube.com/watch?v=rNlyF43Te6U");
+            multiplayerButton.enabled = true;
         }
         else
             StartCoroutine(LoadNewWorld(1f));
@@ -99,15 +99,10 @@ public class PushPlay : MonoBehaviour
         {
             string ip = WorldPanelController.worldPanelController.multiplayerIp.GetComponent<InputField>().text;
             int port = System.Convert.ToInt32(WorldPanelController.worldPanelController.multiplayerPort.GetComponent<InputField>().text);
+            string user = System.Convert.ToInt32(WorldPanelController.worldPanelController.multiplayerUsername.GetComponent<InputField>().text);
             Debug.Log("Trying to connect to server: " + port);
 
-            List<IMultipartFormSection> formData = new List<IMultipartFormSection>
-            {
-                new MultipartFormDataSection("user", DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData[0]),
-                new MultipartFormDataSection("port", port + "")
-            };
-
-            StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/servers/joinServer.php", "joinServer", formData));
+            Client.Main(ip, port, user);
         }
         catch(System.Exception ex)
         {

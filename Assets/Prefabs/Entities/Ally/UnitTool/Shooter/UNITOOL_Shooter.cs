@@ -45,7 +45,7 @@ public class UNITOOL_Shooter : MonoBehaviour
                     Vector2 targetPos = nearesT.transform.position;
                     transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPos);
 
-                    if (nearest < 35f)
+                    if (nearest < 100f)
                     {
                         target = nearesT;
                         if (!unit.BeingControlled)

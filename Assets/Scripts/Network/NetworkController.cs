@@ -19,22 +19,12 @@ public class NetworkController : MonoBehaviour
         networkController = this;
     }
 
-    public static string GetLocalIP()
-    {
-        string localIP;
-        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
-        {
-            socket.Connect("8.8.8.8", 65530);
-            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-            localIP = endPoint.Address.ToString();
-        }
-        return localIP;
-    }
 
     public void Create(string ip, int port, string username)
     {
         Server.Main(ip, port, username);
         DontDestroyOnLoad(gameObject);
+        //NATUPnP(true);
     }
 
     public void ConnectTo(string ip, int port, string message)
@@ -43,6 +33,27 @@ public class NetworkController : MonoBehaviour
         Client.Main(ip, port, message);
         DontDestroyOnLoad(gameObject);
         print("client exits connect");
+    }
+
+    public void NATUPnP(bool boolean)
+    {
+        UPnPNAT upnpnat = new UPnPNAT();
+
+        IStaticPortMappingCollection mappings = upnpnat.StaticPortMappingCollection;
+
+        // Check if the device supports UPnP and has a mapping capability
+        if (mappings != null)
+        {
+            // Add a new port mapping
+            if (boolean)
+                mappings.Add(7777, "TCP", Server.targetPort, "ip", true, "Leager Multiplayer Server");
+            else
+                mappings.Remove(7777, "TCP");
+        }
+        else
+        {
+            Debug.LogError("UPnP is not supported on this device.");
+        }
     }
 
     public void UpdateBlock(int chunkIdx, int idx, int tile)
@@ -83,7 +94,7 @@ public class NetworkController : MonoBehaviour
                     {
                         if (user.tcpClient.GetStream().DataAvailable)
                         {
-                            string entry = Server.Read(user.tcpClient, 8192);
+                            string entry = Server.Read(user.tcpClient, 16384);
                             string[] messages = entry.Split('/');
 
                             foreach (string message in messages)
@@ -106,6 +117,7 @@ public class NetworkController : MonoBehaviour
                                     chunk.TileGrid[System.Convert.ToInt32(input[2])] = System.Convert.ToInt32(input[3]);
                                     chunk.UpdateChunk();
                                     blocksToReplace.Add(new string[] { user.username, input[0], input[1], input[2], input[3] });
+                                    LightController.lightController.AddRenderQueue(GameManager.gameManagerReference.player.transform.position);
                                 }
                             }
                         }
@@ -175,11 +187,11 @@ public class NetworkController : MonoBehaviour
 
                     blocksToReplace = new List<string[]>();
                 }
-                else
+                else if(GameManager.gameManagerReference.isNetworkClient)
                 {
                     if (Client.stream.DataAvailable)
                     {
-                        string entry = Client.Read(8192);
+                        string entry = Client.Read(16384);
                         string[] messages = entry.Split('/');
 
 
@@ -227,6 +239,7 @@ public class NetworkController : MonoBehaviour
                                 ChunkController chunk = GameManager.gameManagerReference.chunkContainer.transform.GetChild(System.Convert.ToInt32(input[1])).GetComponent<ChunkController>();
                                 chunk.TileGrid[System.Convert.ToInt32(input[2])] = System.Convert.ToInt32(input[3]);
                                 chunk.UpdateChunk();
+                                LightController.lightController.AddRenderQueue(GameManager.gameManagerReference.player.transform.position);
                             }
 
                             if (input[0] == "setTime")
@@ -284,7 +297,7 @@ public class Server
         {
             Debug.Log("Someone is entering...");
             TcpClient client = listener.AcceptTcpClient();
-            
+
             NetworkStream stream = client.GetStream();
 
 
@@ -293,38 +306,30 @@ public class Server
             string message = Encoding.ASCII.GetString(data, 0, bytesRead);
 
             //TODO Check if username in use, if true then refuse the connect, else let client connect
-            if(message == "Lecter")
+            List<string> usernamesInUse = new List<string> { hostUsername, "null", "Lecter" };
+            foreach (TcpUser c in clients)
+                usernamesInUse.Add(c.username);
+
+            if (usernamesInUse.Contains(message))
             {
                 client.Close();
                 return "null";
             }
-            if (message == "null")
-            {
-                client.Close();
-                return "null";
-            }
-            foreach (TcpUser user in clients)
-            {
-                if (message == user.username)
-                {
-                    client.Close();
-                    return "null";
-                }
-            }
-                Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
-                Read(client, 1024);
 
-                Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)).Length + "");
-                Read(client, 1024);
+            Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
+            Read(client, 1024);
 
-                Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
-                Read(client, 1024);
+            Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)).Length + "");
+            Read(client, 1024);
 
-                Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
-                Read(client, 1024);
+            Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
+            Read(client, 1024);
 
-                clients.Add(new TcpUser(client, message));
-                return message; //returns message
+            Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
+            Read(client, 1024);
+
+            clients.Add(new TcpUser(client, message));
+            return message;
         }
         else
         {

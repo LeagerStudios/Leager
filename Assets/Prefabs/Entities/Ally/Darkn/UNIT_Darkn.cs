@@ -50,9 +50,9 @@ public class UNIT_Darkn : UnitBase, IDamager
             AiFrame();
     }
 
-    public static void StaticSpawn(string[] args, Vector2 spawnPos)
+    public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)UnitEntities.Darkn], Vector2.zero, Quaternion.identity).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)UnitEntities.Darkn], Vector2.zero, Quaternion.identity).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
     }
 
     void Start()
