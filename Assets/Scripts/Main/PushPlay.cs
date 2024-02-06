@@ -69,11 +69,8 @@ public class PushPlay : MonoBehaviour
         string worldName = WorldPanelController.worldPanelController.newWorldName.GetComponent<InputField>().text;
         if (worldName == "miler sucks")
         {
-            Application.OpenURL("https://www.youtube.com/watch?v=8xMagakTNtI&t=0s");
-        }
-        else if (worldName == "gofredeb")
-        {
-            multiplayerButton.enabled = true;
+            multiplayerButton.interactable = true;
+            Camera.main.GetComponent<MainCameraController>().Focus = "mainMenu";
         }
         else
             StartCoroutine(LoadNewWorld(1f));
@@ -99,10 +96,11 @@ public class PushPlay : MonoBehaviour
         {
             string ip = WorldPanelController.worldPanelController.multiplayerIp.GetComponent<InputField>().text;
             int port = System.Convert.ToInt32(WorldPanelController.worldPanelController.multiplayerPort.GetComponent<InputField>().text);
-            string user = System.Convert.ToInt32(WorldPanelController.worldPanelController.multiplayerUsername.GetComponent<InputField>().text);
+            string user = WorldPanelController.worldPanelController.multiplayerUsername.GetComponent<InputField>().text;
             Debug.Log("Trying to connect to server: " + port);
 
             Client.Main(ip, port, user);
+            StartCoroutine(LoadNetworkWorld(1f, port));
         }
         catch(System.Exception ex)
         {

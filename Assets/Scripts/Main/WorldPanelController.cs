@@ -45,6 +45,7 @@ public class WorldPanelController : MonoBehaviour {
         saveObject = GameObject.Find("SaveObject").GetComponent<ComponetSaver>();
         Dropdown worldsDropdown = dropdown.GetComponent<Dropdown>();
         worldsDropdown.ClearOptions();
+        multiplayerIp.text = NetworkController.GetLocalIP();
 
         RefreshWorlds();
     }

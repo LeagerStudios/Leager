@@ -38,28 +38,34 @@ public class PlayerController : MonoBehaviour, IDamager {
         gameManager = GameManager.gameManagerReference;
     }
 
-    void Update () {
-        if (spawned)
-        {
-            if (alive && gameManager.InGame)
+    void Update()
+    {
+        if (isMain)
+            if (spawned)
             {
-                if (onControl)
-                    PlayerControl();
-                LecterAI();
-                Camera.main.transform.eulerAngles = Vector3.zero;
-            }
+                if (alive && gameManager.InGame)
+                {
+                    if (onControl)
+                        PlayerControl();
+                    LecterAI();;
+                    Camera.main.transform.eulerAngles = Vector3.zero;
+                }
 
-            if (!alive && !killing && gameManager.InGame)
-            {
-                Camera.main.transform.eulerAngles += Vector3.forward * Time.deltaTime;
-                Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
+                if (!alive && !killing && gameManager.InGame)
+                {
+                    Camera.main.transform.eulerAngles += Vector3.forward * Time.deltaTime;
+                    Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
+                }
             }
-        }
+            else
+            {
+                transform.position = new Vector2(0, 0);
+            }
         else
         {
-            transform.position = new Vector2(0, 0);
+
         }
-	}
+    }
 
     private void LateUpdate()
     {

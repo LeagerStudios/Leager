@@ -270,6 +270,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ManageTransition("CanStart", true, 1f));
         Invoke("UpdateChunksActive", 0.1f);
 
+        if(!isNetworkClient)
         LoadEntities();
     }
 
@@ -1150,7 +1151,6 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("===ENDED MAP GENERATION===");
-        Debug.Log("");
     }
 
     void SpawnChunk(int chunkX, float chunkIdx, int spawnedIdxs, int childId, string chunkBiome, int orgXpos)
@@ -1537,6 +1537,8 @@ public class GameManager : MonoBehaviour
             }
             ChunkController chunk = chunkContainer.transform.GetChild((int)ManagingFunctions.EntireDivision(idx, WorldHeight * 16).cocient).GetComponent<ChunkController>();
             chunk.TileGrid[idx - chunk.tilesToChunk] = tile;
+            if (updateChunk) chunk.UpdateChunk();
+            if (isNetworkClient || isNetworkHost) NetworkController.networkController.UpdateBlock(chunk.transform.GetSiblingIndex(), idx, tile);
             return chunk;
         }
         catch

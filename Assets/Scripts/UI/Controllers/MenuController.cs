@@ -34,6 +34,9 @@ public class MenuController : MonoBehaviour {
     [SerializeField] GameObject VSyncButton;
     [SerializeField] GameObject LoadingPlanetScreen;
     [SerializeField] DeathScreenController deathScreenController;
+    [SerializeField] InputField ipHost;
+    [SerializeField] InputField portHost;
+    [SerializeField] InputField usernameHost;
 
     GameManager gameManager;
     public Coroutine travelCoroutine;
@@ -187,6 +190,12 @@ public class MenuController : MonoBehaviour {
             MiniMapButton.GetComponent<Button>().interactable = false;
             ResolutionDropdown.interactable = false;
         }
+    }
+
+    public void StartServer()
+    {
+        Server.Main(ipHost.text, System.Convert.ToInt32(portHost.text), "host");
+        gameManager.isNetworkHost = true;
     }
 
     private void OnApplicationFocus(bool focus)

@@ -19,6 +19,10 @@ public class NetworkController : MonoBehaviour
         networkController = this;
     }
 
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void Create(string ip, int port, string username)
     {
@@ -108,7 +112,7 @@ public class NetworkController : MonoBehaviour
 
                                 if (input[0] == "playerPos")
                                 {
-                                    user.position = new Vector2(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]));
+                                    user.position = new Vector4(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]), System.Convert.ToSingle(input[4]));
                                 }
 
                                 if (input[0] == "chunkReplace")
@@ -159,7 +163,7 @@ public class NetworkController : MonoBehaviour
                         {
                             if (user != userData)
                             {
-                                Server.Write(user.tcpClient, string.Join(";", new string[] { "playerPos", userData.username, userData.position.x.ToString(), userData.position.y + "/" }));
+                                Server.Write(user.tcpClient, string.Join(";", new string[] { "playerPos", userData.username, userData.position.x.ToString(), userData.position.y.ToString(), userData.position.z.ToString(), userData.position.w + "/" }));
                             }
                         }
 
@@ -169,9 +173,9 @@ public class NetworkController : MonoBehaviour
                         }
 
                         if (GameManager.gameManagerReference.player.alive)
-                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "/" }));
+                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y + "/" }));
                         else
-                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100/" }));
+                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100", "0", "0/" }));
 
                         Server.Write(userData.tcpClient, string.Join(";", new string[] { "setTime", GameManager.gameManagerReference.dayTime + "/" }));
 
@@ -215,12 +219,14 @@ public class NetworkController : MonoBehaviour
                                     newDummy.name = input[1];
                                     newDummy.transform.GetChild(0).GetComponent<TextMesh>().text = input[1];
                                     newDummy.transform.position = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
+                                    newDummy.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[4]), System.Convert.ToSingle(input[5]));
                                 }
                                 else
                                 {
                                     if (dummyPlayer.transform.position.x != System.Convert.ToSingle(input[2]))
                                         dummyPlayer.GetComponent<SpriteRenderer>().flipX = dummyPlayer.transform.position.x > System.Convert.ToSingle(input[2]);
                                     dummyPlayer.transform.position = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
+                                    dummyPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[4]), System.Convert.ToSingle(input[5]));
                                 }
                             }
 
@@ -250,9 +256,9 @@ public class NetworkController : MonoBehaviour
                     }
 
                     if (GameManager.gameManagerReference.player.alive)
-                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x +"", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y + "/" }));
                     else
-                        Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100", "0", "0/" }));
                 }
             }
             else
@@ -261,6 +267,19 @@ public class NetworkController : MonoBehaviour
             }
         }
     }
+
+    public static string GetLocalIP()
+    {
+        string localIP;
+        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+        {
+            socket.Connect("8.8.8.8", 65530);
+            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            localIP = endPoint.Address.ToString();
+        }
+        return localIP;
+    }
+
 }
 
 
@@ -453,7 +472,7 @@ public class Client
 public class TcpUser
 {
     public string username;
-    public Vector2 position;
+    public Vector4 position;
     public TcpClient tcpClient;
 
     public TcpUser(TcpClient client, string username)

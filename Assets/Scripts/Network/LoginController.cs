@@ -34,26 +34,26 @@ public class LoginController : MonoBehaviour {
 
     void RefreshLogin()
     {
-        loggedIn = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/logginSettings.lgrsd");
+        //loggedIn = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/logginSettings.lgrsd");
 
-        PushPlay.main.multiplayerButton.interactable = false;
+        //PushPlay.main.multiplayerButton.interactable = false;
 
-        loggedUser.SetActive(loggedIn);
-        loginButton.SetActive(!loggedIn);
-        logOffButton.interactable = loggedIn;
+        //loggedUser.SetActive(loggedIn);
+        //loginButton.SetActive(!loggedIn);
+        //logOffButton.interactable = loggedIn;
 
-        if (loggedIn)
-        {
-            string[] logginSession = DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData;
+        //if (loggedIn)
+        //{
+        //    string[] logginSession = DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData;
 
-            List<IMultipartFormSection> formData = new List<IMultipartFormSection>
-            {
-                new MultipartFormDataSection("user", logginSession[0]),
-                new MultipartFormDataSection("pass", logginSession[1])
-            };
+        //    List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+        //    {
+        //        new MultipartFormDataSection("user", logginSession[0]),
+        //        new MultipartFormDataSection("pass", logginSession[1])
+        //    };
 
-            StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "userLogin", formData));
-        }
+        //    StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "userLogin", formData));
+        //}
     }
 
     public void Login()
