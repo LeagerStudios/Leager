@@ -97,7 +97,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, velocity, 0.6f * Time.deltaTime);
         transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.1f));
         transform.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(transform.position, GameManager.gameManagerReference.player.transform.position));
-        if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 300) == 0)
+        if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 140) == 0)
         {
             PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z + 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
             PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z - 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
@@ -119,7 +119,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 indexSegment.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Random.Range(0, 1000) == 0)
+                if (Random.Range(0, 5065) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
                 }
@@ -129,7 +129,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             else
             {
                 indexSegment.GetChild(1).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 20) == 0)
+                if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 120) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
                 }

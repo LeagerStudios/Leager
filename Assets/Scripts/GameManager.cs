@@ -660,9 +660,8 @@ public class GameManager : MonoBehaviour
                 value = value / 1.2f;
             }
         }
-        value += 0.05f;
 
-        dayLuminosity = Mathf.Clamp01(value);
+        dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
         daytimeUpdatedSkyboxColor = skyboxColor * value;
     }
 

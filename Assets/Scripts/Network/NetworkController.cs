@@ -427,11 +427,11 @@ public class Client
         Write("Received");
 
         Debug.Log("data2");
-        int mapLength = System.Convert.ToInt32(Read(1024));
+        int mapLength = System.Convert.ToInt32(Read(2048));
         Write("Received");
-        string mapData = Read(mapLength + 1024);
+        string mapData = Read(mapLength + 8196);
         Write("Received");
-        string mapBiomes = Read(wp[1] * 2 + 1024);
+        string mapBiomes = Read(wp[1] * 4 + 8196);
         Write("Received");
 
         Debug.Log("converting data");

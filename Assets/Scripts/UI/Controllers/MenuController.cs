@@ -194,7 +194,7 @@ public class MenuController : MonoBehaviour {
 
     public void StartServer()
     {
-        Server.Main(ipHost.text, System.Convert.ToInt32(portHost.text), "host");
+        Server.Main(NetworkController.GetLocalIP(), System.Convert.ToInt32(portHost.text), "host");
         gameManager.isNetworkHost = true;
     }
 

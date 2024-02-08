@@ -22,7 +22,7 @@ public class DoorController : MonoBehaviour {
 	
 	void Update ()
     {
-        if (GInput.GetMouseButtonDown(1))
+        if (GInput.GetMouseButtonDown(1) || (GInput.leagerInput.platform == "Mobile" && GInput.GetMouseButtonDown(0)))
         {
             bool canInteract = true;
 
