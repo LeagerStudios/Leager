@@ -268,7 +268,8 @@ public class CraftMenuController : MonoBehaviour
         int temp = tileSelectedAmount;
 
         Debug.Log("x" + tileSelectedAmount);
-        while (StackBar.AddItem(tileSelected) && tileSelectedAmount > 0)
+        while (tileSelectedAmount > 0)
+            if(StackBar.AddItem(tileSelected))
             tileSelectedAmount--;
 
         Debug.Log("y" + tileSelectedAmount);

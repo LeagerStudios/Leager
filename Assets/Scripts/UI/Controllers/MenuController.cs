@@ -567,6 +567,6 @@ public class MenuController : MonoBehaviour {
     {
         vSync = !vSync;
         QualitySettings.vSyncCount = System.Convert.ToInt32(vSync);
-        DataSaver.SaveStats(new string[] { fpsOn.ToString() }, Application.persistentDataPath + @"/settings/vsync.lgrsd");
+        DataSaver.SaveStats(new string[] { fpsOn.ToString().ToLower() }, Application.persistentDataPath + @"/settings/vsync.lgrsd");
     }
 }
