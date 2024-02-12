@@ -51,10 +51,10 @@ public class UNITOOL_LaserDrill : MonoBehaviour
                         if (nearest < 100f)
                         {
                             targetPos = targetPosi;
-                            if (!unit.BeingControlled)
+                            if (!unit.PositionControlled)
                             {
                                 unit.SetTargetPosition(nearesT.transform.position);
-                                unit.BeingControlled = true;
+                                unit.PositionControlled = true;
                                 controllingUnit = true;
                             }
                         }
@@ -67,16 +67,32 @@ public class UNITOOL_LaserDrill : MonoBehaviour
                 if (!blockAlive)
                 {
                     targetPos = Vector2Int.one * -1;
-                    unit.BeingControlled = false;
+                    unit.PositionControlled = false;
+                    unit.RotationControlled = false;
                     controllingUnit = false;
                 }
                 else
                 {
                     if (controllingUnit)
-                        unit.SetTargetPosition((Vector3)(Vector2)targetPos - unit.transform.forward);
-                    transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPos);
+                    {
+                        unit.SetTargetPosition((Vector3)(Vector2)targetPos - Vector3.left * 2f);
+                        unit.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(unit.transform.position, targetPos);
+                        transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPos);
+                    }
+                    else
+                    {
+                        transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPos);
+
+                        transform.GetChild(0).localScale = new Vector3(1, Vector2.Distance(transform.GetChild(0).position, targetPos));
+                        transform.GetChild(1).localPosition = new Vector2(0, Vector2.Distance(transform.GetChild(0).position, targetPos) + 0.421f);
+                    }
 
                     if (Vector2.Distance(targetPos, transform.position) < 5)
+                    {
+                        transform.GetChild(0).localScale = new Vector3(1, Vector2.Distance(transform.GetChild(0).position, targetPos));
+                        transform.GetChild(1).localPosition = new Vector2(0, Vector2.Distance(transform.GetChild(0).position, targetPos) + 0.421f);
+                    }
+                    else
                     {
 
                     }

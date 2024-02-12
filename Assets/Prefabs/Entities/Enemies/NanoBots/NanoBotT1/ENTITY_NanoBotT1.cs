@@ -45,6 +45,11 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         }
     }
 
+    public override string[] GenerateArgs()
+    {
+        return null;
+    }
+
     public override EntityBase Spawn(string[] args, Vector2 spawnPos)
     {
         manager = GameManager.gameManagerReference;

@@ -71,7 +71,7 @@ public class EntityCommonScript : MonoBehaviour
 
         if (transform.position.x < -1)
         {
-            transform.Translate(new Vector2(GameManager.gameManagerReference.WorldWidth * 16, 0));
+            transform.position = transform.position + new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
             if (EntityType == "lecter")
             {
                 LightController.lightController.AddRenderQueue(transform.position);
@@ -81,7 +81,7 @@ public class EntityCommonScript : MonoBehaviour
 
         if (transform.position.x > GameManager.gameManagerReference.WorldWidth * 16)
         {
-            transform.Translate(new Vector2(-GameManager.gameManagerReference.WorldWidth * 16, 0));
+            transform.position = transform.position - new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
             if (EntityType == "lecter")
             {
                 LightController.lightController.AddRenderQueue(transform.position);

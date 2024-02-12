@@ -55,6 +55,11 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
 
     }
 
+    public override string[] GenerateArgs()
+    {
+        return null;
+    }
+
     public void CheckCollision()
     {
         collided = false;

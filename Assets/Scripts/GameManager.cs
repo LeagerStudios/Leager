@@ -18,6 +18,11 @@ public enum UnitEntities : int
     Darkn = 6,
 }
 
+public enum UnitWeapons : int
+{
+    Shooter = 0, LaserDrill = 1,
+}
+
 public enum Projectiles : int
 {
     Arrow = 0, SwordParticle = 1, Laser = 2,
@@ -149,7 +154,8 @@ public class GameManager : MonoBehaviour
     }
 
     void Start()
-    {  
+    {
+        gameManagerReference = this;
         //Setup
         skyboxColor = Camera.main.backgroundColor;
         Time.timeScale = 1.0f;
@@ -254,7 +260,6 @@ public class GameManager : MonoBehaviour
 
         frameTimer = 0;
         Transition.SetActive(true);
-        gameManagerReference = this;
 
         //Generate all
         GenerateAllChunks(GenerateMap());

@@ -48,10 +48,10 @@ public class UNITOOL_Shooter : MonoBehaviour
                     if (nearest < 100f)
                     {
                         target = nearesT;
-                        if (!unit.BeingControlled)
+                        if (!unit.PositionControlled)
                         {
                             unit.SetTargetPosition(nearesT.transform.position);
-                            unit.BeingControlled = true;
+                            unit.PositionControlled = true;
                             controllingUnit = true;
                         }
                     }
@@ -61,7 +61,7 @@ public class UNITOOL_Shooter : MonoBehaviour
         else if (targetAlive)
         {
             targetAlive = false;
-            unit.BeingControlled = false;
+            unit.PositionControlled = false;
             controllingUnit = false;
         }
         else

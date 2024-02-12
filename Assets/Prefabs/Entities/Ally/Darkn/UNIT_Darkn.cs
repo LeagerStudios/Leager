@@ -11,7 +11,8 @@ public class UNIT_Darkn : UnitBase, IDamager
     [SerializeField] LayerMask blockMask;
     public Vector2 targetVelocity;
     public Vector2 targetPosition;
-    bool beingControlled = false;
+    bool positionControlled = false;
+    bool rotationControlled = false;
     float HpMax = 32;
     float HP = 32;
 
@@ -37,11 +38,18 @@ public class UNIT_Darkn : UnitBase, IDamager
         }
     }
 
-    public override bool BeingControlled
+    public override bool PositionControlled
     {
-        get { return beingControlled; }
+        get { return positionControlled; }
 
-        set { beingControlled = value; }
+        set { positionControlled = value; }
+    }
+
+    public override bool RotationControlled
+    {
+        get { return rotationControlled; }
+
+        set { rotationControlled = value; }
     }
 
     void Update()
@@ -53,6 +61,11 @@ public class UNIT_Darkn : UnitBase, IDamager
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
         return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)UnitEntities.Darkn], Vector2.zero, Quaternion.identity).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
+    }
+
+    public override string[] GenerateArgs()
+    {
+        return null;
     }
 
     void Start()
@@ -67,7 +80,8 @@ public class UNIT_Darkn : UnitBase, IDamager
         else
             targetVelocity = Vector2.zero;
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, targetVelocity, 0.8f * Time.deltaTime);
-        transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.3f));
+        if (!rotationControlled)
+            transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.3f));
 
         if (rb2d.velocity.magnitude > 0.1f && fireZone.transform.childCount == 0)
         {
@@ -86,6 +100,15 @@ public class UNIT_Darkn : UnitBase, IDamager
         transform.position = spawnPos;
         transform.GetChild(0).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+
+        if(args != null)
+        {
+
+        }
+        else
+        {
+            targetPosition = transform.position;
+        }
 
         return this;
     }
@@ -107,6 +130,11 @@ public class UNIT_Darkn : UnitBase, IDamager
     public override void SetTargetPosition(Vector2 targetPos)
     {
         targetPosition = targetPos;
+    }
+
+    public override Vector2 GetTargetPosition()
+    {
+        return targetPosition;
     }
 
     public override void Kill(string[] args)

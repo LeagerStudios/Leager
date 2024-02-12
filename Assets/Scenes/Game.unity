@@ -7345,6 +7345,7 @@ MonoBehaviour:
   entityStates: 
   stateDuration: []
   saveToFile: 0
+  canBeNetworked: 0
 --- !u!222 &427
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15135,7 +15136,6 @@ MonoBehaviour:
   entitiesContainer: {fileID: 148}
   Transition: {fileID: 127}
   savingText: {fileID: 418275460}
-  Generated: 0
   isNetworkClient: 0
   isNetworkHost: 0
   brush: 0

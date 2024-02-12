@@ -45,6 +45,11 @@ public class ENTITY_NanoBotT2 : EntityBase, IDamager
         }
     }
 
+    public override string[] GenerateArgs()
+    {
+        return null;
+    }
+
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
         return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.NanoBotT2], spawnPos, Quaternion.identity).GetComponent<ENTITY_NanoBotT2>().Spawn(args, spawnPos);

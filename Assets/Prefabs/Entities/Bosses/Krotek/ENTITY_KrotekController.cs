@@ -107,6 +107,11 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
         }
     }
 
+    public override string[] GenerateArgs()
+    {
+        return null;
+    }
+
     void LateUpdate()
     {
         SetPositions();
