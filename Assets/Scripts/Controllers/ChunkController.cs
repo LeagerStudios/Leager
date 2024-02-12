@@ -753,9 +753,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
             counter++;
         }
 
-    
+        
         loading = false;
         loaded = false;
+        UpdateWalls();
         gameObject.SetActive(false);
     }
 
@@ -764,7 +765,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (manager.doingAnAction)
             {
-                if (manager.doingAnAction && Mathf.Abs(player.transform.position.x - transform.position.x) < 99 || !manager.Generated)
+                if (manager.doingAnAction)
                 {
                     if (GInput.GetMouseButton(0))
                     {

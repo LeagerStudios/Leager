@@ -31,7 +31,7 @@ public class LoadingSceneScript : MonoBehaviour
         isLoading = true;
         Debug.Log("===STARTED INITIAL LOADING===");
 
-        if (Application.platform != RuntimePlatform.Android)
+        if (Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.WebGLPlayer)
             UpdateResolution();
 
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/data"))

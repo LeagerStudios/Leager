@@ -6,11 +6,11 @@ public class MainManager : MonoBehaviour {
 
 
 	void Start () {
-        GameObject.Find("Transition").GetComponent<Animator>().SetBool("CanStart", true);
+        Invoke("OpenTransition", 0.5f);
     }
 	
 
-	void Update () {
-		
-	}
+	void OpenTransition () {
+        GameObject.Find("Transition").GetComponent<Animator>().SetBool("CanStart", true);
+    }
 }

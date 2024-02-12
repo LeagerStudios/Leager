@@ -174,7 +174,7 @@ public class LightControllerCurrent : MonoBehaviour
         if (MenuController.menuController.miniMapOn)
             lightDist = (int)minimapCamera.orthographicSize / 2 * 4 + (lightRadius * 3);
         else
-            lightDist = 34;
+            lightDist = 40;
 
 
         UpdateLights(lightPosition);

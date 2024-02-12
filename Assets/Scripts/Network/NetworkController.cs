@@ -344,6 +344,9 @@ public class Server
             Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
             Read(client, 1024);
 
+            Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
+            Read(client, 1024);
+
             Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
             Read(client, 1024);
 
@@ -431,7 +434,9 @@ public class Client
         Write("Received");
         string mapData = Read(mapLength + 8196);
         Write("Received");
-        string mapBiomes = Read(wp[1] * 4 + 8196);
+        int biomesLenght = System.Convert.ToInt32(Read(8196));
+        Write("Received");
+        string mapBiomes = Read(biomesLenght + 8196);
         Write("Received");
 
         Debug.Log("converting data");

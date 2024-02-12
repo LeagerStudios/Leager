@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject savingText;
 
     [Header("Other")]
-    public bool Generated = false;
     public bool isNetworkClient = false;
     public bool isNetworkHost = false;
     public int brush;
@@ -258,9 +257,7 @@ public class GameManager : MonoBehaviour
         gameManagerReference = this;
 
         //Generate all
-        Generated = false;
         GenerateAllChunks(GenerateMap());
-        Generated = true;
 
         player.Respawn((WorldWidth * 16) / 2, SearchForClearSpawn((WorldWidth * 16) / 2) + 2);
         GameObject.Find("IlluminationCape").GetComponent<LightControllerCurrent>().AddRenderQueue(player.transform.position);
@@ -301,7 +298,7 @@ public class GameManager : MonoBehaviour
                 dayTime++;
                 dayFloat--;
             }
-            
+
             if (frameTimer > 2000000000)
             {
                 frameTimer = 0;
@@ -312,141 +309,138 @@ public class GameManager : MonoBehaviour
             }
             SetSkybox();
 
-            
+
 
             if (Input.GetMouseButtonUp(0))
             {
                 breakingTime = -1;
             }
 
-            if (Generated)
+            if (GInput.GetMouseButton(0))
             {
-                if (GInput.GetMouseButton(0))
-                {
-                    mouseUp = 0;
-                }
-                else if (mouseUp >= 3)
-                {
-                    brush = -1;
-                }
-                mouseUp++;
+                mouseUp = 0;
+            }
+            else if (mouseUp >= 3)
+            {
+                brush = -1;
+            }
+            mouseUp++;
 
-                chunksLimits.GetChild(2).transform.position = new Vector2(player.transform.position.x, WorldHeight + 2);
+            chunksLimits.GetChild(2).transform.position = new Vector2(player.transform.position.x, WorldHeight + 2);
 
-                if (GInput.GetKeyDown(KeyCode.V))
+            if (GInput.GetKeyDown(KeyCode.V))
+            {
+                if (player.alive && canBuild)
                 {
-                    if (player.alive && canBuild)
-                    {
-                        if (building)
-                        {
-                            building = false;
-                        }
-                        else
-                        {
-                            building = true;
-                        }
-                    }
-                    if (player.alive && canUseTool)
-                    {
-                        if (usingTool)
-                        {
-                            usingTool = false;
-                        }
-                        else
-                        {
-                            usingTool = true;
-                        }
-                    }
-                    if (player.alive && canAtack)
-                    {
-                        if (usingArm)
-                        {
-                            usingArm = false;
-                        }
-                        else
-                        {
-                            usingArm = true;
-                        }
-                    }
-                    if (player.alive && canEquip)
-                    {
-                        soundController.PlaySfxSound(SoundName.select);
-                        int equipPiece = StackBar.stackBarController.currentItem;
-                        int idx = 0;
-                        if (equipType == "helmet")
-                        {
-                            idx = 0;
-                        }
-                        else if (equipType == "chestplate")
-                        {
-                            idx = 1;
-                        }
-                        else if (equipType == "boots")
-                        {
-                            idx = 2;
-                        }
-                        
-                        if (equipedArmor[idx] > 0)
-                        {
-                            StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx] = equipedArmor[idx];
-                        }
-                        else
-                        {
-                            StackBar.LoseItem();
-                        }
-
-                        equipedArmor[idx] = equipPiece;
-                    }
-                    if (player.alive && canConsume)
-                    {
-                        Consume(StackBar.stackBarController.currentItem);
-                        StackBar.LoseItem();
-                    }
-                }
-                {//Manage Action
-                    if (!canBuild)
+                    if (building)
                     {
                         building = false;
-                        canBuild = false;
-                    }
-
-                    if (!canUseTool)
-                    {
-                        usingTool = false;
-                        canUseTool = false;
-                    }
-
-                    if (!canAtack)
-                    {
-                        usingArm = false;
-                        canAtack = false;
-                    }
-
-                    if (building && !player.alive)
-                    {
-                        building = false;
-                    }
-
-                    if (usingTool && !player.alive)
-                    {
-                        usingTool = false;
-                    }
-
-                    if (usingArm && !player.alive)
-                    {
-                        usingArm = false;
-                    }
-
-                    if (building || usingTool || usingArm)
-                    {
-                        doingAnAction = true;
                     }
                     else
                     {
-                        doingAnAction = false;
+                        building = true;
+                    }
+                }
+                if (player.alive && canUseTool)
+                {
+                    if (usingTool)
+                    {
+                        usingTool = false;
+                    }
+                    else
+                    {
+                        usingTool = true;
+                    }
+                }
+                if (player.alive && canAtack)
+                {
+                    if (usingArm)
+                    {
+                        usingArm = false;
+                    }
+                    else
+                    {
+                        usingArm = true;
+                    }
+                }
+                if (player.alive && canEquip)
+                {
+                    soundController.PlaySfxSound(SoundName.select);
+                    int equipPiece = StackBar.stackBarController.currentItem;
+                    int idx = 0;
+                    if (equipType == "helmet")
+                    {
+                        idx = 0;
+                    }
+                    else if (equipType == "chestplate")
+                    {
+                        idx = 1;
+                    }
+                    else if (equipType == "boots")
+                    {
+                        idx = 2;
                     }
 
+                    if (equipedArmor[idx] > 0)
+                    {
+                        StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx] = equipedArmor[idx];
+                    }
+                    else
+                    {
+                        StackBar.LoseItem();
+                    }
+
+                    equipedArmor[idx] = equipPiece;
                 }
+                if (player.alive && canConsume)
+                {
+                    Consume(StackBar.stackBarController.currentItem);
+                    StackBar.LoseItem();
+                }
+            }
+            {//Manage Action
+                if (!canBuild)
+                {
+                    building = false;
+                    canBuild = false;
+                }
+
+                if (!canUseTool)
+                {
+                    usingTool = false;
+                    canUseTool = false;
+                }
+
+                if (!canAtack)
+                {
+                    usingArm = false;
+                    canAtack = false;
+                }
+
+                if (building && !player.alive)
+                {
+                    building = false;
+                }
+
+                if (usingTool && !player.alive)
+                {
+                    usingTool = false;
+                }
+
+                if (usingArm && !player.alive)
+                {
+                    usingArm = false;
+                }
+
+                if (building || usingTool || usingArm)
+                {
+                    doingAnAction = true;
+                }
+                else
+                {
+                    doingAnAction = false;
+                }
+
             }
 
             if (GInput.GetKeyDown(KeyCode.F2))
@@ -1194,6 +1188,7 @@ public class GameManager : MonoBehaviour
                 entitiesContainer.GetComponent<EntitiesManager>().UpdateEntities(LoadedChunks);
                 LightController.lightController.AddRenderQueue(Camera.main.transform.position);
             }
+            if(!isNetworkClient)
             SaveGameData(true);
         }
     }
@@ -1238,21 +1233,13 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject chunk in gameChunksToLoad)
         {
-            //if (!firstLimitPlaced)
-            //{
-            //    chunksLimits.GetChild(0).transform.position = new Vector2(chunk.transform.position.x, WorldHeight / 2);
-            //    firstLimitPlaced = true;
-            //}
-
             if (!chunk.activeInHierarchy)
             {
                 chunk.SetActive(true);
                 chunksActived++;
             }
 
-            //chunksLimits.GetChild(1).transform.position = new Vector2(chunk.transform.position.x + 16, WorldHeight / 2);
-            
-
+            chunk.GetComponent<ChunkController>().UpdateWalls();
             gameChunksLoaded.Add(chunk);
 
         }

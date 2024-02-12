@@ -29,7 +29,7 @@ public class UNITOOL_Shooter : MonoBehaviour
             {
                 float nearest = 1000000f;
                 DamagersCollision nearesT = null;
-                ;
+                
                 foreach (DamagersCollision target in targets)
                 {
                     float dis = Vector2.Distance(transform.position, target.transform.position);

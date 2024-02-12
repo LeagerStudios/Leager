@@ -157,9 +157,9 @@ public class CommandController : MonoBehaviour {
                     {
                         ENTITY_TheDestroyer.StaticSpawn(null, spawn);
                     }
-                    if (entity == "antilaser")
+                    if (entity == "darkn")
                     {
-                        ENTITY_AntiLaser.StaticSpawn(null, spawn);
+                        UNIT_Darkn.StaticSpawn(null, spawn);
                     }
                 }
             }

@@ -15,7 +15,8 @@ public class EntityCommonScript : MonoBehaviour
     [Header("Secondary")]
     public List<EntityState> entityStates = new List<EntityState>();
     public List<float> stateDuration = new List<float>();
-    public bool saveToFile = false; 
+    public bool saveToFile = false;
+    public bool canBeNetworked = true;
 
     private void OnValidate()
     {
@@ -31,6 +32,15 @@ public class EntityCommonScript : MonoBehaviour
         {
             entityDamager = damagerObject.GetComponent<IDamager>();
         }
+    }
+
+    private void Start()
+    {
+        if (canBeNetworked)
+            if (GameManager.gameManagerReference.isNetworkClient || GameManager.gameManagerReference.isNetworkHost)
+            {
+                gameObject.AddComponent<NetworkEntity>();
+            }
     }
 
     public void AddState(EntityState state, float duration)
