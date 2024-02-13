@@ -25,51 +25,73 @@ public class UNITOOL_LaserDrill : MonoBehaviour
     {
         if (resourceToMine != -1)
         {
-            if (targetPos == Vector2Int.one*-1)
+            if (blockAlive)
             {
-                DamagersCollision[] targets = GameManager.gameManagerReference.entitiesContainer.GetComponentsInChildren<DamagersCollision>();
-                if (targets.Length != 0)
+                if (targetPos == Vector2Int.one * -1)
+                    blockAlive = false;
+                else
                 {
-                    float nearest = 1000000f;
-                    DamagersCollision nearesT = null;
+                    blockAlive = GameManager.gameManagerReference.GetTileAt(targetPos.x * GameManager.gameManagerReference.WorldHeight + targetPos.y) == resourceToMine;
+                }
+            }
 
-                    foreach (DamagersCollision target in targets)
+            if (targetPos == Vector2Int.one * -1)
+            {
+                int[] grid = (int[])GameManager.gameManagerReference.GetTileObjectAt((int)transform.position.x * GameManager.gameManagerReference.WorldHeight + (int)transform.position.y).transform.parent.GetComponent<ChunkController>().TileGrid.Clone();
+                int chunkx = (int)GameManager.gameManagerReference.GetTileObjectAt((int)transform.position.x * GameManager.gameManagerReference.WorldHeight + (int)transform.position.y).transform.parent.position.x;
+                float nearest = 1000000f;
+                Vector2 nearesT = Vector2Int.one*-1;
+
+                for (int x = 0; x < 16; x++)
+                {
+                    for (int y = 0; y < GameManager.gameManagerReference.WorldHeight; y++)
                     {
-                        float dis = Vector2.Distance(transform.position, target.transform.position);
-                        if (dis < nearest && target.team != "ally")
-                        {
-                            nearest = dis;
-                            nearesT = target;
-                        }
-                    }
+                        
+                        int index = x * GameManager.gameManagerReference.WorldHeight + y;
+                        float distance = Vector2.Distance(transform.position, new Vector2(x + chunkx, y));
 
-                    if (nearesT != null)
-                    {
-                        Vector2Int targetPosi = Vector2Int.RoundToInt(nearesT.transform.position);
-                        transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPosi);
-
-                        if (nearest < 100f)
+                        if (grid[index] == resourceToMine)
                         {
-                            targetPos = targetPosi;
-                            if (!unit.PositionControlled)
+                            if (distance < nearest)
                             {
-                                unit.SetTargetPosition(nearesT.transform.position);
-                                unit.PositionControlled = true;
-                                controllingUnit = true;
+                                nearest = distance;
+                                nearesT = new Vector2Int(x + chunkx, y);
                             }
                         }
                     }
                 }
-            }
 
+                if (nearesT != Vector2Int.one*-1)
+                {
+                    Vector2Int targetPosi = Vector2Int.RoundToInt(nearesT);
+                    transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPosi);
+
+                    if (nearest < 100f)
+                    {
+                        targetPos = targetPosi;
+                        if (!unit.PositionControlled)
+                        {
+                            unit.SetTargetPosition(nearesT);
+                            unit.PositionControlled = true;
+                            unit.RotationControlled = true;
+                            controllingUnit = true;
+                            blockAlive = true;
+                        }
+                    }
+                }
+            }
             else
             {
                 if (!blockAlive)
                 {
                     targetPos = Vector2Int.one * -1;
-                    unit.PositionControlled = false;
-                    unit.RotationControlled = false;
-                    controllingUnit = false;
+
+                    if (controllingUnit)
+                    {
+                        unit.PositionControlled = false;
+                        unit.RotationControlled = false;
+                        controllingUnit = false;
+                    }
                 }
                 else
                 {
@@ -89,14 +111,28 @@ public class UNITOOL_LaserDrill : MonoBehaviour
 
                     if (Vector2.Distance(targetPos, transform.position) < 5)
                     {
+                        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = true;
                         transform.GetChild(0).localScale = new Vector3(1, Vector2.Distance(transform.GetChild(0).position, targetPos));
                         transform.GetChild(1).localPosition = new Vector2(0, Vector2.Distance(transform.GetChild(0).position, targetPos) + 0.421f);
                     }
                     else
                     {
-
+                        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
                     }
                 }
+            }
+        }
+        else
+        {
+            targetPos = Vector2Int.one * -1;
+
+            if (controllingUnit)
+            {
+                unit.PositionControlled = false;
+                unit.RotationControlled = false;
+                controllingUnit = false;
             }
         }
     }
