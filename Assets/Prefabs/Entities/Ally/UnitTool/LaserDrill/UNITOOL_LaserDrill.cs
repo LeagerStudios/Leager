@@ -9,6 +9,7 @@ public class UNITOOL_LaserDrill : MonoBehaviour
     public int resourceToMine = -1;
     public Vector2Int targetPos;
     public bool blockAlive = false;
+    public int resourceAmount = 0;
 
 
     private void Start()
