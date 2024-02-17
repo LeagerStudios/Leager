@@ -100,28 +100,32 @@ public class LightControllerCurrent : MonoBehaviour
 
         foreach (KeyValuePair<Vector2, float> renderLight in renderLights)
         {
+
             Vector2 rendLight = renderLight.Key;
-            rendLight += Vector2.one * (lightDist / 2);
             float intensity = renderLight.Value;
+
             Color thisColorLight = lightEcoTexture.GetPixel((int)rendLight.x, (int)rendLight.y);
             bool didPoint = false;
-            if (intensity > 1)
+            if (intensity > 1f)
             {
                 float secondIntensity = -1f;
-                if (renderLights.TryGetValue(rendLight - Vector2.one, out secondIntensity))
+                if (renderLights.TryGetValue(rendLight + Vector2.down, out secondIntensity))
                 {
-                    if (secondIntensity > 1)
-                        if (renderLights.TryGetValue(rendLight - Vector2.left, out secondIntensity))
-                            if (secondIntensity > 1)
-                                if (renderLights.TryGetValue(rendLight - Vector2.right, out secondIntensity))
-                                {
-                                    lightEcoTexture.SetPixel((int)rendLight.x, (int)rendLight.y, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
-                                    didPoint = true;
-                                }
-                                    
+                    if (secondIntensity > 1f)
+                        if (renderLights.TryGetValue(rendLight + Vector2.left, out secondIntensity))
+                            if (secondIntensity > 1f)
+                                if (renderLights.TryGetValue(rendLight + Vector2.up, out secondIntensity))
+                                    if (secondIntensity > 1f)
+                                        if (renderLights.TryGetValue(rendLight + Vector2.right, out secondIntensity))
+                                        {
+                                            lightEcoTexture.SetPixel((int)rendLight.x, (int)rendLight.y, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
+                                            didPoint = true;
+                                        }
+
                 }
             }
-            if(!didPoint)
+
+            if (!didPoint)
             {
                 for (int nx = (int)rendLight.x - lightRadius; nx < (int)rendLight.x + lightRadius + 1; nx++)
                 {
@@ -241,7 +245,7 @@ public class LightControllerCurrent : MonoBehaviour
                                 if (Vector2.Distance(chunkController.TileObject[i].transform.position, lightPosition) < lightDist + lightRadius * 2)
                                 {
                                     Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
-                                    renderLights.Add(lightPos, chunkController.LightMap[i]);
+                                    renderLights.Add(lightPos + Vector2.one * (lightDist / 2), chunkController.LightMap[i]);
                                 }
                         }
                     }
@@ -282,7 +286,7 @@ public class EcoTexture
     {
         if((x >= 0 && y >= 0) && (x < width && y < height))
         {
-            int index = (x * height) + y;
+            int index = (y * width) + x;
             r[index] = pr;
             g[index] = pg;
             b[index] = pb;
@@ -305,7 +309,7 @@ public class EcoTexture
     {
         if ((x >= 0 && y >= 0) && (x < width && y < height))
         {
-            int idx = (x * height) + y;
+            int idx = (y * width) + x;
 
             return new Color(r[idx], g[idx], b[idx], a[idx]);
         }

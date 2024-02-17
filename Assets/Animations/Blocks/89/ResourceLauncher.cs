@@ -16,11 +16,11 @@ public class ResourceLauncher : MonoBehaviour {
     {
         get
         {
-            return GetComponent<TileProperties>().storedItems;
+            return transform.parent.GetComponent<TileProperties>().storedItems;
         }
         set
         {
-            GetComponent<TileProperties>().storedItems = value;
+            transform.parent.GetComponent<TileProperties>().storedItems = value;
         }
     }
 
@@ -29,11 +29,16 @@ public class ResourceLauncher : MonoBehaviour {
         transform.eulerAngles = transform.parent.eulerAngles;
         transform.localPosition = new Vector2(0, 0.5f);
 
-        TileProperties properties = gameObject.AddComponent<TileProperties>();
-        properties.parentTile = 89;
-        properties.associatedTile = transform.parent.gameObject;
-        properties.canDropStoredItems = true;
+        if (transform.parent.GetComponent<TileProperties>() == null)
+        {
+            TileProperties properties = transform.parent.gameObject.AddComponent<TileProperties>();
+            properties.parentTile = 89;
+            properties.canDropStoredItems = true;
+        }
+        else
+        {
 
+        }
         StartCoroutine(PlaceAnimation());
 	}
 
@@ -54,6 +59,9 @@ public class ResourceLauncher : MonoBehaviour {
 
                     Invoke("ReturnCamFocus", 1.5f);
                 }
+
+        if(Input.GetKeyDown(KeyCode.G))
+            print(transform.parent.gameObject.GetComponent<TileProperties>().Export());
     }
 
     public void ReturnCamFocus()
