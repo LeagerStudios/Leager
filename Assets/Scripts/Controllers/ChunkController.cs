@@ -10,8 +10,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public bool loaded = false;
     public string chunkBiome = "dumby";
     public bool loading = false;
-    public float[] ChunkGrid;
     public int[] TileGrid;
+    public string[] TilePropertiesArr;
     public int[] TileGridRotation;
     public float[] LightMap;
     public GameObject[] TileObject;
@@ -39,8 +39,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
     {
         loaded = false;
         ID = id;
-        ChunkGrid = new float[h * 16];
         TileGrid = new int[h * 16];
+        TilePropertiesArr = new string[h * 16];
         TileGridRotation = new int[h * 16];
         TileObject = new GameObject[h * 16];
         LightMap = new float[h * 16];
@@ -53,12 +53,12 @@ public class ChunkController : MonoBehaviour, ITimerCall
     }
 
 
-    public void RegisterTile(float i, int t, int r, GameObject o)
+    public void RegisterTile(int idx, int t, int r, string prop, GameObject o)
     {
-        ChunkGrid[(int)Mathf.Floor(i)] = i;
-        TileGrid[(int)Mathf.Floor(i)] = t;
-        TileGridRotation[(int)Mathf.Floor(i)] = r;
-        TileObject[(int)Mathf.Floor(i)] = o;
+        TileGrid[idx] = t;
+        TileGridRotation[idx] = r;
+        TileObject[idx] = o;
+        TilePropertiesArr[idx] = prop;
 
         o.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[t];
     }
@@ -693,11 +693,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 GameObject newTile = manager.ExtractPooledTile(new Vector2(tileX, tileY));
                 newTile.transform.SetParent(transform, false);
                 newTile.name = "Tile" + tileName;
-                int tileSet = 0;
 
-                tileSet = TileGrid[tileIdx];
-
-                RegisterTile(tileName, tileSet, 0, newTile);
+                int tileSet = TileGrid[tileIdx];
+                string properties = TilePropertiesArr[tileIdx];
+                TileProperties tileProperties = new TileProperties();
+                tileProperties.Load(properties);
+                
+                RegisterTile(tileIdx, tileSet, tileProperties.rotation, properties, newTile);
                 tileY++;
                 tileName++;
                 tileIdx++;
