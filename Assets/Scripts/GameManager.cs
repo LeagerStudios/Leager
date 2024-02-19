@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     //The map container
     public int[] allMapGrid;
+    public string[] allMapProp;
     public string currentPlanetName = "Korenz";
     public string currentHexPlanetColor = "25FF00FF";
     public bool currentPlanetIsRoot = true;
@@ -737,6 +738,7 @@ public class GameManager : MonoBehaviour
         if (!isNetworkClient)
         {
             DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(allMapGrid), persistentDataPath + @"/worlds/" + worldName + @"/map.lgrsd");
+            DataSaver.SaveStats(allMapProp, persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd");
             DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), persistentDataPath + @"/worlds/" + worldName + @"/equips.lgrsd");
             DataSaver.SaveStats(new string[] { currentHexPlanetColor }, persistentDataPath + @"/worlds/" + worldName + @"/planetColor.lgrsd");
             DataSaver.SaveStats(new string[] { dayTime + "" }, persistentDataPath + @"/worlds/" + worldName + @"/daytime.lgrsd");
@@ -1107,6 +1109,13 @@ public class GameManager : MonoBehaviour
         DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd", new string[] { seed + "" });
 
         allMapGrid = buildedMapGrid;
+        allMapProp = new string[allMapGrid.Length];
+        for(int i = 0;i < allMapProp.Length; i++)
+        {
+            allMapProp[i] = "null";
+        }
+        DataSaver.SaveStats(allMapProp, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapprop.lgrsd");
+
         return buildedMapGrid;
     }
 
@@ -1118,6 +1127,17 @@ public class GameManager : MonoBehaviour
         int[] buildedMapGrid = new int[(WorldWidth * 16) * WorldHeight];
 
         buildedMapGrid = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/map.lgrsd").SavedData);
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd"))
+            allMapProp = DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd").SavedData;
+        else
+        {
+            allMapProp = new string[buildedMapGrid.Length];
+
+            for (int i = 0; i < allMapProp.Length; i++)
+            {
+                allMapProp[i] = "null";
+            }
+        }
 
         return buildedMapGrid;
     }
@@ -1167,7 +1187,9 @@ public class GameManager : MonoBehaviour
             {
                 int tileSet = 0;
                 tileSet = allMapGrid[spawnedIdxs + tileIdx];
+                string tileProp = allMapProp[spawnedIdxs + tileIdx];
                 newChunk.GetComponent<ChunkController>().TileGrid[tileIdx] = tileSet;
+                newChunk.GetComponent<ChunkController>().TilePropertiesArr[tileIdx] = tileProp;
                 tileIdx++;
             }
         }
@@ -1277,7 +1299,7 @@ public class GameManager : MonoBehaviour
                 if (tile.GetComponent<Timer>() != null) Destroy(tile.GetComponent<Timer>());
                 if (tile.GetComponent<BlockAnimationController>() != null) Destroy(tile.GetComponent<BlockAnimationController>());
                 tile.transform.parent.GetComponent<ChunkController>().TileGrid[System.Array.IndexOf(tile.transform.parent.GetComponent<ChunkController>().TileObject, tile)] = brush;
-                tile.transform.parent.GetComponent<ChunkController>().TileGridRotation[System.Array.IndexOf(tile.transform.parent.GetComponent<ChunkController>().TileObject, tile)] = buildRotation;
+                //tile.transform.parent.GetComponent<ChunkController>().TileGridRotation[System.Array.IndexOf(tile.transform.parent.GetComponent<ChunkController>().TileObject, tile)] = buildRotation;
                 tile.transform.parent.GetComponent<ChunkController>().UpdateChunk();
                 LightController.lightController.AddRenderQueue(player.transform.position);
 

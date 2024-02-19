@@ -12,7 +12,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public bool loading = false;
     public int[] TileGrid;
     public string[] TilePropertiesArr;
-    public int[] TileGridRotation;
     public float[] LightMap;
     public GameObject[] TileObject;
     public float ID;
@@ -41,7 +40,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
         ID = id;
         TileGrid = new int[h * 16];
         TilePropertiesArr = new string[h * 16];
-        TileGridRotation = new int[h * 16];
         TileObject = new GameObject[h * 16];
         LightMap = new float[h * 16];
         manager = GameManager.gameManagerReference;
@@ -53,13 +51,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
     }
 
 
-    public void RegisterTile(int idx, int t, int r, string prop, GameObject o)
+    public void RegisterTile(int idx, int t, string prop, GameObject o)
     {
         TileGrid[idx] = t;
-        TileGridRotation[idx] = r;
         TileObject[idx] = o;
         TilePropertiesArr[idx] = prop;
-
         o.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[t];
     }
 
@@ -268,7 +264,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 string cT = manager.TileCollisionType[TileGrid[e]];
 
                 TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
-                TileObject[e].transform.eulerAngles = new Vector3(0, 0, TileGridRotation[e]);
                 switch (cT)
                 {
                     case "#":
@@ -304,6 +299,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         break;
                 }
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
+                if (TileObject[e].GetComponent<TileProperties>())
+                {
+                    TilePropertiesArr[e] = TileObject[e].GetComponent<TileProperties>().Export();
+                    manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
+                    print("hola" + TilePropertiesArr[e]);
+                }
+                
             }
 
             for (int x = 0; x < 16; x++)
@@ -345,9 +347,9 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void TileMod(int e)
     {
-        if (TileObject[e].GetComponentInChildren<TileProperties>())
+        if (TileObject[e].GetComponent<TileProperties>())
         {
-            TileProperties tileProperties = TileObject[e].GetComponentInChildren<TileProperties>();
+            TileProperties tileProperties = TileObject[e].GetComponent<TileProperties>();
 
             if(tileProperties.parentTile != TileGrid[e])
             {
@@ -365,6 +367,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
 
                 Destroy(tileProperties);
+            }
+        }
+        else
+        {
+            if(TilePropertiesArr[e] != "null")
+            {
+                TileObject[e].AddComponent<TileProperties>().Load(TilePropertiesArr[e]);
             }
         }
 
@@ -696,10 +705,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                 int tileSet = TileGrid[tileIdx];
                 string properties = TilePropertiesArr[tileIdx];
-                TileProperties tileProperties = new TileProperties();
-                tileProperties.Load(properties);
                 
-                RegisterTile(tileIdx, tileSet, tileProperties.rotation, properties, newTile);
+                RegisterTile(tileIdx, tileSet, properties, newTile);
                 tileY++;
                 tileName++;
                 tileIdx++;
@@ -738,6 +745,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
         for(int e = 0; e < TileGrid.Length; e++)
         {
             manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
+            if (TileObject[e].GetComponent<TileProperties>())
+            {
+                TilePropertiesArr[e] = TileObject[e].GetComponent<TileProperties>().Export();
+                manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
+            }
         }
 
         for (int e = 0; e < TileObject.Length; e++)
