@@ -57,6 +57,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         TileObject[idx] = o;
         TilePropertiesArr[idx] = prop;
         o.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[t];
+       if(prop != "null") o.AddComponent<TileProperties>().Load(prop);
     }
 
     public void UpdateChunkPos()
