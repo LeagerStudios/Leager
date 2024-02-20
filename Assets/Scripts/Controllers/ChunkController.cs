@@ -30,6 +30,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject grassObject;
     [SerializeField] GameObject fireObject;
     [SerializeField] GameObject doorObject;
+    [SerializeField] GameObject boxObject;
     [SerializeField] GameObject resourceGrabberObject;
 
     [SerializeField] Sprite[] waterFrames;
@@ -304,7 +305,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 {
                     TilePropertiesArr[e] = TileObject[e].GetComponent<TileProperties>().Export();
                     manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
-                    print("hola" + TilePropertiesArr[e]);
                 }
                 
             }
@@ -367,14 +367,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     }
                 }
 
+                TilePropertiesArr[e] = "null";
                 Destroy(tileProperties);
-            }
-        }
-        else
-        {
-            if(TilePropertiesArr[e] != "null")
-            {
-                TileObject[e].AddComponent<TileProperties>().Load(TilePropertiesArr[e]);
             }
         }
 
@@ -395,6 +389,12 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             GameObject grassBlock = Instantiate(grassObject, TileObject[e].transform);
             grassBlock.transform.localPosition = Vector2.zero;
+        }
+
+        if (TileGrid[e] == 15 && TileObject[e].transform.childCount < 1)
+        {
+            GameObject boxBlock = Instantiate(boxObject, TileObject[e].transform);
+            boxBlock.transform.localPosition = Vector2.zero;
         }
 
         if (TileGrid[e] == 84 && TileObject[e].transform.childCount < 1)

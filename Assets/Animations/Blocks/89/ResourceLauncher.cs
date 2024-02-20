@@ -59,9 +59,6 @@ public class ResourceLauncher : MonoBehaviour {
 
                     Invoke("ReturnCamFocus", 1.5f);
                 }
-
-        if(Input.GetKeyDown(KeyCode.G))
-            print(transform.parent.gameObject.GetComponent<TileProperties>().Export());
     }
 
     public void ReturnCamFocus()

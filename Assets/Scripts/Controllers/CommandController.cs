@@ -24,11 +24,6 @@ public class CommandController : MonoBehaviour {
 	
 
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.G) && Application.isEditor)
-        {
-            UNIT_Darkn.StaticSpawn(null, new Vector2(GameManager.gameManagerReference.player.transform.position.x, 80));
-        }
-
         if (!commandEnabled)
         {
             if (GInput.GetKeyDown(KeyCode.F12) && GameManager.gameManagerReference.InGame)

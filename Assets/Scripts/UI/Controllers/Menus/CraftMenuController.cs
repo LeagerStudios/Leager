@@ -267,12 +267,11 @@ public class CraftMenuController : MonoBehaviour
         }
         int temp = tileSelectedAmount;
 
-        Debug.Log("x" + tileSelectedAmount);
         while (tileSelectedAmount > 0)
-            if(StackBar.AddItem(tileSelected))
-            tileSelectedAmount--;
+            if (StackBar.AddItem(tileSelected))
+                tileSelectedAmount--;
+            else break;
 
-        Debug.Log("y" + tileSelectedAmount);
         if (tileSelectedAmount > 0)
             GameManager.gameManagerReference.player.PlayerRelativeDrop(tileSelected, tileSelectedAmount);
 

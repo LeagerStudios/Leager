@@ -36,7 +36,7 @@ public class WorkItemController : MonoBehaviour {
                         if (canInteract[tileSelected] == true)
                         {
                             workIcon.GetComponent<SpriteRenderer>().sprite = spritesRenders[tileSelected];
-                            if (GInput.GetMouseButtonDown(1) || GInput.leagerInput.platform == "Mobile")
+                            if (GInput.GetMouseButtonDown(1) || (GInput.leagerInput.platform == "Mobile" && !GameManager.gameManagerReference.cancelPlacing))
                             {
                                 DisplayForTile(tileSelected, rayHit);
                             }
@@ -49,6 +49,12 @@ public class WorkItemController : MonoBehaviour {
 
     public void DisplayForTile(int tile, RaycastHit2D rayHit)
     {
+        if (tile == 15)
+        {
+            rayHit.transform.GetChild(0).GetComponent<Box>().ToggleItems();
+        }
+
+
         if (tile == 16)
         {
             if (GameObject.Find("CraftMenu") == null)

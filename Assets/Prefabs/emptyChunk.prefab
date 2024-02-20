@@ -1,22 +1,12 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &100100000
-Prefab:
-  m_ObjectHideFlags: 1
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications: []
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1728888408477196}
-  m_IsPrefabParent: 1
 --- !u!1 &1728888408477196
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4012388461021220}
   - component: {fileID: 114729877220749926}
@@ -29,9 +19,10 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &4012388461021220
 Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1728888408477196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -42,9 +33,10 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114729877220749926
 MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1728888408477196}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -57,22 +49,25 @@ MonoBehaviour:
   chunkColor: {r: 1, g: 1, b: 1, a: 1}
   loaded: 0
   chunkBiome: dumby
-  ChunkGrid: []
+  loading: 0
   TileGrid: 
-  TileGridRotation: 
+  TilePropertiesArr: []
   LightMap: []
   TileObject: []
   ID: 0
   childId: 0
   tilesToChunk: 0
+  orgX: 0
   entitiesSpawnTime: 0
   liquidTileGrid: 
   grassObject: {fileID: 1349882380421944, guid: 0237245838412a8438afe9831b6fdd0e,
-    type: 2}
-  fireObject: {fileID: 1774782936830166, guid: cd062fb7db861eb498646a4970687d29, type: 2}
-  doorObject: {fileID: 1288251155577116, guid: 3084c1fcd1cb90c4a9e2df7d56f8a4e5, type: 2}
+    type: 3}
+  fireObject: {fileID: 1774782936830166, guid: cd062fb7db861eb498646a4970687d29, type: 3}
+  doorObject: {fileID: 1288251155577116, guid: 3084c1fcd1cb90c4a9e2df7d56f8a4e5, type: 3}
+  boxObject: {fileID: 7094164205071775113, guid: df5a31779cf9aa141978a0f04dfbbdd5,
+    type: 3}
   resourceGrabberObject: {fileID: 1146909955889306, guid: b1eb08a54fe3f5441b94cd8f841d89f4,
-    type: 2}
+    type: 3}
   waterFrames:
   - {fileID: 21300000, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
   - {fileID: 21300002, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}

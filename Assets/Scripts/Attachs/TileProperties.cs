@@ -5,7 +5,7 @@ using UnityEngine;
 public class TileProperties : MonoBehaviour
 {
     public int parentTile = 0;
-    public GameObject associatedTile;
+    public ChunkController chunk;
 
     public bool canDropStoredItems = true;
     public List<string> storedItems = new List<string>();
@@ -15,7 +15,7 @@ public class TileProperties : MonoBehaviour
 
     public void Start()
     {
-
+        chunk = transform.GetComponentInParent<ChunkController>();
     }
 
     public string Export()
@@ -44,8 +44,14 @@ public class TileProperties : MonoBehaviour
         if (decode[3] != "")
             info = new List<string>(decode[3].Split('#'));
         else
-            storedItems = new List<string>();
+            info = new List<string>();
         rotation = System.Convert.ToInt32(decode[4]);
+    }
 
+    public void CommitToChunk()
+    {
+        string a = Export();
+        chunk.TilePropertiesArr[transform.GetSiblingIndex()] = a;
+        GameManager.gameManagerReference.allMapProp[chunk.tilesToChunk + transform.GetSiblingIndex()] = a;
     }
 }
