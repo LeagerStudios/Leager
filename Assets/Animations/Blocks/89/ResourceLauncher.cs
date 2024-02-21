@@ -47,7 +47,7 @@ public class ResourceLauncher : MonoBehaviour {
     {
         if (playingCore != null)
             if (playingCore.GetComponent<SpriteRenderer>().enabled)
-                if (Physics2D.Raycast(playingCore.transform.position, Vector2.up, 0.6f, blockMask))
+                if (SendRaycast(playingCore, 0.6f, Vector2.up, Vector2.zero, true))
                 {
                     Instantiate(explosion, playingCore.transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
                     StopAllCoroutines();
@@ -59,6 +59,33 @@ public class ResourceLauncher : MonoBehaviour {
 
                     Invoke("ReturnCamFocus", 1.5f);
                 }
+    }
+
+    public bool SendRaycast(GameObject obj, float raycastDist, Vector2 raycastDir, Vector2 localOffset, bool ignoreSlabs = false)
+    {
+        bool colliding = false;
+        Vector2 startpos = (Vector2)obj.transform.position + localOffset;
+
+        if (ignoreSlabs)
+        {
+            RaycastHit2D rayHit = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
+            if (rayHit)
+                colliding = rayHit.transform.GetComponent<PlatformEffector2D>() == null;
+            else colliding = false;
+        }
+        else
+            colliding = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
+
+        if (colliding)
+        {
+            Debug.DrawRay(startpos, raycastDir * raycastDist, Color.green);
+        }
+        else
+        {
+            Debug.DrawRay(startpos, raycastDir * raycastDist, Color.red);
+        }
+
+        return colliding;
     }
 
     public void ReturnCamFocus()

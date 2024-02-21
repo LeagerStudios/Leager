@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Box : MonoBehaviour
 {
+    int maxStacks = 9;
+
 
     void Start()
     {
@@ -14,7 +16,7 @@ public class Box : MonoBehaviour
     public void ToggleItems()
     {
         List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
-        if(items.Count > 0)
+        if(StackBar.stackBarController.currentItem == 0 && items.Count > 0)
         {
             int[] data = ManagingFunctions.ConvertStringToIntArray(items[0].Split(':'));
 
@@ -34,7 +36,7 @@ public class Box : MonoBehaviour
         }
         else
         {
-            if(StackBar.stackBarController.currentItem != 0)
+            if(StackBar.stackBarController.currentItem != 0 && items.Count <= maxStacks)
             {
                 items.Add(StackBar.stackBarController.currentItem + ":" + StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx]);
                 StackBar.AsignNewStack(StackBar.stackBarController.idx, 0, 0);
