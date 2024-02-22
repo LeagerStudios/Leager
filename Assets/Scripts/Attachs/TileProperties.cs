@@ -8,6 +8,7 @@ public class TileProperties : MonoBehaviour
     public ChunkController chunk;
 
     public bool canDropStoredItems = true;
+    public bool destroy = false;
     public List<string> storedItems = new List<string>();
     public List<string> info = new List<string>();
 
@@ -16,6 +17,11 @@ public class TileProperties : MonoBehaviour
     public void Start()
     {
         chunk = transform.GetComponentInParent<ChunkController>();
+    }
+
+    public void Update()
+    {
+        
     }
 
     public string Export()

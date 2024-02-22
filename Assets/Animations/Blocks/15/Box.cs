@@ -18,7 +18,7 @@ public class Box : MonoBehaviour
         List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
         if(StackBar.stackBarController.currentItem == 0 && items.Count > 0)
         {
-            int[] data = ManagingFunctions.ConvertStringToIntArray(items[0].Split(':'));
+            int[] data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
 
             int tile = data[0];
             int tileAmount = data[1];

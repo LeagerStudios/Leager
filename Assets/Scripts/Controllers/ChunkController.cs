@@ -303,8 +303,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
                 if (TileObject[e].GetComponent<TileProperties>())
                 {
-                    TilePropertiesArr[e] = TileObject[e].GetComponent<TileProperties>().Export();
-                    manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
+                    if (!TileObject[e].GetComponent<TileProperties>().destroy)
+                    {
+                        TilePropertiesArr[e] = TileObject[e].GetComponent<TileProperties>().Export();
+                        manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
+                    }
                 }
                 
             }
@@ -368,6 +371,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
 
                 TilePropertiesArr[e] = "null";
+                manager.allMapProp[tilesToChunk + e] = "null";
+                tileProperties.destroy = true;
                 Destroy(tileProperties);
             }
         }

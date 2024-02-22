@@ -6,6 +6,7 @@ TextureImporter:
     21300002: UnitCenter_1
     21300004: UnitCenter_2
     21300006: UnitCenter_3
+    21300008: UnitCenter_4
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -49,7 +50,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 31.7
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -84,14 +85,14 @@ TextureImporter:
         y: 48
         width: 32
         height: 14
-      alignment: 9
-      pivot: {x: 0.5, y: 0.29}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 44b906cccab82914b82891190f114ac0
+      spriteID: 2eb9055bc0f3ec84eb7ba18477a317ae
       vertices: []
       indices: 
       edges: []
@@ -100,18 +101,18 @@ TextureImporter:
       name: UnitCenter_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 30
+        x: 40
+        y: 40
         width: 32
-        height: 10
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23da18cd9744d2b4c96e1945bac394d7
+      spriteID: 6c6936eeb8b6c8b42960ff4fc4c59387
       vertices: []
       indices: 
       edges: []
@@ -125,13 +126,13 @@ TextureImporter:
         width: 28
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a44c5fae6b61504f9aa9b87b7651975
+      spriteID: 47fd9dac2bec6eb49b667c63a657c9b0
       vertices: []
       indices: 
       edges: []
@@ -140,18 +141,38 @@ TextureImporter:
       name: UnitCenter_3
       rect:
         serializedVersion: 2
-        x: 0
+        x: 80
         y: 0
         width: 32
-        height: 24
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 68982517416076e42a8f022a3d89740f
+      spriteID: f9a03659f91d02441928266fc646b5b9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UnitCenter_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f812b0ebe4641b84189be3965ced66a1
       vertices: []
       indices: 
       edges: []
