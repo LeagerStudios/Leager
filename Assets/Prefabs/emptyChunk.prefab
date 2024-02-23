@@ -68,6 +68,8 @@ MonoBehaviour:
     type: 3}
   resourceGrabberObject: {fileID: 1146909955889306, guid: b1eb08a54fe3f5441b94cd8f841d89f4,
     type: 3}
+  unitCenterObject: {fileID: 6917301097493396352, guid: 7fc7983b7f69e84418a8f09a630bde86,
+    type: 3}
   waterFrames:
   - {fileID: 21300000, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
   - {fileID: 21300002, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}

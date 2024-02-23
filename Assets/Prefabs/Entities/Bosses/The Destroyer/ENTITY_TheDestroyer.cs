@@ -124,7 +124,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 indexSegment.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Random.Range(0, 5065) == 0)
+                if (Random.Range(0, 10065) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
                 }
@@ -134,7 +134,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             else
             {
                 indexSegment.GetChild(1).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 120) == 0)
+                if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 200) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
                 }

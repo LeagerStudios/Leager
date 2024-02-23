@@ -32,6 +32,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject doorObject;
     [SerializeField] GameObject boxObject;
     [SerializeField] GameObject resourceGrabberObject;
+    [SerializeField] GameObject unitCenterObject;
 
     [SerializeField] Sprite[] waterFrames;
 
@@ -366,7 +367,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             text = text.Remove(item.Length - 1);
                         int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
                         GameObject droppedItem = ManagingFunctions.DropItem(datas[0], TileObject[e].transform.position, datas[1]);
-                        droppedItem.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-3, 3), 6);
+                        droppedItem.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-4f, 4f), 6);
                     }
                 }
 
@@ -400,6 +401,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             GameObject boxBlock = Instantiate(boxObject, TileObject[e].transform);
             boxBlock.transform.localPosition = Vector2.zero;
+            boxBlock.name = "15";
         }
 
         if (TileGrid[e] == 84 && TileObject[e].transform.childCount < 1)
@@ -467,6 +469,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
             grabberObject.name = "89";
             grabberObject.transform.localPosition = Vector2.zero;
         }
+
+        if (TileGrid[e] == 101 && TileObject[e].transform.childCount < 1)
+        {
+            GameObject unitCenter = Instantiate(unitCenterObject, TileObject[e].transform);
+            unitCenter.name = "101";
+            unitCenter.transform.localPosition = Vector2.zero;
+        }
     }
 
 
@@ -515,8 +524,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         }
                         else/* if (liquidTileGrid[idx - 1] != tile)*/
                         {
-                            int dir = Random.Range(0, 2);
-                            if (dir == 0) dir = -1;
+                            int dir = Random.Range(-1, 2);
                             if (!PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(dir, 0)))
                                 PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(-dir, 0));
                         }

@@ -796,6 +796,12 @@ public class GameManager : MonoBehaviour
 
         float totalProbability = 0f;
 
+        allMapProp = new string[buildedMapGrid.Length];
+        for (int i = 0; i < allMapProp.Length; i++)
+        {
+            allMapProp[i] = "null";
+        }
+
         foreach (float f in biomeProbability)
         {
             totalProbability += f;
@@ -1088,6 +1094,16 @@ public class GameManager : MonoBehaviour
 
         //STRUCTURES
         {
+            for(int i = 0; i < WorldWidth / 5; i++)//chests
+            {
+                int yPosition = Random.Range((int)(WorldHeight * 0.1f), (int)(WorldHeight * 0.3f));
+                int xPosition = Random.Range(0, WorldWidth * 16);
+                int idx = yPosition + (xPosition * WorldHeight);
+
+                buildedMapGrid[idx] = 15;
+                string[] loot = { "15@true@30:5#32:3@@0", "15@true@39:1#64:5@@0", "15@true@75:1#51:13@@0", "15@true@70:3#6:6@@0", "15@true@30:7#31:4@@0" };
+                allMapProp[idx] = loot[Random.Range(0, loot.Length)];
+            }
             
         }
 
@@ -1109,11 +1125,6 @@ public class GameManager : MonoBehaviour
         DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd", new string[] { seed + "" });
 
         allMapGrid = buildedMapGrid;
-        allMapProp = new string[allMapGrid.Length];
-        for(int i = 0;i < allMapProp.Length; i++)
-        {
-            allMapProp[i] = "null";
-        }
         DataSaver.SaveStats(allMapProp, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapprop.lgrsd");
 
         return buildedMapGrid;
@@ -1224,7 +1235,14 @@ public class GameManager : MonoBehaviour
     {
         List<GameObject> gameChunksLoaded = new List<GameObject>();
         List<GameObject> gameChunksToLoad = new List<GameObject>();
-        List<GameObject> previousChunks = new List<GameObject>(LoadedChunks);
+        ChunkController[] chunks = chunkContainer.GetComponentsInChildren<ChunkController>();
+        List<GameObject> previousChunks = new List<GameObject>();
+        foreach(ChunkController chunk in chunks)
+        {
+            previousChunks.Add(chunk.gameObject);
+        }
+        LoadedChunks = previousChunks.ToArray();
+
         MenuController menuController = GameObject.Find("MenuFunctions").GetComponent<MenuController>();
 
         int chunksActived = 0;

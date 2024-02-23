@@ -32,7 +32,7 @@ public class Box : MonoBehaviour
             if (tileAmount > 0)
                 GameManager.gameManagerReference.player.PlayerRelativeDrop(tile, tileAmount);
 
-            items.RemoveAt(0);
+            items.RemoveAt(items.Count - 1);
         }
         else
         {
@@ -44,5 +44,35 @@ public class Box : MonoBehaviour
         }
 
         transform.parent.GetComponent<TileProperties>().CommitToChunk();
+    }
+
+    public bool AddItem(int item, int amount)
+    {
+        List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
+
+        if (items.Count <= maxStacks)
+        {
+            items.Add(item + ":" + amount);
+            return true;
+        }
+        else return false;
+    }
+
+    public string GetItem()
+    {
+        List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
+
+        if (items.Count > 0)
+        {
+            int[] data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
+
+            int tile = data[0];
+            int tileAmount = data[1];
+
+            items.RemoveAt(items.Count - 1);
+
+            return tile + ":" + tileAmount;
+        }
+        else return "null";
     }
 }

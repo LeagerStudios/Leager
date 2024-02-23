@@ -8,6 +8,7 @@ public class CommandController : MonoBehaviour {
     Image background;
     Text text;
     bool commandEnabled;
+    bool varraSan = false;
     string command = "";
     char writebar = ' ';
     int writebarFrame = 0;
@@ -24,6 +25,12 @@ public class CommandController : MonoBehaviour {
 	
 
 	void Update () {
+        if (varraSan)
+        {
+            Vector2 pos = GameManager.gameManagerReference.player.transform.position;
+            GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
+        }
+
         if (!commandEnabled)
         {
             if (GInput.GetKeyDown(KeyCode.F12) && GameManager.gameManagerReference.InGame)
@@ -195,6 +202,10 @@ public class CommandController : MonoBehaviour {
             {
                 GameManager.gameManagerReference.dayTime = System.Convert.ToInt32(input[1]);
                 LightController.lightController.AddRenderQueue(Camera.main.transform.position);
+            }
+            else if (input[0] == "sun")
+            {
+                varraSan = true;
             }
             else
             {
