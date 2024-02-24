@@ -476,6 +476,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
             unitCenter.name = "101";
             unitCenter.transform.localPosition = Vector2.zero;
         }
+
+        if (TileGrid[e] == 102 && TileObject[e].transform.childCount < 1)
+        {
+            GameObject boxBlock = Instantiate(boxObject, TileObject[e].transform);
+            boxBlock.transform.localPosition = Vector2.zero;
+            boxBlock.name = "102";
+        }
     }
 
 

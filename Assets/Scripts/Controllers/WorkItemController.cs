@@ -72,5 +72,10 @@ public class WorkItemController : MonoBehaviour {
                 MenuController.menuController.PlanetMenuDeploy(rayHit.transform.GetChild(0).GetComponent<ResourceLauncher>());
             }
         }
+
+        if (tile == 102)
+        {
+            rayHit.transform.GetChild(0).GetComponent<Box>().ToggleItems();
+        }
     }
 }
