@@ -52,6 +52,7 @@ public class ResourceLauncher : MonoBehaviour {
                     Instantiate(explosion, playingCore.transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
                     StopAllCoroutines();
                     playingCore.GetComponent<SpriteRenderer>().enabled = false;
+                    GameManager.gameManagerReference.TileExplosionAt((int)playingCore.transform.position.x, (int)playingCore.transform.position.y, 5, 10);
 
                     foreach (SpriteRenderer a in playingCore.transform.GetComponentsInChildren<SpriteRenderer>()) { a.enabled = false; }
 

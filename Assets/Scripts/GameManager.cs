@@ -1100,10 +1100,10 @@ public class GameManager : MonoBehaviour
                 int xPosition = Random.Range(0, WorldWidth * 16);
                 int idx = yPosition + (xPosition * WorldHeight);
 
-                if (buildedMapGrid[idx - 1] != 0 && buildedMapGrid[idx - 1] != 0 && buildedMapGrid[idx] == 0)
+                if (TileCollisionType[buildedMapGrid[idx - 1]] == "#" && buildedMapGrid[idx] == 0)
                 {
                     buildedMapGrid[idx] = 102;
-                    string[] loot = { "102@true@30:5#32:3@@0", "102@true@39:1#64:5@@0", "102@true@75:1#51:13@@0", "102@true@70:3#6:6@@0", "102@true@30:7#31:4@@0" };
+                    string[] loot = { "102@true@30:5#32:3@@0", "102@true@39:1#64:5@@0", "102@true@75:1#51:13@@0", "102@true@70:3#93:6@@0", "102@true@30:7#31:4@@0", "102@true@96:1#66:4@@0" };
                     allMapProp[idx] = loot[Random.Range(0, loot.Length)];
                 }
                 else i--;
