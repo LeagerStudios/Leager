@@ -72,7 +72,7 @@ public class StackBarController : MonoBehaviour {
 
             selectedStack.GetComponent<Image>().sprite = gameManager.tiles[StackBarGrid[i - 1]];
 
-            if (!(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "tool" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "arm" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "equip") && !(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == ""))
+            if (!(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "tool" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "arm" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "equip" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "core") && !(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == ""))
             {
                 childTransform.GetChild(0).gameObject.SetActive(true);
                 childTransform.GetChild(0).GetComponent<Text>().text = StackItemAmount[i - 1] + "";
@@ -214,7 +214,7 @@ public static class StackBar
         {
             for(int i = 0; i < 9; i++)
             {
-                if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < 99 && !typeAlreadyExists && GameManager.gameManagerReference.tileType[item] != "tool" && GameManager.gameManagerReference.tileType[item] != "arm" && GameManager.gameManagerReference.tileType[item] != "equip")
+                if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < 99 && !typeAlreadyExists && GameManager.gameManagerReference.tileType[item] != "tool" && GameManager.gameManagerReference.tileType[item] != "arm" && GameManager.gameManagerReference.tileType[item] != "equip" && GameManager.gameManagerReference.tileType[item] != "core")
                 {
                     typeAlreadyExists = true;
                     existingIdx = i;

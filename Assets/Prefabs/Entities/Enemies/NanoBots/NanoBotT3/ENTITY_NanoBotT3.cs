@@ -138,6 +138,13 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
     {
         if (manager == null) manager = GameManager.gameManagerReference;
         if (manager.InGame && HP > 0 && !animator.GetBool("makeboom")) AiFrame();
+
+        if (manager.InGame && HP > 0 && animator.GetBool("makeboom"))
+            if (followingPlayer)
+                if (Vector2.Distance(followingPlayer.transform.position, transform.position) > 5.5f)
+                {
+                    animator.SetBool("makeboom", false);
+                }
     }
 
     public override void AiFrame()
@@ -169,21 +176,28 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
                 {
                     if (CheckGrounded())
                     {
-                        rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                        if (followingPlayer)
+                        {
+                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 3, rb2D.velocity.y);
+                        }
+                        else
+                        {
+                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                        }
 
                         int boolint = ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX);
 
                         if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.up, true))
                         {
-                            rb2D.velocity = new Vector2(rb2D.velocity.x, 13f);
+                            rb2D.velocity = new Vector2(rb2D.velocity.x, 14f);
                         }
                         else if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.zero))
                         {
-                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
+                            rb2D.velocity = new Vector2(rb2D.velocity.x, 11f);
                         }
-                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f))
+                        else if(!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && (!SendRaycast(1.85f, Vector2.down, Vector2.right * boolint * 0.7f) || SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f)))
                         {
-                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10);
+                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10.5f);
                         }
 
                     }
@@ -191,7 +205,14 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
                     {
                         if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
                         {
-                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                            if (followingPlayer)
+                            {
+                                rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 3, rb2D.velocity.y);
+                            }
+                            else
+                            {
+                                rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                            }
                         }
                         else
                         {

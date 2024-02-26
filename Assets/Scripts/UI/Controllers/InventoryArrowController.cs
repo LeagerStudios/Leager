@@ -171,7 +171,7 @@ public class InventoryArrowController : MonoBehaviour {
                     tilePorting = -1;
                     dragged = true;
                 }
-                else if(StackBar.stackBarController.StackBarGrid[idxPos] == tilePorting && StackBar.stackBarController.StackItemAmount[idxPos] < 99 && GameManager.gameManagerReference.tileType[tilePorting] != "tool" && StackBar.stackBarController.StackItemAmount[idxPos] < 99 && GameManager.gameManagerReference.tileType[tilePorting] != "arm" && GameManager.gameManagerReference.tileType[tilePorting] != "equip")
+                else if(StackBar.stackBarController.StackBarGrid[idxPos] == tilePorting && StackBar.stackBarController.StackItemAmount[idxPos] < 99 && GameManager.gameManagerReference.tileType[tilePorting] != "tool" && StackBar.stackBarController.StackItemAmount[idxPos] < 99 && GameManager.gameManagerReference.tileType[tilePorting] != "arm" && GameManager.gameManagerReference.tileType[tilePorting] != "equip" && GameManager.gameManagerReference.tileType[tilePorting] != "core")
                 {
                     StackBar.AsignNewStack(idxPos, tilePorting, tilePortingAmount + StackBar.stackBarController.StackItemAmount[idxPos]);
 
@@ -214,7 +214,7 @@ public class InventoryArrowController : MonoBehaviour {
                     tilePorting = -1;
                     dragged = true;
                 }
-                else if (InventoryBar.inventoryBarController.InventoryBarGrid[idxPos - 9] == tilePorting && InventoryBar.inventoryBarController.InventoryItemAmount[idxPos - 9] < 99 && GameManager.gameManagerReference.tileType[tilePorting] != "tool" && GameManager.gameManagerReference.tileType[tilePorting] != "arm" && GameManager.gameManagerReference.tileType[tilePorting] != "equip")
+                else if (InventoryBar.inventoryBarController.InventoryBarGrid[idxPos - 9] == tilePorting && InventoryBar.inventoryBarController.InventoryItemAmount[idxPos - 9] < 99 && GameManager.gameManagerReference.tileType[tilePorting] != "tool" && GameManager.gameManagerReference.tileType[tilePorting] != "arm" && GameManager.gameManagerReference.tileType[tilePorting] != "equip" && GameManager.gameManagerReference.tileType[tilePorting] != "core")
                 {
                     InventoryBar.AsignNewStack(idxPos - 9, tilePorting, tilePortingAmount + InventoryBar.inventoryBarController.InventoryItemAmount[idxPos - 9]);
 

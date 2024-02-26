@@ -146,7 +146,7 @@ public class ENTITY_NanoBotT2 : EntityBase, IDamager
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 11f);
                         }
-                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f))
+                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && (!SendRaycast(1.85f, Vector2.down, Vector2.right * boolint * 0.7f) || SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f)))
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 11f);
                         }

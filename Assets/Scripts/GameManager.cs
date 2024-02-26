@@ -1479,6 +1479,12 @@ public class GameManager : MonoBehaviour
             case 87:
                 returnItem = 0;
                 break;
+            case 98:
+                returnItem = 0;
+                break;
+            case 99:
+                returnItem = 0;
+                break;
         }
 
 

@@ -391,10 +391,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
         }
 
-        if (TileGrid[e] == 1)
+        if (TileGrid[e] == 1 && TileObject[e].transform.childCount < 1)
         {
             GameObject grassBlock = Instantiate(grassObject, TileObject[e].transform);
             grassBlock.transform.localPosition = Vector2.zero;
+            grassBlock.name = "1";
         }
 
         if (TileGrid[e] == 15 && TileObject[e].transform.childCount < 1)
@@ -468,6 +469,45 @@ public class ChunkController : MonoBehaviour, ITimerCall
             GameObject grabberObject = Instantiate(resourceGrabberObject, TileObject[e].transform);
             grabberObject.name = "89";
             grabberObject.transform.localPosition = Vector2.zero;
+        }
+
+        if (TileGrid[e] == 98)
+        {
+            if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 99)
+            {
+                ManagingFunctions.DropItem(100, TileObject[e].transform.position + Vector3.right * 0.5f);
+                TileGrid[e] = 0;
+            }
+        }
+
+        if (TileGrid[e] == 99)
+        {
+            if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 98)
+            {
+                ManagingFunctions.DropItem(100, TileObject[e].transform.position + Vector3.left * 0.5f);
+                TileGrid[e] = 0;
+            }
+        }
+
+        if (TileGrid[e] == 100)
+        {
+            try
+            {
+                if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) == 0)
+                {
+                    TileGrid[e] = 98;
+                    manager.SetTileAt(tilesToChunk + e + manager.WorldHeight, 99);
+                }
+                else
+                {
+                    throw new System.Exception("UH NO");
+                }
+            }
+            catch
+            {
+                TileGrid[e] = 0;
+                StackBar.AddItem(100);
+            }
         }
 
         if (TileGrid[e] == 101 && TileObject[e].transform.childCount < 1)

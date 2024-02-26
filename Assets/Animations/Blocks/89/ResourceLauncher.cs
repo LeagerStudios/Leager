@@ -77,15 +77,6 @@ public class ResourceLauncher : MonoBehaviour {
         else
             colliding = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
 
-        if (colliding)
-        {
-            Debug.DrawRay(startpos, raycastDir * raycastDist, Color.green);
-        }
-        else
-        {
-            Debug.DrawRay(startpos, raycastDir * raycastDist, Color.red);
-        }
-
         return colliding;
     }
 

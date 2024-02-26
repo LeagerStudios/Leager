@@ -45,7 +45,7 @@ public class InventoryController : MonoBehaviour
 
             selectedStack.GetComponent<Image>().sprite = gameManager.tiles[InventoryBarGrid[i - 1]];
 
-            if (!(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "tool" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "arm" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "equip") && !(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == ""))
+            if (!(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "tool" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "arm" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "equip" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "core") && !(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == ""))
             {
                 childTransform.GetChild(0).gameObject.SetActive(true);
                 childTransform.GetChild(0).GetComponent<Text>().text = InventoryItemAmount[i - 1] + "";
