@@ -880,6 +880,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
             }
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                
+            }
         }
         else if (!loading && !loaded)
         {

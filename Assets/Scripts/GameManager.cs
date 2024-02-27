@@ -1400,9 +1400,10 @@ public class GameManager : MonoBehaviour
                     brush = entryTile;
                 }
 
-                ManagingFunctions.DropItem(SwitchTroughBlockBroke(entryTile, tile.transform.position), tile.transform.position);
+
                 tile.transform.parent.GetComponent<ChunkController>().TileGrid[System.Array.IndexOf(tile.transform.parent.GetComponent<ChunkController>().TileObject, tile)] = brush;
                 tile.transform.parent.GetComponent<ChunkController>().UpdateChunk();
+                ManagingFunctions.DropItem(SwitchTroughBlockBroke(entryTile, Vector2Int.RoundToInt(tile.transform.position)), tile.transform.position);
                 LightController.lightController.AddRenderQueue(player.transform.position);
 
                 if (isNetworkClient || isNetworkHost)
@@ -1424,7 +1425,7 @@ public class GameManager : MonoBehaviour
         lastTileBrush = tile;
     }
 
-    public int SwitchTroughBlockBroke(int entryTile, Vector2 tileEntryPos)
+    public int SwitchTroughBlockBroke(int entryTile, Vector2Int tileEntryPos)
     {
         int returnItem = entryTile;
         Vector2 tilePos = tileEntryPos;
@@ -1480,10 +1481,27 @@ public class GameManager : MonoBehaviour
                 returnItem = 0;
                 break;
             case 98:
-                returnItem = 0;
+
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15)
+                {
+                    SetTileAt((tileEntryPos.x + 1) * WorldHeight + tileEntryPos.y, 0);
+                    returnItem = 100;
+                }
+                else
+                {
+                    returnItem = 0;
+                }
                 break;
             case 99:
-                returnItem = 0;
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 0)
+                {
+                    SetTileAt((tileEntryPos.x - 1) * WorldHeight + tileEntryPos.y, 0);
+                    returnItem = 100;
+                }
+                else
+                {
+                    returnItem = 0;
+                }
                 break;
         }
 
@@ -1604,7 +1622,7 @@ public class GameManager : MonoBehaviour
 
                     if (Random.Range(0, 2) == 0 && dropBlocks)
                     {
-                        ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2(dx, dy)), new Vector2(dx, dy));
+                        ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2Int(dx, dy)), new Vector2(dx, dy));
                     }
 
                     if (!chunks2Update.Contains(c))
