@@ -1108,7 +1108,20 @@ public class GameManager : MonoBehaviour
                 }
                 else i--;
             }
-            
+
+
+            for (int i = 0; i < WorldWidth / 10; i++)//broken drones
+            {
+                int yPosition = Random.Range((int)(WorldHeight * 0.1f), (int)(WorldHeight * 0.3f));
+                int xPosition = Random.Range(0, WorldWidth * 16);
+                int idx = yPosition + (xPosition * WorldHeight);
+
+                if (TileCollisionType[buildedMapGrid[idx - 1]] == "#" && buildedMapGrid[idx] == 0)
+                {
+                    buildedMapGrid[idx] = 103;
+                }
+                else i--;
+            }
         }
 
         DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapBiomes.lgrsd", mapBiomes);
