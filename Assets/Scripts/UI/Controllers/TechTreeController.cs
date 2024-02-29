@@ -4,15 +4,4 @@ using UnityEngine;
 
 public class TechTreeController : MonoBehaviour {
 
-
-
-
-	void Start () {
-		
-	}
-	
-
-	void Update () {
-		
-	}
 }

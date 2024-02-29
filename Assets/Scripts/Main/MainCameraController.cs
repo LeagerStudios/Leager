@@ -9,8 +9,10 @@ public class MainCameraController : MonoBehaviour {
     public float focusX = 0f;
     public float focusY = 0f;
     [SerializeField] GameObject canvas;
+    [SerializeField] GameObject backgroundTrees;
+    [SerializeField] GameObject backgroundMountains;
 
-	void Start () {
+    void Start () {
 		
 	}
 
@@ -78,6 +80,8 @@ public class MainCameraController : MonoBehaviour {
 
         focusY = canvas.GetComponent<RectTransform>().localPosition.y;
         canvas.GetComponent<RectTransform>().localPosition = Vector2.Lerp(canvas.GetComponent<RectTransform>().localPosition, new Vector2(focusX, focusY), 0.2f);
+        backgroundTrees.transform.position = canvas.GetComponent<RectTransform>().localPosition / 500f;
+        backgroundMountains.transform.position = canvas.GetComponent<RectTransform>().localPosition / 350f;
     }
 
     public void ChangeFocus(string newFocus)
