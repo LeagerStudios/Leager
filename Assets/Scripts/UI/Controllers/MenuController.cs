@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour {
     public Resolution[] resolutions;
     [SerializeField] GameObject menu;
     [SerializeField] public GameObject planetMenu;
-    [SerializeField] Canvas canvas;
+    [SerializeField] public Canvas canvas;
     [SerializeField] public Text ChunkUpdateNotifier;
     [SerializeField] public Dropdown ChunkRenderDropdown;
     [SerializeField] public Slider ChunkUpdateSlider;

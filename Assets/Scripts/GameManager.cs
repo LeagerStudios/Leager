@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour
     public int armUsingDamageDeal = 0;
     public string equipType = "";
     public Vector3 mouseCurrentPosition;
+    public Vector3 mouseLastPosition;
+    public Vector3 mouseDelta;
     public int NumberOfTilesInChunk;
 
     public int[] equipedArmor = new int[3];
@@ -281,6 +283,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         mouseCurrentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseDelta = mouseCurrentPosition - mouseLastPosition;
 
         if (inGame)
         {
@@ -474,6 +477,7 @@ public class GameManager : MonoBehaviour
         }
 
         savingText.SetActive(isSavingData);
+        mouseLastPosition = mouseCurrentPosition;
     }
 
     public int GetCapacityOfCore(int core)

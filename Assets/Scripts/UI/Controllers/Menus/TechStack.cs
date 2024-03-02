@@ -8,71 +8,71 @@ public class TechStack : MonoBehaviour
     public int tile = 0;
     public TechStack parent;
     public GameObject[] nodes;
-    public Sprite obtainedWith;
     public bool unlocked = false;
     public bool fullyUnlocked = false;
     public int[] unlockOnFullUnlock;
 
+    public Sprite obtainedWith;
+    public string description;
+    public bool addPlusSimbol = false;
+
     void OnValidate()
     {
         transform.GetChild(0).GetComponent<Image>().sprite = GameObject.Find("GameManager").GetComponent<GameManager>().tiles[tile];
+        transform.GetChild(1).GetComponent<Image>().enabled = addPlusSimbol;
     }
 
     void Start()
     {
         if (parent)
-            TriggerTech(false);
+            Lock();
         else
         {
-            TriggerTech(false);
-        
-            TriggerTech(true);
+            Lock();
+            Unlock();
         }
         GetComponent<Button>().onClick.AddListener(() => TechManager.techTree.UnlockBlock(tile));
     }
 
-    public void TriggerTech(bool val)
+    public void Lock()
     {
-        unlocked = val;
+        unlocked = false;
+        fullyUnlocked = false;
+
+
+        GetComponent<Button>().interactable = false;
+        GetComponent<Image>().enabled = false;
+        transform.GetChild(0).GetComponent<Image>().enabled = false;
+        transform.GetChild(1).GetComponent<Image>().enabled = false;
+
+        foreach (GameObject node in nodes)
+            node.SetActive(false);
+    }
+
+    public void Unlock()
+    {
+        unlocked = true;
+
+        GetComponent<Button>().interactable = true;
+        GetComponent<Image>().enabled = true;
+        transform.GetChild(0).GetComponent<Image>().enabled = true;
+        transform.GetChild(1).GetComponent<Image>().enabled = addPlusSimbol;
+        GetComponent<Button>().colors = TechManager.techTree.notFullColor;
+
+        foreach (GameObject node in nodes)
+            node.SetActive(true);
 
         if (unlockOnFullUnlock.Length == 0)
-        {
-            GetComponent<Button>().interactable = val;
-            GetComponent<Image>().enabled = val;
-            transform.GetChild(0).GetComponent<Image>().enabled = val;
-
-            foreach (GameObject node in nodes)
-                node.SetActive(val);
-        }
-        else
-        {
-            if (!val)
-            {
-                GetComponent<Button>().interactable = true;
-                //GetComponent<Button>().colors.normalColor = TechManager.techTree.notFullColor;
-                GetComponent<Image>().enabled = false;
-                transform.GetChild(0).GetComponent<Image>().enabled = false;
-
-                foreach (GameObject node in nodes)
-                    node.SetActive(val);
-            }
-            else
-            {
-                GetComponent<Button>().interactable = false;
-                GetComponent<Image>().enabled = true;
-                transform.GetChild(0).GetComponent<Image>().enabled = true;
-
-                foreach (GameObject node in nodes)
-                    node.SetActive(true);
-            }
-        }
+            UnlockFully();
     }
 
     public void UnlockFully()
     {
         fullyUnlocked = true;
         GetComponent<Button>().interactable = true;
-        foreach(int toUnlock in unlockOnFullUnlock)
+        GetComponent<Button>().colors = TechManager.techTree.fullColor;
+
+        foreach (int toUnlock in unlockOnFullUnlock)
         {
             TechManager.techTree.UnlockBlock(toUnlock);
         }
@@ -84,9 +84,9 @@ public class TechStack : MonoBehaviour
         {
             if (unlocked == false)
             {
-                TriggerTech(true);
+                Unlock();
             }
-            else if (fullyUnlocked == false && unlockOnFullUnlock.Length > 0)
+            else if (fullyUnlocked == false)
             {
                 UnlockFully();
             }

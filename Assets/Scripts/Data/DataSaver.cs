@@ -173,7 +173,7 @@ public static class DataSaver
         else
         {
             Debug.LogError("There's no file in " + directory);
-            return default(T);
+            return default;
         }
     }
 }
