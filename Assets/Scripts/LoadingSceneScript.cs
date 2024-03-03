@@ -31,6 +31,10 @@ public class LoadingSceneScript : MonoBehaviour
         isLoading = true;
         Debug.Log("===STARTED INITIAL LOADING===");
 
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 1;
+
         if (Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.WebGLPlayer)
             UpdateResolution();
 
