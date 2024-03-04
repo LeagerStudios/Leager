@@ -1126,6 +1126,65 @@ public class GameManager : MonoBehaviour
                 }
                 else i--;
             }
+
+            if(isLorePlanet)
+            {//lost storage center
+                int xPosition = Random.Range(0, WorldWidth * 15);
+                int yPosition = Random.Range(20, 30);
+
+                for(int dx = xPosition; dx < xPosition + 4; dx++)
+                {
+                    for(int dy = yPosition; dy < yPosition + 4; dy++)
+                    {
+                        int idx = dy + (dx * WorldHeight);
+
+                        buildedMapGrid[idx] = 105;
+
+                        if (dy == yPosition)
+                            buildedMapGrid[idx] = 6;
+                        else if (dy == yPosition + 1)
+                        {
+                            if (dx == xPosition)
+                            {
+                                buildedMapGrid[idx] = 104;
+                                allMapProp[idx] = "104@true@78:2#103:" + Random.Range(1, 3) + "@@0";
+                            }
+                            else if (dx == 1 + xPosition)
+                            {
+                                buildedMapGrid[idx] = 104;
+                                allMapProp[idx] = "104@true@88:2#92:1@@0";
+                            }
+                            else if (dx == 2 + xPosition)
+                            {
+                                if (Random.Range(0, 2) == 0)
+                                {
+                                    buildedMapGrid[idx] = 102;
+                                    allMapProp[idx] = "102@true@66:2#67:1@@0";
+                                }
+                                else
+                                {
+                                    buildedMapGrid[idx] = 92;
+                                }
+                            }
+                        }
+                        else if (dy == 2 + yPosition)
+                        {
+                            if (dx == 1 + xPosition)
+                            {
+                                if (Random.Range(0, 2) == 0)
+                                {
+                                    buildedMapGrid[idx] = 104;
+                                    allMapProp[idx] = "104@true@80:1#90:3#91:1@@0";
+                                }
+                                else
+                                {
+                                    buildedMapGrid[idx] = 89;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapBiomes.lgrsd", mapBiomes);

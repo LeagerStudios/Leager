@@ -318,12 +318,8 @@ public class PushPlay : MonoBehaviour
     //OPTIONS METHODS
     public void EraseScreenshots()
     {
-        int f = DataSaver.FilesInside(Application.persistentDataPath + @"/screenshots");
-
-        for (int i = 0;i < f; i++)
-        {
-            DataSaver.DeleteFile(Application.persistentDataPath + @"/screenshots/screenshot" + (i + 1) + ".png");
-        }
+        DataSaver.DeleteFile(Application.persistentDataPath + @"/screenshots");
+        DataSaver.CreateFolder(Application.persistentDataPath + @"/screenshots");
     }
 
 }

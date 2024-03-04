@@ -18,9 +18,15 @@ public class TechManager : MonoBehaviour, IDragHandler
     public ColorBlock notFullColor;
     public bool deployed = false;
 
-    public void Start()
+    public void Awake()
     {
         techTree = this;
+        deployed = false;
+    }
+
+    public void Start()
+    {
+       
     }
 
     public void StartUnlocks(List<int> unlocks)
@@ -37,8 +43,12 @@ public class TechManager : MonoBehaviour, IDragHandler
 
     public void Update()
     {
-        if (GInput.GetKeyDown(KeyCode.Tab))
+        if ((GInput.GetKeyDown(KeyCode.Tab) || (GInput.leagerInput.platform == "Mobile" && GInput.GetKeyDown(KeyCode.Escape))) && (deployed || (!deployed && GameManager.gameManagerReference.InGame)))
+        {
             deployed = !deployed;
+            GameManager.gameManagerReference.InGame = !deployed;
+        }
+            
 
         GetComponent<Image>().enabled = deployed;
         GetComponent<Image>().raycastTarget = deployed;
@@ -47,7 +57,10 @@ public class TechManager : MonoBehaviour, IDragHandler
         transform.parent.GetComponent<Image>().raycastTarget = deployed;
 
         if (deployed)
+        {
             transform.parent.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+             transform.localScale = Vector3.one * Mathf.Clamp(transform.localScale.x + (Input.mouseScrollDelta.y * 0.1f), 0.5f, 1.5f);
+        }
         else
             transform.parent.GetComponent<RectTransform>().anchoredPosition = Vector2.left * 100000;
     }
