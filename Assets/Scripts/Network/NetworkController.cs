@@ -346,6 +346,7 @@ public class Server
 
             if (client.Connected)
             {
+                print("got here so far");
                 Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
                 Read(client, 1024);
 
