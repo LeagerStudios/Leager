@@ -343,10 +343,11 @@ public class Server
                 return "null";
             }
             Write(client, Application.version);
-
-            if (client.Connected)
+            
+            Debug.Log("get ready");
+            if (Read(client, 1024) != "d")
             {
-                print("got here so far");
+                Debug.Log("got here so far");
                 Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
                 Read(client, 1024);
 
@@ -446,7 +447,7 @@ public class Client
         string version = Read(1024);
         if(version != Application.version)
         {
-            client.Close();
+            Write("d");
             return false;
         }
         else
