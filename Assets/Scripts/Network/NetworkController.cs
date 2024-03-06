@@ -31,12 +31,20 @@ public class NetworkController : MonoBehaviour
         //NATUPnP(true);
     }
 
-    public void ConnectTo(string ip, int port, string message)
+    public bool ConnectTo(string ip, int port, string message)
     {
         print("client reached connect1");
-        Client.Main(ip, port, message);
-        DontDestroyOnLoad(gameObject);
-        print("client exits connect");
+        if(Client.Main(ip, port, message))
+        {
+            DontDestroyOnLoad(gameObject);
+            print("client exits connect");
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+       
     }
 
     public void NATUPnP(bool boolean)
@@ -334,24 +342,33 @@ public class Server
                 client.Close();
                 return "null";
             }
+            Write(client, Application.version);
 
-            Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
-            Read(client, 1024);
+            if (client.Connected)
+            {
+                Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
+                Read(client, 1024);
 
-            Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)).Length + "");
-            Read(client, 1024);
+                Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)).Length + "");
+                Read(client, 1024);
 
-            Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
-            Read(client, 1024);
+                Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
+                Read(client, 1024);
 
-            Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
-            Read(client, 1024);
+                Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
+                Read(client, 1024);
 
-            Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
-            Read(client, 1024);
+                Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
+                Read(client, 1024);
 
-            clients.Add(new TcpUser(client, message));
-            return message;
+                clients.Add(new TcpUser(client, message));
+                return message;
+            }
+            else
+            {
+                client.Close();
+                return "null";
+            }
         }
         else
         {
@@ -404,9 +421,10 @@ public class Client
 
     public static int[] worldProportionsLoad;
     public static int[] worldMapLoad;
+    public static int[] worldMapPropLoad;
     public static string[] worldBiomesLoad;
 
-    public static void Main(string ip, int portParam, string message)
+    public static bool Main(string ip, int portParam, string message)
     {
         
         serverIpAddress = IPAddress.Parse(ip); // replace with the IP address of the server
@@ -423,27 +441,39 @@ public class Client
         Debug.Log("sending username");
         stream.Write(data, 0, data.Length);
 
-        Debug.Log("getting data");
+        Debug.Log("getting version");
+        string version = Read(1024);
+        if(version != Application.version)
+        {
+            client.Close();
+            return false;
+        }
+        else
+        {
+            Write("OK");
+            Debug.Log("getting data");
 
-        Debug.Log("data1");
-        int[] wp = ManagingFunctions.ConvertStringToIntArray(Read(1024).Split(';'));
-        Write("Received");
+            Debug.Log("data1");
+            int[] wp = ManagingFunctions.ConvertStringToIntArray(Read(1024).Split(';'));
+            Write("Received");
 
-        Debug.Log("data2");
-        int mapLength = System.Convert.ToInt32(Read(2048));
-        Write("Received");
-        string mapData = Read(mapLength + 8196);
-        Write("Received");
-        int biomesLenght = System.Convert.ToInt32(Read(8196));
-        Write("Received");
-        string mapBiomes = Read(biomesLenght + 8196);
-        Write("Received");
+            Debug.Log("data2");
+            Write("Map start");
+            string mapData = StartGettingMap();
+            Write("Received");
+            int biomesLenght = System.Convert.ToInt32(Read(8196));
+            Write("Received");
+            string mapBiomes = Read(biomesLenght + 8196);
+            Write("Received");
 
-        Debug.Log("converting data");
-        worldProportionsLoad = wp;
-        //Debug.Log(mapData);
-        worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
-        worldBiomesLoad = mapBiomes.Split(';');
+
+            Debug.Log("converting data");
+            worldProportionsLoad = wp;
+            //Debug.Log(mapData);
+            worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
+            worldBiomesLoad = mapBiomes.Split(';');
+            return true;
+        }
     }
 
     public static string Read(int buffer)
@@ -453,6 +483,18 @@ public class Client
         string message = Encoding.ASCII.GetString(data, 0, bytesRead);
 
         return message;
+    }
+
+    public static string StartGettingMap()
+    {
+        string map = "";
+
+        for(int i = 0; i < worldProportionsLoad[1]; i++)
+        {
+
+        }
+
+        return map;
     }
 
     public static void Write(string message)

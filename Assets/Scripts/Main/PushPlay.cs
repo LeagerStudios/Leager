@@ -100,7 +100,7 @@ public class PushPlay : MonoBehaviour
             string user = WorldPanelController.worldPanelController.multiplayerUsername.GetComponent<InputField>().text;
             Debug.Log("Trying to connect to server: " + port);
 
-            Client.Main(ip, port, user);
+            if(networkController.ConnectTo(ip, port, user))
             StartCoroutine(LoadNetworkWorld(1f, port));
         }
         catch(System.Exception ex)
