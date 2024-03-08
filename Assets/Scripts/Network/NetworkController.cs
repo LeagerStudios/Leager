@@ -339,27 +339,34 @@ public class Server
 
             if (usernamesInUse.Contains(message))
             {
-                client.Close();
+                client.GetStream().Close();
                 return "null";
             }
             Write(client, Application.version);
             
             Debug.Log("get ready");
-            if (Read(client, 1024) != "d")
+            string a = Read(client, 1024);
+            Debug.Log(a);
+            if (a != "d")
             {
                 Debug.Log("got here so far");
                 Write(client, string.Join(";", new string[] { GameManager.gameManagerReference.WorldHeight + "", GameManager.gameManagerReference.WorldWidth + "" }));
+                Debug.Log(1);
                 Read(client, 1024);
 
+                Debug.Log(1);
                 Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)).Length + "");
                 Read(client, 1024);
 
+                Debug.Log(1);
                 Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
                 Read(client, 1024);
 
+                Debug.Log(1);
                 Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
                 Read(client, 1024);
 
+                Debug.Log(1);
                 Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
                 Read(client, 1024);
 
@@ -368,6 +375,7 @@ public class Server
             }
             else
             {
+                client.GetStream().Close();
                 client.Close();
                 return "null";
             }
