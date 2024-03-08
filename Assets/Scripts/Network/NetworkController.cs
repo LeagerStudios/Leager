@@ -354,19 +354,14 @@ public class Server
                 Debug.Log(1);
                 Read(client, 1024);
 
-                Debug.Log(1);
-                Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)).Length + "");
-                Read(client, 1024);
+                Debug.Log(2);
+                SendChunks(client);
 
-                Debug.Log(1);
-                Write(client, string.Join(";", ManagingFunctions.ConvertIntToStringArray(GameManager.gameManagerReference.allMapGrid)));
-                Read(client, 1024);
-
-                Debug.Log(1);
+                Debug.Log(3);
                 Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
                 Read(client, 1024);
 
-                Debug.Log(1);
+                Debug.Log(4);
                 Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
                 Read(client, 1024);
 
@@ -392,6 +387,42 @@ public class Server
         byte[] data = Encoding.ASCII.GetBytes(message);
 
         stream.Write(data, 0, data.Length);
+    }
+
+    public static void SendChunks(TcpClient client)
+    {
+        string readMain = "heugefiefbrgbwghwgruenrggv";
+
+        while (readMain != "exit")
+        {
+            readMain = Read(client, 1024);
+            Write(client, "next");
+
+            if (readMain.Contains("requestchunk"))
+            {
+                string subRead = "HOLA WENAS";
+
+                while (subRead != "exit")
+                {
+
+                    int chunkid = System.Convert.ToInt32(readMain.Split(':')[1]);
+                    subRead = Read(client, 2048);
+
+                    if (subRead == "mapgrid")
+                    {
+                        int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(chunkid).GetComponent<ChunkController>().TileGrid.Clone();
+                        string[] result = ManagingFunctions.ConvertIntToStringArray(tilemap);
+                        string export = string.Join(";", result);
+
+                        Write(client, export.Length + "");
+                        Read(client, 1024);
+                        Write(client, export);
+                    }
+                }
+
+                Write(client, "exiting");
+            }
+        }
     }
 
     public static string Read(TcpClient client, int buffer)
@@ -468,20 +499,19 @@ public class Client
             Write("Received");
 
             Debug.Log("data2");
-            Write("Map start");
-            string mapData = StartGettingMap();
-            Write("Received");
+            GetMap();
+
             int biomesLenght = System.Convert.ToInt32(Read(8196));
             Write("Received");
             string mapBiomes = Read(biomesLenght + 8196);
             Write("Received");
 
-
             Debug.Log("converting data");
             worldProportionsLoad = wp;
             //Debug.Log(mapData);
-            worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
+            //worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
             worldBiomesLoad = mapBiomes.Split(';');
+
             return true;
         }
     }
@@ -495,16 +525,35 @@ public class Client
         return message;
     }
 
-    public static string StartGettingMap()
+    public static void GetMap()
     {
         string map = "";
+        string mapprop = "";
 
-        for(int i = 0; i < worldProportionsLoad[1]; i++)
+
+        for (int i = 0; i < worldProportionsLoad[1]; i++)
         {
+            Write("requestchunk:" + i);
+            Read(1024);
+            Write("mapgrid");
+            int buffer = System.Convert.ToInt32(Read(8192));
+            Write("x");
+            string mapGrid = Read(buffer);
+            map = string.Join(";", new string[] { map, mapGrid });
+
+            Write("exit");
+            Read(1024);
+            //Write("tileprop");
+            //buffer = System.Convert.ToInt32(Read(8192));
+            //Write("x");
+            //string mapTileProp = Read(buffer);
+            //mapprop = string.Join(";", new string[] { mapprop, mapTileProp });
+
 
         }
 
-        return map;
+        worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
+        //leaves with server write turn
     }
 
     public static void Write(string message)

@@ -91,7 +91,7 @@ public static class ManagingFunctions
 
         for (int i = 0; i < entryArray.Length; i++)
         {
-            exitArray[i] = System.Convert.ToString(entryArray[i]);
+            exitArray[i] = entryArray[i].ToString();
         }
 
         return exitArray;

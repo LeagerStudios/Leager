@@ -150,16 +150,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool PlayerFocused
-    {
-        get { return playerFocused; }
-        set { playerFocused = value; }
-    }
-
     void Start()
     {
         gameManagerReference = this;
+        Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, Screen.fullScreen);
+
         //Setup
+
+
         skyboxColor = Camera.main.backgroundColor;
         Time.timeScale = 1.0f;
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
@@ -1218,7 +1216,7 @@ public class GameManager : MonoBehaviour
         int[] buildedMapGrid = new int[(WorldWidth * 16) * WorldHeight];
 
         buildedMapGrid = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/map.lgrsd").SavedData);
-        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd"))
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd") && !isNetworkClient)
             allMapProp = DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd").SavedData;
         else
         {
