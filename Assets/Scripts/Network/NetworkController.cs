@@ -397,6 +397,7 @@ public class Server
         {
             readMain = Read(client, 1024);
             Write(client, "next");
+            Debug.Log("main" + readMain);
 
             if (readMain.Contains("requestchunk"))
             {
@@ -407,6 +408,7 @@ public class Server
 
                     int chunkid = System.Convert.ToInt32(readMain.Split(':')[1]);
                     subRead = Read(client, 2048);
+                    Debug.Log("sub" + readMain);
 
                     if (subRead == "mapgrid")
                     {
@@ -422,7 +424,10 @@ public class Server
 
                 Write(client, "exiting");
             }
+
         }
+        //wait to exit
+        Read(client, 1024);
     }
 
     public static string Read(TcpClient client, int buffer)
@@ -462,7 +467,7 @@ public class Client
 
     public static int[] worldProportionsLoad;
     public static int[] worldMapLoad;
-    public static int[] worldMapPropLoad;
+    public static string[] worldMapPropLoad;
     public static string[] worldBiomesLoad;
 
     public static bool Main(string ip, int portParam, string message)
@@ -497,17 +502,19 @@ public class Client
             Debug.Log("data1");
             int[] wp = ManagingFunctions.ConvertStringToIntArray(Read(1024).Split(';'));
             Write("Received");
+            worldProportionsLoad = wp;
 
             Debug.Log("data2");
             GetMap();
-
-            int biomesLenght = System.Convert.ToInt32(Read(8196));
+            string i = Read(8196);
+            Debug.Log(i);
+            int biomesLenght = System.Convert.ToInt32(i);
             Write("Received");
             string mapBiomes = Read(biomesLenght + 8196);
             Write("Received");
 
             Debug.Log("converting data");
-            worldProportionsLoad = wp;
+  
             //Debug.Log(mapData);
             //worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
             worldBiomesLoad = mapBiomes.Split(';');
@@ -530,7 +537,6 @@ public class Client
         string map = "";
         string mapprop = "";
 
-
         for (int i = 0; i < worldProportionsLoad[1]; i++)
         {
             Write("requestchunk:" + i);
@@ -539,7 +545,11 @@ public class Client
             int buffer = System.Convert.ToInt32(Read(8192));
             Write("x");
             string mapGrid = Read(buffer);
-            map = string.Join(";", new string[] { map, mapGrid });
+            if (map == "")
+                map = mapGrid;
+            else
+                map = string.Join(";", new string[] { map, mapGrid });
+
 
             Write("exit");
             Read(1024);
@@ -552,7 +562,15 @@ public class Client
 
         }
 
+        Write("exit");
+        Read(1024);
+        Write("wenas");
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
+        worldMapPropLoad = new string[worldMapLoad.Length];
+        for (int i = 0; i < worldMapPropLoad.Length; i++)
+        {
+            worldMapPropLoad[i] = "null";
+        }
         //leaves with server write turn
     }
 

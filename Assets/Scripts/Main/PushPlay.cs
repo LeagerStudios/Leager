@@ -93,8 +93,8 @@ public class PushPlay : MonoBehaviour
 
     public void ConnectToExternalGame()
     {
-        try
-        {
+        //try
+        //{
             string ip = WorldPanelController.worldPanelController.multiplayerIp.GetComponent<InputField>().text;
             int port = System.Convert.ToInt32(WorldPanelController.worldPanelController.multiplayerPort.GetComponent<InputField>().text);
             string user = WorldPanelController.worldPanelController.multiplayerUsername.GetComponent<InputField>().text;
@@ -102,11 +102,11 @@ public class PushPlay : MonoBehaviour
 
             if(networkController.ConnectTo(ip, port, user))
             StartCoroutine(LoadNetworkWorld(1f, port));
-        }
-        catch(System.Exception ex)
-        {
-            Debug.Log(ex.Message);
-        }
+        //}
+        //catch(System.Exception ex)
+        //{
+        //    Debug.Log(ex.Message + "==" + ex.Source);
+        //}
     }
 
     public void CreateMainSaves()

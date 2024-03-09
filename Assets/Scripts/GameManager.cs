@@ -760,6 +760,7 @@ public class GameManager : MonoBehaviour
             mapGrid = Client.worldMapLoad;
             WorldHeight = Client.worldProportionsLoad[0];
             WorldWidth = Client.worldProportionsLoad[1];
+            allMapProp = Client.worldMapPropLoad;
         }
         else
         {
