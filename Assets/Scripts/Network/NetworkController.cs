@@ -342,6 +342,11 @@ public class Server
                 client.GetStream().Close();
                 return "null";
             }
+            if(message == "ServerDiscoveryRequestCode7777")
+            {
+                Write(client, NetworkController.GetLocalIP());
+                return "null";
+            }
             Write(client, Application.version);
             
             Debug.Log("get ready");
@@ -507,7 +512,6 @@ public class Client
             Debug.Log("data2");
             GetMap();
             string i = Read(8196);
-            Debug.Log(i);
             int biomesLenght = System.Convert.ToInt32(i);
             Write("Received");
             string mapBiomes = Read(biomesLenght + 8196);
