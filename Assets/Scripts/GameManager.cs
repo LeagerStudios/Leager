@@ -147,7 +147,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameManagerReference = this;
-        Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, Screen.fullScreen);
 
         //Setup
 
