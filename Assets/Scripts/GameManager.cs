@@ -10,14 +10,8 @@ public enum Biomes : int
 
 public enum Entities : int
 {
-    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, AntiLaser = 4, NanoBotT3 = 5, x = 7
+    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, AntiLaser = 4, NanoBotT3 = 5, Darkn = 6, x = 7
 }
-
-public enum UnitEntities : int
-{
-    Darkn = 6,
-}
-
 public enum UnitWeapons : int
 {
     Shooter = 0, LaserDrill = 1,
@@ -580,22 +574,7 @@ public class GameManager : MonoBehaviour
                 string entityType = datas[0];
                 EntityBase entityBase = null;
 
-                if (entityType == "nanobot1")
-                {
-                    entityBase = ENTITY_NanoBotT1.StaticSpawn(null, spawnPos);
-                }
-                if (entityType == "nanobot2")
-                {
-                    entityBase = ENTITY_NanoBotT2.StaticSpawn(null, spawnPos);
-                }
-                if (entityType == "nanobot3")
-                {
-                    entityBase = ENTITY_NanoBotT3.StaticSpawn(null, spawnPos);
-                }
-                if (entityType == "darkn")
-                {
-                    entityBase = UNIT_Darkn.StaticSpawn(null, spawnPos);
-                }
+                SpawnEntity(StringToEntity(entityType), null, spawnPos);
 
                 if (entityBase != null)
                 {
@@ -603,6 +582,81 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public string EntityToString(Entities entity)
+    {
+        switch (entity)
+        {
+            case Entities.NanoBotT1:
+                return "nanobot1";
+            case Entities.NanoBotT2:
+                return "nanobot2";
+            case Entities.NanoBotT3:
+                return "nanobot3";
+            case Entities.TheDestroyer:
+                return "destroyer";
+            case Entities.KrotekBoss:
+                return "krotek";
+            case Entities.Darkn:
+                return "darkn";
+            default:
+                return "null";
+        }
+    }
+
+    public Entities StringToEntity(string entity)
+    {
+        switch (entity)
+        {
+            case "nanobot1":
+                return Entities.NanoBotT1;
+            case "nanobot2":
+                return Entities.NanoBotT2;
+            case "nanobot3":
+                return Entities.NanoBotT3;
+            case "destroyer":
+                return Entities.TheDestroyer;
+            case "krotek":
+                return Entities.KrotekBoss;
+            case "darkn":
+                return Entities.Darkn;
+            default:
+                return Entities.x;
+        }
+    }
+
+    public EntityBase SpawnEntity(Entities entityType, string[] args, Vector2 spawnPos)
+    {
+        EntityBase entityBase = null;
+
+        if (entityType == Entities.NanoBotT1)
+        {
+            entityBase = ENTITY_NanoBotT1.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.NanoBotT2)
+        {
+            entityBase = ENTITY_NanoBotT2.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.NanoBotT3)
+        {
+            entityBase = ENTITY_NanoBotT3.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.Darkn)
+        {
+            entityBase = UNIT_Darkn.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.TheDestroyer)
+        {
+            entityBase = ENTITY_TheDestroyer.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.KrotekBoss)
+        {
+            entityBase = ENTITY_KrotekController.StaticSpawn(null, spawnPos);
+        }
+
+        //entityBase.IsLocal = !isNetworkClient;
+        return entityBase;
     }
 
     private void SetSkybox()

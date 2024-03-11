@@ -21,6 +21,7 @@ public abstract class UnitBase : EntityBase
 {
     public abstract bool PositionControlled { get; set; }
     public abstract bool RotationControlled { get; set; }
+    public abstract bool IsLocal { get; set; }
     public abstract void SetTargetPosition(Vector2 targetPos);
     public abstract Vector2 GetTargetPosition();
 }

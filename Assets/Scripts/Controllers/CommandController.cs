@@ -139,30 +139,7 @@ public class CommandController : MonoBehaviour {
 
                 if (entity != "")
                 {
-                    if (entity == "krotek")
-                    {
-                        ENTITY_KrotekController.StaticSpawn(null, spawn);
-                    }
-                    if (entity == "nanobot1")
-                    {
-                        ENTITY_NanoBotT1.StaticSpawn(null, spawn);
-                    }
-                    if (entity == "nanobot2")
-                    {
-                        ENTITY_NanoBotT2.StaticSpawn(null, spawn);
-                    }
-                    if (entity == "nanobot3")
-                    {
-                        ENTITY_NanoBotT3.StaticSpawn(null, spawn);
-                    }
-                    if (entity == "destroyer")
-                    {
-                        ENTITY_TheDestroyer.StaticSpawn(null, spawn);
-                    }
-                    if (entity == "darkn")
-                    {
-                        UNIT_Darkn.StaticSpawn(null, spawn);
-                    }
+                    GameManager.gameManagerReference.SpawnEntity(GameManager.gameManagerReference.StringToEntity(entity), null, spawn);
                 }
             }
             else if (input[0] == "give")

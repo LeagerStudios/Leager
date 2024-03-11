@@ -45,6 +45,14 @@ public class UNIT_Darkn : UnitBase, IDamager
         set { positionControlled = value; }
     }
 
+    private bool isLocal;
+    public override bool IsLocal
+    {
+        get { return isLocal; }
+
+        set { isLocal = value; }
+    }
+
     public override bool RotationControlled
     {
         get { return rotationControlled; }
@@ -60,7 +68,7 @@ public class UNIT_Darkn : UnitBase, IDamager
 
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)UnitEntities.Darkn], Vector2.zero, Quaternion.identity).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.Darkn], Vector2.zero, Quaternion.identity).GetComponent<UNIT_Darkn>().Spawn(args, spawnPos);
     }
 
     public override string[] GenerateArgs()

@@ -45,9 +45,9 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         else if (GameManager.gameManagerReference.InGame && DescentIa) DescentIaFrame();
     }
 
-    public static void StaticSpawn(string[] args, Vector2 spawnPos)
+    public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.TheDestroyer], Vector2.zero, Quaternion.identity).transform.GetChild(0).GetComponent<ENTITY_TheDestroyer>().Spawn(args, spawnPos);
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.TheDestroyer], Vector2.zero, Quaternion.identity).transform.GetChild(0).GetComponent<ENTITY_TheDestroyer>().Spawn(args, spawnPos);
     }
 
     void Start()

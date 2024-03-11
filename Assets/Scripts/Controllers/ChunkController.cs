@@ -709,42 +709,43 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void CheckEntitiesSpawn()
     {
-        for (int x = 0; x < 16; x++)
-        {
-            for (int y = 0; y < manager.WorldHeight; y++)
+        if (!manager.isNetworkClient)
+            for (int x = 0; x < 16; x++)
             {
-                if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == "#")//Nano1
+                for (int y = 0; y < manager.WorldHeight; y++)
                 {
-                    if (Random.Range(0, (int)(350 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
+                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == "#")//Nano1
                     {
-                        if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                        if (Random.Range(0, (int)(350 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
                         {
-                            ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            {
+                                ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                            }
                         }
                     }
-                }
-                if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
-                {
-                    if (Random.Range(0, 250) == 0)
+                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
                     {
-                        if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                        if (Random.Range(0, 250) == 0)
                         {
-                            ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            {
+                                ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                            }
                         }
                     }
-                }
-                if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
-                {
-                    if (Random.Range(0, 450) == 0)
+                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
                     {
-                        if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                        if (Random.Range(0, 450) == 0)
                         {
-                            ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            {
+                                ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                            }
                         }
                     }
                 }
             }
-        }
     }
 
     public IEnumerator SpawnChunk()
