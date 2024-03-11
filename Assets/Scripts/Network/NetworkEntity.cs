@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class NetworkEntity : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
+        if(!GameManager.gameManagerReference.isNetworkClient && !GameManager.gameManagerReference.isNetworkHost)
+        {
+            Destroy(this);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         

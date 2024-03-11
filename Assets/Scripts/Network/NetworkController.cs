@@ -12,6 +12,7 @@ public class NetworkController : MonoBehaviour
 {
     public static NetworkController networkController;
     List<string[]> blocksToReplace;
+    List<string[]> entitiesToShow;
     float updateTime = 0f;
 
     void Awake()
@@ -274,6 +275,11 @@ public class NetworkController : MonoBehaviour
                 updateTime += Time.deltaTime;
             }
         }
+    }
+
+    public void LateUpdate()
+    {
+        entitiesToShow = new List<string[]>();
     }
 
     public static string GetLocalIP()

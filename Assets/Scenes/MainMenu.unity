@@ -3517,6 +3517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 621416141}
+  hostedPanel: {fileID: 0}
 --- !u!222 &476371520
 CanvasRenderer:
   m_ObjectHideFlags: 0
