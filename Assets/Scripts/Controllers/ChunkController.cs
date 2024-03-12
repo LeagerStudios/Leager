@@ -352,10 +352,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void TileMod(int e)
     {
-        if (TileObject[e].GetComponent<TileProperties>())
-        {
-            TileProperties tileProperties = TileObject[e].GetComponent<TileProperties>();
+        TileProperties tileProperties = TileObject[e].GetComponent<TileProperties>();
 
+        if (tileProperties)
+        {
             if(tileProperties.parentTile != TileGrid[e])
             {
                 if (tileProperties.canDropStoredItems)
@@ -451,6 +451,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
 
                 GameObject doorBlock = Instantiate(doorObject, TileObject[e].transform);
+                doorBlock.name = "86";
                 doorBlock.transform.localPosition = Vector2.zero;
             }
         }
@@ -880,11 +881,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
             for (int e = 0; e < TileGrid.Length; e++)
             {
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
-            }
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                
             }
         }
         else if (!loading && !loaded)

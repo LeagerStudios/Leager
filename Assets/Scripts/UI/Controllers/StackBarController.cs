@@ -50,6 +50,11 @@ public class StackBarController : MonoBehaviour {
             }
             transform.GetChild(0).GetComponent<Image>().enabled = !InventoryDeployed;
         }
+        else if (gameManager.InGame)
+        {
+            InventoryDeployed = false;
+        }
+
         if (InventoryDeployed) InventoryBar.transform.GetChild(0).gameObject.SetActive(true);
         else InventoryBar.transform.GetChild(0).gameObject.SetActive(false);
         itemText.enabled = !InventoryDeployed;

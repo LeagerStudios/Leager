@@ -136,11 +136,16 @@ public class GameManager : MonoBehaviour
             inGame = value;
             if (isNetworkClient || isNetworkHost) inGame = true;
 
-            Rigidbody2D[] rigidbodys = FindObjectsOfType<Rigidbody2D>();
-            foreach (Rigidbody2D rigidbody2D in rigidbodys)
-            {
-                rigidbody2D.simulated = inGame;
-            }
+            UpdateEntitiesRB2D(inGame);
+        }
+    }
+
+    public void UpdateEntitiesRB2D(bool value)
+    {
+        Rigidbody2D[] rigidbodys = FindObjectsOfType<Rigidbody2D>();
+        foreach (Rigidbody2D rigidbody2D in rigidbodys)
+        {
+            rigidbody2D.simulated = value;
         }
     }
 
@@ -470,6 +475,7 @@ public class GameManager : MonoBehaviour
 
         savingText.SetActive(isSavingData);
         mouseLastPosition = mouseCurrentPosition;
+        UpdateEntitiesRB2D(InGame);
     }
 
     public int GetCapacityOfCore(int core)
@@ -1631,6 +1637,9 @@ public class GameManager : MonoBehaviour
                 {
                     returnItem = 0;
                 }
+                break;
+            case 104:
+                returnItem = 0;
                 break;
         }
 
