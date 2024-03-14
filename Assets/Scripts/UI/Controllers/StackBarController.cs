@@ -63,7 +63,7 @@ public class StackBarController : MonoBehaviour {
             itemText.text = gameManager.tileName[StackBarGrid[idx]];
         }
 
-        UpdateStacks();
+        //UpdateStacks();
     }
 
     public void UpdateStacks()
@@ -158,6 +158,8 @@ public static class StackBar
             stackBarController.StackBarGrid = new int[] { 22, 23, 24, 0, 0, 0, 0, 0, 16 };
             stackBarController.StackItemAmount = new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 1 };
         }
+
+        stackBarController.UpdateStacks();
     }
 
     public static void SaveStackBar()
@@ -175,6 +177,7 @@ public static class StackBar
     public static void ChangeStackBarIdx(int i)
     {
         stackBarController.idx = Mathf.Clamp(i, 0, 8);
+        stackBarController.UpdateStacks();
     }
 
     public static void AsignNewStack(int index, int tile, int amountOfTiles)

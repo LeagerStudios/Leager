@@ -352,7 +352,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void TileMod(int e)
     {
-        TileProperties tileProperties = TileObject[e].GetComponent<TileProperties>();
+        GameObject tile = TileObject[e];
+        TileProperties tileProperties = tile.GetComponent<TileProperties>();
 
         if (tileProperties)
         {
@@ -366,7 +367,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         if (text[text.Length - 1] == ';')
                             text = text.Remove(item.Length - 1);
                         int[] datas = ManagingFunctions.ConvertStringToIntArray(text.Split(':'));
-                        GameObject droppedItem = ManagingFunctions.DropItem(datas[0], TileObject[e].transform.position, datas[1]);
+                        GameObject droppedItem = ManagingFunctions.DropItem(datas[0], tile.transform.position, datas[1]);
                         droppedItem.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-4f, 4f), 6);
                     }
                 }
@@ -378,36 +379,36 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
         }
 
-        if (TileObject[e].transform.childCount > 0)
+        if (tile.transform.childCount > 0)
         {
-            for (int i = 0; i < TileObject[e].transform.childCount; i++)
+            for (int i = 0; i < tile.transform.childCount; i++)
             {
-                if (TileObject[e].transform.GetChild(i).gameObject.name != TileGrid[e] + "")
+                if (tile.transform.GetChild(i).gameObject.name != TileGrid[e] + "")
                 {
-                    GameObject block = TileObject[e].transform.GetChild(i).gameObject;
+                    GameObject block = tile.transform.GetChild(i).gameObject;
                     block.transform.parent = null;
                     Destroy(block);
                 }
             }
         }
 
-        if (TileGrid[e] == 1 && TileObject[e].transform.childCount < 1)
+        if (TileGrid[e] == 1 && tile.transform.childCount < 1)
         {
-            GameObject grassBlock = Instantiate(grassObject, TileObject[e].transform);
+            GameObject grassBlock = Instantiate(grassObject, tile.transform);
             grassBlock.transform.localPosition = Vector2.zero;
             grassBlock.name = "1";
         }
 
-        if (TileGrid[e] == 15 && TileObject[e].transform.childCount < 1)
+        if (TileGrid[e] == 15 && tile.transform.childCount < 1)
         {
-            GameObject boxBlock = Instantiate(boxObject, TileObject[e].transform);
+            GameObject boxBlock = Instantiate(boxObject, tile.transform);
             boxBlock.transform.localPosition = Vector2.zero;
             boxBlock.name = "15";
         }
 
-        if (TileGrid[e] == 84 && TileObject[e].transform.childCount < 1)
+        if (TileGrid[e] == 84 && tile.transform.childCount < 1)
         {
-            GameObject fireBlock = Instantiate(fireObject, TileObject[e].transform);
+            GameObject fireBlock = Instantiate(fireObject, tile.transform);
             fireBlock.name = "84";
             fireBlock.transform.localPosition = Vector2.zero;
         }
@@ -437,22 +438,25 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (TileGrid[e + 1] != 87)
             {
-                ManagingFunctions.DropItem(85, TileObject[e].transform.position);
+                ManagingFunctions.DropItem(85, tile.transform.position);
                 TileGrid[e] = 0;
             }
             else
             {
-                if (TileObject[e].GetComponent<BlockAnimationController>() == null)
+                if (tile.GetComponent<BlockAnimationController>() == null)
                 {
-                    BlockAnimationController animationController = TileObject[e].AddComponent<BlockAnimationController>();
+                    BlockAnimationController animationController = tile.AddComponent<BlockAnimationController>();
                     animationController.animationData = manager.tileAnimation[TileGrid[e]];
                     animationController.rootBIdx = e;
                     animationController.rootChunk = this;
                 }
 
-                GameObject doorBlock = Instantiate(doorObject, TileObject[e].transform);
-                doorBlock.name = "86";
-                doorBlock.transform.localPosition = Vector2.zero;
+                if (tile.transform.childCount < 1)
+                {
+                    GameObject doorBlock = Instantiate(doorObject, tile.transform);
+                    doorBlock.name = "86";
+                    doorBlock.transform.localPosition = Vector2.zero;
+                }
             }
         }
 
@@ -460,14 +464,14 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (TileGrid[e - 1] != 86)
             {
-                ManagingFunctions.DropItem(85, TileObject[e].transform.position - Vector3.up);
+                ManagingFunctions.DropItem(85, tile.transform.position - Vector3.up);
                 TileGrid[e] = 0;
             }
         }
 
-        if (TileGrid[e] == 89 && TileObject[e].transform.childCount < 1)
+        if (TileGrid[e] == 89 && tile.transform.childCount < 1)
         {
-            GameObject grabberObject = Instantiate(resourceGrabberObject, TileObject[e].transform);
+            GameObject grabberObject = Instantiate(resourceGrabberObject, tile.transform);
             grabberObject.name = "89";
             grabberObject.transform.localPosition = Vector2.zero;
         }
@@ -476,7 +480,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 99)
             {
-                ManagingFunctions.DropItem(100, TileObject[e].transform.position + Vector3.right * 0.5f);
+                ManagingFunctions.DropItem(100, tile.transform.position + Vector3.right * 0.5f);
                 TileGrid[e] = 0;
             }
         }
@@ -485,7 +489,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 98)
             {
-                ManagingFunctions.DropItem(100, TileObject[e].transform.position + Vector3.left * 0.5f);
+                ManagingFunctions.DropItem(100, tile.transform.position + Vector3.left * 0.5f);
                 TileGrid[e] = 0;
             }
         }
@@ -511,19 +515,20 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
         }
 
-        if (TileGrid[e] == 101 && TileObject[e].transform.childCount < 1)
+        if (TileGrid[e] == 101 && tile.transform.childCount < 1)
         {
-            GameObject unitCenter = Instantiate(unitCenterObject, TileObject[e].transform);
+            GameObject unitCenter = Instantiate(unitCenterObject, tile.transform);
             unitCenter.name = "101";
             unitCenter.transform.localPosition = Vector2.zero;
         }
 
-        if (TileGrid[e] == 102 && TileObject[e].transform.childCount < 1)
+        if (TileGrid[e] == 102 && tile.transform.childCount < 1)
         {
-            GameObject boxBlock = Instantiate(boxObject, TileObject[e].transform);
+            GameObject boxBlock = Instantiate(boxObject, tile.transform);
             boxBlock.transform.localPosition = Vector2.zero;
             boxBlock.name = "102";
         }
+
     }
 
 

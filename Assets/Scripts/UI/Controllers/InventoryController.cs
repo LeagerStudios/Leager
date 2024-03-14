@@ -25,10 +25,10 @@ public class InventoryController : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-        UpdateStacks();
-    }
+    //private void FixedUpdate()
+    //{
+    //    UpdateStacks();
+    //}
 
     public void UpdateStacks()
     {
@@ -81,6 +81,8 @@ public static class InventoryBar
             inventoryBarController.InventoryBarGrid = new int[36];
             inventoryBarController.InventoryItemAmount = new int[36];
         }
+
+        inventoryBarController.UpdateStacks();
     }
 
     public static void SaveInventory()
