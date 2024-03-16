@@ -403,6 +403,7 @@ public class Server
     public static void SendChunks(TcpClient client)
     {
         string readMain = "heugefiefbrgbwghwgruenrggv";
+        Write(client, "Entering the obvious");
 
         while (readMain != "exit")
         {
@@ -546,6 +547,8 @@ public class Client
     {
         string map = "";
         string mapprop = "";
+
+        Read(1024);
 
         for (int i = 0; i < worldProportionsLoad[1]; i++)
         {
