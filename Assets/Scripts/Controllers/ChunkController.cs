@@ -60,7 +60,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
         TileGrid[idx] = t;
         TileObject[idx] = o;
         TilePropertiesArr[idx] = prop;
-        Meshes[idx] = mesh;
         o.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[t];
        if(prop != "null") o.AddComponent<TileProperties>().Load(prop);
     }
