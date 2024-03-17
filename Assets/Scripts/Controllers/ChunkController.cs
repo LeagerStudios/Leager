@@ -12,6 +12,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public bool loading = false;
     public int[] TileGrid;
     public string[] TilePropertiesArr;
+    public string[] Meshes;
     public float[] LightMap;
     public GameObject[] TileObject;
     public float ID;
@@ -42,6 +43,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         ID = id;
         TileGrid = new int[h * 16];
         TilePropertiesArr = new string[h * 16];
+        Meshes = new string[h * 16];
         TileObject = new GameObject[h * 16];
         LightMap = new float[h * 16];
         manager = GameManager.gameManagerReference;
@@ -53,11 +55,12 @@ public class ChunkController : MonoBehaviour, ITimerCall
     }
 
 
-    public void RegisterTile(int idx, int t, string prop, GameObject o)
+    public void RegisterTile(int idx, int t, string prop, string mesh, GameObject o)
     {
         TileGrid[idx] = t;
         TileObject[idx] = o;
         TilePropertiesArr[idx] = prop;
+        Meshes[idx] = mesh;
         o.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[t];
        if(prop != "null") o.AddComponent<TileProperties>().Load(prop);
     }
@@ -267,40 +270,47 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 string cT = manager.TileCollisionType[TileGrid[e]];
 
                 TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
-                switch (cT)
+
+                if (cT == "#" && Meshes[e] != "#")
                 {
-                    case "#":
-                        TileObject[e].layer = 8;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "":
-                        TileObject[e].layer = 9;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "~":
-                        TileObject[e].layer = 10;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "=":
-                        TileObject[e].layer = 8;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
-                        {
-                            ModifyTile(true, "platform", TileObject[e]);
-                        }
-                        break;
+                    TileObject[e].layer = 8;
+                    if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                    {
+                        ModifyTile(false, "platform", TileObject[e]);
+                    }
+                    Meshes[e] = "#";
                 }
+
+                if (cT == "" && Meshes[e] != "")
+                {
+                    TileObject[e].layer = 9;
+                    if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                    {
+                        ModifyTile(false, "platform", TileObject[e]);
+                    }
+                    Meshes[e] = "";
+                }
+
+                if (cT == "~" && Meshes[e] != "~")
+                {
+                    TileObject[e].layer = 10;
+                    if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                    {
+                        ModifyTile(false, "platform", TileObject[e]);
+                    }
+                    Meshes[e] = "~";
+                }
+
+                if (cT == "=" && Meshes[e] != "=")
+                {
+                    TileObject[e].layer = 8;
+                    if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
+                    {
+                        ModifyTile(true, "platform", TileObject[e]);
+                    }
+                    Meshes[e] = "=";
+                }
+
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
                 if (TileObject[e].GetComponent<TileProperties>())
                 {
@@ -310,7 +320,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
                     }
                 }
-                
+
             }
 
             for (int x = 0; x < 16; x++)
@@ -774,7 +784,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 int tileSet = TileGrid[tileIdx];
                 string properties = TilePropertiesArr[tileIdx];
                 
-                RegisterTile(tileIdx, tileSet, properties, newTile);
+                RegisterTile(tileIdx, tileSet, properties, manager.TileCollisionType[tileSet], newTile);
                 tileY++;
                 tileName++;
                 tileIdx++;

@@ -456,7 +456,8 @@ public class MenuController : MonoBehaviour {
     IEnumerator ExitGame()
     {
         yield return new WaitForSeconds(1);
-        GameManager.gameManagerReference.SaveGameData(false);
+        if (!gameManager.isNetworkClient)
+            GameManager.gameManagerReference.SaveGameData(false);
         if (gameManager.isNetworkHost)
         {
             Server.CloseServer();
@@ -470,7 +471,7 @@ public class MenuController : MonoBehaviour {
         Debug.Log("===EXITED TO MAIN MENU===");
         Destroy(GameObject.Find("SaveObject"));
         SceneManager.LoadScene("MainMenu");
-        
+
     }
 
 

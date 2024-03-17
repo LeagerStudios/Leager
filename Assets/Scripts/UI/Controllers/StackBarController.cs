@@ -47,6 +47,8 @@ public class StackBarController : MonoBehaviour {
                 {
                     InventoryDeployed = true;
                 }
+
+                UpdateStacks();
             }
             transform.GetChild(0).GetComponent<Image>().enabled = !InventoryDeployed;
         }

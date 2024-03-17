@@ -128,6 +128,10 @@ public class GameManager : MonoBehaviour
 
     public SkinContainer[] playerSkins;
 
+    [Header("Events")]
+    public bool raining = false;
+    public AudioSource rainSource;
+
     public bool InGame
     {
         get { return inGame; }
@@ -470,6 +474,23 @@ public class GameManager : MonoBehaviour
                     buildRotation = (int)Mathf.Repeat(buildRotation - 90, 360);
                 }
             }
+
+            //EVENTS
+
+            if (raining)
+            {
+                if (!rainSource.isPlaying)
+                {
+                    rainSource.Play();
+                }
+            }
+            else
+            {
+                if (rainSource.isPlaying)
+                {
+                    rainSource.Stop();
+                }
+            }
         }
 
         savingText.SetActive(isSavingData);
@@ -723,7 +744,11 @@ public class GameManager : MonoBehaviour
         }
 
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
-        daytimeUpdatedSkyboxColor = skyboxColor * value;
+
+        if(raining)
+            dayLuminosity = Mathf.Clamp(value, 0.1f, 0.25f);
+
+        daytimeUpdatedSkyboxColor = skyboxColor * dayLuminosity;
     }
 
     public void DropOn(Vector2 position, float length)
