@@ -10,7 +10,7 @@ public class Box : MonoBehaviour
     void Start()
     {
         if (transform.parent.GetComponent<TileProperties>() == null)
-            transform.parent.gameObject.AddComponent<TileProperties>().parentTile = 15;
+            transform.parent.gameObject.AddComponent<TileProperties>().parentTile = System.Array.IndexOf(GameManager.gameManagerReference.tiles, transform.parent.GetComponent<SpriteRenderer>().sprite);
     }
 
     public void ToggleItems()
