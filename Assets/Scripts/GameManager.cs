@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
 
     //Auxiliar for build
     GameObject lastTileBrush;
-    [HideInInspector] public int breakingTime = -1;
+    public int breakingTime = -1;
     public int tileBreaking = -1;
     public bool cancelPlacing = false; //Mobile
 
@@ -323,6 +323,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 breakingTime = -1;
+                tileBreaking = -1;
             }
 
             if (GInput.GetMouseButton(0))
@@ -393,6 +394,7 @@ public class GameManager : MonoBehaviour
                     if (equipedArmor[idx] > 0)
                     {
                         StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx] = equipedArmor[idx];
+                        StackBar.stackBarController.UpdateStacks();
                     }
                     else
                     {

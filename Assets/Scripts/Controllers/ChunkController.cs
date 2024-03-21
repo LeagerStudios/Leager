@@ -854,32 +854,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
     void Update () {
         if (manager.InGame && loaded && !loading)
         {
-            if (manager.doingAnAction)
-            {
-                if (manager.doingAnAction)
-                {
-                    if (GInput.GetMouseButton(0))
-                    {
-                        RaycastHit2D rayHit = new RaycastHit2D();
-                        Vector3 mousePos = manager.mouseCurrentPosition;
-                        mousePos.y++;
-                        rayHit = Physics2D.Raycast(mousePos, Vector2.down, 1f, tilesMasks);
-                        if (rayHit.transform != null)
-                        {
-                            ClickedObject(rayHit.transform.gameObject);
-                        }
-                        Debug.DrawRay(player.transform.position, manager.mouseCurrentPosition - player.transform.position, Color.blue);
-                    }
-                    else
-                    {
-                        Debug.DrawRay(player.transform.position, manager.mouseCurrentPosition - player.transform.position, Color.green);
-                    }
-                }
-            }
-            else
-            {
-                Debug.DrawRay(player.transform.position, manager.mouseCurrentPosition - player.transform.position, Color.red);
-            }
             BlocksPhysics();
 
             if (entitiesSpawnTime > entitiesSpawnTimeConstant)
@@ -903,7 +877,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         }
     }
 
-    void ClickedObject(GameObject obj)
+    public void ClickedTile(GameObject obj)
     {
         if (obj.transform.parent == gameObject.transform)
         {

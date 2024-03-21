@@ -4534,9 +4534,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 290}
-  - component: {fileID: 1060}
   - component: {fileID: 320}
   - component: {fileID: 1061}
+  - component: {fileID: 1060}
   m_Layer: 0
   m_Name: SpecialCursor
   m_TagString: Untagged
@@ -14751,8 +14751,8 @@ MonoBehaviour:
   - Grass
   - Snowy Grass
   - Snow
-  - 
-  - 
+  - Clay
+  - Cement
   - Stone
   - Dirt
   - Iron Ore
@@ -22420,6 +22420,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66e5e4e4e11f605419d90d499d23dff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilesMasks:
+    serializedVersion: 2
+    m_Bits: 1792
   CraftMenu: {fileID: 1082114432784878, guid: dfa0a87c77fe19e45b510f9a51d09542, type: 3}
   spritesRenders:
   - {fileID: 0}

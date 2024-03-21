@@ -14,7 +14,6 @@ public class BuildingCursorController : MonoBehaviour {
 
     void Update()
     {
-
         if (gameManager.InGame)
         {
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -40,7 +39,7 @@ public class BuildingCursorController : MonoBehaviour {
                     GetComponent<SpriteRenderer>().sprite = gameManager.tileBuildPrev[gameManager.chosenBrush];
                 }
             }
-            else if (gameManager.usingTool && gameManager.breakingTime != -1)
+            else if (gameManager.usingTool && gameManager.tileBreaking != -1)
             {
                 GetComponent<SpriteRenderer>().enabled = true;
                 Color newColor = GetComponent<SpriteRenderer>().color;
