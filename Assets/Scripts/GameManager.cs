@@ -1602,12 +1602,6 @@ public class GameManager : MonoBehaviour
                 if (Random.Range(0, 5) == 0)
                     ManagingFunctions.DropItem(3, tilePos);
                 break;
-            case 4:
-                returnItem = 7;
-                break;
-            case 5:
-                returnItem = 7;
-                break;
             case 8:
                 returnItem = 31;
                 ManagingFunctions.DropItem(6, tilePos);
