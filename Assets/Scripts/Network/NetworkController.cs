@@ -402,41 +402,16 @@ public class Server
 
     public static void SendChunks(TcpClient client)
     {
-        string readMain = "heugefiefbrgbwghwgruenrggv";
-        Write(client, "Entering the obvious");
-
-        while (readMain != "exit")
+        for (int i = 0; i < GameManager.gameManagerReference.WorldWidth; i++)
         {
-            readMain = Read(client, 1024);
-            Write(client, "next");
-            Debug.Log("main" + readMain);
+            Debug.Log("chunk" + i);
+            int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(chunkid).GetComponent<ChunkController>().TileGrid.Clone();
+            string[] result = ManagingFunctions.ConvertIntToStringArray(tilemap);
+            string export = string.Join(";", result);
 
-            if (readMain.Contains("requestchunk"))
-            {
-                string subRead = "HOLA WENAS";
-
-                while (subRead != "exit")
-                {
-
-                    int chunkid = System.Convert.ToInt32(readMain.Split(':')[1]);
-                    subRead = Read(client, 2048);
-                    Debug.Log("sub" + readMain);
-
-                    if (subRead == "mapgrid")
-                    {
-                        int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(chunkid).GetComponent<ChunkController>().TileGrid.Clone();
-                        string[] result = ManagingFunctions.ConvertIntToStringArray(tilemap);
-                        string export = string.Join(";", result);
-
-                        Write(client, export.Length + "");
-                        Read(client, 1024);
-                        Write(client, export);
-                    }
-                }
-
-                Write(client, "exiting");
-            }
-
+            Write(client, export.Length + "");
+            Read(client, 1024);
+            Write(client, export);
         }
         //wait to exit
         Read(client, 1024);
@@ -451,6 +426,8 @@ public class Server
         byte[] data = new byte[buffer]; //creates data with X buffer
         int bytesRead = stream.Read(data, 0, data.Length); //reads the stream
         string message = Encoding.ASCII.GetString(data, 0, bytesRead);
+
+        Debug.Log("help me plz im dying;;" + message);
 
         return message;
     }
@@ -539,6 +516,7 @@ public class Client
         byte[] data = new byte[buffer]; //creates data with X buffer
         int bytesRead = stream.Read(data, 0, data.Length); //reads the stream
         string message = Encoding.ASCII.GetString(data, 0, bytesRead);
+       
 
         return message;
     }
@@ -548,35 +526,17 @@ public class Client
         string map = "";
         string mapprop = "";
 
-        Read(1024);
-
         for (int i = 0; i < worldProportionsLoad[1]; i++)
         {
-            Write("requestchunk:" + i);
-            Read(1024);
-            Write("mapgrid");
             int buffer = System.Convert.ToInt32(Read(8192));
-            Write("x");
+            Write("a weno");
             string mapGrid = Read(buffer);
             if (map == "")
                 map = mapGrid;
             else
                 map = string.Join(";", new string[] { map, mapGrid });
-
-
-            Write("exit");
-            Read(1024);
-            //Write("tileprop");
-            //buffer = System.Convert.ToInt32(Read(8192));
-            //Write("x");
-            //string mapTileProp = Read(buffer);
-            //mapprop = string.Join(";", new string[] { mapprop, mapTileProp });
-
-
         }
 
-        Write("exit");
-        Read(1024);
         Write("wenas");
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
         worldMapPropLoad = new string[worldMapLoad.Length];
