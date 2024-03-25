@@ -34,6 +34,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject boxObject;
     [SerializeField] GameObject resourceGrabberObject;
     [SerializeField] GameObject unitCenterObject;
+    [SerializeField] GameObject leavesObject;
 
     [SerializeField] Sprite[] waterFrames;
 
@@ -413,6 +414,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
             GameObject boxBlock = Instantiate(boxObject, tile.transform);
             boxBlock.transform.localPosition = Vector2.zero;
             boxBlock.name = "15";
+        }
+
+        if (TileGrid[e] == 55 && tile.transform.childCount < 1)
+        {
+            GameObject leavesBlock = Instantiate(leavesObject, tile.transform);
+            leavesBlock.transform.localPosition = Vector2.zero;
+            leavesBlock.name = "55";
         }
 
         if (TileGrid[e] == 84 && tile.transform.childCount < 1)

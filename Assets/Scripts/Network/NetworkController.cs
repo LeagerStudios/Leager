@@ -405,7 +405,7 @@ public class Server
         for (int i = 0; i < GameManager.gameManagerReference.WorldWidth; i++)
         {
             Debug.Log("chunk" + i);
-            int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(chunkid).GetComponent<ChunkController>().TileGrid.Clone();
+            int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TileGrid.Clone();
             string[] result = ManagingFunctions.ConvertIntToStringArray(tilemap);
             string export = string.Join(";", result);
 
@@ -426,8 +426,6 @@ public class Server
         byte[] data = new byte[buffer]; //creates data with X buffer
         int bytesRead = stream.Read(data, 0, data.Length); //reads the stream
         string message = Encoding.ASCII.GetString(data, 0, bytesRead);
-
-        Debug.Log("help me plz im dying;;" + message);
 
         return message;
     }
