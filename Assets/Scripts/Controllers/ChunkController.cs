@@ -12,7 +12,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public bool loading = false;
     public int[] TileGrid;
     public string[] TilePropertiesArr;
-    public string[] Meshes;
     public float[] LightMap;
     public GameObject[] TileObject;
     public float ID;
@@ -44,7 +43,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
         ID = id;
         TileGrid = new int[h * 16];
         TilePropertiesArr = new string[h * 16];
-        Meshes = new string[h * 16];
         TileObject = new GameObject[h * 16];
         LightMap = new float[h * 16];
         manager = GameManager.gameManagerReference;
@@ -271,56 +269,40 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                 TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
 
-                if (cT == "#" && Meshes[e] != "#")
+                switch (cT)
                 {
-                    TileObject[e].layer = 8;
-                    if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                    {
-                        ModifyTile(false, "platform", TileObject[e]);
-                    }
-                    Meshes[e] = "#";
-                }
+                    case "#":
+                        TileObject[e].layer = 8;
+                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                        {
+                            ModifyTile(false, "platform", TileObject[e]);
+                        }
+                        break;
 
-                if (cT == "" && Meshes[e] != "")
-                {
-                    TileObject[e].layer = 9;
-                    if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                    {
-                        ModifyTile(false, "platform", TileObject[e]);
-                    }
-                    Meshes[e] = "";
-                }
+                    case "":
+                        TileObject[e].layer = 9;
+                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                        {
+                            ModifyTile(false, "platform", TileObject[e]);
+                        }
+                        break;
 
-                if (cT == "~" && Meshes[e] != "~")
-                {
-                    TileObject[e].layer = 10;
-                    if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                    {
-                        ModifyTile(false, "platform", TileObject[e]);
-                    }
-                    Meshes[e] = "~";
-                }
+                    case "~":
+                        TileObject[e].layer = 10;
+                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                        {
+                            ModifyTile(false, "platform", TileObject[e]);
+                        }
+                        break;
 
-                if (cT == "=" && Meshes[e] != "=")
-                {
-                    TileObject[e].layer = 8;
-                    if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
-                    {
-                        ModifyTile(true, "platform", TileObject[e]);
-                    }
-                    Meshes[e] = "=";
+                    case "=":
+                        TileObject[e].layer = 8;
+                        if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
+                        {
+                            ModifyTile(true, "platform", TileObject[e]);
+                        }
+                        break;
                 }
-
-                manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
-                if (TileObject[e].GetComponent<TileProperties>())
-                {
-                    if (!TileObject[e].GetComponent<TileProperties>().destroy)
-                    {
-                        TilePropertiesArr[e] = TileObject[e].GetComponent<TileProperties>().Export();
-                        manager.allMapProp[tilesToChunk + e] = TilePropertiesArr[e];
-                    }
-                }
-
             }
 
             for (int x = 0; x < 16; x++)

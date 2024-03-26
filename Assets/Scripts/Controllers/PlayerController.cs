@@ -71,8 +71,15 @@ public class PlayerController : MonoBehaviour, IDamager {
     {
         if (skin != 0)
         {
-            GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, GetComponent<SpriteRenderer>().sprite)];
-            transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, transform.GetChild(2).GetComponent<SpriteRenderer>().sprite)];
+            try
+            {
+                GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, GetComponent<SpriteRenderer>().sprite)];
+                transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, transform.GetChild(2).GetComponent<SpriteRenderer>().sprite)];
+            }
+            catch
+            {
+
+            }
         }
     }
 

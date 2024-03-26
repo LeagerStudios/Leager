@@ -6,6 +6,9 @@ public class LeavesColor : MonoBehaviour {
 
 	void Start ()
     {
-        GetComponent<SpriteRenderer>().color = transform.parent.parent.GetComponent<ChunkController>().chunkColor;
+        Color.RGBToHSV(transform.parent.parent.GetComponent<ChunkController>().chunkColor, out float h, out float s, out float v);
+        h += 0.065f;
+
+        GetComponent<SpriteRenderer>().color = Color.HSVToRGB(h, s, v);
 	}
 }

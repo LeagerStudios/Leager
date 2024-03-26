@@ -1,7 +1,19 @@
 fileFormatVersion: 2
 guid: 42b0374b08eb47d448281f0260d6b66f
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: PumpkinLecter_0
+    21300002: PumpkinLecter_1
+    21300004: PumpkinLecter_2
+    21300006: PumpkinLecter_3
+    21300008: PumpkinLecter_4
+    21300010: PumpkinLecter_5
+    21300012: PumpkinLecter_6
+    21300014: PumpkinLecter_7
+    21300016: PumpkinLecter_8
+    21300018: PumpkinLecter_9
+    21300020: PumpkinLecter_10
+    21300022: PumpkinLecter_11
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -31,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -40,12 +52,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 80
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -63,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -71,7 +83,247 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: PumpkinLecter_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 118
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fead0189492eff409f7214b477db947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 118
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 675f021046c63454b881e374dfa7f97f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_2
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 118
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c3c099498a80214aa4c4a99ac49ed51
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_3
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 118
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58ae7be8e44d141458da469c1cdd1fda
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f007355f1dea7f946a8ac783ac893b61
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_5
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 0
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57075d0a498b71c4683287b5afdafc27
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_6
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d99ce77873e0dc54eb3d6dd41337e74d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_7
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 237
+        width: 18
+        height: 36
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d57d001c2b249544e9f897d0e18d515b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_8
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 237
+        width: 27
+        height: 36
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 068bfe2d48b3f104d98956d141dba9e3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_9
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 237
+        width: 18
+        height: 36
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32f9bd156e3e44340839e6a94f1dc92c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_10
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 237
+        width: 27
+        height: 36
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abb01f6b74211b04ab43a1699a80a314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PumpkinLecter_11
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 56
+        height: 116
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46551725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc9cf1f9795f064a994b2b37e238e77
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

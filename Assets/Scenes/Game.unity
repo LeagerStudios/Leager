@@ -15238,6 +15238,8 @@ MonoBehaviour:
   playerSkins:
   - {fileID: 11400000, guid: decb83e878f61cf44aaf5feca80edf44, type: 2}
   - {fileID: 11400000, guid: d25754a15295cea4f862fca773b89384, type: 2}
+  - {fileID: 11400000, guid: 5474234e7cde26f4cb9fab4c1367a5fd, type: 2}
+  - {fileID: 11400000, guid: d323af4f614d60445ab2c18ac0563c78, type: 2}
   raining: 0
   rainSource: {fileID: 1170192903}
 --- !u!114 &806
@@ -27027,7 +27029,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &300792587
 RectTransform:
   m_ObjectHideFlags: 0
@@ -40629,7 +40631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ead3502fa5cf9744bdece492d7f7949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: 113
+  key: 101
 --- !u!114 &1492099517
 MonoBehaviour:
   m_ObjectHideFlags: 0

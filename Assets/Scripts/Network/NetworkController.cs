@@ -421,8 +421,6 @@ public class Server
     {
         NetworkStream stream = client.GetStream();
 
-
-
         byte[] data = new byte[buffer]; //creates data with X buffer
         int bytesRead = stream.Read(data, 0, data.Length); //reads the stream
         string message = Encoding.ASCII.GetString(data, 0, bytesRead);
@@ -526,9 +524,12 @@ public class Client
 
         for (int i = 0; i < worldProportionsLoad[1]; i++)
         {
-            int buffer = System.Convert.ToInt32(Read(8192));
+            string ab = Read(8192);
+            Debug.Log("buffer" + i + ";;" + ab);
+            int buffer = System.Convert.ToInt32(ab);
             Write("a weno");
-            string mapGrid = Read(buffer);
+            string mapGrid = Read(buffer + 10);
+            Debug.Log("map" + i + ";;" + mapGrid);
             if (map == "")
                 map = mapGrid;
             else
