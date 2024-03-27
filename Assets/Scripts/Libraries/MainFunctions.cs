@@ -229,6 +229,26 @@ public static class ManagingFunctions
     }
 }
 
+public static class TextDebug
+{
+    public static void Log(string text)
+    {
+        if(DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/log.txt"))
+        {
+            List<string> data = new List<string>(DataSaver.ReadTxt(Application.persistentDataPath + @"/log.txt"));
+
+            data.Add("");
+            data.Add(text);
+
+            DataSaver.ModifyTxt(Application.persistentDataPath + @"/log.txt", data.ToArray());
+        }
+        else
+        {
+            DataSaver.CreateTxt(Application.persistentDataPath + @"/log.txt", new string[] { "Log Start", "", text });
+        }
+    }
+}
+
 class MainFunctions : MonoBehaviour
 {
     [SerializeField] GameObject dropReference;

@@ -94,8 +94,7 @@ public static class DataSaver
         {
             List<string> exitTxtList = new List<string>(ReadTxt(directory));
             exitTxtList.Add(txt);
-            string[] exitTxt = exitTxtList.ToArray();
-            ModifyTxt(directory, exitTxt);
+            ModifyTxt(directory, exitTxtList.ToArray());
         }
     }
 

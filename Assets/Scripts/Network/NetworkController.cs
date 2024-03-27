@@ -35,7 +35,7 @@ public class NetworkController : MonoBehaviour
     public bool ConnectTo(string ip, int port, string message)
     {
         print("client reached connect1");
-        if(Client.Main(ip, port, message))
+        if (Client.Main(ip, port, message))
         {
             DontDestroyOnLoad(gameObject);
             print("client exits connect");
@@ -45,7 +45,7 @@ public class NetworkController : MonoBehaviour
         {
             return false;
         }
-       
+
     }
 
     public void NATUPnP(bool boolean)
@@ -88,8 +88,8 @@ public class NetworkController : MonoBehaviour
             if (Server.listener.Pending() && GameManager.gameManagerReference != null)
             {
                 string newClientUsername = Server.AceptClient(1024);
-                if(newClientUsername != "null")
-                Debug.Log(newClientUsername + " has joined!");
+                if (newClientUsername != "null")
+                    Debug.Log(newClientUsername + " has joined!");
             }
         }
 
@@ -200,7 +200,7 @@ public class NetworkController : MonoBehaviour
 
                     blocksToReplace = new List<string[]>();
                 }
-                else if(GameManager.gameManagerReference.isNetworkClient)
+                else if (GameManager.gameManagerReference.isNetworkClient)
                 {
                     if (Client.stream.DataAvailable)
                     {
@@ -265,7 +265,7 @@ public class NetworkController : MonoBehaviour
                     }
 
                     if (GameManager.gameManagerReference.player.alive)
-                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x +"", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y + "/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y + "/" }));
                     else
                         Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100", "0", "0/" }));
                 }
@@ -348,13 +348,13 @@ public class Server
                 client.GetStream().Close();
                 return "null";
             }
-            if(message == "ServerDiscoveryRequestCode7777")
+            if (message == "ServerDiscoveryRequestCode7777")
             {
                 Write(client, NetworkController.GetLocalIP());
                 return "null";
             }
             Write(client, Application.version);
-            
+
             Debug.Log("get ready");
             string a = Read(client, 1024);
             Debug.Log(a);
@@ -407,14 +407,14 @@ public class Server
             Debug.Log("chunk" + i);
             int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TileGrid.Clone();
             string[] result = ManagingFunctions.ConvertIntToStringArray(tilemap);
-            string export = string.Join(";", result);
+            string export = string.Join(";", result) + "d";
 
             Write(client, export.Length + "");
             Read(client, 1024);
             Write(client, export);
+            Read(client, 1024);
         }
         //wait to exit
-        Read(client, 1024);
     }
 
     public static string Read(TcpClient client, int buffer)
@@ -430,7 +430,7 @@ public class Server
 
     public static void CloseServer()
     {
-        foreach(TcpUser user in clients)
+        foreach (TcpUser user in clients)
         {
             Write(user.tcpClient, "disconnect");
         }
@@ -457,7 +457,7 @@ public class Client
 
     public static bool Main(string ip, int portParam, string message)
     {
-        
+
         serverIpAddress = IPAddress.Parse(ip); // replace with the IP address of the server
         int serverPort = portParam; // replace with the port number used by the server
 
@@ -474,7 +474,7 @@ public class Client
 
         Debug.Log("getting version");
         string version = Read(1024);
-        if(version != Application.version)
+        if (version != Application.version)
         {
             Write("d");
             return false;
@@ -498,7 +498,7 @@ public class Client
             Write("Received");
 
             Debug.Log("converting data");
-  
+
             //Debug.Log(mapData);
             //worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
             worldBiomesLoad = mapBiomes.Split(';');
@@ -512,7 +512,7 @@ public class Client
         byte[] data = new byte[buffer]; //creates data with X buffer
         int bytesRead = stream.Read(data, 0, data.Length); //reads the stream
         string message = Encoding.ASCII.GetString(data, 0, bytesRead);
-       
+
 
         return message;
     }
@@ -528,15 +528,23 @@ public class Client
             Debug.Log("buffer" + i + ";;" + ab);
             int buffer = System.Convert.ToInt32(ab);
             Write("a weno");
-            string mapGrid = Read(buffer + 10);
+
+
+            string mapGrid = "";
+            do
+            {
+                mapGrid += Read(buffer);
+            } while (mapGrid[mapGrid.Length - 1] != 'd');
+            mapGrid = mapGrid.Remove(mapGrid.Length - 1);
+
             Debug.Log("map" + i + ";;" + mapGrid);
             if (map == "")
                 map = mapGrid;
             else
                 map = string.Join(";", new string[] { map, mapGrid });
+            Write("a weno");
         }
 
-        Write("wenas");
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
         worldMapPropLoad = new string[worldMapLoad.Length];
         for (int i = 0; i < worldMapPropLoad.Length; i++)
