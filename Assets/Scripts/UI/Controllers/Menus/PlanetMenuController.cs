@@ -64,8 +64,6 @@ public class PlanetMenuController : MonoBehaviour {
                 }
             }
         }
-
-        planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 340));
     }
 
     void Update()
@@ -156,6 +154,8 @@ public class PlanetMenuController : MonoBehaviour {
 
         MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher, GameManager.gameManagerReference.tiles[subPanel.GetComponent<PackupMenuController>().currentCore]);
         subPanel.GetComponent<PackupMenuController>().currentCore = 0;
+        Items = new List<string>();
+
         gameObject.SetActive(false);
     }
 

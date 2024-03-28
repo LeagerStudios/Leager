@@ -413,6 +413,17 @@ public class Server
             Read(client, 1024);
             Write(client, export);
             Read(client, 1024);
+
+            //props
+
+            Debug.Log("props" + i);
+            string[] tileprops = (string[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TilePropertiesArr.Clone();
+            string export2 = string.Join("$", tileprops);
+
+            Write(client, export2.Length + "");
+            Read(client, 1024);
+            Write(client, export2);
+            Read(client, 1024);
         }
         //wait to exit
     }
@@ -543,14 +554,31 @@ public class Client
             else
                 map = string.Join(";", new string[] { map, mapGrid });
             Write("a weno");
+
+
+            //tileproperties
+            string ac = Read(8192);
+            Debug.Log("buffer" + i + ";;" + ac);
+            int buffer2 = System.Convert.ToInt32(ac);
+            Write("a weno");
+
+
+            string mapProp = "";
+            do
+            {
+                mapProp += Read(buffer2);
+            } while (mapProp.Length < buffer2);
+
+            Debug.Log("mapprop" + i + ";;" + mapProp);
+            if (mapprop == "")
+                mapprop = mapProp;
+            else
+                mapprop = string.Join("$", new string[] { mapprop, mapProp });
+            Write("a weno");
         }
 
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
-        worldMapPropLoad = new string[worldMapLoad.Length];
-        for (int i = 0; i < worldMapPropLoad.Length; i++)
-        {
-            worldMapPropLoad[i] = "null";
-        }
+        worldMapPropLoad = mapprop.Split('$');
         //leaves with server write turn
     }
 

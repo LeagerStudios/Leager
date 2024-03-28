@@ -215,7 +215,7 @@ MonoBehaviour:
   HP: 20
   MaxHP: 20
   falling: 0
-  skin: 1
+  skin: 3
 --- !u!70 &70501830748478446
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

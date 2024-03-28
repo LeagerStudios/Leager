@@ -153,7 +153,7 @@ public class CommandController : MonoBehaviour {
                     int item = System.Convert.ToInt32(input[1]);
                     int repeat = System.Convert.ToInt32(input[2]);
 
-                    ManagingFunctions.DropItem(item, GameManager.gameManagerReference.player.transform.position, repeat);
+                    ManagingFunctions.DropItem(item, GameManager.gameManagerReference.player.transform.position, amount: repeat);
                 }
                 catch (System.Exception exception)
                 {

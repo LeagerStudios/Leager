@@ -17,21 +17,30 @@ public class CameraController : MonoBehaviour {
     }
     void Update()
     {
-
-        nextCameraPos = new Vector2(focus.transform.position.x, focus.transform.position.y);
-        //Vector2 camPosition = Vector2.Lerp(actualCameraPos, nextCameraPos, delay);
-        //camPosition.x = nextCameraPos.x;
-        if (!transparentSkybox)
+        if (focus != null)
         {
-            Color color = GameManager.gameManagerReference.daytimeUpdatedSkyboxColor;
-            color.a = 1;
-            GetComponent<Camera>().backgroundColor = color;
+            nextCameraPos = new Vector2(focus.transform.position.x, focus.transform.position.y);
+            //Vector2 camPosition = Vector2.Lerp(actualCameraPos, nextCameraPos, delay);
+            //camPosition.x = nextCameraPos.x;
+            if (!transparentSkybox)
+            {
+                Color color = GameManager.gameManagerReference.daytimeUpdatedSkyboxColor;
+                color.a = 1;
+                GetComponent<Camera>().backgroundColor = color;
+            }
+            else
+            {
+                GetComponent<Camera>().backgroundColor = GameManager.gameManagerReference.daytimeUpdatedSkyboxColor;
+            }
+            transform.position = new Vector3(nextCameraPos.x, nextCameraPos.y, -10f);
+            actualCameraPos = transform.position;
         }
         else
         {
-            GetComponent<Camera>().backgroundColor = GameManager.gameManagerReference.daytimeUpdatedSkyboxColor;
+            focus = GameObject.Find("Lecter");
+
+            focus.GetComponent<PlayerController>().onControl = true;
+            MenuController.menuController.UIActive = true;
         }
-        transform.position = new Vector3(nextCameraPos.x, nextCameraPos.y, -10f);
-        actualCameraPos = transform.position;
     }
 }

@@ -151,8 +151,8 @@ public class UNIT_Darkn : UnitBase, IDamager
         {
             if (args[0] == "dead")
             {
-                ManagingFunctions.DropItem(31, transform.position, Random.Range(1, 4));
-                ManagingFunctions.DropItem(93, transform.position, Random.Range(2, 5));
+                ManagingFunctions.DropItem(31, transform.position, amount: Random.Range(1, 4));
+                ManagingFunctions.DropItem(93, transform.position, amount: Random.Range(2, 5));
                 Despawn();
             }
         }

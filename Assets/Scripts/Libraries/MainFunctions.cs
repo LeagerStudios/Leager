@@ -13,20 +13,21 @@ public static class ManagingFunctions
     public static int operationSkipLimit = 1200;
 
 
-    public static GameObject DropItem(int item, Vector2 dropPosition, int amount = 1, float imunityGrab = 0)
+    public static void DropItem(int item, Vector2 dropPosition, Vector2 velocity = default, int amount = 1, float imunityGrab = 0)
     {
         if(item > 0 && amount > 0)
         {
             GameObject newDrop = GameObject.Instantiate(emptyDrop, dropPosition, Quaternion.identity);
             newDrop.transform.SetParent(dropContainer.transform);
             newDrop.GetComponent<SpriteRenderer>().sprite = gameManager.GetComponent<GameManager>().tiles[item];
+            newDrop.GetComponent<Rigidbody2D>().velocity = velocity;
             newDrop.GetComponent<DroppedItemController>().amount = amount;
             newDrop.GetComponent<DroppedItemController>().imunityGrab = imunityGrab;
-            return newDrop;
+            //return newDrop;
         }
         else
         {
-            return null;
+            //return null;
         }
     }
 
@@ -226,26 +227,6 @@ public static class ManagingFunctions
             a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
         }
         return new Color32(r, g, b, a);
-    }
-}
-
-public static class TextDebug
-{
-    public static void Log(string text)
-    {
-        if(DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/log.txt"))
-        {
-            List<string> data = new List<string>(DataSaver.ReadTxt(Application.persistentDataPath + @"/log.txt"));
-
-            data.Add("");
-            data.Add(text);
-
-            DataSaver.ModifyTxt(Application.persistentDataPath + @"/log.txt", data.ToArray());
-        }
-        else
-        {
-            DataSaver.CreateTxt(Application.persistentDataPath + @"/log.txt", new string[] { "Log Start", "", text });
-        }
     }
 }
 
