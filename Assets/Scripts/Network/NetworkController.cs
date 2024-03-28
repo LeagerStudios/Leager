@@ -81,6 +81,48 @@ public class NetworkController : MonoBehaviour
         }
     }
 
+    public void UpdateProperties(int chunkIdx, int idx, string properties)
+    {
+        if (GameManager.gameManagerReference.isNetworkClient)
+        {
+            Client.Write(string.Join(";", new string[] { "chunkReplace", chunkIdx.ToString(), idx.ToString(), properties.ToString() + "/" }));
+        }
+        else if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            blocksToReplace.Add(new string[] { Server.hostUsername, "chunkReplace", chunkIdx.ToString(), idx.ToString(), properties.ToString() });
+        }
+    }
+
+    public void DropItem(int item, int amount, float imunityGrab, Vector2 position, Vector2 velocity)
+    {
+        if (GameManager.gameManagerReference.isNetworkClient)
+        {
+            Client.Write(string.Join(";", new string[] { "dropItem", item.ToString(), amount.ToString(), imunityGrab.ToString(), position.x + "#" + position.y, velocity.x + "#" + velocity.y + "/" }));
+        }
+        else if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            foreach(TcpUser user in Server.clients)
+            {
+                Server.Write(user.tcpClient, string.Join(";", new string[] { "dropItem", item.ToString(), amount.ToString(), imunityGrab.ToString(), position.x + "#" + position.y, velocity.x + "#" + velocity.y + "/" }));
+            }
+        }
+    }
+
+    public void UndropItem(int idx)
+    {
+        if (GameManager.gameManagerReference.isNetworkClient)
+        {
+            Client.Write(string.Join(";", new string[] { "undropItem", idx + "/" }));
+        }
+        else if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            foreach (TcpUser user in Server.clients)
+            {
+                Server.Write(user.tcpClient, string.Join(";", new string[] { "undropItem", idx + "/" }));
+            }
+        }
+    }
+
     void Update()
     {
         if (Server.isOpen)
@@ -107,7 +149,12 @@ public class NetworkController : MonoBehaviour
                     {
                         if (user.tcpClient.GetStream().DataAvailable)
                         {
-                            string entry = Server.Read(user.tcpClient, 16384);
+                            string entry = "";
+                            do
+                            {
+                                entry += Server.Read(user.tcpClient, 16384);
+                            } while (entry[entry.Length - 1] != '/');
+                             
                             string[] messages = entry.Split('/');
 
                             foreach (string message in messages)
@@ -204,7 +251,12 @@ public class NetworkController : MonoBehaviour
                 {
                     if (Client.stream.DataAvailable)
                     {
-                        string entry = Client.Read(16384);
+                        string entry = "";
+                        do
+                        {
+                            entry += Client.Read(16384);
+                        } while (entry[entry.Length - 1] != '/');
+
                         string[] messages = entry.Split('/');
 
 

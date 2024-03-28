@@ -23,12 +23,13 @@ public static class ManagingFunctions
             newDrop.GetComponent<Rigidbody2D>().velocity = velocity;
             newDrop.GetComponent<DroppedItemController>().amount = amount;
             newDrop.GetComponent<DroppedItemController>().imunityGrab = imunityGrab;
-            //return newDrop;
+
+            if(gameManager.isNetworkClient || gameManager.isNetworkHost)
+            {
+                NetworkController.networkController.DropItem(item, amount, imunityGrab, dropPosition, velocity);
+            }
         }
-        else
-        {
-            //return null;
-        }
+
     }
 
     public static int ParseBoolToInt(bool value,bool inverted = false)
@@ -239,7 +240,7 @@ class MainFunctions : MonoBehaviour
     {
         ManagingFunctions.emptyDrop = dropReference;
         ManagingFunctions.dropContainer = dropContainerReference;
-        ManagingFunctions.gameManager = GameManager.gameManagerReference;
+        ManagingFunctions.gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
 }

@@ -83,7 +83,7 @@ public class ENTITY_NanoBotT2 : EntityBase, IDamager
                 g.GetComponent<ParticleController>().Spawn();
             }
             int drops = Random.Range(1, 4);
-            ManagingFunctions.DropItem(65, transform.position, drops);
+            ManagingFunctions.DropItem(65, transform.position, amount: drops);
         }
         Destroy(gameObject);
     }

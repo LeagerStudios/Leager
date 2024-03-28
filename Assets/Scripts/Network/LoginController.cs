@@ -58,9 +58,11 @@ public class LoginController : MonoBehaviour {
 
     public void Login()
     {
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        formData.Add(new MultipartFormDataSection("user", loginUserField.text));
-        formData.Add(new MultipartFormDataSection("pass", loginPassField.text));
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+        {
+            new MultipartFormDataSection("user", loginUserField.text),
+            new MultipartFormDataSection("pass", loginPassField.text)
+        };
 
         StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "login", formData));
     }
@@ -74,11 +76,13 @@ public class LoginController : MonoBehaviour {
 
     public void SignIn()
     {
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        formData.Add(new MultipartFormDataSection("user", signinUserField.text));
-        formData.Add(new MultipartFormDataSection("pass", signinPassField.text));
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+        {
+            new MultipartFormDataSection("user", signinUserField.text),
+            new MultipartFormDataSection("pass", signinPassField.text)
+        };
 
-        if(signinNickField.text == "")
+        if (signinNickField.text == "")
             formData.Add(new MultipartFormDataSection("nick", "null"));
         else
             formData.Add(new MultipartFormDataSection("nick", signinNickField.text));

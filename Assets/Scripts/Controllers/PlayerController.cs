@@ -379,19 +379,7 @@ public class PlayerController : MonoBehaviour, IDamager {
 
     public void PlayerRelativeDrop(int item, int amount)
     {
-        GameObject newDroppedItem = ManagingFunctions.DropItem(item, transform.position, amount, 3);
-
-        if (newDroppedItem != null)
-        {
-            if (!GetComponent<SpriteRenderer>().flipX)
-            {
-                newDroppedItem.GetComponent<Rigidbody2D>().AddForce(new Vector2(350f, 100f + (rb2D.velocity.y * 50)));
-            }
-            else
-            {
-                newDroppedItem.GetComponent<Rigidbody2D>().AddForce(new Vector2(-350f, 100f + (rb2D.velocity.y * 50)));
-            }
-        }
+        ManagingFunctions.DropItem(item, transform.position, new Vector2(5f * ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX) + rb2D.velocity.x * 1.5f, 5f + rb2D.velocity.y), amount: amount, imunityGrab: 3);
     }
 
     public void LoseHp(int hpLost, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
@@ -503,8 +491,7 @@ public class PlayerController : MonoBehaviour, IDamager {
         {
             if(gameManager.equipedArmor[i] > 0)
             {
-                GameObject newDroppedArmorItem = ManagingFunctions.DropItem(gameManager.equipedArmor[i], transform.position + Vector3.up);
-                newDroppedArmorItem.GetComponent<Rigidbody2D>().AddForce(Vector2.right * (i - 1) * 250);
+                ManagingFunctions.DropItem(gameManager.equipedArmor[i], transform.position + Vector3.up, Vector2.right * (i - 1));
                 gameManager.equipedArmor[i] = 0;
             }
         }

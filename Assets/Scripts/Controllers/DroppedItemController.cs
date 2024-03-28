@@ -12,7 +12,7 @@ public class DroppedItemController : MonoBehaviour, IDamager {
     {
         if (imunityGrab <= 0f)
         {
-            if (collision.gameObject.CompareTag("Player") && GameManager.gameManagerReference.player.alive)
+            if (collision.gameObject.CompareTag("Player") && collision.gameObject.GetComponent<PlayerController>().alive)
             {
                 int itemAdd = System.Array.IndexOf(GameManager.gameManagerReference.tiles, GetComponent<SpriteRenderer>().sprite);
                 int itemReturn = 0;

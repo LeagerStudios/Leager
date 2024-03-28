@@ -240,8 +240,8 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 }
                 Transform targetSegment = transform.parent.GetChild(segmentShortestDist);
 
-                ManagingFunctions.DropItem(65, targetSegment.position, Random.Range(20, 40));
-                ManagingFunctions.DropItem(34, targetSegment.position, Random.Range(5, 10));
+                ManagingFunctions.DropItem(65, targetSegment.position, amount: Random.Range(20, 40));
+                ManagingFunctions.DropItem(34, targetSegment.position, amount: Random.Range(5, 10));
                 Despawn();
             }
         }
