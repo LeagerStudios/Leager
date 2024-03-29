@@ -728,7 +728,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             }
                         }
                     }
-                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
+                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
                     {
                         if (Random.Range(0, 250) == 0)
                         {
