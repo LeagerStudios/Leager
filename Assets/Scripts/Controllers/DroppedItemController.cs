@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DroppedItemController : MonoBehaviour, IDamager {
+public class DroppedItemController : MonoBehaviour, IDamager
+{
 
     private float seconds = 0;
     public int amount = 1;
@@ -10,38 +11,50 @@ public class DroppedItemController : MonoBehaviour, IDamager {
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (imunityGrab <= 0f)
-        {
-            if (collision.gameObject.CompareTag("Player") && collision.gameObject.GetComponent<PlayerController>().alive)
+        if (!GameManager.gameManagerReference.isNetworkClient)
+            if (imunityGrab <= 0f)
             {
-                int itemAdd = System.Array.IndexOf(GameManager.gameManagerReference.tiles, GetComponent<SpriteRenderer>().sprite);
-                int itemReturn = 0;
-                for (int i = 0; i < amount; i++)
+                if (collision.gameObject.CompareTag("Player") && collision.gameObject.GetComponent<PlayerController>().alive)
                 {
-                    if (!StackBar.AddItem(itemAdd)) itemReturn++;
-                }
-                if (itemReturn == 0)
-                {
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    amount = itemReturn;
+                    int itemAdd = System.Array.IndexOf(GameManager.gameManagerReference.tiles, GetComponent<SpriteRenderer>().sprite);
+                    int itemReturn = 0;
+
+                    if (collision.gameObject.GetComponent<PlayerController>() == GameManager.gameManagerReference.player)
+                    {
+                        for (int i = 0; i < amount; i++)
+                        {
+                            if (!StackBar.AddItem(itemAdd)) itemReturn++;
+                        }
+                        if (itemReturn == 0)
+                        {
+                            Destroy(gameObject);
+                        }
+                        else
+                        {
+                            amount = itemReturn;
+                        }
+                    }
+                    else
+                    {
+                        NetworkController.networkController.DropRequest(itemAdd, amount, gameObject.name, collision.gameObject.name);
+                        Destroy(gameObject);
+                    }
                 }
             }
-        }
-       
+
     }
 
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
-        if (damageDeal > 0)
-            Destroy(gameObject);
+        if (!GameManager.gameManagerReference.isNetworkClient)
+            if (damageDeal > 0)
+                Destroy(gameObject);
     }
 
     private void Update()
     {
-        if (amount == 0 || GetComponent<EntityCommonScript>().entityStates.Contains(EntityState.OnFire)) Destroy(gameObject);
+        if (!GameManager.gameManagerReference.isNetworkClient)
+            if (amount == 0 || GetComponent<EntityCommonScript>().entityStates.Contains(EntityState.OnFire)) Destroy(gameObject);
 
         if (GameManager.gameManagerReference.InGame)
         {
@@ -66,31 +79,32 @@ public class DroppedItemController : MonoBehaviour, IDamager {
                 GetComponent<Rigidbody2D>().simulated = false;
             }
 
-            if (imunityGrab <= 0f)
-            {
-                for (int i = 0; i < transform.parent.childCount; i++)
+            if (!GameManager.gameManagerReference.isNetworkClient)
+                if (imunityGrab <= 0f)
                 {
-                    DroppedItemController itemDrop = transform.parent.GetChild(i).GetComponent<DroppedItemController>();
-                    if (itemDrop != this)
+                    for (int i = 0; i < transform.parent.childCount; i++)
                     {
-                        if (itemDrop.imunityGrab < 0f)
+                        DroppedItemController itemDrop = transform.parent.GetChild(i).GetComponent<DroppedItemController>();
+                        if (itemDrop != this)
                         {
-                            if (Vector2.Distance(itemDrop.transform.position, transform.position) < 1.3f)
+                            if (itemDrop.imunityGrab < 0f)
                             {
-                                if (itemDrop.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+                                if (Vector2.Distance(itemDrop.transform.position, transform.position) < 1.3f)
                                 {
-                                    amount += itemDrop.amount;
-                                    itemDrop.amount = 0;
-                                    imunityGrab = (itemDrop.imunityGrab + imunityGrab) / 2f;
-                                    transform.position = Vector2.Lerp(transform.position, itemDrop.transform.position, 0.5f);
-                                    seconds = 0;
-                                    Destroy(itemDrop.gameObject);
+                                    if (itemDrop.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+                                    {
+                                        amount += itemDrop.amount;
+                                        itemDrop.amount = 0;
+                                        imunityGrab = (itemDrop.imunityGrab + imunityGrab) / 2f;
+                                        transform.position = Vector2.Lerp(transform.position, itemDrop.transform.position, 0.5f);
+                                        seconds = 0;
+                                        Destroy(itemDrop.gameObject);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
         }
     }
 }

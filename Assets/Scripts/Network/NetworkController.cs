@@ -93,7 +93,7 @@ public class NetworkController : MonoBehaviour
         }
     }
 
-    public void DropItem(int item, int amount, float imunityGrab, Vector2 position, Vector2 velocity)
+    public void DropItem(int item, int amount, float imunityGrab, Vector2 position, Vector2 velocity, string name = "")
     {
         if (GameManager.gameManagerReference.isNetworkClient)
         {
@@ -103,7 +103,7 @@ public class NetworkController : MonoBehaviour
         {
             foreach(TcpUser user in Server.clients)
             {
-                Server.Write(user.tcpClient, string.Join(";", new string[] { "dropItem", item.ToString(), amount.ToString(), imunityGrab.ToString(), position.x + "#" + position.y, velocity.x + "#" + velocity.y + "/" }));
+                Server.Write(user.tcpClient, string.Join(";", new string[] { "dropItem", item.ToString(), amount.ToString(), imunityGrab.ToString(), position.x + "#" + position.y, velocity.x + "#" + velocity.y, name + "/" }));
             }
         }
     }
@@ -119,6 +119,20 @@ public class NetworkController : MonoBehaviour
             foreach (TcpUser user in Server.clients)
             {
                 Server.Write(user.tcpClient, string.Join(";", new string[] { "undropItem", idx + "/" }));
+            }
+        }
+    }
+
+    public void DropRequest(int item, int amount, string dropName, string userName)
+    {
+        if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            foreach (TcpUser user in Server.clients)
+            {
+                if(user.username == userName)
+                {
+                    Server.Write(user.tcpClient, string.Join(";", new string[] { "dropRequest", item.ToString(), amount.ToString(), dropName + "/" }));
+                }
             }
         }
     }
@@ -299,6 +313,24 @@ public class NetworkController : MonoBehaviour
                                 {
                                     Destroy(dummyPlayer.gameObject);
                                 }
+                            }
+
+                            if (input[0] == "dropItem")
+                            {
+                                string[] parts = message.Split(';');
+
+                                int item = int.Parse(parts[1]);
+                                int amount = int.Parse(parts[2]);
+                                float imunityGrab = float.Parse(parts[3]);
+
+                                string[] position = parts[4].Split('#');
+                                Vector2 vPosition = new Vector2(float.Parse(position[0]), float.Parse(position[1]));
+                                string[] velocity = parts[5].Split('#');
+                                Vector2 vVelocity = new Vector2(float.Parse(velocity[0]), float.Parse(velocity[1]));
+
+                                string name = parts[6];
+
+                                ManagingFunctions.DropItem(item, vPosition, vVelocity, amount, imunityGrab, true, name);
                             }
 
                             if (input[0] == "chunkReplace")

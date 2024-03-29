@@ -9,24 +9,36 @@ public static class ManagingFunctions
     public static GameManager gameManager = GameManager.gameManagerReference;
     public static GameObject emptyDrop;
     public static GameObject dropContainer;
-    static int operationSkip = 0;
     public static int operationSkipLimit = 1200;
 
 
-    public static void DropItem(int item, Vector2 dropPosition, Vector2 velocity = default, int amount = 1, float imunityGrab = 0)
+    public static void DropItem(int item, Vector2 dropPosition, Vector2 velocity = default, int amount = 1, float imunityGrab = 0, bool clientIsAuthored = false, string theName = "#null")
     {
-        if(item > 0 && amount > 0)
+        if (item > 0 && amount > 0)
         {
-            GameObject newDrop = GameObject.Instantiate(emptyDrop, dropPosition, Quaternion.identity);
-            newDrop.transform.SetParent(dropContainer.transform);
-            newDrop.GetComponent<SpriteRenderer>().sprite = gameManager.GetComponent<GameManager>().tiles[item];
-            newDrop.GetComponent<Rigidbody2D>().velocity = velocity;
-            newDrop.GetComponent<DroppedItemController>().amount = amount;
-            newDrop.GetComponent<DroppedItemController>().imunityGrab = imunityGrab;
-
-            if(gameManager.isNetworkClient || gameManager.isNetworkHost)
+            if (gameManager.isNetworkClient && !clientIsAuthored)
             {
                 NetworkController.networkController.DropItem(item, amount, imunityGrab, dropPosition, velocity);
+            }
+            else
+            {
+                GameObject newDrop = GameObject.Instantiate(emptyDrop, dropPosition, Quaternion.identity);
+                newDrop.transform.SetParent(dropContainer.transform);
+                newDrop.GetComponent<SpriteRenderer>().sprite = gameManager.GetComponent<GameManager>().tiles[item];
+                newDrop.GetComponent<Rigidbody2D>().velocity = velocity;
+                newDrop.GetComponent<DroppedItemController>().amount = amount;
+                newDrop.GetComponent<DroppedItemController>().imunityGrab = imunityGrab;
+                if (theName != "#null")
+                {
+                    newDrop.name = theName;
+                }
+                else
+                    newDrop.name = GetRandomString(5);
+
+                if (gameManager.isNetworkHost)
+                {
+                    NetworkController.networkController.DropItem(item, amount, imunityGrab, dropPosition, velocity, newDrop.name);
+                }
             }
         }
 
@@ -115,17 +127,6 @@ public static class ManagingFunctions
     {
         StackBar.SaveStackBar();
         InventoryBar.SaveInventory();
-    }
-
-    public static bool OperationSkip()
-    {
-        operationSkip++;
-        if (operationSkip > operationSkipLimit)
-        {
-            operationSkip = 0;
-            return true;
-        }
-        else return false;
     }
 
     public static float PointToPivotDown(Vector2 actual,Vector2 to)
