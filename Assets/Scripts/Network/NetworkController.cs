@@ -184,6 +184,23 @@ public class NetworkController : MonoBehaviour
                                 {
                                     user.position = new Vector4(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]), System.Convert.ToSingle(input[4]));
                                 }
+                                
+                                if (input[0] == "dropItem")
+                                {
+                                    string[] parts = message.Split(';');
+
+                                    int item = int.Parse(parts[1]);
+                                    int amount = int.Parse(parts[2]);
+                                    float imunityGrab = float.Parse(parts[3]);
+
+                                    string[] position = parts[4].Split('#');
+                                    Vector2 vPosition = new Vector2(float.Parse(position[0]), float.Parse(position[1]));
+                                    string[] velocity = parts[5].Split('#');
+                                    Vector2 vVelocity = new Vector2(float.Parse(velocity[0]), float.Parse(velocity[1]));
+
+
+                                    ManagingFunctions.DropItem(item, vPosition, vVelocity, amount, imunityGrab);
+                                }
 
                                 if (input[0] == "chunkReplace")
                                 {
