@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour, IDamager {
+public class PlayerController : MonoBehaviour, IDamager
+{
 
     [SerializeField] float MaxSpeed;
     [SerializeField] float AccelerationInGround;
@@ -45,9 +46,10 @@ public class PlayerController : MonoBehaviour, IDamager {
             {
                 if (alive && gameManager.InGame)
                 {
+                    Hitbox();
                     if (onControl)
                         PlayerControl();
-                    LecterAI();;
+                    LecterAI(); ;
                     Camera.main.transform.eulerAngles = Vector3.zero;
                 }
 
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             }
         else
         {
-
+            Hitbox();
         }
     }
 
@@ -85,13 +87,13 @@ public class PlayerController : MonoBehaviour, IDamager {
 
     public void Hit(int damage, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
-        if(procedence.EntityFamily != "yellow")
+        if (procedence.EntityFamily != "yellow")
         {
             LoseHp(damage, ignoreImunity, knockback, penetrate);
         }
     }
 
-    public void Respawn(float x,float y)
+    public void Respawn(float x, float y)
     {
         Time.timeScale = 1f;
         damagedCooldown = 0.5f;
@@ -119,9 +121,7 @@ public class PlayerController : MonoBehaviour, IDamager {
         spawned = true;//confirmación final
     }
 
-
-
-    void PlayerControl()
+    void Hitbox()
     {
         CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
 
@@ -136,6 +136,11 @@ public class PlayerController : MonoBehaviour, IDamager {
             transform.GetChild(2).localPosition = new Vector2(-handOffset, transform.GetChild(2).localPosition.y);
         }
         transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
+    }
+
+    void PlayerControl()
+    {
+        CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
 
         float raycastDistance = 0.7f;
         bool Grounded = false;
@@ -279,7 +284,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             animations.SetBool("falling", false);
             animations.SetBool("jumping", true);
         }
-        else if(rb2D.velocity.y < 0.1f && rb2D.velocity.y > -0.1f)
+        else if (rb2D.velocity.y < 0.1f && rb2D.velocity.y > -0.1f)
         {
             animations.SetBool("falling", false);
             animations.SetBool("jumping", false);
@@ -290,9 +295,9 @@ public class PlayerController : MonoBehaviour, IDamager {
             animations.SetBool("jumping", false);
         }
 
-        if(transform.position.y < -30f)
+        if (transform.position.y < -30f)
         {
-            if(!killing) StartCoroutine(KillAllLives(1));
+            if (!killing) StartCoroutine(KillAllLives(1));
             killing = true;
         }
 
@@ -315,7 +320,7 @@ public class PlayerController : MonoBehaviour, IDamager {
                     vector.x = vector.x * -1;
                     PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]], GetComponent<EntityCommonScript>());
                 }
-                else if(InventoryBar.Search(64, 1) != -1)
+                else if (InventoryBar.Search(64, 1) != -1)
                 {
                     InventoryBar.LoseItem(InventoryBar.Search(64, 1));
                     Vector2 vector = gameManager.mouseCurrentPosition - transform.position;
@@ -346,7 +351,7 @@ public class PlayerController : MonoBehaviour, IDamager {
             regenTime -= Time.deltaTime;
         }
 
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[i]];
             transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
@@ -487,9 +492,9 @@ public class PlayerController : MonoBehaviour, IDamager {
             GameObject g = Instantiate(particle, transform.position, Quaternion.identity);
             g.GetComponent<ParticleController>().Spawn();
         }
-        for(int i = 0;i < gameManager.equipedArmor.Length; i++)
+        for (int i = 0; i < gameManager.equipedArmor.Length; i++)
         {
-            if(gameManager.equipedArmor[i] > 0)
+            if (gameManager.equipedArmor[i] > 0)
             {
                 ManagingFunctions.DropItem(gameManager.equipedArmor[i], transform.position + Vector3.up, Vector2.right * (i - 1));
                 gameManager.equipedArmor[i] = 0;
@@ -522,13 +527,13 @@ public class PlayerController : MonoBehaviour, IDamager {
             if (Vector2.Distance(transform.position, gameManager.mouseCurrentPosition) < 2.5f) PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
             transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
             float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX, false);
-            for (int i = 0;i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
                 yield return new WaitForSeconds(0.016f);
             }
         }
-        if(armType == "bow")
+        if (armType == "bow")
         {
             transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, -45);
             transform.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(Vector2.zero, gameManager.mouseCurrentPosition - transform.position));
@@ -546,9 +551,9 @@ public class PlayerController : MonoBehaviour, IDamager {
             else
             {
                 transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
-                
+
             }
-            
+
             float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX, false);
             for (int i = 0; i < 12; i++)
             {

@@ -35,9 +35,6 @@ public class LoadingSceneScript : MonoBehaviour
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 1;
 
-        if (Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.WebGLPlayer)
-            UpdateResolution();
-
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/data"))
         {
             DataSaver.CreateFolder(Application.persistentDataPath + @"/data");
@@ -57,7 +54,7 @@ public class LoadingSceneScript : MonoBehaviour
             {
                 DataSaver.CopyPasteTxt(Application.dataPath + @"/packages/LeagerStudios/crafts.txt", Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt");
             }
-            else if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer)
+            else if ((Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer) && !Debug.isDebugBuild)
             {
                 if (!DataSaver.CheckIfFileExists(Application.dataPath + @"/packages"))
                 {
@@ -107,12 +104,6 @@ public class LoadingSceneScript : MonoBehaviour
             DataSaver.AddLineToTxt(Application.persistentDataPath + @"/data/loginlog.txt", "Total Logins: " + (DataSaver.LinesInTxt(Application.persistentDataPath + @"/data/loginlog.txt") - 4));
         }
     } 
-
-    public void UpdateResolution()
-    {
-        Resolution resolution = Screen.resolutions[Screen.resolutions.Length - 1];
-        Screen.SetResolution(resolution.width * 2, resolution.height * 2, true);
-    }
 
     IEnumerator Freeze()
     {

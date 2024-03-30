@@ -101,24 +101,31 @@ public class NetworkController : MonoBehaviour
         }
         else if (GameManager.gameManagerReference.isNetworkHost)
         {
-            foreach(TcpUser user in Server.clients)
+            foreach (TcpUser user in Server.clients)
             {
                 Server.Write(user.tcpClient, string.Join(";", new string[] { "dropItem", item.ToString(), amount.ToString(), imunityGrab.ToString(), position.x + "#" + position.y, velocity.x + "#" + velocity.y, name + "/" }));
             }
         }
     }
 
-    public void UndropItem(int idx)
+    public void UndropItem(string name)
     {
-        if (GameManager.gameManagerReference.isNetworkClient)
-        {
-            Client.Write(string.Join(";", new string[] { "undropItem", idx + "/" }));
-        }
-        else if (GameManager.gameManagerReference.isNetworkHost)
+        if (GameManager.gameManagerReference.isNetworkHost)
         {
             foreach (TcpUser user in Server.clients)
             {
-                Server.Write(user.tcpClient, string.Join(";", new string[] { "undropItem", idx + "/" }));
+                Server.Write(user.tcpClient, string.Join(";", new string[] { "undropItem", name + "/" }));
+            }
+        }
+    }
+
+    public void MoveItem(string name, Vector2 newPosition)
+    {
+        if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            foreach (TcpUser user in Server.clients)
+            {
+                Server.Write(user.tcpClient, string.Join(";", new string[] { "moveItem", name, newPosition.x + "#" + newPosition.y + "/" }));
             }
         }
     }
@@ -129,11 +136,19 @@ public class NetworkController : MonoBehaviour
         {
             foreach (TcpUser user in Server.clients)
             {
-                if(user.username == userName)
+                if (user.username == userName)
                 {
                     Server.Write(user.tcpClient, string.Join(";", new string[] { "dropRequest", item.ToString(), amount.ToString(), dropName + "/" }));
                 }
             }
+        }
+    }
+
+    public void DropCallback(int item, int amount, string dropName)
+    {
+        if (GameManager.gameManagerReference.isNetworkClient)
+        {
+            Client.Write(string.Join(";", new string[] { "dropCallback", item.ToString(), amount.ToString(), dropName + "/" }));
         }
     }
 
@@ -151,7 +166,7 @@ public class NetworkController : MonoBehaviour
 
         if (GameManager.gameManagerReference != null)
         {
-            if (updateTime > 0.1f)
+            if (updateTime > 0.05f)
             {
                 updateTime = 0f;
 
@@ -168,7 +183,7 @@ public class NetworkController : MonoBehaviour
                             {
                                 entry += Server.Read(user.tcpClient, 16384);
                             } while (entry[entry.Length - 1] != '/');
-                             
+
                             string[] messages = entry.Split('/');
 
                             foreach (string message in messages)
@@ -183,23 +198,48 @@ public class NetworkController : MonoBehaviour
                                 if (input[0] == "playerPos")
                                 {
                                     user.position = new Vector4(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]), System.Convert.ToSingle(input[4]));
+                                    user.flipX = System.Convert.ToBoolean(input[5]);
                                 }
-                                
+
                                 if (input[0] == "dropItem")
                                 {
-                                    string[] parts = message.Split(';');
+                                    int item = int.Parse(input[1]);
+                                    int amount = int.Parse(input[2]);
+                                    float imunityGrab = float.Parse(input[3]);
 
-                                    int item = int.Parse(parts[1]);
-                                    int amount = int.Parse(parts[2]);
-                                    float imunityGrab = float.Parse(parts[3]);
-
-                                    string[] position = parts[4].Split('#');
+                                    string[] position = input[4].Split('#');
                                     Vector2 vPosition = new Vector2(float.Parse(position[0]), float.Parse(position[1]));
-                                    string[] velocity = parts[5].Split('#');
+                                    string[] velocity = input[5].Split('#');
                                     Vector2 vVelocity = new Vector2(float.Parse(velocity[0]), float.Parse(velocity[1]));
 
 
                                     ManagingFunctions.DropItem(item, vPosition, vVelocity, amount, imunityGrab);
+                                }
+
+                                if (input[0] == "dropCallback")
+                                {
+                                    int item = int.Parse(input[1]);
+                                    int amount = int.Parse(input[2]);
+                                    string dropName = input[3];
+                                    Transform drop = ManagingFunctions.dropContainer.transform.Find(dropName);
+
+                                    if (amount == 0)
+                                    {
+                                        UndropItem(dropName);
+                                        if (drop != null)
+                                        {
+                                            Destroy(drop.gameObject);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (drop != null)
+                                        {
+                                            DroppedItemController droppedItem = drop.GetComponent<DroppedItemController>();
+                                            droppedItem.amount = amount;
+                                            droppedItem.gettingEnabled = true;
+                                        }
+                                    }
                                 }
 
                                 if (input[0] == "chunkReplace")
@@ -220,13 +260,18 @@ public class NetworkController : MonoBehaviour
                             GameObject newDummy = Instantiate(GameManager.gameManagerReference.lecterSprite, Vector3.zero, Quaternion.identity, GameManager.gameManagerReference.dummyObjects);
                             newDummy.name = user.username;
                             newDummy.transform.GetChild(0).GetComponent<TextMesh>().text = user.username;
-                            newDummy.transform.position = user.position;
+                            float[] input = new float[] { user.position.x, user.position.y, user.position.z, user.position.w };
+
+                            newDummy.transform.position = new Vector2(System.Convert.ToSingle(input[0]), System.Convert.ToSingle(input[1]));
+                            newDummy.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
                         }
                         else
                         {
-                            if (dummyPlayer.transform.position.x != user.position.x)
-                                dummyPlayer.GetComponent<SpriteRenderer>().flipX = dummyPlayer.transform.position.x > user.position.x;
-                            dummyPlayer.transform.position = user.position;
+                            float[] input = new float[] { user.position.x, user.position.y, user.position.z, user.position.w};
+
+                            dummyPlayer.transform.position = new Vector2(System.Convert.ToSingle(input[0]), System.Convert.ToSingle(input[1]));
+                            dummyPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
+                            dummyPlayer.GetComponent<SpriteRenderer>().flipX = user.flipX;
                         }
                     }
 
@@ -260,9 +305,9 @@ public class NetworkController : MonoBehaviour
                         }
 
                         if (GameManager.gameManagerReference.player.alive)
-                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y + "/" }));
+                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y.ToString(), GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX.ToString() + "/" }));
                         else
-                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100", "0", "0/" }));
+                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100", "0", "0", "False/" }));
 
                         Server.Write(userData.tcpClient, string.Join(";", new string[] { "setTime", GameManager.gameManagerReference.dayTime + "/" }));
 
@@ -293,7 +338,6 @@ public class NetworkController : MonoBehaviour
 
                         foreach (string message in messages)
                         {
-
                             string[] input = message.Split(';');
 
                             if (input[0] == "disconnect")
@@ -315,10 +359,9 @@ public class NetworkController : MonoBehaviour
                                 }
                                 else
                                 {
-                                    if (dummyPlayer.transform.position.x != System.Convert.ToSingle(input[2]))
-                                        dummyPlayer.GetComponent<SpriteRenderer>().flipX = dummyPlayer.transform.position.x > System.Convert.ToSingle(input[2]);
                                     dummyPlayer.transform.position = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
                                     dummyPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[4]), System.Convert.ToSingle(input[5]));
+                                    dummyPlayer.GetComponent<SpriteRenderer>().flipX = System.Convert.ToBoolean(input[6]);
                                 }
                             }
 
@@ -334,20 +377,60 @@ public class NetworkController : MonoBehaviour
 
                             if (input[0] == "dropItem")
                             {
-                                string[] parts = message.Split(';');
+                                int item = int.Parse(input[1]);
+                                int amount = int.Parse(input[2]);
+                                float imunityGrab = float.Parse(input[3]);
 
-                                int item = int.Parse(parts[1]);
-                                int amount = int.Parse(parts[2]);
-                                float imunityGrab = float.Parse(parts[3]);
-
-                                string[] position = parts[4].Split('#');
+                                string[] position = input[4].Split('#');
                                 Vector2 vPosition = new Vector2(float.Parse(position[0]), float.Parse(position[1]));
-                                string[] velocity = parts[5].Split('#');
+                                string[] velocity = input[5].Split('#');
                                 Vector2 vVelocity = new Vector2(float.Parse(velocity[0]), float.Parse(velocity[1]));
 
-                                string name = parts[6];
+                                string name = input[6];
 
                                 ManagingFunctions.DropItem(item, vPosition, vVelocity, amount, imunityGrab, true, name);
+                            }
+
+                            if (input[0] == "undropItem")
+                            {
+                                string dropName = input[1];
+                                Transform drop = ManagingFunctions.dropContainer.transform.Find(dropName);
+
+                                if (drop != null)
+                                {
+                                    Destroy(drop.gameObject);
+                                }
+                            }
+
+                            if (input[0] == "moveItem")
+                            {
+                                string dropName = input[1];
+                                string[] position = input[2].Split('#');
+                                Vector2 vPosition = new Vector2(float.Parse(position[0]), float.Parse(position[1]));
+                                Transform drop = ManagingFunctions.dropContainer.transform.Find(dropName);
+
+                                if (drop != null)
+                                {
+                                    drop.position = vPosition;
+                                }
+                            }
+
+                            if (input[0] == "dropRequest")
+                            {
+                                int item = int.Parse(input[1]);
+                                int amount = int.Parse(input[2]);
+                                string dropName = input[3];
+                                int itemReturn = 0;
+
+                                if (ManagingFunctions.dropContainer.transform.Find(dropName) != null)
+                                {
+                                    for (int i = 0; i < amount; i++)
+                                    {
+                                        if (!StackBar.AddItem(item)) itemReturn++;
+                                    }
+
+                                    DropCallback(item, itemReturn, dropName);
+                                }
                             }
 
                             if (input[0] == "chunkReplace")
@@ -366,9 +449,9 @@ public class NetworkController : MonoBehaviour
                     }
 
                     if (GameManager.gameManagerReference.player.alive)
-                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y + "/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y.ToString(), GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX.ToString() + "/" }));
                     else
-                        Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100", "0", "0/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100", "0", "0", "False/" }));
                 }
             }
             else
@@ -394,7 +477,6 @@ public class NetworkController : MonoBehaviour
         }
         return localIP;
     }
-
 }
 
 
@@ -706,6 +788,7 @@ public class TcpUser
 {
     public string username;
     public Vector4 position;
+    public bool flipX;
     public TcpClient tcpClient;
 
     public TcpUser(TcpClient client, string username)

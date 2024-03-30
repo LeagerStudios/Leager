@@ -33,7 +33,7 @@ public class CommandController : MonoBehaviour {
 
         if (!commandEnabled)
         {
-            if (GInput.GetKeyDown(KeyCode.F12) && GameManager.gameManagerReference.InGame && GameManager.gameManagerReference.player.alive)
+            if (GInput.GetKeyDown(KeyCode.F12) && GameManager.gameManagerReference.InGame && GameManager.gameManagerReference.player.alive && Debug.isDebugBuild)
             {
                 commandEnabled = true;
                 GameManager.gameManagerReference.InGame = false;
