@@ -9,7 +9,7 @@ public static class ManagingFunctions
     public static GameManager gameManager = GameManager.gameManagerReference;
     public static GameObject emptyDrop;
     public static GameObject dropContainer;
-    public static int operationSkipLimit = 1200;
+    public static int lastDropName = 0;
 
 
     public static void DropItem(int item, Vector2 dropPosition, Vector2 velocity = default, int amount = 1, float imunityGrab = 0, bool clientIsAuthored = false, string theName = "#null")
@@ -33,7 +33,7 @@ public static class ManagingFunctions
                     newDrop.name = theName;
                 }
                 else
-                    newDrop.name = GetRandomString(5);
+                    newDrop.name = lastDropName++.ToString();
 
                 if (gameManager.isNetworkHost)
                 {

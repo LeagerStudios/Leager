@@ -12,7 +12,7 @@ public class PushPlay : MonoBehaviour
     public AudioMixer gameAudio;
     [SerializeField] Slider loadingSlider;
     [SerializeField] Slider bgmSlider;
-    [SerializeField] GameObject loadingTexts;
+    //[SerializeField] GameObject loadingTexts;
     [SerializeField] public Button multiplayerButton;
     [SerializeField] NetworkController networkController;
     [SerializeField] GameObject transition;
@@ -267,7 +267,7 @@ public class PushPlay : MonoBehaviour
     public IEnumerator LoadGame()
     {
         loadingSlider.gameObject.SetActive(true);
-        loadingTexts.gameObject.SetActive(true);
+        //loadingTexts.gameObject.SetActive(true);
 
         AsyncOperation operation = SceneManager.LoadSceneAsync("Game");
         

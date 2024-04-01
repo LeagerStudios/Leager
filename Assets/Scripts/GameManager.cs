@@ -1305,6 +1305,15 @@ public class GameManager : MonoBehaviour
         buildedMapGrid = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/map.lgrsd").SavedData);
         if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd") && !isNetworkClient)
             allMapProp = DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd").SavedData;
+        else if (!isNetworkClient)
+        {
+            allMapProp = new string[buildedMapGrid.Length];
+
+            for (int i = 0; i < allMapProp.Length; i++)
+            {
+                allMapProp[i] = "null";
+            }
+        }
 
         return buildedMapGrid;
     }
