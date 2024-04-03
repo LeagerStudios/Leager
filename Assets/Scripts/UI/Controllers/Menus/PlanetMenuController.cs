@@ -180,7 +180,7 @@ public class PlanetMenuController : MonoBehaviour {
             newPlanet.GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
             int size = Random.Range(20, 250);
 
-            PlanetData planetData = new PlanetData(planetName, new Color(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), Random.Range(0.5f, 1f)), size);
+            PlanetData planetData = new PlanetData(planetName, Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0.7f,1f), Random.Range(0.8f,1f)), size);
             planetData.ApplyToButton(newPlanet);
             planets.Add(planetData);
 
