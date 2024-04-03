@@ -261,6 +261,14 @@ public class GameManager : MonoBehaviour
         InventoryBar.Reset();
         StackBar.Reset();
 
+        skyboxColor = ManagingFunctions.HexToColor(currentHexPlanetColor);
+        Color.RGBToHSV(skyboxColor, out float h, out float s, out float v);
+        h += 0.19166666666f;
+        skyboxColor = Color.HSVToRGB(h, s, v);
+        skyboxColor.a = 0f;
+
+
+
         frameTimer = 0;
         Transition.SetActive(true);
 
