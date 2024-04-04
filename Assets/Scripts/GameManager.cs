@@ -258,14 +258,29 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        PlanetMenuController.planetMenu = MenuController.menuController.canvas.transform.Find("PlanetsPanel").GetComponent<PlanetMenuController>();
+
+        isLorePlanet = PlanetMenuController.planetMenu.lorePlanets.Contains(currentPlanetName);
+
         InventoryBar.Reset();
         StackBar.Reset();
 
-        skyboxColor = ManagingFunctions.HexToColor(currentHexPlanetColor);
-        Color.RGBToHSV(skyboxColor, out float h, out float s, out float v);
-        h += 0.19166666666f;
-        skyboxColor = Color.HSVToRGB(h, s, v);
-        skyboxColor.a = 0f;
+
+        //h += 0.19166666666f;
+        if (!isLorePlanet)
+        {
+            skyboxColor = ManagingFunctions.HexToColor(currentHexPlanetColor);
+            Color.RGBToHSV(skyboxColor, out float h, out float s, out float v);
+            v -= 0.2f;
+            skyboxColor = Color.HSVToRGB(h, s, v);
+            skyboxColor.a = 0f;
+
+        }
+        else
+        {
+            skyboxColor = PlanetMenuController.planetMenu.lorePlanetsColor[PlanetMenuController.planetMenu.lorePlanets.IndexOf(currentPlanetName)];
+        }
+
 
 
 

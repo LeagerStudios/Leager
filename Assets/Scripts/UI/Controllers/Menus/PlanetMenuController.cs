@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class PlanetMenuController : MonoBehaviour {
 
     public ResourceLauncher targetResourceLauncher;
+    public static PlanetMenuController planetMenu;
 
     RectTransform rectTransform;
     [SerializeField] RectTransform planetPanelRectTransform;
@@ -19,7 +20,8 @@ public class PlanetMenuController : MonoBehaviour {
 
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
-    public List<string> lorePlanets = new List<string> { "Korenz", "Dua" };
+    public List<string> lorePlanets = new List<string> { "Korenz", "Dua", "Intersection, Fortress" };
+    public Color[] lorePlanetsColor; 
     public List<string> Items
     {
         get
@@ -35,7 +37,12 @@ public class PlanetMenuController : MonoBehaviour {
     public bool planetSelectionFocused = true;
     public int planetFocused = -1;
 
-	void Start ()
+    private void Awake()
+    {
+        planetMenu = this;
+    }
+
+    void Start ()
     {
         rectTransform = GetComponent<RectTransform>();
 
@@ -53,7 +60,7 @@ public class PlanetMenuController : MonoBehaviour {
 
             foreach(PlanetData planet in planets)
             {
-                if (!lorePlanets.Contains(planet.planetName))
+                if (planet.planetName != "Korenz")
                 {
                     RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
                     newPlanet.anchoredPosition = new Vector2(0f, 197.5f - (newPlanet.GetSiblingIndex() * 50f));
