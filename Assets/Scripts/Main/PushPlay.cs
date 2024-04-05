@@ -145,6 +145,10 @@ public class PushPlay : MonoBehaviour
             {
                 DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/settings/lightstyle.lgrsd");
             }
+            if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/lightstyle.lgrsd"))
+            {
+                DataSaver.SaveStats(new string[] { (Application.platform != RuntimePlatform.Android).ToString().ToLower() }, Application.persistentDataPath + @"/settings/lightstyle.lgrsd");
+            }
         }
 
     }

@@ -450,6 +450,7 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         if (!alive && killing)
         {
+            if(collision.gameObject.layer == 8)
             DeathFase();
         }
     }
@@ -465,7 +466,7 @@ public class PlayerController : MonoBehaviour, IDamager
         killing = true;
         deathScreenController.StartDeath();
         animations.SetBool("killed", true);
-        Time.timeScale = 0.75f;
+        Time.timeScale = 0.5f;
         yield return new WaitForSeconds(2);
         if (GetComponent<SpriteRenderer>().enabled)
         {

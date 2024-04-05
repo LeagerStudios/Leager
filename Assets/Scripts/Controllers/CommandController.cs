@@ -31,6 +31,11 @@ public class CommandController : MonoBehaviour {
             GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
         }
 
+        if (Input.GetKey(KeyCode.G) && Application.isEditor)
+        {
+            ENTITY_NanoBotT1.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
+        }
+
         if (!commandEnabled)
         {
             if (GInput.GetKeyDown(KeyCode.F12) && GameManager.gameManagerReference.InGame && GameManager.gameManagerReference.player.alive && Debug.isDebugBuild)

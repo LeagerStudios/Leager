@@ -923,7 +923,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < worldTileHeight.Length; i++)
         {
-            worldTileHeight[i] = (int)(Mathf.PerlinNoise(i * 0.05f, aaa) * 30) + (WorldHeight / 2 /*0.5*/);
+            worldTileHeight[i] = (int)(Mathf.PerlinNoise(i * 0.02f, aaa) * (WorldHeight / 3)) + (WorldHeight / 2 /*0.5*/);
         }
 
         for (int i = 0; i < WorldWidth; i++)
@@ -966,78 +966,6 @@ public class GameManager : MonoBehaviour
             string currentBiome = mapBiomes[i];
             floorUndergroundEnd = worldTileHeight[i * 16] - 5;
 
-            if (currentBiome == biomes[(int)Biomes.meadow])
-            {
-                floorSurfTile = 1;
-                floorUndergroundTile = 7;
-
-                for (int i2 = 0; i2 < 16; i2++)
-                {
-                    floorUndergroundEnd = worldTileHeight[i * 16 + i2] - Random.Range(2, 6);
-
-                    for (int e = 0; e < WorldHeight; e++)
-                    {
-                        int idx = (((i * 16) + i2) * WorldHeight) + e;
-
-                        if (e < 3)
-                        {
-                            if (Random.Range(0, e + 1) == 0)
-                            {
-                                buildedMapGrid[idx] = 13;
-                            }
-                        }
-                        if (!(e > floorUndergroundEnd) && buildedMapGrid[idx] == 6)
-                        {
-                            if (e < floorUndergroundEnd * 0.9f && e > floorUndergroundEnd * 0.65f && Random.Range(0, 15) == 0)
-                            {
-                                buildedMapGrid[idx] = 11;
-                                int ore2 = Random.Range(-1, 2);
-                                if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 3) == 0) buildedMapGrid[idx + ore2] = 11;
-                            }
-                            else if (e < floorUndergroundEnd * 0.85f && e > floorUndergroundEnd * 0.2f && Random.Range(0, 25) == 0)
-                            {
-                                buildedMapGrid[idx] = 8;
-                                int ore2 = Random.Range(-1, 2);
-                                if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 11) == 0) buildedMapGrid[idx + ore2] = 8;
-                            }
-                            else if (e < floorUndergroundEnd * 0.75f && e > floorUndergroundEnd * 0.5f && Random.Range(0, 25) == 0)
-                            {
-                                buildedMapGrid[idx] = 10;
-                                int ore2 = Random.Range(-1, 2);
-                                if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 8) == 0) buildedMapGrid[idx + ore2] = 10;
-                            }
-                            else if (e < floorUndergroundEnd * 0.7f && e > floorUndergroundEnd * 0.4f && Random.Range(0, 30) == 0)
-                            {
-                                buildedMapGrid[idx] = 9;
-                                int ore2 = Random.Range(-1, 2);
-                                if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 20) == 0) buildedMapGrid[idx + ore2] = 9;
-                            }
-                            else if (e < floorUndergroundEnd * 0.25f && e > floorUndergroundEnd * 0.1f && Random.Range(0, 35) == 0)
-                            {
-                                buildedMapGrid[idx] = 12;
-                                int ore2 = Random.Range(-1, 2);
-                                if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 14) == 0) buildedMapGrid[idx + ore2] = 12;
-                            }
-                        }
-                        if (e > floorUndergroundEnd && e < worldTileHeight[i * 16 + i2])
-                        {
-                            buildedMapGrid[idx] = floorUndergroundTile;
-                        }
-                        if (e == worldTileHeight[i * 16 + i2])
-                        {
-                            buildedMapGrid[idx] = floorSurfTile;
-                        }
-                        if (e > worldTileHeight[i * 16 + i2])
-                        {
-                            buildedMapGrid[idx] = 0;
-                        }
-
-                    }
-                }
-            }
-
-
-
             if (currentBiome == biomes[(int)Biomes.forest])
             {
                 for (int i2 = 0; i2 < 16; i2++)
@@ -1069,6 +997,18 @@ public class GameManager : MonoBehaviour
                                 int ore2 = Random.Range(-1, 2);
                                 if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 11) == 0) buildedMapGrid[idx + ore2] = 8;
                             }
+                            else if (e < floorUndergroundEnd * 0.85f && e > floorUndergroundEnd * 0.5f && Random.Range(0, 245) == 0)
+                            {
+                                buildedMapGrid[idx] = 5;
+                                if (buildedMapGrid[idx + 1] == 6) buildedMapGrid[idx + 1] = 5;
+                                if (buildedMapGrid[idx - 1] == 6) buildedMapGrid[idx - 1] = 5;
+                                if (i != WorldWidth - 1 && i2 != 15)
+                                    if (buildedMapGrid[idx + WorldHeight] == 6) buildedMapGrid[idx + WorldHeight] = 5;
+                                if (i != 0 && i2 != 0)
+                                    if (buildedMapGrid[idx - WorldHeight] == 6) buildedMapGrid[idx - WorldHeight] = 5;
+                                if (i != WorldWidth - 1 && i2 != 15)
+                                    if (buildedMapGrid[idx + 1 + WorldHeight] == 6 && Random.Range(0, 3) == 0) buildedMapGrid[idx + 1 + WorldHeight] = 5;
+                            }
                             else if (e < floorUndergroundEnd * 0.75f && e > floorUndergroundEnd * 0.5f && Random.Range(0, 25) == 0)
                             {
                                 buildedMapGrid[idx] = 10;
@@ -1092,6 +1032,11 @@ public class GameManager : MonoBehaviour
                         {
                             buildedMapGrid[idx] = floorUndergroundTile;
                         }
+                        if (e == floorUndergroundEnd && Random.Range(0,8) == 0)
+                        {
+                            buildedMapGrid[idx] = 4;
+                            buildedMapGrid[idx - 1] = 4;
+                        }
                         if (e == worldTileHeight[i * 16 + i2])
                         {
                             buildedMapGrid[idx] = floorSurfTile;
@@ -1106,7 +1051,6 @@ public class GameManager : MonoBehaviour
                                 buildedMapGrid[idx + WorldHeight] != 53 && buildedMapGrid[idx - WorldHeight] != 53
                                 && buildedMapGrid[idx + WorldHeight * 2] != 53 && buildedMapGrid[idx - WorldHeight * 2] != 53)
                             {
-                                buildedMapGrid[idx - 1] = 7;
                                 buildedMapGrid[idx] = 53;
                                 buildedMapGrid[idx + 1] = 53;
                                 buildedMapGrid[idx + 2 + WorldHeight] = 55;
@@ -1121,49 +1065,6 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-
-            if (currentBiome == biomes[(int)Biomes.mountain])
-            {
-                for (int i2 = 0; i2 < 16; i2++)
-                {
-                    floorUndergroundEnd = worldTileHeight[i * 16 + i2] - Random.Range(3, 9);
-
-                    for (int e = 0; e < WorldHeight; e++)
-                    {
-                        int idx = (((i * 16) + i2) * WorldHeight) + e;
-
-                        if (Random.Range(0, 9) == 0 && buildedMapGrid[idx] == 6 && e < worldTileHeight[i * 16 + i2] * 0.7f)
-                        {
-                            buildedMapGrid[idx] = 8 + Random.Range(0, 4);
-                        }
-                        if (e < 3)
-                        {
-                            if (Random.Range(0, e + 1) == 0)
-                            {
-                                buildedMapGrid[idx] = 13;
-                            }
-                        }
-                        else if (e < floorUndergroundEnd * 0.10f && buildedMapGrid[idx] != 13 && Random.Range(0, 3) == 0)
-                        {
-                            buildedMapGrid[idx] = 17;
-                        }
-
-                        if (e > floorUndergroundEnd && e < worldTileHeight[i * 16 + i2])
-                        {
-                            buildedMapGrid[idx] = floorUndergroundTile;
-                        }
-                        if (e == worldTileHeight[i * 16 + i2])
-                        {
-                            buildedMapGrid[idx] = floorSurfTile;
-                        }
-                        if (e > worldTileHeight[i * 16 + i2])
-                        {
-                            buildedMapGrid[idx] = 0;
-                        }
-                    }
-                }
-            }
-
             float perlinFreq = 0.08f;
             float perlinOffsetX = Random.Range(-9999f, 9999f);
             float perlinOffsetY = Random.Range(-9999f, 9999f);
