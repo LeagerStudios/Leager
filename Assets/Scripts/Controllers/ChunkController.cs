@@ -148,7 +148,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 bool hasSolidOnTop = false;
                 if (aux1 != -1)
                 {
-                    if (manager.TileCollisionType[aux1] != "#")
+                    if (manager.TileCollisionType[aux1] != "#" && manager.TileCollisionType[aux1] != "~")
                         hasSolidOnTop = false;
                     else
                         hasSolidOnTop = true;
@@ -204,6 +204,20 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         timer.InvokeTimer(Random.Range(10, 20), new string[] { "Change", e + "", "62" }, this);
                     else
                         timer.InvokeTimer(Random.Range(30, 55), new string[] { "Change", e + "", "0" }, this);
+                }
+
+                if (TileGrid[e] == 4 && TileObject[e].GetComponent<Timer>() == null && TileGrid[e - 1] == 5 && !hasSolidOnTop)
+                {
+                    Timer timer = TileObject[e].AddComponent<Timer>();
+                    timer.InvokeTimer(10, new string[] { "ChangeBrick", e + "",}, this);
+                    TileObject[e].GetComponent<BlockAnimationController>().PlayAnimation();
+                }
+                else if (TileGrid[e] == 4 && TileObject[e].GetComponent<Timer>() != null && TileGrid[e - 1] != 5)
+                {
+                    Destroy(TileObject[e].GetComponent<BlockAnimationController>());
+                    TileGrid[e] = 0;
+                    ManagingFunctions.DropItem(4, TileObject[e].transform.position);
+                    Destroy(TileObject[e].GetComponent<Timer>());
                 }
 
                 if (TileGrid[e] == 70)
@@ -263,7 +277,15 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
 
                 if (manager.tileAnimation[TileGrid[e]] == null)
+                {
                     TileObject[e].GetComponent<SpriteRenderer>().sprite = manager.tiles[TileGrid[e]];
+                    TileObject[e].GetComponent<SpriteRenderer>().sortingOrder = 0;
+                }
+                else
+                {
+                    TileObject[e].GetComponent<SpriteRenderer>().sortingOrder = 1;
+                }
+                    
 
                 string cT = manager.TileCollisionType[TileGrid[e]];
 
@@ -310,30 +332,42 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 bool isStillSunny = true;
                 for (int y = manager.WorldHeight - 1; y > -1; y--)
                 {
+                    int idx = (x * manager.WorldHeight) + y;
                     if (manager.TileCollisionType[TileGrid[(x * manager.WorldHeight) + y]] == "#") isStillSunny = false;
                     if (isStillSunny)
                     {
-                        LightMap[(x * manager.WorldHeight) + y] = 2;
+                        LightMap[idx] = 2;
                     }
                     else
                     {
-                        if (LightMap[(x * manager.WorldHeight) + y] < 3)
-                            LightMap[(x * manager.WorldHeight) + y] = 0;
+                        if (LightMap[idx] < 3)
+                            LightMap[idx] = 0;
                         else
-                            LightMap[(x * manager.WorldHeight) + y] = LightMap[(x * manager.WorldHeight) + y] - 2f;
+                            LightMap[idx] = LightMap[idx] - 2f;
                     }
-                    if (TileGrid[(x * manager.WorldHeight) + y] == 70)
+                    if (TileGrid[idx] == 70)
                     {
-                        LightMap[(x * manager.WorldHeight) + y] = 1;
+                        LightMap[idx] = 1;
                     }
-                    else if (TileGrid[(x * manager.WorldHeight) + y] == 84)
+                    else if (TileGrid[idx] == 84)
                     {
-                        LightMap[(x * manager.WorldHeight) + y] = 0.5f;
+                        LightMap[idx] = 0.5f;
                     }
-                    else if (TileGrid[(x * manager.WorldHeight) + y] == 88)
+                    else if (TileGrid[idx] == 88)
                     {
-                        LightMap[(x * manager.WorldHeight) + y] = 1;
-                        LightMap[(x * manager.WorldHeight) + y - 1] = 3;
+                        LightMap[idx] = 1;
+                        LightMap[idx - 1] = 3;
+                    }
+                    else if (TileGrid[idx] == 62)
+                    {
+                        if(idx == LightMap.Length - 1)
+                        {
+                            LightMap[idx] = 2 * 0.6f;
+                        }
+                        else
+                        {
+                            LightMap[idx] = LightMap[idx + 1] * 0.6f;
+                        }
                     }
                 }
             }
@@ -900,6 +934,14 @@ public class ChunkController : MonoBehaviour, ITimerCall
         if(msg[0] == "Change")
         {
             TileGrid[System.Convert.ToInt32(msg[1])] = System.Convert.ToInt32(msg[2]);
+            LightController.lightController.AddRenderQueue(player.transform.position);
+        }
+
+
+        if (msg[0] == "ChangeBrick")
+        {
+            TileGrid[System.Convert.ToInt32(msg[1])] = 0;
+            TileGrid[System.Convert.ToInt32(msg[1]) - 1] = 14;
             LightController.lightController.AddRenderQueue(player.transform.position);
         }
 

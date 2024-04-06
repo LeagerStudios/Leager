@@ -26,19 +26,22 @@ public class BlockAnimationController : MonoBehaviour {
     {
         if (playing)
         {
-            frameProgress += Time.deltaTime;
-
-            if (frameProgress > animationData.timePerFrame)
+            if (GameManager.gameManagerReference.InGame || animationData.playOnPause)
             {
-                frameProgress = 0;
-                frame++;
-                if (frame >= animationData.frames.Length)
-                {
-                    frame = 0;
+                frameProgress += Time.deltaTime;
 
-                    if (!animationData.loop)
+                if (frameProgress > animationData.timePerFrame)
+                {
+                    frameProgress = 0;
+                    frame++;
+                    if (frame >= animationData.frames.Length)
                     {
-                        playing = false;
+                        frame = 0;
+
+                        if (!animationData.loop)
+                        {
+                            playing = false;
+                        }
                     }
                 }
             }

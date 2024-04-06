@@ -1032,16 +1032,39 @@ public class GameManager : MonoBehaviour
                         {
                             buildedMapGrid[idx] = floorUndergroundTile;
                         }
-                        if (e == floorUndergroundEnd && Random.Range(0,8) == 0)
+                        if (e == floorUndergroundEnd && Random.Range(0,24) == 0)
                         {
                             buildedMapGrid[idx] = 4;
-                            buildedMapGrid[idx - 1] = 4;
+                            int max = Random.Range(0, 7);
+                            for(int it = 0; it < max; it++)
+                            {
+                                if (buildedMapGrid[idx - it] == 6)
+                                {
+                                    buildedMapGrid[idx - it] = 4;
+                                }
+                            }
                         }
                         if (e == worldTileHeight[i * 16 + i2])
                         {
                             buildedMapGrid[idx] = floorSurfTile;
                         }
-                        if (e > worldTileHeight[i * 16 + i2] && buildedMapGrid[idx] != 53 && buildedMapGrid[idx] != 55)
+                        if (e > worldTileHeight[i * 16 + i2] && e < WorldHeight * 0.6f)
+                        {
+                            buildedMapGrid[idx] = 62;
+
+                            if(buildedMapGrid[idx - 1] == 1)
+                            {
+                                if(Random.Range(0, 4) == 0)
+                                {
+                                    buildedMapGrid[idx - 1] = 4;
+                                }
+                                else
+                                {
+                                    buildedMapGrid[idx - 1] = 7;
+                                }
+                            }
+                        }
+                        else if (e > worldTileHeight[i * 16 + i2] && buildedMapGrid[idx] != 53 && buildedMapGrid[idx] != 55)
                         {
                             buildedMapGrid[idx] = 0;
                         }

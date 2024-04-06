@@ -11,4 +11,5 @@ public class BlockAnimationData : ScriptableObject {
     public bool loop;
     public bool playOnStart;
     public bool startOnRandomFrame;
+    public bool playOnPause = true;
 }
