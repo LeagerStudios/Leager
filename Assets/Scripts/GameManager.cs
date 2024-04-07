@@ -961,6 +961,10 @@ public class GameManager : MonoBehaviour
         int floorUndergroundTile = 7;
 
 
+        float perlinFreq = 0.07f;
+        float perlinOffsetX = Random.Range(-9999f, 9999f);
+        float perlinOffsetY = Random.Range(-9999f, 9999f);
+
         for (int i = 0; i < mapBiomes.Length; i++)
         {
             string currentBiome = mapBiomes[i];
@@ -1088,9 +1092,6 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            float perlinFreq = 0.08f;
-            float perlinOffsetX = Random.Range(-9999f, 9999f);
-            float perlinOffsetY = Random.Range(-9999f, 9999f);
 
             Texture2D cavesGeneration = new Texture2D(16, WorldHeight);
             for (int x = 0; x < 16; x++)
@@ -1112,15 +1113,24 @@ public class GameManager : MonoBehaviour
                 {
                     cavesIdx = (((i * 16) + x) * WorldHeight) + y;
 
-                    if (cavesGeneration.GetPixel(x, y).a < 0.25f && y < floorUndergroundEnd * Random.Range(0.9f, 0.8f) && y > 2)
+                    if (cavesGeneration.GetPixel(x, y).a < 0.30f && y < floorUndergroundEnd * Random.Range(0.9f, 0.8f) && y > 2)
                     {
                         buildedMapGrid[cavesIdx] = 0;
-                        if (Random.Range(0, (WorldHeight - y) / 2) == 0)
+                        if (y > WorldHeight * 0.2f)
+                            if (Random.Range(0, (WorldHeight - y) / 2) == 0)
+                            {
+                                buildedMapGrid[cavesIdx] = 62;
+                            }
+                            else if (y < WorldHeight * 0.3)
+                                if (Random.Range(0, y * 2) == 0 && buildedMapGrid[cavesIdx - 1] == 6)
+                                {
+                                    buildedMapGrid[cavesIdx] = 21;
+                                }
+                        if(y < WorldHeight * 0.06f)
                         {
-                            buildedMapGrid[cavesIdx] = 62;
+                            buildedMapGrid[cavesIdx] = 21;
                         }
                     }
-
                 }
             }
 

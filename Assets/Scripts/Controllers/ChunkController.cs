@@ -361,7 +361,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     }
                     else if (TileGrid[idx] == 62)
                     {
-                        if(idx == LightMap.Length - 1)
+                        if (idx == LightMap.Length - 1)
                         {
                             LightMap[idx] = 2 * 0.6f;
                         }
@@ -369,6 +369,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         {
                             LightMap[idx] = LightMap[idx + 1] * 0.6f;
                         }
+                    }
+                    else if (TileGrid[idx] == 21)
+                    {
+                        LightMap[idx] = 1f;
                     }
                 }
             }
