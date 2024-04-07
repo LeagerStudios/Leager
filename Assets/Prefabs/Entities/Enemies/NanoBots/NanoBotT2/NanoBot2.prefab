@@ -255,7 +255,10 @@ MonoBehaviour:
   entityBase: {fileID: 114918532072823930}
   EntityType: nanobot2
   EntityFamily: nanobot
-  entityStates: 
-  stateDuration: []
   saveToFile: 0
   canBeNetworked: 1
+  rb2D: {fileID: 50817449215215884}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 1
+  swimming: 0

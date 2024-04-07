@@ -7343,10 +7343,13 @@ MonoBehaviour:
   entityBase: {fileID: 0}
   EntityType: lecter
   EntityFamily: yellow
-  entityStates: 
-  stateDuration: []
   saveToFile: 0
   canBeNetworked: 0
+  rb2D: {fileID: 294}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 1
+  swimming: 0
 --- !u!222 &427
 CanvasRenderer:
   m_ObjectHideFlags: 0

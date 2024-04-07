@@ -193,10 +193,13 @@ MonoBehaviour:
   entityBase: {fileID: 114894831233194474}
   EntityType: nanobot1
   EntityFamily: nanobot
-  entityStates: 
-  stateDuration: []
   saveToFile: 0
   canBeNetworked: 1
+  rb2D: {fileID: 50364822081270122}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 1
+  swimming: 0
 --- !u!1 &1691095426621732
 GameObject:
   m_ObjectHideFlags: 0

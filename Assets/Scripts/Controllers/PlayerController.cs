@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] public DeathScreenController deathScreenController;
     Animator animations;
     Rigidbody2D rb2D;
+    EntityCommonScript entityScript;
     MainSoundController soundController;
     bool spawned = false;
     public float damagedCooldown = 0.5f;
@@ -49,7 +50,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     Hitbox();
                     if (onControl)
                         PlayerControl();
-                    LecterAI(); ;
+                    LecterAI();
                     Camera.main.transform.eulerAngles = Vector3.zero;
                 }
 
@@ -109,6 +110,7 @@ public class PlayerController : MonoBehaviour, IDamager
         healthBar.SetHealth(HP);
         animations.SetBool("killed", false);
         GetComponent<SpriteRenderer>().enabled = true;
+        entityScript = GetComponent<EntityCommonScript>();
         for (int i = 0; i < 3; i++)
         {
             transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().enabled = true;
@@ -237,6 +239,8 @@ public class PlayerController : MonoBehaviour, IDamager
         if (GInput.GetKey(KeyCode.S))
         {
             gameManager.DropOn(transform.position - new Vector3(0f, 0.6f, 0f), 0.5f);
+
+
         }
 
         if (Grounded && alive)
@@ -264,6 +268,24 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             rb2D.velocity = Vector2.right * rb2D.velocity.x;
             rb2D.AddForce(new Vector2(0, JumpForce));
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            if (entityScript.entityStates.Contains(EntityState.Swimming))
+            {
+                rb2D.velocity = new Vector2(rb2D.velocity.x, 4f);
+                entityScript.swimming = 4f;
+            }
+        }
+        else if(Input.GetKey(KeyCode.S))
+        {
+            rb2D.velocity = new Vector2(rb2D.velocity.x, -5f);
+            entityScript.swimming = 5f;
+        }
+        else
+        {
+            entityScript.swimming = 0f;
         }
 
         //if (GInput.GetKey(KeyCode.W))
@@ -363,7 +385,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
     void LecterAI()
     {
-        if (GetComponent<EntityCommonScript>().entityStates.Contains(EntityState.OnFire))
+        if (entityScript.entityStates.Contains(EntityState.OnFire))
         {
             transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
             LoseHp(1, false, 0);
@@ -454,11 +476,6 @@ public class PlayerController : MonoBehaviour, IDamager
             DeathFase();
         }
     }
-
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Debug.Log("heya", collision.gameObject);
-    //}
 
     IEnumerator Kill()
     {

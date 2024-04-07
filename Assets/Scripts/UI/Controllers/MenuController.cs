@@ -484,9 +484,9 @@ public class MenuController : MonoBehaviour {
     public void UpdateRenderChunkDistance(int idx)
     {
         int[] list = { 3, 5, 10, 20, 40 };
-        chunkLoadDistance = list[idx] * 20;
+        chunkLoadDistance = list[idx] * 16;
         chunksOnEachSide = list[idx];
-        Debug.Log("(OPTIONS)==CHUNKS ACTIVATED SET TO: " + idx + ". EQUALS: " + list[idx] + ".==");
+        Debug.Log("(OPTIONS)==CHUNKS ACTIVATED SET TO: " + idx + ". EQUALS: " + chunksOnEachSide + ":" + chunkLoadDistance + ".==");
     }
 
     public void UpdateResolution(int resIdx)

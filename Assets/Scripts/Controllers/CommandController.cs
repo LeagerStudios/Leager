@@ -31,7 +31,7 @@ public class CommandController : MonoBehaviour {
             GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
         }
 
-        if (Input.GetKey(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
+        if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
         {
             ENTITY_NanoBotT1.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
         }
@@ -95,8 +95,7 @@ public class CommandController : MonoBehaviour {
                 if(input.Length == 1)
                 {
                     GameManager.gameManagerReference.InGame = true;
-                    GameManager.gameManagerReference.player.LoseHp(10000, true);
-                    GameManager.gameManagerReference.player.deathScreenController.InstaKill();
+                    GameManager.gameManagerReference.player.LoseHp(99999, true);
                 }
                 else if(input.Length == 2)
                 {

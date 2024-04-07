@@ -923,7 +923,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < worldTileHeight.Length; i++)
         {
-            worldTileHeight[i] = (int)(Mathf.PerlinNoise(i * 0.02f, aaa) * (WorldHeight / 3)) + (WorldHeight / 2 /*0.5*/);
+            worldTileHeight[i] = (int)((Mathf.PerlinNoise(i * 0.04f, aaa) * 0.4f + Mathf.PerlinNoise(i * 0.01f, aaa) * 0.6f) * (WorldHeight / 3)) + (WorldHeight / 2 /*0.5*/);
         }
 
         for (int i = 0; i < WorldWidth; i++)
@@ -1048,7 +1048,7 @@ public class GameManager : MonoBehaviour
                         {
                             buildedMapGrid[idx] = floorSurfTile;
                         }
-                        if (e > worldTileHeight[i * 16 + i2] && e < WorldHeight * 0.6f)
+                        if (e > worldTileHeight[i * 16 + i2] && e < WorldHeight * 0.64f)
                         {
                             buildedMapGrid[idx] = 62;
 

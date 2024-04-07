@@ -290,6 +290,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 string cT = manager.TileCollisionType[TileGrid[e]];
 
                 TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
+                TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == "~";
 
                 switch (cT)
                 {

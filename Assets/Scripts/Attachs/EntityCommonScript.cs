@@ -13,10 +13,17 @@ public class EntityCommonScript : MonoBehaviour
     public string EntityFamily = "null";
 
     [Header("Secondary")]
-    public List<EntityState> entityStates = new List<EntityState>();
-    public List<float> stateDuration = new List<float>();
     public bool saveToFile = false;
     public bool canBeNetworked = true;
+    public Rigidbody2D rb2D;
+
+    [Header("States")]
+    public List<EntityState> entityStates = new List<EntityState>();
+    public List<float> stateDuration = new List<float>();
+    public bool affectedByLiquids = true;
+    public float swimming = 0;
+
+
 
     private void OnValidate()
     {
@@ -31,6 +38,19 @@ public class EntityCommonScript : MonoBehaviour
         else
         {
             entityDamager = damagerObject.GetComponent<IDamager>();
+        }
+
+        if (rb2D == null)
+        {
+            if (gameObject.GetComponent<Rigidbody2D>())
+            {
+                rb2D = gameObject.GetComponent<Rigidbody2D>();
+                Debug.Log("Autoimported Rigidbody for " + gameObject.name);
+            }
+            else
+            {
+                Debug.LogError("Rigidbody of " + gameObject.name + " is null");
+            }
         }
     }
 
@@ -89,9 +109,28 @@ public class EntityCommonScript : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerStay2D(Collider2D collider)
+    {
+        if (affectedByLiquids)
+            if (collider.gameObject.layer == 10)
+            {
+                if (swimming == 0f)
+                    rb2D.velocity = Vector2.ClampMagnitude(rb2D.velocity, 2);
+                else
+                    rb2D.velocity = Vector2.ClampMagnitude(rb2D.velocity, swimming);
+
+
+                AddState(EntityState.Swimming, 0.1f);
+                if (rb2D.transform.position.y < collider.transform.position.y + 0.5f)
+                {
+                    AddState(EntityState.Swimming, 0.1f);
+                }
+            }
+    }
 }
 
 public enum EntityState : int
 {
-    OnFire, Paralisis,
+    OnFire, Paralisis, Drowning, Swimming
 }

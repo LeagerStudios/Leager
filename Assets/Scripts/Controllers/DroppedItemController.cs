@@ -7,9 +7,16 @@ public class DroppedItemController : MonoBehaviour, IDamager
     public int amount = 1;
     public float imunityGrab = 0;
     public bool gettingEnabled = true;
+    public bool floating = false;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if(floating)
+            if(collision.gameObject.layer == 10)
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, 1f);
+            }
+
         if (gettingEnabled)
             if (!GameManager.gameManagerReference.isNetworkClient)
                 if (imunityGrab <= 0f)
@@ -43,6 +50,15 @@ public class DroppedItemController : MonoBehaviour, IDamager
                     }
                 }
 
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == 8)
+        {
+            GetComponent<EntityCommonScript>().swimming = 1f;
+            floating = true;
+        }
     }
 
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
