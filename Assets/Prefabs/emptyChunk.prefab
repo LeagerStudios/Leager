@@ -45,14 +45,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilesMasks:
     serializedVersion: 2
-    m_Bits: 1792
+    m_Bits: 395008
   chunkColor: {r: 1, g: 1, b: 1, a: 1}
   loaded: 0
   chunkBiome: dumby
   loading: 0
   TileGrid: 
   TilePropertiesArr: []
-  Meshes: []
   LightMap: []
   TileObject: []
   ID: 0

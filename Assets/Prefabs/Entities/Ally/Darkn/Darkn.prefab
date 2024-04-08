@@ -216,10 +216,16 @@ MonoBehaviour:
   entityBase: {fileID: 3541840519257593117}
   EntityType: darkn
   EntityFamily: yellow
-  entityStates: 
-  stateDuration: []
+  height: 0.5
+  raycastHeight: 0
   saveToFile: 1
   canBeNetworked: 1
+  rb2D: {fileID: 50922432798917964}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 0
+  affectedBySolids: 0
+  swimming: 0
 --- !u!50 &50922432798917964
 Rigidbody2D:
   serializedVersion: 4

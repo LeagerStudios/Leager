@@ -7343,12 +7343,16 @@ MonoBehaviour:
   entityBase: {fileID: 0}
   EntityType: lecter
   EntityFamily: yellow
+  height: 0.66
+  width: 0.25
+  raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 0
   rb2D: {fileID: 294}
   entityStates: 
   stateDuration: []
   affectedByLiquids: 1
+  affectedBySolids: 1
   swimming: 0
 --- !u!222 &427
 CanvasRenderer:
@@ -14447,8 +14451,8 @@ MonoBehaviour:
   - =
   - '#'
   - '#'
-  - '#'
-  - '#'
+  - /
+  - \
   - ~
   - 
   - 
@@ -14770,8 +14774,8 @@ MonoBehaviour:
   - Crafting Bench
   - Old Corrupted Stone
   - Temple Brick
-  - 
-  - 
+  - Brick Ladder
+  - Brick Ladder
   - Lava
   - Wooden Pickaxe
   - Wooden Shovel
@@ -22428,7 +22432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilesMasks:
     serializedVersion: 2
-    m_Bits: 1792
+    m_Bits: 395008
   CraftMenu: {fileID: 1082114432784878, guid: dfa0a87c77fe19e45b510f9a51d09542, type: 3}
   spritesRenders:
   - {fileID: 0}
@@ -22892,16 +22896,15 @@ MonoBehaviour:
   MaxSpeed: 10
   AccelerationInGround: 1200
   AccelerationInAir: 750
-  JumpForce: 700
+  JumpForce: 14
   healthBar: {fileID: 999}
   particle: {fileID: 1524452008572986, guid: 2d42c10f67fac1f45b441f4a988085c5, type: 3}
-  tileType:
-  - serializedVersion: 2
-    m_Bits: 256
-  - serializedVersion: 2
-    m_Bits: 512
-  - serializedVersion: 2
-    m_Bits: 1024
+  solidTiles:
+    serializedVersion: 2
+    m_Bits: 393472
+  tileLayer:
+    serializedVersion: 2
+    m_Bits: 395008
   deathScreenController: {fileID: 777}
   damagedCooldown: 1
   handOffset: 0.062

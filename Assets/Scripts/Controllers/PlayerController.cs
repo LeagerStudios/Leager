@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] float JumpForce;
     [SerializeField] HealthBarController healthBar;
     [SerializeField] GameObject particle;
-    [SerializeField] LayerMask[] tileType;
+    [SerializeField] LayerMask solidTiles;
+    [SerializeField] LayerMask tileLayer;
     [SerializeField] public DeathScreenController deathScreenController;
     Animator animations;
     Rigidbody2D rb2D;
@@ -148,8 +149,8 @@ public class PlayerController : MonoBehaviour, IDamager
         bool Grounded = false;
         Vector2 pos = new Vector2(transform.position.x + collider2D.offset.x, transform.position.y);
 
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, tileType[0])) Grounded = true;
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, tileType[0]))
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
         {
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
         }
@@ -160,8 +161,8 @@ public class PlayerController : MonoBehaviour, IDamager
 
         pos = new Vector2(transform.position.x + collider2D.size.x / 2.1f + collider2D.offset.x, pos.y);
 
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, tileType[0])) Grounded = true;
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, tileType[0]))
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
         {
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
         }
@@ -173,8 +174,8 @@ public class PlayerController : MonoBehaviour, IDamager
         pos = new Vector2(transform.position.x, transform.position.y);
         pos = new Vector2(transform.position.x - collider2D.size.x / 2.1f + collider2D.offset.x, pos.y);
 
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, tileType[0])) Grounded = true;
-        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, tileType[0]))
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
         {
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
         }
@@ -266,8 +267,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (GInput.GetKeyDown(KeyCode.W) && Grounded && rb2D.velocity.y >= 0)
         {
-            rb2D.velocity = Vector2.right * rb2D.velocity.x;
-            rb2D.AddForce(new Vector2(0, JumpForce));
+            rb2D.velocity = new Vector2(rb2D.velocity.x, JumpForce);
         }
 
         if (Input.GetKey(KeyCode.W))
@@ -278,10 +278,13 @@ public class PlayerController : MonoBehaviour, IDamager
                 entityScript.swimming = 4f;
             }
         }
-        else if(Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
-            rb2D.velocity = new Vector2(rb2D.velocity.x, -5f);
-            entityScript.swimming = 5f;
+            if (entityScript.entityStates.Contains(EntityState.Swimming))
+            {
+                rb2D.velocity = new Vector2(rb2D.velocity.x, -5f);
+                entityScript.swimming = 5f;
+            }
         }
         else
         {

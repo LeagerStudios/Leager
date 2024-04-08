@@ -203,6 +203,7 @@ MonoBehaviour:
   amount: 1
   imunityGrab: 0
   gettingEnabled: 1
+  floating: 0
 --- !u!114 &114514071694002274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,10 +220,14 @@ MonoBehaviour:
   entityBase: {fileID: 0}
   EntityType: null
   EntityFamily: null
+  height: 0.5
+  width: 0.5
+  raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 1
   rb2D: {fileID: 50730676017698402}
   entityStates: 
   stateDuration: []
   affectedByLiquids: 1
+  affectedBySolids: 1
   swimming: 0

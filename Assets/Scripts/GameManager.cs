@@ -961,7 +961,7 @@ public class GameManager : MonoBehaviour
         int floorUndergroundTile = 7;
 
 
-        float perlinFreq = 0.07f;
+        float perlinFreq = 0.08f;
         float perlinOffsetX = Random.Range(-9999f, 9999f);
         float perlinOffsetY = Random.Range(-9999f, 9999f);
 
@@ -980,7 +980,7 @@ public class GameManager : MonoBehaviour
                     {
                         int idx = (((i * 16) + i2) * WorldHeight) + e;
 
-                        if (e < 3)
+                        if (e < 5)
                         {
                             if (Random.Range(0, e + 1) == 0)
                             {
@@ -1113,7 +1113,7 @@ public class GameManager : MonoBehaviour
                 {
                     cavesIdx = (((i * 16) + x) * WorldHeight) + y;
 
-                    if (cavesGeneration.GetPixel(x, y).a < 0.30f && y < floorUndergroundEnd * Random.Range(0.9f, 0.8f) && y > 2)
+                    if (cavesGeneration.GetPixel(x, y).a < 0.3f && y < floorUndergroundEnd * Random.Range(0.9f, 0.8f) && y > 2)
                     {
                         buildedMapGrid[cavesIdx] = 0;
                         if (y > WorldHeight * 0.2f)

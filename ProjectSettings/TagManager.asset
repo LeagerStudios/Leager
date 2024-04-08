@@ -25,9 +25,9 @@ TagManager:
   - EnemyDamageBox
   - IgnoreEntitiesCollision
   - Damager
-  - 
-  - 
-  - 
+  - Slope<
+  - Slope>
+  - FalseBlock
   - 
   - 
   - 

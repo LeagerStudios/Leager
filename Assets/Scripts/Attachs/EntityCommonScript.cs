@@ -11,6 +11,9 @@ public class EntityCommonScript : MonoBehaviour
     public EntityBase entityBase;
     public string EntityType = "null";
     public string EntityFamily = "null";
+    public float height = 1f;
+    public float width = 0.35f;
+    public bool raycastHeight = false;
 
     [Header("Secondary")]
     public bool saveToFile = false;
@@ -21,13 +24,14 @@ public class EntityCommonScript : MonoBehaviour
     public List<EntityState> entityStates = new List<EntityState>();
     public List<float> stateDuration = new List<float>();
     public bool affectedByLiquids = true;
+    public bool affectedBySolids = true;
     public float swimming = 0;
 
 
 
     private void OnValidate()
     {
-        if(damagerObject == null)
+        if (damagerObject == null)
         {
             Debug.LogWarning("Damager of " + gameObject.name + " is null");
         }
@@ -51,6 +55,11 @@ public class EntityCommonScript : MonoBehaviour
             {
                 Debug.LogError("Rigidbody of " + gameObject.name + " is null");
             }
+        }
+
+        if (raycastHeight)
+        {
+            Debug.DrawLine(transform.position, transform.position + Vector3.down * height, Color.blue, 1f);
         }
     }
 
@@ -78,16 +87,16 @@ public class EntityCommonScript : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.gameManagerReference.InGame)
-        for (int i = 0; i < entityStates.Count; i++)
-        {
-            stateDuration[i] = stateDuration[i] - Time.deltaTime;
-            if(stateDuration[i] <= 0)
+        if (GameManager.gameManagerReference.InGame)
+            for (int i = 0; i < entityStates.Count; i++)
             {
-                entityStates.RemoveAt(i);
-                stateDuration.RemoveAt(i);
+                stateDuration[i] = stateDuration[i] - Time.deltaTime;
+                if (stateDuration[i] <= 0)
+                {
+                    entityStates.RemoveAt(i);
+                    stateDuration.RemoveAt(i);
+                }
             }
-        }
 
         if (transform.position.x < -1)
         {

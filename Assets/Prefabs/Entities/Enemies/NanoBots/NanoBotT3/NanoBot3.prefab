@@ -179,10 +179,16 @@ MonoBehaviour:
   entityBase: {fileID: 114123282073713518}
   EntityType: nanobot3
   EntityFamily: nanobot
-  entityStates: 
-  stateDuration: []
+  height: 0.8
+  raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 1
+  rb2D: {fileID: 50418029117181658}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 1
+  affectedBySolids: 1
+  swimming: 0
 --- !u!114 &114181759324585744
 MonoBehaviour:
   m_ObjectHideFlags: 0

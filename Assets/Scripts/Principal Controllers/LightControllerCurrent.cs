@@ -47,16 +47,8 @@ public class LightControllerCurrent : MonoBehaviour
         loadedChunks = GameManager.gameManagerReference.LoadedChunks;
         if (!renderizingLight && !renderized && renderQueue.Count < 1)
         {
-            Vector2 globalPosition = ManagingFunctions.RoundVector2(Camera.main.transform.position);
-            transform.position = globalPosition - Vector2.one * 0.5f;
-
-            if (transform.position != previousPosition)
-            {
-                AddRenderQueue(globalPosition);
-                transform.position = previousPosition;
-            }
-
-            
+            AddRenderQueue(ManagingFunctions.RoundVector2(Camera.main.transform.position));
+            transform.position = previousPosition;
         }
 
 
