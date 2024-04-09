@@ -298,7 +298,11 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (GInput.GetKey(KeyCode.Space))
         {
-
+            entityScript.ladderVelocity = 6f;
+        }
+        else
+        {
+            entityScript.ladderVelocity = 0f;
         }
 
 

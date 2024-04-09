@@ -26,6 +26,7 @@ public class EntityCommonScript : MonoBehaviour
     public bool affectedByLiquids = true;
     public bool affectedBySolids = true;
     public float swimming = 0;
+    public float ladderVelocity = 0;
 
 
 
@@ -136,8 +137,44 @@ public class EntityCommonScript : MonoBehaviour
                     AddState(EntityState.Swimming, 0.1f);
                 }
             }
+
+        if (ladderVelocity != 0)
+            if (collider.gameObject.layer == 20)
+            {
+                if (collider.transform.position.y + 1f > transform.position.y)
+                    rb2D.velocity = new Vector2(rb2D.velocity.x, Mathf.Clamp(rb2D.velocity.y + ladderVelocity * Time.deltaTime * 3, rb2D.velocity.y, ladderVelocity));
+            }
     }
+
+    //private void SlopePhysics(Collider2D collider)
+    //{
+    //    if (collider.gameObject.layer == 17)
+    //    {
+    //        float constant1 = collider.transform.position.y + height;
+    //        float extremelyLargeNumber = Mathf.Clamp(constant1 + width + (transform.position.x - collider.transform.position.x), constant1 - height, constant1 + height);
+
+    //        if(transform.position.y > extremelyLargeNumber + Mathf.Abs(rb2D.velocity.y))
+    //        {
+                
+    //        }
+    //        else if (transform.position.y > extremelyLargeNumber + Mathf.Clamp(rb2D.velocity.y, -10f, -0.1f) - 0.1f)
+    //        {
+    //            transform.position = new Vector2(transform.position.x, extremelyLargeNumber);
+    //            rb2D.velocity = Vector2.right * rb2D.velocity.x;
+                
+    //        }
+    //        else
+    //        {
+                
+    //        }
+
+
+
+    //    }
+    //}
 }
+
+
 
 public enum EntityState : int
 {

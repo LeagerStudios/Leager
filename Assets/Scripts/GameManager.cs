@@ -1174,7 +1174,7 @@ public class GameManager : MonoBehaviour
                 int xPosition = Random.Range(0, WorldWidth * 15);
                 int yPosition = Random.Range(20, 30);
 
-                for(int dx = xPosition; dx < xPosition + 4; dx++)
+                for (int dx = xPosition; dx < xPosition + 4; dx++)
                 {
                     for(int dy = yPosition; dy < yPosition + 4; dy++)
                     {
@@ -1222,6 +1222,107 @@ public class GameManager : MonoBehaviour
                                 {
                                     buildedMapGrid[idx] = 89;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (currentPlanetName == "Korenz")//temple
+            {
+                int xPosition = Random.Range(0, WorldWidth * 15);
+                int yPosition = WorldHeight / 10 * 9;
+
+                while(yPosition > 0)
+                {
+                    int idx = yPosition + (xPosition * WorldHeight);
+
+                    if (buildedMapGrid[idx] == 7)
+                        break;
+                    else
+                        yPosition--;
+                }
+
+                for (int dx = xPosition; dx < xPosition + 5; dx++)
+                {
+                    for (int dy = yPosition; dy < yPosition + 14; dy++)
+                    {
+                        int idx = dy + (dx * WorldHeight);
+
+                        buildedMapGrid[idx] = 18;
+
+                        if(dy == yPosition)
+                            buildedMapGrid[idx] = 7;
+
+                        if(dx == xPosition)
+                        {
+                            if(dy == yPosition + 1 || dy == yPosition + 2)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+
+                            if (dy == yPosition + 14)
+                            {
+                                buildedMapGrid[idx] = 108;
+                            }
+                        }
+
+                        if (dx == xPosition + 1)
+                        {
+                            if (dy == yPosition + 11)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            if (dy == yPosition + 12)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            if (dy == yPosition + 13)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                        }
+
+                        if (dx == xPosition + 2)
+                        {
+                            if (dy == yPosition + 11)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            if (dy == yPosition + 12)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            if (dy == yPosition + 13)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                        }
+
+                        if (dx == xPosition + 3)
+                        {
+                            if (dy == yPosition + 11)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            else if (dy == yPosition + 12)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            else
+                            {
+                                buildedMapGrid[idx] = 110;
+                            }
+                        }
+                        if (dx == xPosition + 4)
+                        {
+                            if (dy == yPosition + 12)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
+                            if (dy == yPosition + 13)
+                            {
+                                buildedMapGrid[idx] = 108;
                             }
                         }
                     }

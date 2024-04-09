@@ -34,6 +34,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject resourceGrabberObject;
     [SerializeField] GameObject unitCenterObject;
     [SerializeField] GameObject leavesObject;
+    [SerializeField] GameObject ladderObject;
 
     [SerializeField] Sprite[] waterFrames;
 
@@ -291,6 +292,15 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                 TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
                 TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == "~" || cT == "/" || cT == @"\";
+
+                if(cT == "/" || cT == @"\")
+                {
+                    TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1.05f;
+                }
+                else
+                {
+                    TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1f;
+                }
 
                 switch (cT)
                 {
@@ -580,6 +590,20 @@ public class ChunkController : MonoBehaviour, ITimerCall
             GameObject boxBlock = Instantiate(boxObject, tile.transform);
             boxBlock.transform.localPosition = Vector2.zero;
             boxBlock.name = "102";
+        }
+
+        if (TileGrid[e] == 109 && tile.transform.childCount < 1)
+        {
+            GameObject ladderBlock = Instantiate(ladderObject, tile.transform);
+            ladderBlock.transform.localPosition = Vector2.zero;
+            ladderBlock.name = "109";
+        }
+
+        if (TileGrid[e] == 110 && tile.transform.childCount < 1)
+        {
+            GameObject ladderBlock = Instantiate(ladderObject, tile.transform);
+            ladderBlock.transform.localPosition = Vector2.zero;
+            ladderBlock.name = "110";
         }
 
     }
