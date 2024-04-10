@@ -180,6 +180,7 @@ MonoBehaviour:
   EntityType: nanobot3
   EntityFamily: nanobot
   height: 0.8
+  width: 0.35
   raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 1
@@ -188,7 +189,8 @@ MonoBehaviour:
   stateDuration: []
   affectedByLiquids: 1
   affectedBySolids: 1
-  swimming: 0
+  swimming: 3
+  ladderVelocity: 0
 --- !u!114 &114181759324585744
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1261,7 +1261,7 @@ public class GameManager : MonoBehaviour
                                 buildedMapGrid[idx] = 107;
                             }
 
-                            if (dy == yPosition + 14)
+                            if (dy == yPosition + 13)
                             {
                                 buildedMapGrid[idx] = 108;
                             }
@@ -1269,6 +1269,38 @@ public class GameManager : MonoBehaviour
 
                         if (dx == xPosition + 1)
                         {
+                            if(dy == yPosition + 1)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 2)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 3)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 4)
+                            {
+                                buildedMapGrid[idx] = 88;
+                            }
+                            if (dy == yPosition + 6)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 7)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 8)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 9)
+                            {
+                                buildedMapGrid[idx] = 88;
+                            }
                             if (dy == yPosition + 11)
                             {
                                 buildedMapGrid[idx] = 0;
@@ -1285,47 +1317,79 @@ public class GameManager : MonoBehaviour
 
                         if (dx == xPosition + 2)
                         {
-                            if (dy == yPosition + 11)
-                            {
-                                buildedMapGrid[idx] = 0;
-                            }
-                            if (dy == yPosition + 12)
-                            {
-                                buildedMapGrid[idx] = 0;
-                            }
                             if (dy == yPosition + 13)
                             {
-                                buildedMapGrid[idx] = 0;
-                            }
-                        }
-
-                        if (dx == xPosition + 3)
-                        {
-                            if (dy == yPosition + 11)
-                            {
-                                buildedMapGrid[idx] = 0;
-                            }
-                            else if (dy == yPosition + 12)
-                            {
-                                buildedMapGrid[idx] = 0;
+                                buildedMapGrid[idx] = 18;
                             }
                             else
                             {
                                 buildedMapGrid[idx] = 110;
                             }
                         }
-                        if (dx == xPosition + 4)
+
+                        if (dx == xPosition + 3)
                         {
+                            if (dy == yPosition + 1)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 2)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 3)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 4)
+                            {
+                                buildedMapGrid[idx] = 88;
+                            }
+                            if (dy == yPosition + 6)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 7)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 8)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+                            if (dy == yPosition + 9)
+                            {
+                                buildedMapGrid[idx] = 88;
+                            }
+                            if (dy == yPosition + 11)
+                            {
+                                buildedMapGrid[idx] = 0;
+                            }
                             if (dy == yPosition + 12)
                             {
                                 buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 13)
                             {
+                                buildedMapGrid[idx] = 0;
+                            }
+                        }
+                        if (dx == xPosition + 4)
+                        {
+                            if (dy == yPosition + 13)
+                            {
                                 buildedMapGrid[idx] = 108;
                             }
                         }
                     }
+                }
+
+                xPosition += 2;
+
+                for (int y = yPosition; y > 20; y--)
+                {
+                    int idx = y + (xPosition * WorldHeight);
+                    buildedMapGrid[idx] = 110;
                 }
             }
         }

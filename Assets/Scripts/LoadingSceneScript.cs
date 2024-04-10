@@ -113,13 +113,6 @@ public class LoadingSceneScript : MonoBehaviour
 
     IEnumerator TasksBeforeStart(string version)
     {
-
-        for (int i = 0; i < 10; i++)
-        {
-            loadingBar.GetComponent<RectTransform>().localScale = new Vector2(loadingBar.GetComponent<RectTransform>().localScale.x - 0.1f, 1f);
-            yield return new WaitForSeconds(0.016f);
-        }
-
         loadingBar.GetComponent<RectTransform>().localScale = new Vector2(0f, 1f);
 
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/data/version.txt"))
@@ -130,7 +123,7 @@ public class LoadingSceneScript : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        string[] randomMessage = { "The Loading Time is Long, Isn't It?", "Loading, loading, loading...", "Waiting for the Loadingbar to Reach the End", "Writing stupid Phrases", "Undoing Stuff", Application.version + ", Cool version, Right?", "You Don't Know How to Play? Read the Instructions.", ":)", "JifteDev is Life", "Go to Eat a Waffle While this Loads", "Creating the Creator", "Waiting a Good Idea", "Go to The Sur and Craft a Core", "Get Ready to Play", "Programming Useless Mechanics", "Miler is slow", "[something has to be put in here]", "12 + 1, Everything matches.", "Enemies are not your allies", "Doors don't close unless you close them.", "The Krotek is Behind you", "Exploring the entire world", "añañañaño" };
+        string[] randomMessage = { "The Loading Time is Long, Isn't It?", "Loading, loading, loading...", "Waiting for the Loadingbar to Reach the End", "Writing stupid Phrases", "Undoing Stuff", "We are on " + Application.version + ", Right?", "You Don't Know How to Play? Read the Instructions.", ":)", "JifteDev is Life", "Go to Eat a Waffle While this Loads", "Creating the Creator", "Waiting for a Good Idea", "Go to The Sur and Craft a Core", "Get Ready to Play", "Programming Useless Mechanics", "Miler is slow", "[something has to be put in here]", "12 + 1, Everything matches.", "Enemies are not your allies", "Doors don't close unless you close them.", "The Krotek is Behind you", "Exploring the entire world", "añañañaño", "Changing from LoadScene.unity to MainMenu.unity", "Nobody talks about how good waffles are", "Razor is taking a Rocket to Space", "Duals... AHHHHH", "WOW! LOOK! Is that a fortress? Oh... no, its not.", ":(", "miler sucks", "Just wait...", "DROP! WAW WAWAWAWAWAWA", "Some load messages are just... Load messages, I guess.", "LoadingSceneScript.cs" };
 
 
         loadingTxt.GetComponent<Text>().text = randomMessage[Random.Range(0, randomMessage.Length)];

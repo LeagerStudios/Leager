@@ -256,6 +256,7 @@ MonoBehaviour:
   EntityType: nanobot2
   EntityFamily: nanobot
   height: 0.8
+  width: 0.35
   raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 1
@@ -264,4 +265,5 @@ MonoBehaviour:
   stateDuration: []
   affectedByLiquids: 1
   affectedBySolids: 1
-  swimming: 0
+  swimming: 2
+  ladderVelocity: 0
