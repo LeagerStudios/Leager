@@ -15299,6 +15299,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d25754a15295cea4f862fca773b89384, type: 2}
   - {fileID: 11400000, guid: 5474234e7cde26f4cb9fab4c1367a5fd, type: 2}
   - {fileID: 11400000, guid: d323af4f614d60445ab2c18ac0563c78, type: 2}
+  - {fileID: 11400000, guid: 0fe9dae3b5a3bbc49baf42437b0f5d36, type: 2}
   raining: 0
   rainSource: {fileID: 1170192903}
 --- !u!114 &806
