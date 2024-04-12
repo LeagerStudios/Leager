@@ -10,7 +10,7 @@ public enum Biomes : int
 
 public enum Entities : int
 {
-    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, AntiLaser = 4, NanoBotT3 = 5, Darkn = 6, x = 7
+    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, Raideon = 4, NanoBotT3 = 5, Darkn = 6, x
 }
 public enum UnitWeapons : int
 {
@@ -651,6 +651,8 @@ public class GameManager : MonoBehaviour
                 return "krotek";
             case Entities.Darkn:
                 return "darkn";
+            case Entities.Raideon:
+                return "darkn";
             default:
                 return "null";
         }
@@ -672,6 +674,8 @@ public class GameManager : MonoBehaviour
                 return Entities.KrotekBoss;
             case "darkn":
                 return Entities.Darkn;
+            case "raideon":
+                return Entities.Raideon;
             default:
                 return Entities.x;
         }
@@ -704,6 +708,10 @@ public class GameManager : MonoBehaviour
         if (entityType == Entities.KrotekBoss)
         {
             entityBase = ENTITY_KrotekController.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.Raideon)
+        {
+            entityBase = ENTITY_Raideon.StaticSpawn(null, spawnPos);
         }
 
         //entityBase.IsLocal = !isNetworkClient;

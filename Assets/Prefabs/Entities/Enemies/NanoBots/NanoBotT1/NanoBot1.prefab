@@ -205,6 +205,9 @@ MonoBehaviour:
   affectedBySolids: 1
   swimming: 2
   ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1691095426621732
 GameObject:
   m_ObjectHideFlags: 0

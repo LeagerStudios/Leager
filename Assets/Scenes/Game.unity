@@ -7355,6 +7355,9 @@ MonoBehaviour:
   affectedBySolids: 1
   swimming: 0
   ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!222 &427
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14100,7 +14103,7 @@ MonoBehaviour:
   - {fileID: 1456089613954364, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
   - {fileID: 1396369739670316, guid: e4fc7b9389df74043a74f8956046e92a, type: 3}
   - {fileID: 1121028424981056, guid: b4eb43100466c9c498c6c7e9e0403589, type: 3}
-  - {fileID: 1167045723135262, guid: 3cb6c9e10f8a2274194042d269747b50, type: 3}
+  - {fileID: 3333195048371584449, guid: 1e4c80f44c216d447a720d67db551bd3, type: 3}
   - {fileID: 1029631959894262, guid: 771f2de9be0f6574082d76156ae62e15, type: 3}
   - {fileID: 7791379123253765221, guid: 178aa65c6f9e00543b3d591db722ffdf, type: 3}
   ProjectilesGameObject:

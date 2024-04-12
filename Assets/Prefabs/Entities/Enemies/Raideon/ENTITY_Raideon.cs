@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ENTITY_NanoBotT1 : EntityBase, IDamager
+public class ENTITY_Raideon : EntityBase, IDamager
 {
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody2D rb2D;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] LayerMask blockMask;
     [SerializeField] GameObject particle;
+    public EntityCommonScript entityScript;
     GameManager manager;
+    public Vector2 point;
 
     public PlayerController followingPlayer;
     float HpMax = 10f;
     float HP = 10f;
+    int currentTool = 0;
 
 
     public override int Hp
@@ -55,12 +58,14 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         transform.GetChild(0).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
+        entityScript = GetComponent<EntityCommonScript>();
+        point = spawnPos;
         Active = true;
         return this;
     }
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.NanoBotT1], spawnPos, Quaternion.identity).GetComponent<ENTITY_NanoBotT1>().Spawn(args, spawnPos);
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.Raideon], spawnPos, Quaternion.identity).GetComponent<ENTITY_Raideon>().Spawn(args, spawnPos);
     }
 
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
@@ -97,11 +102,11 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         Invoke("Despawn", 1f);
     }
 
-    void Update ()
+    void Update()
     {
         if (manager == null) manager = GameManager.gameManagerReference;
         if (manager.InGame) AiFrame();
-	}
+    }
 
     public override void AiFrame()
     {
@@ -136,17 +141,24 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
 
                         int boolint = ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX);
 
-                        if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.up, true))
+                        if (SendRaycast(0.70f, Vector2.right * boolint, Vector2.up, true))
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 13f);
+                            entityScript.ladderVelocity = 4f;
                         }
-                        else if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.zero))
+                        else if (SendRaycast(0.70f, Vector2.right * boolint, Vector2.zero))
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
+                            entityScript.ladderVelocity = 4f;
                         }
-                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && (!SendRaycast(1.85f, Vector2.down, Vector2.right * boolint * 0.7f) || SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f)))
+                        else if (!SendRaycast(0.65f, Vector2.down, Vector2.right * boolint * 0.5f) && (!SendRaycast(1.65f, Vector2.down, Vector2.right * boolint * 0.5f) || SendRaycast(0.65f, Vector2.down, Vector2.right * boolint * 1f)))
                         {
                             rb2D.velocity = new Vector2(rb2D.velocity.x, 10.5f);
+                            entityScript.ladderVelocity = 0f;
+                        }
+                        else
+                        {
+                            entityScript.ladderVelocity = 0f;
                         }
 
                     }
@@ -265,7 +277,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
 
     public bool CheckGrounded()
     {
-        return SendRaycast(0.85f, Vector2.down, Vector2.zero);
+        return SendRaycast(0.75f, Vector2.down, Vector2.zero);
     }
 
     public bool SendRaycast(float raycastDist, Vector2 raycastDir, Vector2 localOffset, bool ignoreSlabs = false)
@@ -281,7 +293,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
             else colliding = false;
         }
         else
-        colliding = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
+            colliding = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
 
         if (colliding)
         {

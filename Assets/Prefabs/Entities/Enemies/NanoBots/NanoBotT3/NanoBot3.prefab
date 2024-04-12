@@ -191,6 +191,9 @@ MonoBehaviour:
   affectedBySolids: 1
   swimming: 3
   ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &114181759324585744
 MonoBehaviour:
   m_ObjectHideFlags: 0

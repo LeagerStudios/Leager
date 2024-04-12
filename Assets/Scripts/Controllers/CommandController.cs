@@ -33,7 +33,7 @@ public class CommandController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
         {
-            ENTITY_NanoBotT1.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
+            ENTITY_Raideon.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
         }
 
         if (!commandEnabled)
