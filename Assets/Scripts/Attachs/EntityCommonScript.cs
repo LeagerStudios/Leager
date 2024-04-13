@@ -137,7 +137,7 @@ public class EntityCommonScript : MonoBehaviour
                 AddState(EntityState.Swimming, 0.1f);
                 if (rb2D.transform.position.y < collider.transform.position.y + 0.5f)
                 {
-                    AddState(EntityState.Swimming, 0.1f);
+                    AddState(EntityState.Drowning, 0.1f);
                 }
             }
 

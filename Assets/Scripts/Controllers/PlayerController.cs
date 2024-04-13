@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] public DeathScreenController deathScreenController;
     Animator animations;
     Rigidbody2D rb2D;
-    EntityCommonScript entityScript;
+    public EntityCommonScript entityScript;
     MainSoundController soundController;
     bool spawned = false;
     public float damagedCooldown = 0.5f;

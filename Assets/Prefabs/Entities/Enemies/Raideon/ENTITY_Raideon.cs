@@ -61,7 +61,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         entityScript = GetComponent<EntityCommonScript>();
         point = spawnPos;
-        closeFactor = Random.Range(0, 1.2f);
+        closeFactor = Random.Range(-2.3f, 1.2f);
         Active = true;
         return this;
     }
@@ -178,7 +178,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
 
                     if (followingPlayer)
                     {
-                        float playerDist = Mathf.Abs(transform.position.x - followingPlayer.transform.position.x);
+                        float playerDist = Vector2.Distance(transform.position, followingPlayer.transform.position);
                         if (playerDist < 4 - closeFactor)
                         {
                             if (playerDist < 3 - closeFactor)
@@ -203,12 +203,22 @@ public class ENTITY_Raideon : EntityBase, IDamager
                     }
                     else
                     {
+                        currentTool = 0;
                         animator.speed = 1;
                     }
 
                     transform.GetChild(1).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), 1, 1);
                     transform.GetChild(1).GetChild(0).gameObject.SetActive(currentTool == 1);
                     transform.GetChild(1).GetChild(1).gameObject.SetActive(currentTool == 2);
+                    if(currentTool == 2 && followingPlayer)
+                    {
+                        if(spriteRenderer.flipX)
+                        transform.GetChild(1).GetChild(1).eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(transform.position, followingPlayer.transform.position) - 90f);
+                        else
+                        {
+                            transform.GetChild(1).GetChild(1).eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(transform.position, followingPlayer.transform.position) + 90f);
+                        }
+                    }
                 }
 
                 if (damaged)
@@ -264,7 +274,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
         }
 
         if (nearestPlayer != null)
-            if (Vector2.Distance(nearestPlayer.transform.position, transform.position) < 20 && nearestPlayer.GetComponent<PlayerController>().alive)
+            if (Vector2.Distance(nearestPlayer.transform.position, transform.position) < 20 && nearestPlayer.GetComponent<PlayerController>().alive && !nearestPlayer.GetComponent<PlayerController>().entityScript.entityStates.Contains(EntityState.Drowning))
             {
                 followingPlayer = nearestPlayer.GetComponent<PlayerController>();
                 animator.SetBool("isMoving", true);
