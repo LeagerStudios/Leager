@@ -291,7 +291,7 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
 
     void KillPlayer()
     {
-        GameManager.gameManagerReference.player.LoseHp(1000, true, 0);
+        GameManager.gameManagerReference.player.LoseHp(1000, GetComponent<EntityCommonScript>(), true, 0);
         DeathScreenController.deathScreenController.InstaKill();
         Invoke("Despawn", 2f);
     }

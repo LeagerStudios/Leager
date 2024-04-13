@@ -844,7 +844,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             for (int e = 0; e < manager.WorldHeight; e++)
             {
-                GameObject newTile = manager.ExtractPooledTile(new Vector2(tileX, tileY));
+                GameObject newTile = Instantiate(manager.emptyTile, new Vector3(tileX, tileY), Quaternion.identity);
+                
                 newTile.transform.SetParent(transform, false);
                 newTile.name = "Tile" + tileName;
 

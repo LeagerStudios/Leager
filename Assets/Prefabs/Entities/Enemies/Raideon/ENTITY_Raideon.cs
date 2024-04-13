@@ -17,6 +17,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
     float HpMax = 10f;
     float HP = 10f;
     int currentTool = 0;
+    float closeFactor;
 
 
     public override int Hp
@@ -60,6 +61,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         entityScript = GetComponent<EntityCommonScript>();
         point = spawnPos;
+        closeFactor = Random.Range(0, 1.2f);
         Active = true;
         return this;
     }
@@ -137,7 +139,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
                 {
                     if (CheckGrounded())
                     {
-                        rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                        rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 5, rb2D.velocity.y);
 
                         int boolint = ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX);
 
@@ -166,7 +168,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
                     {
                         if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
                         {
-                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 4, rb2D.velocity.y);
                         }
                         else
                         {
@@ -174,8 +176,39 @@ public class ENTITY_Raideon : EntityBase, IDamager
                         }
                     }
 
+                    if (followingPlayer)
+                    {
+                        float playerDist = Mathf.Abs(transform.position.x - followingPlayer.transform.position.x);
+                        if (playerDist < 4 - closeFactor)
+                        {
+                            if (playerDist < 3 - closeFactor)
+                            {
+                                rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(spriteRenderer.flipX) * 3f, rb2D.velocity.y);
+                                currentTool = 1;
+                                animator.speed = 1;
+                            }
+                            else
+                            {
+                                rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
+                                currentTool = 2;
+                                animator.speed = 0;
+                            }
 
+                        }
+                        else
+                        {
+                            currentTool = 0;
+                            animator.speed = 1;
+                        }
+                    }
+                    else
+                    {
+                        animator.speed = 1;
+                    }
 
+                    transform.GetChild(1).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), 1, 1);
+                    transform.GetChild(1).GetChild(0).gameObject.SetActive(currentTool == 1);
+                    transform.GetChild(1).GetChild(1).gameObject.SetActive(currentTool == 2);
                 }
 
                 if (damaged)
@@ -212,6 +245,11 @@ public class ENTITY_Raideon : EntityBase, IDamager
                 }
             }
 
+        if (entityScript.entityStates.Contains(EntityState.Swimming))
+        {
+            rb2D.velocity = new Vector2(rb2D.velocity.x * 0.6f, 2);
+        }
+
         GameObject nearestPlayer = null;
         float nearestDist = 999999f;
 
@@ -226,7 +264,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
         }
 
         if (nearestPlayer != null)
-            if (Vector2.Distance(nearestPlayer.transform.position, transform.position) < 15 && nearestPlayer.GetComponent<PlayerController>().alive)
+            if (Vector2.Distance(nearestPlayer.transform.position, transform.position) < 20 && nearestPlayer.GetComponent<PlayerController>().alive)
             {
                 followingPlayer = nearestPlayer.GetComponent<PlayerController>();
                 animator.SetBool("isMoving", true);
@@ -267,9 +305,9 @@ public class ENTITY_Raideon : EntityBase, IDamager
                 manager.DropOn(transform.position - Vector3.up * 0.8f, 0.5f);
             }
 
-            if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 1 && !dead && followingPlayer != null)
+            if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 0.8 && !dead && followingPlayer != null)
             {
-                followingPlayer.LoseHp(3);
+                followingPlayer.LoseHp(7, entityScript);
             }
         }
     }

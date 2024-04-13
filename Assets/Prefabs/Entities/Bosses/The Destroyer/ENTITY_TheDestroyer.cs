@@ -108,7 +108,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z - 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
         }
         if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-            GameManager.gameManagerReference.player.LoseHp(15);
+            GameManager.gameManagerReference.player.LoseHp(15, GetComponent<EntityCommonScript>());
 
 
         Transform previousSegment = transform;
@@ -129,7 +129,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
                 }
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(5);
+                    GameManager.gameManagerReference.player.LoseHp(5, GetComponent<EntityCommonScript>());
             }
             else
             {
@@ -139,7 +139,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
                 }
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(16);
+                    GameManager.gameManagerReference.player.LoseHp(16, GetComponent<EntityCommonScript>());
             }
 
             previousSegment = indexSegment;
@@ -156,7 +156,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, velocity, 0.1f);
         transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.1f));
         if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-            GameManager.gameManagerReference.player.LoseHp(15);
+            GameManager.gameManagerReference.player.LoseHp(15, GetComponent<EntityCommonScript>());
 
         Transform previousSegment = transform;
         for (int i = 1; i < transform.parent.childCount; i++)
@@ -171,12 +171,12 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(5);
+                    GameManager.gameManagerReference.player.LoseHp(5, GetComponent<EntityCommonScript>());
             }
             else
             {
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(16);
+                    GameManager.gameManagerReference.player.LoseHp(16, GetComponent<EntityCommonScript>());
             }
             previousSegment = indexSegment;
         }

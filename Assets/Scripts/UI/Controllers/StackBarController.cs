@@ -14,8 +14,12 @@ public class StackBarController : MonoBehaviour {
     public Text itemText;
     [SerializeField] public int[] StackBarGrid = new int[9];
     [SerializeField] public int[] StackItemAmount = new int[9];
+    RectTransform rectTransform;
+    RectTransform parentRectTransform;
 
-	void Start () {
+    void Start () {
+        rectTransform = GetComponent<RectTransform>();
+        parentRectTransform = transform.parent.GetComponent<RectTransform>();
         gameManager = GameManager.gameManagerReference;
         StackBarGrid = new int[9];
         StackItemAmount = new int[9];
@@ -57,6 +61,16 @@ public class StackBarController : MonoBehaviour {
             InventoryDeployed = false;
         }
 
+
+        if (gameManager.player.alive)
+        {
+            parentRectTransform.anchoredPosition = new Vector2(400, -225);
+        }
+        else
+        {
+            parentRectTransform.anchoredPosition = new Vector2(400, 225);
+        }
+
         if (InventoryDeployed) InventoryBar.transform.GetChild(0).gameObject.SetActive(true);
         else InventoryBar.transform.GetChild(0).gameObject.SetActive(false);
         itemText.enabled = !InventoryDeployed;
@@ -70,7 +84,7 @@ public class StackBarController : MonoBehaviour {
 
     public void UpdateStacks()
     {
-        RectTransform rectTransform = GetComponent<RectTransform>();
+        
 
         for(int i = 1;i < transform.childCount; i++)
         {

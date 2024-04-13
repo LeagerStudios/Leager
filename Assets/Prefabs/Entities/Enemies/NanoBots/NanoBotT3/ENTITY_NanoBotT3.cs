@@ -100,7 +100,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             {
                 if (entity.gameObject.GetComponent<PlayerController>() != null)
                 {
-                    entity.gameObject.GetComponent<PlayerController>().LoseHp(15, true, 1.5f, true);
+                    entity.gameObject.GetComponent<PlayerController>().LoseHp(15, GetComponent<EntityCommonScript>(), true, 1.5f, true);
                 }
             }
         }

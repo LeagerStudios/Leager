@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         if (procedence.EntityFamily != "yellow")
         {
-            LoseHp(damage, ignoreImunity, knockback, penetrate);
+            LoseHp(damage, procedence, ignoreImunity, knockback, penetrate);
         }
     }
 
@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour, IDamager
         rb2D.bodyType = RigidbodyType2D.Dynamic;
         transform.position = new Vector2(x, y);
         Camera.main.orthographicSize = 5f;
+        Camera.main.GetComponent<CameraController>().focus = gameObject;
         spawned = true;//confirmación final
     }
 
@@ -249,7 +250,7 @@ public class PlayerController : MonoBehaviour, IDamager
             if (Mathf.Round(falling) >= 5f)
             {
                 int HpLose = Mathf.RoundToInt(falling);
-                LoseHp(HpLose, true, 0f, true);
+                LoseHp(HpLose, entityScript, true, 0f, true);
                 falling = 0;
 
                 if (HP <= 0)
@@ -373,7 +374,7 @@ public class PlayerController : MonoBehaviour, IDamager
         if (regenTime < 0f)
         {
             regenTime = 1f;
-            if (HP < MaxHP) LoseHp(-1);
+            if (HP < MaxHP) LoseHp(-1, entityScript);
         }
         else
         {
@@ -395,7 +396,7 @@ public class PlayerController : MonoBehaviour, IDamager
         if (entityScript.entityStates.Contains(EntityState.OnFire))
         {
             transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
-            LoseHp(1, false, 0);
+            LoseHp(1, entityScript, false, 0);
         }
         else
         {
@@ -416,7 +417,7 @@ public class PlayerController : MonoBehaviour, IDamager
         ManagingFunctions.DropItem(item, transform.position, new Vector2(5f * ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX) + rb2D.velocity.x * 1.5f, 5f + rb2D.velocity.y), amount: amount, imunityGrab: 3);
     }
 
-    public void LoseHp(int hpLost, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
+    public void LoseHp(int hpLost, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
         soundController.PlaySfxSound(SoundName.damage);
 
@@ -449,24 +450,24 @@ public class PlayerController : MonoBehaviour, IDamager
 
                     if (GetComponent<SpriteRenderer>().flipX)
                     {
-                        rb2D.AddForce(new Vector2((AccelerationInGround * 0.5f) * knockback, (JumpForce * 0.6f) * knockback));
+                        rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
                     }
                     else
                     {
-                        rb2D.AddForce(new Vector2((AccelerationInGround * -0.5f) * knockback, (JumpForce * 0.6f) * knockback));
+                        rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
                     }
 
-                    StartCoroutine(Kill());
+                    StartCoroutine(Kill(procedence));
                 }
                 else if (hpLost > 0)
                 {
                     if (GetComponent<SpriteRenderer>().flipX)
                     {
-                        rb2D.AddForce(new Vector2((AccelerationInGround * 0.5f) * knockback, (JumpForce * 0.6f) * knockback));
+                        rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
                     }
                     else
                     {
-                        rb2D.AddForce(new Vector2((AccelerationInGround * -0.5f) * knockback, (JumpForce * 0.6f) * knockback));
+                        rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
                     }
                     damagedCooldown = 0.6f;
                     regenTime = 3.5f;
@@ -484,11 +485,11 @@ public class PlayerController : MonoBehaviour, IDamager
         }
     }
 
-    IEnumerator Kill()
+    IEnumerator Kill(EntityCommonScript procedence)
     {
         alive = false;
         killing = true;
-        deathScreenController.StartDeath();
+        deathScreenController.StartDeath(procedence);
         animations.SetBool("killed", true);
         Time.timeScale = 0.5f;
         yield return new WaitForSeconds(2);
@@ -536,7 +537,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
         while (alive)
         {
-            LoseHp(liveLost, true);
+            LoseHp(liveLost, entityScript, true);
             yield return new WaitForSeconds(secsWait);
         }
     }

@@ -259,7 +259,7 @@ public class ENTITY_NanoBotT2 : EntityBase, IDamager
 
             if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 1 && !dead && followingPlayer != null)
             {
-                followingPlayer.LoseHp(5);
+                followingPlayer.LoseHp(6, GetComponent<EntityCommonScript>());
             }
         }
     }

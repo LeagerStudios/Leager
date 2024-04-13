@@ -95,7 +95,7 @@ public class CommandController : MonoBehaviour {
                 if(input.Length == 1)
                 {
                     GameManager.gameManagerReference.InGame = true;
-                    GameManager.gameManagerReference.player.LoseHp(99999, true);
+                    GameManager.gameManagerReference.player.LoseHp(99999,GameManager.gameManagerReference.player.GetComponent<EntityCommonScript>(), true);
                 }
                 else if(input.Length == 2)
                 {

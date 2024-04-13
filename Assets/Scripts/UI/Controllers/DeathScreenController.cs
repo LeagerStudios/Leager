@@ -15,6 +15,7 @@ public class DeathScreenController : MonoBehaviour {
     MainSoundController soundController;
     [SerializeField] AudioClip instaKillSound;
     [SerializeField] Animator animator;
+    EntityCommonScript procedence;
 
 
 	void Start () {
@@ -54,13 +55,14 @@ public class DeathScreenController : MonoBehaviour {
         called = true;
     }
 
-    public void StartDeath()
+    public void StartDeath(EntityCommonScript procedence)
     {
-        if (!called) StartCoroutine(IEDeath());
+        if (!called) StartCoroutine(IEDeath(procedence));
     }
 
-    IEnumerator IEDeath()
+    IEnumerator IEDeath(EntityCommonScript procedence)
     {
+        this.procedence = procedence;
         Image image = transform.GetChild(0).GetComponent<Image>();
         child1.SetActive(true);
 
@@ -90,6 +92,15 @@ public class DeathScreenController : MonoBehaviour {
     IEnumerator DeathScreen()
     {
         Image image = transform.GetChild(0).GetComponent<Image>();
+
+        try
+        {
+            Camera.main.GetComponent<CameraController>().focus = procedence.gameObject;
+        }
+        finally
+        {
+
+        }
 
         Color startColor = image.color;
         startColor.a = 1f;
