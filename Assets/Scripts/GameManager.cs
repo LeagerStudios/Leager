@@ -652,7 +652,7 @@ public class GameManager : MonoBehaviour
             case Entities.Darkn:
                 return "darkn";
             case Entities.Raideon:
-                return "darkn";
+                return "raideon";
             default:
                 return "null";
         }
@@ -1521,8 +1521,8 @@ public class GameManager : MonoBehaviour
                 entitiesContainer.GetComponent<EntitiesManager>().UpdateEntities(LoadedChunks);
                 LightController.lightController.AddRenderQueue(Camera.main.transform.position);
             }
-            if(!isNetworkClient)
-            SaveGameData(true);
+            if (!isNetworkClient)
+                SaveGameData(true);
         }
     }
 

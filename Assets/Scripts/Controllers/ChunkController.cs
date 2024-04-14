@@ -159,7 +159,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 {
                     if (TileGrid[e] == 7 && TileObject[e].GetComponent<Timer>() == null)
                     {
-                        if (tileY < manager.WorldHeight * 0.7)
+                        if (tileY < manager.WorldHeight * 0.75f)
                         {
                             Timer timer = TileObject[e].AddComponent<Timer>();
                             timer.InvokeTimer(Random.Range(70, 120), new string[] { "DirtReplace", e + "", "1", "1" }, this);
@@ -170,7 +170,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             timer.InvokeTimer(Random.Range(100, 170), new string[] { "DirtReplace", e + "", "2", "1" }, this);
                         }
                     }
-                    if (TileGrid[e] == 1 && tileY > manager.WorldHeight * 0.7 && TileObject[e].GetComponent<Timer>() == null)
+                    if (TileGrid[e] == 1 && tileY > manager.WorldHeight * 0.75f && TileObject[e].GetComponent<Timer>() == null)
                     {
                         Timer timer = TileObject[e].AddComponent<Timer>();
                         timer.InvokeTimer(Random.Range(30, 50), new string[] { "DirtReplace", e + "", "2", "1" }, this);
@@ -191,14 +191,14 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         }
                     }
 
-
-                if (TileGrid[e] == 2 && TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.7)
+                
+                if (TileGrid[e] == 2 && TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.75f)
                 {
                     Timer timer = TileObject[e].AddComponent<Timer>();
                     timer.InvokeTimer(Random.Range(20, 40), new string[] { "Change", e + "", "1", "1" }, this);
                 }
 
-                if (TileGrid[e] == 3 && TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.7)
+                if (TileGrid[e] == 3 && TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.75f)
                 {
                     Timer timer = TileObject[e].AddComponent<Timer>();
                     if (Random.Range(0, 2) == 0)

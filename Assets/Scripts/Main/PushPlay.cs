@@ -245,7 +245,7 @@ public class PushPlay : MonoBehaviour
 
     public void SetWorldSize(int width)
     {
-        int[] wp = { width, 160 };
+        int[] wp = { width, 60 };
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldSize");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(ManagingFunctions.ConvertIntToStringArray(wp), "newWorldSize");
     }

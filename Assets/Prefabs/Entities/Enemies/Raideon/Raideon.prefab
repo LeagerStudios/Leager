@@ -389,13 +389,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damagerObject: {fileID: 3333195048371584449}
-  entityBase: {fileID: 0}
+  entityBase: {fileID: 5220455952322622260}
   EntityType: raideon
   EntityFamily: raideon
   height: 0.69
   width: 0.225
   raycastHeight: 0
-  saveToFile: 0
+  saveToFile: 1
   canBeNetworked: 1
   rb2D: {fileID: 3333195048371584458}
   entityStates: 

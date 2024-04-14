@@ -249,14 +249,17 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             if (Mathf.Round(falling) >= 5f)
             {
-                int HpLose = Mathf.RoundToInt(falling);
-                LoseHp(HpLose, entityScript, true, 0f, true);
-                falling = 0;
-
-                if (HP <= 0)
+                if (!entityScript.entityStates.Contains(EntityState.Swimming))
                 {
-                    deathScreenController.InstaKill();
-                }
+                    int HpLose = Mathf.RoundToInt(falling);
+                    LoseHp(HpLose, entityScript, true, 0f, true);
+                    falling = 0;
+
+                    if (HP <= 0)
+                    {
+                        deathScreenController.InstaKill();
+                    }
+                } 
             }
         }
 
