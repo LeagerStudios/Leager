@@ -48,26 +48,34 @@ public class NetworkController : MonoBehaviour
 
     }
 
-    public void NATUPnP(bool boolean)
-    {
-        UPnPNAT upnpnat = new UPnPNAT();
+    //public void NATUPnP(bool boolean)
+    //{
+    //    Debug.Log("Mapping");
+    //    UPnPNAT upnpnat = new UPnPNAT();
+    //    Debug.Log("Added mapping x");
 
-        IStaticPortMappingCollection mappings = upnpnat.StaticPortMappingCollection;
+    //    IDynamicPortMappingCollection mappings = upnpnat.DynamicPortMappingCollection;
+    //    Debug.Log("Added mapping xx");
+    //    // Check if the device supports UPnP and has a mapping capability
+    //    if (mappings != null)
+    //    {
+    //        // Add a new port mapping
+    //        if (boolean)
+    //        {
+    //            mappings.Add(GetPublicIP(),7777, "TCP", 7777, GetLocalIP(), true, "Leager Multiplayer Server", 4);
+    //            Debug.Log("Added mapping");
+    //        }
+    //        else
+    //            mappings.Remove(GetPublicIP(),7777, "TCP");
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("UPnP is not supported on this device.");
+    //    }
 
-        // Check if the device supports UPnP and has a mapping capability
-        if (mappings != null)
-        {
-            // Add a new port mapping
-            if (boolean)
-                mappings.Add(7777, "TCP", Server.targetPort, "ip", true, "Leager Multiplayer Server");
-            else
-                mappings.Remove(7777, "TCP");
-        }
-        else
-        {
-            Debug.LogError("UPnP is not supported on this device.");
-        }
-    }
+    //    Debug.Log("Added mapping out");
+    //}
+
 
     public void UpdateBlock(int chunkIdx, int idx, int tile)
     {
@@ -222,12 +230,14 @@ public class NetworkController : MonoBehaviour
                                     int amount = int.Parse(input[2]);
                                     string dropName = input[3];
                                     Transform drop = ManagingFunctions.dropContainer.transform.Find(dropName);
+                                    Debug.Log("Drop: " + dropName + " amm: " + amount);
 
                                     if (amount == 0)
                                     {
                                         UndropItem(dropName);
                                         if (drop != null)
                                         {
+                                            drop.GetComponent<DroppedItemController>().gettingEnabled = false;
                                             Destroy(drop.gameObject);
                                         }
                                     }

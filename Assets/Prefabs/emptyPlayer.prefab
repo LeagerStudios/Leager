@@ -197,14 +197,14 @@ MonoBehaviour:
   JumpForce: 0
   healthBar: {fileID: 0}
   particle: {fileID: 1524452008572986, guid: 2d42c10f67fac1f45b441f4a988085c5, type: 3}
-  tileType:
-  - serializedVersion: 2
-    m_Bits: 256
-  - serializedVersion: 2
-    m_Bits: 512
-  - serializedVersion: 2
-    m_Bits: 1024
+  solidTiles:
+    serializedVersion: 2
+    m_Bits: 0
+  tileLayer:
+    serializedVersion: 2
+    m_Bits: 0
   deathScreenController: {fileID: 0}
+  entityScript: {fileID: 0}
   damagedCooldown: 0.5
   handOffset: 0.062
   regenTime: 0
@@ -251,7 +251,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: 069c94f5df2e85a43b33baaaf9297d0a, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!95 &95931482126620058
 Animator:

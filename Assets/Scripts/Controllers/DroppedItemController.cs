@@ -35,6 +35,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
                             if (itemReturn == 0)
                             {
                                 NetworkController.networkController.UndropItem(gameObject.name);
+                                gettingEnabled = false;
                                 Destroy(gameObject);
                             }
                             else
