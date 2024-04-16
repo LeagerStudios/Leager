@@ -94,6 +94,16 @@ public class EntityCommonScript : MonoBehaviour
         if (GameManager.gameManagerReference.InGame)
             for (int i = 0; i < entityStates.Count; i++)
             {
+                if(entityStates[i] == EntityState.OnFire)
+                {
+                    if (entityStates.Contains(EntityState.Swimming))
+                    {
+                        entityStates.RemoveAt(i);
+                        stateDuration.RemoveAt(i);
+                        continue;
+                    }
+                }
+
                 stateDuration[i] = stateDuration[i] - Time.deltaTime;
                 if (stateDuration[i] <= 0)
                 {
@@ -129,7 +139,7 @@ public class EntityCommonScript : MonoBehaviour
             if (collider.gameObject.layer == 10)
             {
                 if (swimming == 0f)
-                    rb2D.velocity = Vector2.ClampMagnitude(rb2D.velocity, 2);
+                    rb2D.velocity = Vector2.ClampMagnitude(rb2D.velocity, 4);
                 else
                     rb2D.velocity = Vector2.ClampMagnitude(rb2D.velocity, swimming);
 

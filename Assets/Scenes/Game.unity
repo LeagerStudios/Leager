@@ -14695,7 +14695,7 @@ MonoBehaviour:
   - boots
   - placeable
   - placeable
-  - fire
+  - placeable
   - placeable
   - door
   - door
@@ -14717,7 +14717,7 @@ MonoBehaviour:
   - item
   - placeable
   - placeable
-  - placeable
+  - item
   - placeable
   - placeable
   - placeable
@@ -22986,6 +22986,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 395008
   deathScreenController: {fileID: 777}
+  entityScript: {fileID: 0}
   damagedCooldown: 1
   handOffset: 0.062
   regenTime: 0

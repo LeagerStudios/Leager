@@ -35,6 +35,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject unitCenterObject;
     [SerializeField] GameObject leavesObject;
     [SerializeField] GameObject ladderObject;
+    [SerializeField] GameObject grassThingObject;
 
     [SerializeField] Sprite[] waterFrames;
 
@@ -245,7 +246,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         if (TileObject[e].GetComponent<Timer>() == null)
                         {
                             Timer timer = TileObject[e].AddComponent<Timer>();
-                            timer.InvokeTimer(Random.Range(10, 20), new string[] { "Change", e + "", "0" }, this);
+                            timer.InvokeTimer(Random.Range(7, 15), new string[] { "FireTick", e + "" }, this);
                         }
                     }
                     else
@@ -590,6 +591,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
             GameObject boxBlock = Instantiate(boxObject, tile.transform);
             boxBlock.transform.localPosition = Vector2.zero;
             boxBlock.name = "102";
+        }
+
+        if (TileGrid[e] == 106 && tile.transform.childCount < 1)
+        {
+            GameObject grassBlock = Instantiate(grassThingObject, tile.transform);
+            grassBlock.transform.localPosition = Vector2.zero;
+            grassBlock.name = "106";
         }
 
         if (TileGrid[e] == 109 && tile.transform.childCount < 1)
@@ -988,6 +996,32 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             TileGrid[System.Convert.ToInt32(msg[1])] = 0;
             TileGrid[System.Convert.ToInt32(msg[1]) - 1] = 14;
+            LightController.lightController.AddRenderQueue(player.transform.position);
+        }
+
+        if (msg[0] == "FireTick")
+        {
+            int idx = System.Convert.ToInt32(msg[1]);
+            TileGrid[idx] = 0;
+
+            if (TileGrid[idx - 1] == 54)
+            {
+                TileGrid[idx - 1] = 84;
+            }
+
+            ChunkController auxChunk = this;
+
+            if (manager.GetTileAt(tilesToChunk + idx + manager.WorldHeight) == 54)
+            {
+                auxChunk = manager.SetTileAt(tilesToChunk + idx + manager.WorldHeight, 84, false);
+            }
+            if (auxChunk != this) auxChunk.UpdateChunk();
+            if (manager.GetTileAt(tilesToChunk + idx - manager.WorldHeight) == 54)
+            {
+                auxChunk = manager.SetTileAt(tilesToChunk + idx - manager.WorldHeight, 84,false);
+            }
+            if (auxChunk != this) auxChunk.UpdateChunk();
+
             LightController.lightController.AddRenderQueue(player.transform.position);
         }
 

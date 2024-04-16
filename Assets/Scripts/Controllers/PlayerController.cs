@@ -279,7 +279,7 @@ public class PlayerController : MonoBehaviour, IDamager
             if (entityScript.entityStates.Contains(EntityState.Swimming))
             {
                 rb2D.velocity = new Vector2(rb2D.velocity.x, 4f);
-                entityScript.swimming = 4f;
+                entityScript.swimming = 6f;
             }
         }
         else if (Input.GetKey(KeyCode.S))
@@ -451,27 +451,29 @@ public class PlayerController : MonoBehaviour, IDamager
                 {
                     healthBar.SetHealth(0);
 
-                    if (GetComponent<SpriteRenderer>().flipX)
-                    {
-                        rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
-                    }
-                    else
-                    {
-                        rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
-                    }
+                    if (knockback != 0f)
+                        if (GetComponent<SpriteRenderer>().flipX)
+                        {
+                            rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
+                        }
+                        else
+                        {
+                            rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
+                        }
 
                     StartCoroutine(Kill(procedence));
                 }
                 else if (hpLost > 0)
                 {
-                    if (GetComponent<SpriteRenderer>().flipX)
-                    {
-                        rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
-                    }
-                    else
-                    {
-                        rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
-                    }
+                    if (knockback != 0f)
+                        if (GetComponent<SpriteRenderer>().flipX)
+                        {
+                            rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
+                        }
+                        else
+                        {
+                            rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
+                        }
                     damagedCooldown = 0.6f;
                     regenTime = 3.5f;
                 }
@@ -492,6 +494,7 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         alive = false;
         killing = true;
+        entityScript.ladderVelocity = 0f;
         deathScreenController.StartDeath(procedence);
         animations.SetBool("killed", true);
         Time.timeScale = 0.5f;

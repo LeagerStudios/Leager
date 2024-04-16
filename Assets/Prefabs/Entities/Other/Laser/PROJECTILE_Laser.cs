@@ -45,30 +45,36 @@ public class PROJECTILE_Laser : ProjectileBase {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 8 && collision.gameObject.GetComponent<PlatformEffector2D>() == null)
+        if (collision.gameObject.layer == 8)
         {
-            if(collision.gameObject.transform.parent != null)
+            if (collision.gameObject.GetComponent<PlatformEffector2D>() == null)
             {
-                if (collision.gameObject.transform.parent.GetComponent<ChunkController>() != null)
+                if (collision.gameObject.transform.parent != null)
                 {
-                    ChunkController chunkCollision = collision.gameObject.transform.parent.GetComponent<ChunkController>();
-                    int collisionIdx = System.Array.IndexOf(chunkCollision.TileObject, collision.gameObject);
-                    if (collisionIdx + 1 < chunkCollision.TileGrid.Length)
-                        if(chunkCollision.TileGrid[collisionIdx + 1] == 0)
-                        {
-                            chunkCollision.TileGrid[collisionIdx + 1] = 84;
-                            chunkCollision.UpdateChunk();
-                        }
+                    if (collision.gameObject.transform.parent.GetComponent<ChunkController>() != null)
+                    {
+                        ChunkController chunkCollision = collision.gameObject.transform.parent.GetComponent<ChunkController>();
+                        int collisionIdx = System.Array.IndexOf(chunkCollision.TileObject, collision.gameObject);
+                        if (collisionIdx + 1 < chunkCollision.TileGrid.Length)
+                            if (chunkCollision.TileGrid[collisionIdx + 1] == 0)
+                            {
+                                chunkCollision.TileGrid[collisionIdx + 1] = 84;
+                                chunkCollision.UpdateChunk();
+                            }
+                    }
                 }
-            }
 
-            Despawn();
+                Despawn();
+            }
         }
 
         if (collision.gameObject.GetComponent<EntityCommonScript>() != null)
         {
-            collision.gameObject.GetComponent<EntityCommonScript>().AddState(EntityState.OnFire, 3f);
-            Despawn();
+            if (collision.gameObject.GetComponent<EntityCommonScript>().EntityFamily == "yellow")
+            {
+                collision.gameObject.GetComponent<EntityCommonScript>().AddState(EntityState.OnFire, 3f);
+                Despawn();
+            }
         }
     }
 

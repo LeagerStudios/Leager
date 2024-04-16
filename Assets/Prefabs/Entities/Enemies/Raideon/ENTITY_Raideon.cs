@@ -18,6 +18,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
     float HP = 10f;
     int currentTool = 0;
     float closeFactor;
+    float gunReload = 0f;
 
 
     public override int Hp
@@ -72,10 +73,13 @@ public class ENTITY_Raideon : EntityBase, IDamager
 
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
-        Hp = Hp - damageDeal;
-        if (CheckGrounded() && !animator.GetBool("damaged")) rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
-        animator.SetBool("damaged", true);
-        Invoke("UnDamage", 0.6f);
+        if (currentTool != 1)
+        {
+            Hp = Hp - damageDeal;
+            if (CheckGrounded() && !animator.GetBool("damaged")) rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
+            animator.SetBool("damaged", true);
+            Invoke("UnDamage", 0.6f);
+        }
     }
 
     public override void Despawn()
@@ -192,6 +196,21 @@ public class ENTITY_Raideon : EntityBase, IDamager
                                 rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
                                 currentTool = 2;
                                 animator.speed = 0;
+
+                                gunReload += Time.deltaTime;
+
+                                if(gunReload > 1f)
+                                {
+                                    float dir = 0;
+
+                                    if (spriteRenderer.flipX)
+                                        dir = transform.GetChild(1).GetChild(1).eulerAngles.z + 90f;
+                                    else
+                                        dir = transform.GetChild(1).GetChild(1).eulerAngles.z - 90f;
+
+                                    PROJECTILE_Laser.StaticSpawn(dir, transform.GetChild(1).position + new Vector3(1.08f * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), 0.205f), 0, entityScript);
+                                    gunReload = 0f;
+                                }
                             }
 
                         }

@@ -1064,9 +1064,9 @@ public class GameManager : MonoBehaviour
                         {
                             buildedMapGrid[idx] = 62;
 
-                            if(buildedMapGrid[idx - 1] == 1)
+                            if (buildedMapGrid[idx - 1] == 1)
                             {
-                                if(Random.Range(0, 4) == 0)
+                                if (Random.Range(0, 4) == 0)
                                 {
                                     buildedMapGrid[idx - 1] = 4;
                                 }
@@ -1079,6 +1079,12 @@ public class GameManager : MonoBehaviour
                         else if (e > worldTileHeight[i * 16 + i2] && buildedMapGrid[idx] != 53 && buildedMapGrid[idx] != 55)
                         {
                             buildedMapGrid[idx] = 0;
+
+                            if (buildedMapGrid[idx - 1] == 1)
+                                if (Random.Range(0, 6) == 5)
+                                {
+                                    buildedMapGrid[idx] = 106;
+                                }
                         }
                         if (Random.Range(0, 3) == 0 && i2 < 14 && i2 > 3 && e > worldTileHeight[i * 16 + i2])
                         {
