@@ -57,19 +57,19 @@ public class PlanetMenuController : MonoBehaviour {
         else
         {
             planets = DataSaver.DeSerializeAt<List<PlanetData>>(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
+        }
 
-            foreach(PlanetData planet in planets)
+        foreach (PlanetData planet in planets)
+        {
+            if (planet.planetName != "Korenz")
             {
-                if (planet.planetName != "Korenz")
-                {
-                    RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
-                    newPlanet.anchoredPosition = new Vector2(0f, 197.5f - (newPlanet.GetSiblingIndex() * 50f));
-                    int idx = newPlanet.GetSiblingIndex();
-                    newPlanet.GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
+                RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
+                newPlanet.anchoredPosition = new Vector2(0f, 197.5f - (newPlanet.GetSiblingIndex() * 50f));
+                int idx = newPlanet.GetSiblingIndex();
+                newPlanet.GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
 
-                    PlanetData planetData = new PlanetData(planet.planetName, planet.planetColor.Color, planet.chunkSize);
-                    planetData.ApplyToButton(newPlanet);
-                }
+                PlanetData planetData = new PlanetData(planet.planetName, planet.planetColor.Color, planet.chunkSize);
+                planetData.ApplyToButton(newPlanet);
             }
         }
     }

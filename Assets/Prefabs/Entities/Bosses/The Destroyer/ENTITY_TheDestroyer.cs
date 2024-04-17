@@ -188,7 +188,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         transform.position = spawnPos;
         transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(1).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < 50; i++)
         {
             GameObject clonedSegment = Instantiate(segment, spawnPos, Quaternion.identity, transform.parent);
             clonedSegment.transform.GetChild(1).GetComponent<DamagersCollision>().target = this;

@@ -1797,6 +1797,9 @@ public class GameManager : MonoBehaviour
             case 104:
                 returnItem = 0;
                 break;
+            case 106:
+                returnItem = 0;
+                break;
         }
 
 

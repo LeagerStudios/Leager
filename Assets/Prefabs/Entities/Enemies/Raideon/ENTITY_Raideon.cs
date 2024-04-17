@@ -208,7 +208,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
                                     else
                                         dir = transform.GetChild(1).GetChild(1).eulerAngles.z - 90f;
 
-                                    PROJECTILE_Laser.StaticSpawn(dir, transform.GetChild(1).position + new Vector3(1.08f * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), 0.205f), 0, entityScript);
+                                    PROJECTILE_Laser.StaticSpawn(dir, transform.GetChild(1).GetChild(1).GetChild(0).position, 0, entityScript);
                                     gunReload = 0f;
                                 }
                             }
