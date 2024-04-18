@@ -43,4 +43,16 @@ public class CameraController : MonoBehaviour {
             MenuController.menuController.UIActive = true;
         }
     }
+
+    public void Turn()
+    {
+        if(Random.Range(0,2) == 0)
+        {
+            transform.eulerAngles = Vector3.forward * -15;
+        }
+        else
+        {
+            transform.eulerAngles = Vector3.forward * 15;
+        }
+    }
 }

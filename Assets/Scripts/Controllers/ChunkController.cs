@@ -244,7 +244,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         if (TileObject[e].GetComponent<Timer>() == null)
                         {
                             Timer timer = TileObject[e].AddComponent<Timer>();
-                            timer.InvokeTimer(Random.Range(7, 15), new string[] { "FireTick", e + "" }, this);
+                            timer.InvokeTimer(Random.Range(1, 7), new string[] { "FireTick", e + "" }, this);
                         }
                     }
                     else

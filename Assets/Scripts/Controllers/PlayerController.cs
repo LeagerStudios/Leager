@@ -18,11 +18,13 @@ public class PlayerController : MonoBehaviour, IDamager
     Animator animations;
     Rigidbody2D rb2D;
     public EntityCommonScript entityScript;
+    public CameraController mainCamera;
     MainSoundController soundController;
     bool spawned = false;
     public float damagedCooldown = 0.5f;
     public float handOffset = 0.062f;
     public float regenTime = 0f;
+    public float drownTime = 5f;
     public bool killing = false;
     public bool alive = true;
     public bool onControl = true;
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviour, IDamager
         animations = GetComponent<Animator>();
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
         gameManager = GameManager.gameManagerReference;
+        mainCamera = Camera.main.GetComponent<CameraController>();
     }
 
     void Update()
@@ -52,13 +55,13 @@ public class PlayerController : MonoBehaviour, IDamager
                     if (onControl)
                         PlayerControl();
                     LecterAI();
-                    Camera.main.transform.eulerAngles = Vector3.zero;
+                    mainCamera.transform.eulerAngles = Mathf.LerpAngle(mainCamera.transform.eulerAngles.z, 0, 10f * Time.deltaTime) * Vector3.forward;
                 }
 
                 if (!alive && !killing && gameManager.InGame)
                 {
-                    Camera.main.transform.eulerAngles += Vector3.forward * Time.deltaTime;
-                    Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
+                    mainCamera.transform.eulerAngles += Vector3.forward * Time.deltaTime;
+                    mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
                 }
             }
             else
@@ -381,7 +384,27 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else
         {
-            regenTime -= Time.deltaTime;
+            if (!entityScript.entityStates.Contains(EntityState.Drowning))
+                regenTime -= Time.deltaTime;
+        }
+
+        drownTime = Mathf.Clamp(drownTime, 0, 6);
+        if (entityScript.entityStates.Contains(EntityState.Drowning))
+        {
+            drownTime -= Time.deltaTime;
+
+            if(drownTime <= 0)
+            {
+                LoseHp(1, entityScript, true, 0, true);
+                drownTime = 1f;
+            }
+        }
+        else
+        {
+
+
+            if (HP == 20)
+                drownTime += Time.deltaTime;
         }
 
         for (int i = 0; i < 3; i++)
@@ -465,6 +488,8 @@ public class PlayerController : MonoBehaviour, IDamager
                 }
                 else if (hpLost > 0)
                 {
+                    mainCamera.Turn();
+
                     if (knockback != 0f)
                         if (GetComponent<SpriteRenderer>().flipX)
                         {
