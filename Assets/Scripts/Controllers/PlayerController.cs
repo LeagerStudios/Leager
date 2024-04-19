@@ -277,7 +277,7 @@ public class PlayerController : MonoBehaviour, IDamager
             rb2D.velocity = new Vector2(rb2D.velocity.x, JumpForce);
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (GInput.GetKey(KeyCode.W))
         {
             if (entityScript.entityStates.Contains(EntityState.Swimming))
             {
@@ -285,7 +285,7 @@ public class PlayerController : MonoBehaviour, IDamager
                 entityScript.swimming = 6f;
             }
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (GInput.GetKey(KeyCode.S))
         {
             if (entityScript.entityStates.Contains(EntityState.Swimming))
             {
