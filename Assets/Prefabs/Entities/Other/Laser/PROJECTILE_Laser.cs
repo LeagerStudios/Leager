@@ -7,6 +7,7 @@ public class PROJECTILE_Laser : ProjectileBase {
     private int damage = 5;
     private int frame = 0;
     public Rigidbody2D rb2D;
+    public EntityCommonScript from;
     public override int Damage { get { return damage; } }
 
 
@@ -31,6 +32,7 @@ public class PROJECTILE_Laser : ProjectileBase {
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         damage += extraDamage;
         rb2D.AddForce(new Vector2(Mathf.Sin(dir * Mathf.Deg2Rad) * -400, Mathf.Cos(dir * Mathf.Deg2Rad) * 400));
+        from = procedence;
     }
 
     public static void StaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
@@ -72,11 +74,15 @@ public class PROJECTILE_Laser : ProjectileBase {
         {
             if (collision.gameObject.GetComponent<EntityCommonScript>().EntityFamily == "yellow")
             {
-                collision.gameObject.GetComponent<EntityCommonScript>().AddState(EntityState.OnFire, 3f);
+                if (Random.Range(0, 4) == 0)
+                    collision.gameObject.GetComponent<EntityCommonScript>().AddState(EntityState.OnFire, 3f);
+                else
+                    if (collision.gameObject.GetComponent<EntityCommonScript>().entityDamager != null)
+                    collision.gameObject.GetComponent<EntityCommonScript>().entityDamager.Hit(damage, from);
                 Despawn();
             }
         }
-    }
+}
 
     public override void CallStaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {

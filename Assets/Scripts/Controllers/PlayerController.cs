@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else
         {
-            if (!entityScript.entityStates.Contains(EntityState.Drowning))
+            if (!entityScript.entityStates.Contains(EntityState.Drowning) && drownTime >= 6f && HP != MaxHP)
                 regenTime -= Time.deltaTime;
         }
 
@@ -401,9 +401,6 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else
         {
-
-
-            if (HP == 20)
                 drownTime += Time.deltaTime;
         }
 
