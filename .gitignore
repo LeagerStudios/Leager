@@ -29,6 +29,7 @@
 ExportedObj/
 .consulo/
 *.csproj
+*.DS_STORE
 *.unityproj
 *.sln
 *.suo
