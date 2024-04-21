@@ -1,0 +1,35 @@
+﻿// Shader code
+#pragma kernel CSMain
+
+Texture2D<float4> InputTexture; // Texture containing the positions of light sources
+RWTexture2D<float4> ResultTexture; // Render texture to store the lighting intensity
+
+float CalculateLightIntensity(float2 pixelPos, float2 lightPos, float lightRadius) {
+    float dist = distance(pixelPos, lightPos);
+    return 1.0f - saturate(dist / lightRadius); // Inverse falloff based on distance
+}
+
+[numthreads(8, 8, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID) {
+    uint2 texSize = ResultTexture.GetDimensions();
+
+    // Calculate pixel position in UV space
+    float2 uv = id.xy / float2(texSize.x, texSize.y);
+
+    float4 result = float4(0.0f, 0.0f, 0.0f, 1.0f); // Initialize result color
+
+    // Loop through all light sources (assuming they are stored in InputTexture)
+    for (int i = 0; i < InputTexture.GetDimensions().x; ++i) {
+        float2 lightPos = InputTexture.Load(int3(i, 0, 0)).xy;
+        float lightRadius = InputTexture.Load(int3(i, 0, 1)).x;
+
+        // Calculate light intensity at this pixel
+        float intensity = CalculateLightIntensity(uv, lightPos, lightRadius);
+
+        // Accumulate lighting contribution
+        result.rgb += intensity;
+    }
+
+    // Write final lighting result to the render texture
+    ResultTexture[id.xy] = result;
+}
