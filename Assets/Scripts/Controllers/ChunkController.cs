@@ -287,72 +287,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 {
                     TileObject[e].GetComponent<SpriteRenderer>().sortingOrder = 1;
                 }
-                    
-
-                string cT = manager.TileCollisionType[TileGrid[e]];
-
-                TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
-                TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == "~" || cT == "/" || cT == @"\";
-
-                if(cT == "/" || cT == @"\")
-                {
-                    TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1.05f;
-                }
-                else
-                {
-                    TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1f;
-                }
-
-                switch (cT)
-                {
-                    case "#":
-                        TileObject[e].layer = 8;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "":
-                        TileObject[e].layer = 9;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "~":
-                        TileObject[e].layer = 10;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "=":
-                        TileObject[e].layer = 8;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
-                        {
-                            ModifyTile(true, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case "/":
-                        TileObject[e].layer = 17;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-
-                    case @"\":
-                        TileObject[e].layer = 18;
-                        if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                        {
-                            ModifyTile(false, "platform", TileObject[e]);
-                        }
-                        break;
-                }
+                   
+                UpdateLayerForTile(e);
             }
 
             for (int x = 0; x < 16; x++)
@@ -362,49 +298,79 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 {
                     int idx = (x * manager.WorldHeight) + y;
                     if (manager.TileCollisionType[TileGrid[(x * manager.WorldHeight) + y]] == "#") isStillSunny = false;
-                    if (isStillSunny)
-                    {
-                        LightMap[idx] = 2;
-                    }
-                    else
-                    {
-                        if (LightMap[idx] < 3)
-                            LightMap[idx] = 0;
-                        else
-                            LightMap[idx] = LightMap[idx] - 2f;
-                    }
-                    if (TileGrid[idx] == 70)
-                    {
-                        LightMap[idx] = 1;
-                    }
-                    else if (TileGrid[idx] == 84)
-                    {
-                        LightMap[idx] = 0.5f;
-                    }
-                    else if (TileGrid[idx] == 88)
-                    {
-                        LightMap[idx] = 1;
-                        LightMap[idx - 1] = 3;
-                    }
-                    else if (TileGrid[idx] == 62)
-                    {
-                        if (idx == LightMap.Length - 1)
-                        {
-                            LightMap[idx] = 2 * 0.6f;
-                        }
-                        else
-                        {
-                            LightMap[idx] = LightMap[idx + 1] * 0.6f;
-                        }
-                    }
-                    else if (TileGrid[idx] == 21)
-                    {
-                        LightMap[idx] = 1f;
-                    }
+                    LightMap[idx] = GetLightForTile(idx, isStillSunny);
                 }
             }
 
             UpdateWalls();
+        }
+    }
+
+    public void UpdateLayerForTile(int e)
+    {
+        string cT = manager.TileCollisionType[TileGrid[e]];
+
+        TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
+        TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == "~" || cT == "/" || cT == @"\";
+
+        if (cT == "/" || cT == @"\")
+        {
+            TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1.05f;
+        }
+        else
+        {
+            TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1f;
+        }
+
+        switch (cT)
+        {
+            case "#":
+                TileObject[e].layer = 8;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+
+            case "":
+                TileObject[e].layer = 9;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+
+            case "~":
+                TileObject[e].layer = 10;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+
+            case "=":
+                TileObject[e].layer = 8;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
+                {
+                    ModifyTile(true, "platform", TileObject[e]);
+                }
+                break;
+
+            case "/":
+                TileObject[e].layer = 17;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+
+            case @"\":
+                TileObject[e].layer = 18;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
         }
     }
 
@@ -633,6 +599,52 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     }
 
+    public float GetLightForTile(int idx, bool isStillSunny)
+    {
+        float returnVal = 0f;
+
+        if (isStillSunny)
+        {
+            returnVal = 2;
+        }
+        else
+        {
+            if (LightMap[idx] < 3)
+                returnVal = 0;
+            else
+                returnVal = LightMap[idx] - 2f;
+        }
+        if (TileGrid[idx] == 70)
+        {
+            returnVal = 1;
+        }
+        else if (TileGrid[idx] == 84)
+        {
+            returnVal = 0.5f;
+        }
+        else if (TileGrid[idx] == 88)
+        {
+            returnVal = 1;
+            LightMap[idx - 1] = 3;
+        }
+        else if (TileGrid[idx] == 62)
+        {
+            if (idx == LightMap.Length - 1)
+            {
+                returnVal = 2 * 0.6f;
+            }
+            else
+            {
+                returnVal = LightMap[idx + 1] * 0.6f;
+            }
+        }
+        else if (TileGrid[idx] == 21)
+        {
+            returnVal = 0.8f;
+        }
+
+        return returnVal;
+    }
 
     public void ModifyTile(bool isAdd, string effect, GameObject tile)
     {
@@ -683,6 +695,14 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             if (!PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(dir, 0)))
                                 PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(-dir, 0));
                         }
+
+                        if (tile == 21)
+                        {
+                            if (!PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(0, 1)))
+                                if (!PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(0, -1)))
+                                    if (!PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(-1, 0)))
+                                        PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(1, 0));
+                        }
                     }
                 }
             }
@@ -725,12 +745,17 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 if (tileCondition.Contains(liquidTileGrid[idx - manager.WorldHeight]))
                 {
-                    TileGrid[idx - manager.WorldHeight] = tile;
-                    liquidTileGrid[idx - manager.WorldHeight] = 1;
-                    TileObject[idx - manager.WorldHeight].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    int old = idx - manager.WorldHeight;
+                    TileGrid[old] = tile;
+                    LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
+                    liquidTileGrid[old] = 1;
+                    TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    UpdateLayerForTile(old);
 
                     TileGrid[idx] = residualTile;
+                    LightMap[idx] = GetLightForTile(idx, LightMap[idx] == 2f);
                     TileObject[idx].GetComponent<SpriteRenderer>().sprite = manager.tiles[residualTile];
+                    UpdateLayerForTile(idx);
 
                     placed = true;
                 }
@@ -766,12 +791,17 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 if (tileCondition.Contains(liquidTileGrid[idx + manager.WorldHeight]))
                 {
-                    TileGrid[idx + manager.WorldHeight] = tile;
-                    liquidTileGrid[idx + manager.WorldHeight] = 1;
-                    TileObject[idx + manager.WorldHeight].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    int old = idx + manager.WorldHeight;
+                    TileGrid[old] = tile;
+                    LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
+                    liquidTileGrid[old] = 1;
+                    TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    UpdateLayerForTile(old);
 
                     TileGrid[idx] = residualTile;
+                    LightMap[idx] = GetLightForTile(idx, LightMap[idx] == 2f);
                     TileObject[idx].GetComponent<SpriteRenderer>().sprite = manager.tiles[residualTile];
+                    UpdateLayerForTile(idx);
 
                     placed = true;
                 }
@@ -783,12 +813,17 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 if (tileCondition.Contains(liquidTileGrid[idx + 1]))
                 {
-                    TileGrid[idx + 1] = tile;
-                    liquidTileGrid[idx + 1] = 1;
-                    TileObject[idx + 1].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    int old = idx + 1;
+                    TileGrid[old] = tile;
+                    LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
+                    liquidTileGrid[old] = 1;
+                    TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    UpdateLayerForTile(old);
 
                     TileGrid[idx] = residualTile;
+                    LightMap[idx] = GetLightForTile(idx, LightMap[idx] == 2f);
                     TileObject[idx].GetComponent<SpriteRenderer>().sprite = manager.tiles[residualTile];
+                    UpdateLayerForTile(idx);
 
                     placed = true;
                 }
@@ -800,12 +835,17 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 if (tileCondition.Contains(liquidTileGrid[idx - 1]))
                 {
-                    TileGrid[idx - 1] = tile;
-                    liquidTileGrid[idx - 1] = 1;
-                    TileObject[idx - 1].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    int old = idx - 1;
+                    TileGrid[old] = tile;
+                    LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
+                    liquidTileGrid[old] = 1;
+                    TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
+                    UpdateLayerForTile(old);
 
                     TileGrid[idx] = residualTile;
+                    LightMap[idx] = GetLightForTile(idx, LightMap[idx] == 2f);
                     TileObject[idx].GetComponent<SpriteRenderer>().sprite = manager.tiles[residualTile];
+                    UpdateLayerForTile(idx);
 
                     placed = true;
                 }
