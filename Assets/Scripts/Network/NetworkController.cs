@@ -4,7 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
-using NATUPNPLib;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 
@@ -500,6 +501,7 @@ public class Server
 
     public static TcpListener listener;
     public static List<TcpUser> clients = new List<TcpUser>();
+    public static Thread hostBroadcastsThread;
 
     public static void Main(string ip, int portParam, string username)
     {
@@ -513,6 +515,12 @@ public class Server
 
         targetIp = ip;
         targetPort = portParam;
+
+        ThreadStart task = new ThreadStart(HostBroadcasts);
+        Thread hostBroadcaster = new Thread(task);
+        hostBroadcaster.Start();
+        hostBroadcastsThread = hostBroadcaster;
+
         Debug.Log("Server started.");
         isOpen = true;
     }
@@ -541,11 +549,6 @@ public class Server
                 client.GetStream().Close();
                 return "null";
             }
-            if (message == "ServerDiscoveryRequestCode7777")
-            {
-                Write(client, NetworkController.GetLocalIP());
-                return "null";
-            }
             Write(client, Application.version);
 
             Debug.Log("get ready");
@@ -559,17 +562,23 @@ public class Server
                 Read(client, 1024);
 
                 Debug.Log(2);
-                SendChunks(client);
 
-                Debug.Log(3);
-                Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
-                Read(client, 1024);
+                int[][] tilemaps = new int[GameManager.gameManagerReference.WorldWidth][];
+                string[][] tileprops = new string[GameManager.gameManagerReference.WorldWidth][];
 
-                Debug.Log(4);
-                Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
-                Read(client, 1024);
+                for (int i = 0; i < tilemaps.Length; i++)
+                {
+                    tilemaps[i] = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TileGrid.Clone();
+                }
+                for (int i = 0; i < tileprops.Length; i++)
+                {
+                    tileprops[i] = (string[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TilePropertiesArr.Clone();
+                }
 
-                clients.Add(new TcpUser(client, message));
+                ThreadStart lastStuff = new ThreadStart(() => TheStuff(client, tilemaps, tileprops, message));
+                Thread stuff = new Thread(lastStuff);
+                stuff.Start();
+
                 return message;
             }
             else
@@ -593,12 +602,26 @@ public class Server
         stream.Write(data, 0, data.Length);
     }
 
-    public static void SendChunks(TcpClient client)
+    public static void TheStuff(TcpClient client, int[][] tilemaps, string[][] tilepropmaps, string message)
+    {
+        SendChunks(client, tilemaps, tilepropmaps);
+         
+        Debug.Log(3);
+        Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
+        Read(client, 1024);
+
+        Debug.Log(4);
+        Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
+        Read(client, 1024);
+
+        clients.Add(new TcpUser(client, message));
+    }
+
+    public static void SendChunks(TcpClient client,int[][] tilemaps, string[][] tilepropmaps)
     {
         for (int i = 0; i < GameManager.gameManagerReference.WorldWidth; i++)
         {
-            Debug.Log("chunk" + i);
-            int[] tilemap = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TileGrid.Clone();
+            int[] tilemap = tilemaps[i];
             string[] result = ManagingFunctions.ConvertIntToStringArray(tilemap);
             string export = string.Join(";", result) + "d";
 
@@ -607,10 +630,8 @@ public class Server
             Write(client, export);
             Read(client, 1024);
 
-            //props
 
-            Debug.Log("props" + i);
-            string[] tileprops = (string[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TilePropertiesArr.Clone();
+            string[] tileprops = tilepropmaps[i];
             string export2 = string.Join("$", tileprops);
 
             Write(client, export2.Length + "");
@@ -632,6 +653,50 @@ public class Server
         return message;
     }
 
+    public static void HostBroadcasts()
+    {
+        Socket udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        try
+        {
+            // Set the port number
+            int port = 7777;
+
+            // Create a UDP socket
+            udpSocket.EnableBroadcast = true;
+
+            // Create an endpoint for receiving broadcast messages
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
+            udpSocket.Bind(localEndPoint);
+
+            Debug.Log($"Listening for broadcast messages on port {port}...");
+
+            // Receive broadcast messages
+            byte[] receiveBuffer = new byte[1024];
+            EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+            while (true)
+            {
+                int bytesRead = udpSocket.ReceiveFrom(receiveBuffer, ref remoteEndPoint);
+                string receivedMessage = Encoding.ASCII.GetString(receiveBuffer, 0, bytesRead);
+                Debug.Log($"Received broadcast message: {receivedMessage}");
+
+                // Respond to the broadcast message
+                string responseMessage = NetworkController.GetLocalIP() + "#" + hostUsername;
+                byte[] responseBytes = Encoding.ASCII.GetBytes(responseMessage);
+                udpSocket.SendTo(responseBytes, remoteEndPoint);
+                Debug.Log($"Sent response to {remoteEndPoint}");
+            }
+        }
+        catch (ThreadAbortException)
+        {
+            udpSocket.Close();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+    }
+
     public static void CloseServer()
     {
         foreach (TcpUser user in clients)
@@ -644,6 +709,8 @@ public class Server
         targetIp = "";
         externalIp = "";
         targetPort = 0;
+        hostBroadcastsThread.Abort();
+        hostBroadcastsThread = null;
         isOpen = false;
     }
 }
@@ -681,6 +748,7 @@ public class Client
         if (version != Application.version)
         {
             Write("d");
+            MultiplayerPanelController.nameInUse = true;
             return false;
         }
         else

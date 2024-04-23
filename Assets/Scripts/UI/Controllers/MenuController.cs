@@ -36,7 +36,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] DeathScreenController deathScreenController;
     [SerializeField] InputField ipHost;
     [SerializeField] InputField portHost;
-    [SerializeField] InputField usernameHost;
+    [SerializeField] Button serverButton;
 
     GameManager gameManager;
     public Coroutine travelCoroutine;
@@ -111,6 +111,7 @@ public class MenuController : MonoBehaviour {
             }
         }
         menu.SetActive(deployed);
+        serverButton.interactable = !gameManager.isNetworkClient && !gameManager.isNetworkHost;
 
         if (UIActive) canvas.targetDisplay = 0;
         else canvas.targetDisplay = 7;

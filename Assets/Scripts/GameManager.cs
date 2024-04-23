@@ -810,7 +810,7 @@ public class GameManager : MonoBehaviour
 
     public string[] GetBiomes()
     {
-        return DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapBiomes.lgrsd");
+        return DataSaver.ReadTxt(persistentDataPath + @"/worlds/" + worldName + @"/mapBiomes.lgrsd");
     }
 
     public void SaveGameData(bool alternateThread)

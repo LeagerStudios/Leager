@@ -80,8 +80,8 @@ public class MainCameraController : MonoBehaviour {
 
         focusY = canvas.GetComponent<RectTransform>().localPosition.y;
         canvas.GetComponent<RectTransform>().localPosition = Vector2.Lerp(canvas.GetComponent<RectTransform>().localPosition, new Vector2(focusX, focusY), 0.2f);
-        backgroundTrees.transform.position = canvas.GetComponent<RectTransform>().localPosition / 500f;
-        backgroundMountains.transform.position = canvas.GetComponent<RectTransform>().localPosition / 350f;
+        backgroundTrees.transform.localPosition = canvas.GetComponent<RectTransform>().localPosition / 350f;
+        backgroundMountains.transform.localPosition = canvas.GetComponent<RectTransform>().localPosition / 500f;
     }
 
     public void ChangeFocus(string newFocus)
