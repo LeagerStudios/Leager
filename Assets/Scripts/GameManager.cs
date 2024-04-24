@@ -1242,7 +1242,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            if (currentPlanetName == "Korenz")//temple
+            if (currentPlanetName == "Korenz" || currentPlanetName == "Intersection")//enemy center
             {
                 int xPosition = Random.Range(0, WorldWidth * 15);
                 int yPosition = WorldHeight / 10 * 9;
@@ -1390,6 +1390,11 @@ public class GameManager : MonoBehaviour
                         }
                         if (dx == xPosition + 4)
                         {
+                            if (dy == yPosition + 1 || dy == yPosition + 2)
+                            {
+                                buildedMapGrid[idx] = 107;
+                            }
+
                             if (dy == yPosition + 13)
                             {
                                 buildedMapGrid[idx] = 108;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DroppedItemController : MonoBehaviour, IDamager
 {
+    public int item = 0;
     public int amount = 1;
     public float imunityGrab = 0;
     public bool gettingEnabled = true;
@@ -23,14 +24,13 @@ public class DroppedItemController : MonoBehaviour, IDamager
                 {
                     if (collision.gameObject.CompareTag("Player") && collision.gameObject.GetComponent<PlayerController>().alive)
                     {
-                        int itemAdd = System.Array.IndexOf(GameManager.gameManagerReference.tiles, GetComponent<SpriteRenderer>().sprite);
                         int itemReturn = 0;
 
                         if (collision.gameObject.GetComponent<PlayerController>() == GameManager.gameManagerReference.player)
                         {
                             for (int i = 0; i < amount; i++)
                             {
-                                if (!StackBar.AddItem(itemAdd)) itemReturn++;
+                                if (!StackBar.AddItem(item)) itemReturn++;
                             }
                             if (itemReturn == 0)
                             {
@@ -46,7 +46,8 @@ public class DroppedItemController : MonoBehaviour, IDamager
                         else
                         {
                             gettingEnabled = false;
-                            NetworkController.networkController.DropRequest(itemAdd, amount, gameObject.name, collision.gameObject.name);
+                            NetworkController.networkController.DropRequest(item, amount, gameObject.name, collision.gameObject.name);
+                            Debug.Log("A" + gameObject.name + " AM " + amount);
                         }
                     }
                 }
@@ -96,7 +97,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
                 Destroy(gameObject);
             }
 
-            if (Mathf.Abs(GameManager.gameManagerReference.player.transform.position.x - transform.position.x) < MenuController.menuController.chunkLoadDistance)
+            if (GameManager.gameManagerReference.GetTileObjectAt(16 * (int)transform.position.x + (int)transform.position.y) != null)
             {
                 GetComponent<Rigidbody2D>().simulated = true;
             }

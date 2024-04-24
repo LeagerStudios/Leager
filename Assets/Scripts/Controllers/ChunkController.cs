@@ -698,10 +698,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                         if (tile == 21)
                         {
-                            if (!PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(0, 1)))
-                                if (!PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(0, -1)))
-                                    if (!PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(-1, 0)))
-                                        PhysicsForFluidBlocks(x, y, 0, new List<int>(new int[] { 62 }), 6, new Vector2(1, 0));
+                            if (!PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(0, 1)))
+                                if (!PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(0, -1)))
+                                    if (!PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(-1, 0)))
+                                        PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(1, 0));
                         }
                     }
                 }
@@ -976,6 +976,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 counter = 0;
             }
             counter++;
+            TileObject[e] = null;
         }
 
         

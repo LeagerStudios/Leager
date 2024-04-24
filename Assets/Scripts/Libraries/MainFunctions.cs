@@ -26,8 +26,10 @@ public static class ManagingFunctions
                 newDrop.transform.SetParent(dropContainer.transform);
                 newDrop.GetComponent<SpriteRenderer>().sprite = gameManager.GetComponent<GameManager>().tiles[item];
                 newDrop.GetComponent<Rigidbody2D>().velocity = velocity;
-                newDrop.GetComponent<DroppedItemController>().amount = amount;
-                newDrop.GetComponent<DroppedItemController>().imunityGrab = imunityGrab;
+                DroppedItemController dropped = newDrop.GetComponent<DroppedItemController>();
+                dropped.item = item;
+                dropped.amount = amount;
+                dropped.imunityGrab = imunityGrab;
                 if (theName != "#null")
                 {
                     newDrop.name = theName;
