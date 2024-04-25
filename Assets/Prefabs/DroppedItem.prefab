@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e16736d77bdc945bc2fbfb120d9cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: 0
   amount: 1
   imunityGrab: 0
   gettingEnabled: 1
@@ -231,3 +232,7 @@ MonoBehaviour:
   affectedByLiquids: 1
   affectedBySolids: 1
   swimming: 0
+  ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 0

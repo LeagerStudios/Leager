@@ -1606,7 +1606,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject chunk in LoadedChunks)
         {
-            chunk.GetComponent<ChunkController>().UpdateChunkPos();
+            //chunk.GetComponent<ChunkController>().UpdateChunkPos();
             if (chunk.GetComponent<ChunkController>().loaded)
                 chunk.GetComponent<ChunkController>().UpdateWalls();
         }

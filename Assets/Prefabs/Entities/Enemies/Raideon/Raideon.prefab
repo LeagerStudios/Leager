@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &413781151
 Transform:
   m_ObjectHideFlags: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
   height: 0.69
   width: 0.225
   raycastHeight: 0
-  saveToFile: 1
+  saveToFile: 0
   canBeNetworked: 1
   rb2D: {fileID: 3333195048371584458}
   entityStates: 
@@ -443,6 +443,7 @@ MonoBehaviour:
     m_Bits: 256
   particle: {fileID: 1524452008572986, guid: 2d42c10f67fac1f45b441f4a988085c5, type: 3}
   entityScript: {fileID: 0}
+  associatedSpawner: {fileID: 0}
   point: {x: 0, y: 0}
   followingPlayer: {fileID: 0}
 --- !u!95 &7966038628357692450

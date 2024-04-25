@@ -34,6 +34,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject resourceGrabberObject;
     [SerializeField] GameObject unitCenterObject;
     [SerializeField] GameObject leavesObject;
+    [SerializeField] GameObject raideonSpawnerObject;
     [SerializeField] GameObject ladderObject;
     [SerializeField] GameObject grassThingObject;
 
@@ -575,6 +576,16 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     GameObject grassBlock = Instantiate(grassThingObject, gameTile.transform);
                     grassBlock.transform.localPosition = Vector2.zero;
                     grassBlock.name = "106";
+                }
+                break;
+
+
+            case 108:
+                if (gameTile.transform.childCount < 1)
+                {
+                    GameObject spawnerBlock = Instantiate(raideonSpawnerObject, gameTile.transform);
+                    spawnerBlock.transform.localPosition = Vector2.zero;
+                    spawnerBlock.name = "108";
                 }
                 break;
 

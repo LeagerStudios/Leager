@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4012388461021220
 Transform:
@@ -71,6 +71,8 @@ MonoBehaviour:
   unitCenterObject: {fileID: 6917301097493396352, guid: 7fc7983b7f69e84418a8f09a630bde86,
     type: 3}
   leavesObject: {fileID: 1349882380421944, guid: 31cdcc80c4970984cb040403a3523ac5,
+    type: 3}
+  raideonSpawnerObject: {fileID: 8285837977399864143, guid: 34fab0e9e655f1942b401b3866ca2c25,
     type: 3}
   ladderObject: {fileID: 7829329832030426735, guid: 6f3801fe3d09e314e834849b4b8feb38,
     type: 3}

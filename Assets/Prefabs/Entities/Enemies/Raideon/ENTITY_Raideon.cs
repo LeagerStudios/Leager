@@ -10,6 +10,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
     [SerializeField] LayerMask blockMask;
     [SerializeField] GameObject particle;
     public EntityCommonScript entityScript;
+    public RaideonSpawner associatedSpawner;
     GameManager manager;
     public Vector2 point;
 
@@ -66,6 +67,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
         Active = true;
         return this;
     }
+
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
         return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.Raideon], spawnPos, Quaternion.identity).GetComponent<ENTITY_Raideon>().Spawn(args, spawnPos);
@@ -95,6 +97,9 @@ public class ENTITY_Raideon : EntityBase, IDamager
             ManagingFunctions.DropItem(65, transform.position, amount: drops);
         }
         Destroy(gameObject);
+
+        if (associatedSpawner != null)
+            associatedSpawner.LoseOne(this);
     }
 
     public void UnDamage()
