@@ -114,22 +114,24 @@ public class DroppedItemController : MonoBehaviour, IDamager
                         DroppedItemController itemDrop = transform.parent.GetChild(i).GetComponent<DroppedItemController>();
                         if (itemDrop != this)
                         {
-                            if (itemDrop.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+                            if (itemDrop.item == item)
                             {
-                                if (itemDrop.imunityGrab < 0f)
-                                {
-                                    if (Vector2.Distance(itemDrop.transform.position, transform.position) < 1.3f)
-                                    {
-                                        amount += itemDrop.amount;
-                                        itemDrop.amount = 0;
-                                        itemDrop.gettingEnabled = false;
-                                        imunityGrab = (itemDrop.imunityGrab + imunityGrab) / 2f;
-                                        transform.position = Vector2.Lerp(transform.position, itemDrop.transform.position, 0.5f);
-                                        NetworkController.networkController.MoveItem(gameObject.name, transform.position);
-                                        NetworkController.networkController.UndropItem(itemDrop.gameObject.name);
-                                        Destroy(itemDrop.gameObject);
-                                    }
-                                }
+								if(itemDrop.gettingEnabled)
+								{	
+									if (itemDrop.imunityGrab < 0f)
+									{
+										if (Vector2.Distance(itemDrop.transform.position, transform.position) < 1.3f)
+										{
+											amount += itemDrop.amount;
+											itemDrop.amount = 0;
+											itemDrop.gettingEnabled = false;
+											imunityGrab = (itemDrop.imunityGrab + imunityGrab) / 2f;
+											transform.position = Vector2.Lerp(transform.position, itemDrop.transform.position, 0.5f);
+											NetworkController.networkController.MoveItem(gameObject.name, transform.position);											NetworkController.networkController.UndropItem(itemDrop.gameObject.name);
+											Destroy(itemDrop.gameObject);
+										}
+									}
+								}
                             }
                         }
                     }
