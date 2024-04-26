@@ -521,6 +521,11 @@ public class GameManager : MonoBehaviour
         savingText.SetActive(isSavingData);
         mouseLastPosition = mouseCurrentPosition;
         UpdateEntitiesRB2D(InGame);
+
+
+        int playerChunk = (int)Mathf.Floor(player.transform.position.x / 16f);
+        chunksLimits.GetChild(0).position = new Vector2((playerChunk - MenuController.menuController.chunksOnEachSide) * 16, WorldHeight / 2);
+        chunksLimits.GetChild(1).position = new Vector2((playerChunk + MenuController.menuController.chunksOnEachSide) * 16, WorldHeight / 2);
     }
 
     public int GetCapacityOfCore(int core)
@@ -932,6 +937,10 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < worldTileHeight.Length; i++)
         {
             worldTileHeight[i] = (int)((Mathf.PerlinNoise(i * 0.04f, aaa) * 0.4f + Mathf.PerlinNoise(i * 0.01f, aaa) * 0.6f) * (WorldHeight / 3)) + (WorldHeight / 2 /*0.5*/);
+            if(i > worldTileHeight.Length - 16)
+            {
+                worldTileHeight[i] = (int)Mathf.Lerp(worldTileHeight[i], worldTileHeight[0], (i - (worldTileHeight.Length - 16f)) / 16f);
+            }
         }
 
         for (int i = 0; i < WorldWidth; i++)
@@ -1251,7 +1260,7 @@ public class GameManager : MonoBehaviour
                 {
                     int idx = yPosition + (xPosition * WorldHeight);
 
-                    if (buildedMapGrid[idx] == 7)
+                    if (TileCollisionType[buildedMapGrid[idx]] != "")
                         break;
                     else
                         yPosition--;
@@ -1408,7 +1417,22 @@ public class GameManager : MonoBehaviour
                 for (int y = yPosition; y > 20; y--)
                 {
                     int idx = y + (xPosition * WorldHeight);
-                    buildedMapGrid[idx] = 110;
+                    if (y > 35)
+                        buildedMapGrid[idx] = 110;
+                    else if(y == 35)
+                        buildedMapGrid[idx] = 109;
+                    else
+                        buildedMapGrid[idx] = 0;
+
+                    if (y == 21)
+                    {
+                        buildedMapGrid[idx - WorldHeight] = 88;
+                        buildedMapGrid[idx + WorldHeight] = 88;
+                        buildedMapGrid[idx - 1] = 21;
+                        buildedMapGrid[idx - 1 - WorldHeight] = 6;
+                        buildedMapGrid[idx - 1 + WorldHeight] = 6;
+                        buildedMapGrid[idx - 2] = 6;
+                    }
                 }
             }
         }
@@ -1549,7 +1573,7 @@ public class GameManager : MonoBehaviour
         }
         LoadedChunks = previousChunks.ToArray();
 
-        MenuController menuController = GameObject.Find("MenuFunctions").GetComponent<MenuController>();
+        MenuController menuController = MenuController.menuController;
 
         int chunksActived = 0;
         int chunksDeactived = 0;
@@ -1590,7 +1614,7 @@ public class GameManager : MonoBehaviour
                 chunksActived++;
             }
 
-            chunk.GetComponent<ChunkController>().UpdateWalls();
+            //chunk.GetComponent<ChunkController>().UpdateWalls();
             gameChunksLoaded.Add(chunk);
 
         }
@@ -1606,9 +1630,9 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject chunk in LoadedChunks)
         {
-            //chunk.GetComponent<ChunkController>().UpdateChunkPos();
-            if (chunk.GetComponent<ChunkController>().loaded)
-                chunk.GetComponent<ChunkController>().UpdateWalls();
+            chunk.GetComponent<ChunkController>().UpdateChunkPos();
+            //if (chunk.GetComponent<ChunkController>().loaded)
+            //    chunk.GetComponent<ChunkController>().UpdateWalls();
         }
     }
 

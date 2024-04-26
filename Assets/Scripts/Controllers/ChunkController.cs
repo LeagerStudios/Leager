@@ -88,30 +88,30 @@ public class ChunkController : MonoBehaviour, ITimerCall
         transform.position = new Vector2(nearestPos, 0);
     }
 
-    public void UpdateWalls()
-    {
-        int sibling = transform.GetSiblingIndex();
-        int sPlus = sibling + 1;
-        int sMinus = sibling - 1;
+    //public void UpdateWalls()
+    //{
+    //    int sibling = transform.GetSiblingIndex();
+    //    int sPlus = sibling + 1;
+    //    int sMinus = sibling - 1;
 
-        if (sMinus < 0)
-        {
-            sMinus += manager.WorldWidth;
-        }
-        if (sPlus >= manager.WorldWidth)
-        {
-            sPlus -= manager.WorldWidth;
-        }
+    //    if (sMinus < 0)
+    //    {
+    //        sMinus += manager.WorldWidth;
+    //    }
+    //    if (sPlus >= manager.WorldWidth)
+    //    {
+    //        sPlus -= manager.WorldWidth;
+    //    }
 
-        if (!transform.parent.GetChild(sMinus).GetComponent<ChunkController>().loaded)
-        {
-            manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
-        }
-        if (!transform.parent.GetChild(sPlus).GetComponent<ChunkController>().loaded)
-        {
-            manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
-        }
-    }
+    //    if (!transform.parent.GetChild(sMinus).GetComponent<ChunkController>().loaded)
+    //    {
+    //        manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
+    //    }
+    //    if (!transform.parent.GetChild(sPlus).GetComponent<ChunkController>().loaded)
+    //    {
+    //        manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
+    //    }
+    //}
 
     public void UpdateChunk()
     {
@@ -124,23 +124,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 int tileY = (int)d.rest;
 
                 if (TileGrid[e] < 0) TileGrid[e] = 0;
-                if (manager.tileAnimation[TileGrid[e]] != null)
-                {
-                    if (TileObject[e].GetComponent<BlockAnimationController>() == null)
-                    {
-                        BlockAnimationController animationController = TileObject[e].AddComponent<BlockAnimationController>();
-                        animationController.animationData = manager.tileAnimation[TileGrid[e]];
-                        animationController.rootBIdx = e;
-                        animationController.rootChunk = this;
-                    }
-                }
-                else
-                {
-                    if (TileObject[e].GetComponent<BlockAnimationController>() != null)
-                    {
-                        Destroy(TileObject[e].GetComponent<BlockAnimationController>());
-                    }
-                }
+
 
                 /*BEHAVIOURS*/
                 int aux1 = -1;
@@ -191,93 +175,126 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         }
                     }
 
-                
-                if (TileGrid[e] == 2 && TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.75f)
+                switch (TileGrid[e])
                 {
-                    Timer timer = TileObject[e].AddComponent<Timer>();
-                    timer.InvokeTimer(Random.Range(20, 40), new string[] { "Change", e + "", "1", "1" }, this);
-                }
-
-                if (TileGrid[e] == 3 && TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.75f)
-                {
-                    Timer timer = TileObject[e].AddComponent<Timer>();
-                    if (Random.Range(0, 2) == 0)
-                        timer.InvokeTimer(Random.Range(10, 20), new string[] { "Change", e + "", "62" }, this);
-                    else
-                        timer.InvokeTimer(Random.Range(30, 55), new string[] { "Change", e + "", "0" }, this);
-                }
-
-                if (TileGrid[e] == 4 && TileObject[e].GetComponent<Timer>() == null && TileGrid[e - 1] == 5 && !hasSolidOnTop)
-                {
-                    Timer timer = TileObject[e].AddComponent<Timer>();
-                    timer.InvokeTimer(10, new string[] { "ChangeBrick", e + "",}, this);
-                    TileObject[e].GetComponent<BlockAnimationController>().PlayAnimation();
-                }
-                else if (TileGrid[e] == 4 && TileObject[e].GetComponent<Timer>() != null && TileGrid[e - 1] != 5)
-                {
-                    Destroy(TileObject[e].GetComponent<BlockAnimationController>());
-                    TileGrid[e] = 0;
-                    ManagingFunctions.DropItem(4, TileObject[e].transform.position);
-                    Destroy(TileObject[e].GetComponent<Timer>());
-                }
-
-                if (TileGrid[e] == 70)
-                {
-                    if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
-                    {
-
-                    }
-                    else
-                    {
-                        TileGrid[e] = 0;
-                        if (StackBar.stackBarController.currentItem == 70)
-                            StackBar.AddItem(70);
-                        else
-                            ManagingFunctions.DropItem(70, TileObject[e].transform.position);
-
-                    }
-                }
-
-                if (TileGrid[e] == 84)
-                {
-                    if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
-                    {
-                        if (TileObject[e].GetComponent<Timer>() == null)
+                    case 2:
+                        if (TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.75f)
                         {
                             Timer timer = TileObject[e].AddComponent<Timer>();
-                            timer.InvokeTimer(Random.Range(1, 7), new string[] { "FireTick", e + "" }, this);
+                            timer.InvokeTimer(Random.Range(20, 40), new string[] { "Change", e + "", "1", "1" }, this);
                         }
-                    }
-                    else
-                    {
-                        TileGrid[e] = 0;
-                    }
-                }
+                        break;
 
-                if (TileGrid[e] == 88)
-                {
-                    if (e + 1 != GameManager.gameManagerReference.NumberOfTilesInChunk)
-                        if (manager.TileCollisionType[TileGrid[e + 1]] == "#")
+                    case 3:
+                        if (TileObject[e].GetComponent<Timer>() == null && tileY < manager.WorldHeight * 0.75f)
+                        {
+                            Timer timer = TileObject[e].AddComponent<Timer>();
+                            if (Random.Range(0, 2) == 0)
+                                timer.InvokeTimer(Random.Range(10, 20), new string[] { "Change", e + "", "62" }, this);
+                            else
+                                timer.InvokeTimer(Random.Range(30, 55), new string[] { "Change", e + "", "0" }, this);
+                        }
+                        break;
+
+                    case 4:
+                        if (TileObject[e].GetComponent<Timer>() == null && TileGrid[e - 1] == 5 && !hasSolidOnTop)
+                        {
+                            Timer timer = TileObject[e].AddComponent<Timer>();
+                            timer.InvokeTimer(10, new string[] { "ChangeBrick", e + "", }, this);
+                            TileObject[e].GetComponent<BlockAnimationController>().PlayAnimation();
+                        }
+                        else if (TileObject[e].GetComponent<Timer>() != null && TileGrid[e - 1] != 5)
+                        {
+                            Destroy(TileObject[e].GetComponent<BlockAnimationController>());
+                            TileGrid[e] = 0;
+                            ManagingFunctions.DropItem(4, TileObject[e].transform.position);
+                            Destroy(TileObject[e].GetComponent<Timer>());
+                        }
+                        break;
+
+                    case 70:
+                        if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
                         {
 
                         }
                         else
                         {
                             TileGrid[e] = 0;
-                            if (StackBar.stackBarController.currentItem == 88)
-                                StackBar.AddItem(88);
+                            if (StackBar.stackBarController.currentItem == 70)
+                                StackBar.AddItem(70);
                             else
-                                ManagingFunctions.DropItem(88, TileObject[e].transform.position);
+                                ManagingFunctions.DropItem(70, TileObject[e].transform.position);
+
                         }
-                    else
-                    {
-                        TileGrid[e] = 0;
-                        StackBar.AddItem(88);
-                    }
+                        break;
+
+                    case 84:
+                        if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
+                        {
+                            if (TileObject[e].GetComponent<Timer>() == null)
+                            {
+                                Timer timer = TileObject[e].AddComponent<Timer>();
+                                timer.InvokeTimer(Random.Range(1, 7), new string[] { "FireTick", e + "" }, this);
+                            }
+                        }
+                        else
+                        {
+                            TileGrid[e] = 0;
+                        }
+                        break;
+
+                    case 88:
+                        if (e + 1 != GameManager.gameManagerReference.NumberOfTilesInChunk)
+                            if (manager.TileCollisionType[TileGrid[e + 1]] == "#")
+                            {
+
+                            }
+                            else
+                            {
+                                TileGrid[e] = 0;
+                                if (StackBar.stackBarController.currentItem == 88)
+                                    StackBar.AddItem(88);
+                                else
+                                    ManagingFunctions.DropItem(88, TileObject[e].transform.position);
+                            }
+                        else
+                        {
+                            TileGrid[e] = 0;
+                            StackBar.AddItem(88);
+                        }
+                        break;
+
+                    case 106:
+                        if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
+                        {
+
+                        }
+                        else
+                        {
+                            TileGrid[e] = 0;
+                        }
+                        break;
                 }
 
                 //end of behaviors
                 TileMod(e, TileGrid[e]);
+                if (manager.tileAnimation[TileGrid[e]] != null)
+                {
+                    if (TileObject[e].GetComponent<BlockAnimationController>() == null)
+                    {
+                        BlockAnimationController animationController = TileObject[e].AddComponent<BlockAnimationController>();
+                        animationController.animationData = manager.tileAnimation[TileGrid[e]];
+                        animationController.rootBIdx = e;
+                        animationController.rootChunk = this;
+                    }
+                }
+                else
+                {
+                    if (TileObject[e].GetComponent<BlockAnimationController>() != null)
+                    {
+                        Destroy(TileObject[e].GetComponent<BlockAnimationController>());
+                    }
+                }
 
                 if (manager.tileAnimation[TileGrid[e]] == null)
                 {
@@ -303,7 +320,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
             }
 
-            UpdateWalls();
+            //UpdateWalls();
         }
     }
 
@@ -993,7 +1010,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         
         loading = false;
         loaded = false;
-        UpdateWalls();
+        //UpdateWalls();
         gameObject.SetActive(false);
     }
 

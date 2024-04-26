@@ -5,20 +5,40 @@ using UnityEngine;
 public class DoorController : MonoBehaviour {
 
     public bool isOpen = false;
+    TileProperties tileProperties;
 
-	void Start ()
+
+    void Start ()
     {
-		if(transform.parent.GetComponent<BlockAnimationController>().frame == 0)
+        tileProperties = transform.parent.GetComponent<TileProperties>();
+
+        if (tileProperties == null)
         {
+            tileProperties = transform.parent.gameObject.AddComponent<TileProperties>();
+            tileProperties.parentTile = 86;
+            tileProperties.info.Add("true");
+            tileProperties.info.Add("true");
+
+
             GetComponent<BoxCollider2D>().enabled = false;
             isOpen = true;
         }
         else
         {
-            GetComponent<BoxCollider2D>().enabled = true;
-            isOpen = false;
+            if (tileProperties.info[0] == "true")
+            {
+                GetComponent<BoxCollider2D>().enabled = false;
+                isOpen = true;
+            }
+            else
+            {
+                GetComponent<BoxCollider2D>().enabled = true;
+                isOpen = false;
+            }
         }
-	}
+
+        Refresh(tileProperties.info[1] == "true");
+    }
 	
 	void Update ()
     {
@@ -38,28 +58,35 @@ public class DoorController : MonoBehaviour {
 
             if (canInteract)
             {
-                if (isOpen)
-                {
-                    GetComponent<BoxCollider2D>().enabled = true;
-                    if(GameManager.gameManagerReference.player.transform.position.x < transform.position.x)
-                    {
-                        transform.parent.GetComponent<BlockAnimationController>().GotoFrame(1);
-                        transform.parent.parent.GetChild(transform.parent.GetSiblingIndex() + 1).GetComponent<BlockAnimationController>().GotoFrame(1);
-                    }
-                    else
-                    {
-                        transform.parent.GetComponent<BlockAnimationController>().GotoFrame(2);
-                        transform.parent.parent.GetChild(transform.parent.GetSiblingIndex() + 1).GetComponent<BlockAnimationController>().GotoFrame(2);
-                    }
-                }
-                else
-                {
-                    GetComponent<BoxCollider2D>().enabled = false;
-                    transform.parent.GetComponent<BlockAnimationController>().GotoFrame(0);
-                    transform.parent.parent.GetChild(transform.parent.GetSiblingIndex() + 1).GetComponent<BlockAnimationController>().GotoFrame(0);
-                }
                 isOpen = !isOpen;
+                tileProperties.info[0] = isOpen.ToString().ToLower();
+                tileProperties.info[1] = (GameManager.gameManagerReference.player.transform.position.x < transform.position.x).ToString().ToLower();
+                Refresh(tileProperties.info[1] == "true");
             }
         }
 	}
+
+    public void Refresh(bool left)
+    {
+        if (!isOpen)
+        {
+            GetComponent<BoxCollider2D>().enabled = true;
+            if (left)
+            {
+                transform.parent.GetComponent<BlockAnimationController>().GotoFrame(1);
+                transform.parent.parent.GetChild(transform.parent.GetSiblingIndex() + 1).GetComponent<BlockAnimationController>().GotoFrame(1);
+            }
+            else
+            {
+                transform.parent.GetComponent<BlockAnimationController>().GotoFrame(2);
+                transform.parent.parent.GetChild(transform.parent.GetSiblingIndex() + 1).GetComponent<BlockAnimationController>().GotoFrame(2);
+            }
+        }
+        else
+        {
+            GetComponent<BoxCollider2D>().enabled = false;
+            transform.parent.GetComponent<BlockAnimationController>().GotoFrame(0);
+            transform.parent.parent.GetChild(transform.parent.GetSiblingIndex() + 1).GetComponent<BlockAnimationController>().GotoFrame(0);
+        }
+    }
 }
