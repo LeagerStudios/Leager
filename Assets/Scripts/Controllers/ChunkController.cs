@@ -472,23 +472,46 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 85:
-                    try
+                try
+                {
+                    if (TileGrid[e + 1] == 0 && TileGrid[e - 1] != 0)
                     {
-                        if (TileGrid[e + 1] == 0 && TileGrid[e - 1] != 0)
+                        TileGrid[e] = 86;
+                        TileGrid[e + 1] = 87;
+
+                        if (TileGrid[e + 1] != 87)
                         {
-                            TileGrid[e] = 86;
-                            TileGrid[e + 1] = 87;
+                            ManagingFunctions.DropItem(85, gameTile.transform.position);
+                            TileGrid[e] = 0;
                         }
                         else
                         {
-                            throw new System.Exception("UH NO");
+                            if (gameTile.GetComponent<BlockAnimationController>() == null)
+                            {
+                                BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
+                                animationController.animationData = manager.tileAnimation[TileGrid[e]];
+                                animationController.rootBIdx = e;
+                                animationController.rootChunk = this;
+                            }
+
+                            if (gameTile.transform.childCount < 1)
+                            {
+                                GameObject doorBlock = Instantiate(doorObject, gameTile.transform);
+                                doorBlock.name = "86";
+                                doorBlock.transform.localPosition = Vector2.zero;
+                            }
                         }
                     }
-                    catch
+                    else
                     {
-                        TileGrid[e] = 0;
-                        StackBar.AddItem(85);
+                        throw new System.Exception("UH NO");
                     }
+                }
+                catch
+                {
+                    TileGrid[e] = 0;
+                    StackBar.AddItem(85);
+                }
                 break;
 
             case 86:

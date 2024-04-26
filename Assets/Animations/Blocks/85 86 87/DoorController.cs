@@ -62,6 +62,7 @@ public class DoorController : MonoBehaviour {
                 tileProperties.info[0] = isOpen.ToString().ToLower();
                 tileProperties.info[1] = (GameManager.gameManagerReference.player.transform.position.x < transform.position.x).ToString().ToLower();
                 Refresh(tileProperties.info[1] == "true");
+                tileProperties.CommitToChunk();
             }
         }
 	}
@@ -71,6 +72,7 @@ public class DoorController : MonoBehaviour {
         if (!isOpen)
         {
             GetComponent<BoxCollider2D>().enabled = true;
+            GetComponent<BoxCollider2D>().offset = new Vector2(0.38f * ManagingFunctions.ParseBoolToInt(!left), 0.5f);
             if (left)
             {
                 transform.parent.GetComponent<BlockAnimationController>().GotoFrame(1);

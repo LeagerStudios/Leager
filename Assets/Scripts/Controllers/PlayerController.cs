@@ -580,7 +580,7 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             if (Vector2.Distance(transform.position, gameManager.mouseCurrentPosition) < 2.5f) PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
             transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
-            float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX, false);
+            float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX);
             for (int i = 0; i < 10; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
@@ -608,7 +608,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
             }
 
-            float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX, false);
+            float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX);
             for (int i = 0; i < 12; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);

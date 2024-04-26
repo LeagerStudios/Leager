@@ -29,6 +29,13 @@ public class RaideonSpawner : MonoBehaviour
                 activated = true;
             }
         }
+        else
+        {
+            if (Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position) > 30)
+            {
+                activated = false;
+            }
+        }
     }
 
     public void AddOne()

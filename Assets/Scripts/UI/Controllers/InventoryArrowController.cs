@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryArrowController : MonoBehaviour {
 
     GameManager gameManager;
+    RectTransform rectTransform;
 
     public int idxPos = 0;
     public int tilePorting = -1;
@@ -13,6 +14,7 @@ public class InventoryArrowController : MonoBehaviour {
 
 	void Start () {
         gameManager = GameManager.gameManagerReference;
+        rectTransform = GetComponent<RectTransform>();
 	}
 	
 	void Update () {
@@ -33,9 +35,9 @@ public class InventoryArrowController : MonoBehaviour {
                     gameManager.player.PlayerRelativeDrop(tilePorting, tilePortingAmount);
 
                     tilePorting = -1;
-                    GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = false;
-                    GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().color = Color.white;
-                    GetComponent<RectTransform>().GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
+                    rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
+                    rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;
+                    rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
                 }
             }
         }
@@ -106,27 +108,41 @@ public class InventoryArrowController : MonoBehaviour {
 
             DivisionResult nextPos = ManagingFunctions.EntireDivision(idxPos, 9);
 
-            GetComponent<RectTransform>().localPosition = new Vector2(-370, 170);
-            if(nextPos.cocient == 0)
-            {
-                GetComponent<RectTransform>().position = StackBar.stackBarController.GetComponent<RectTransform>().GetChild((int)nextPos.rest + 1).position;
-            }
-            else
-            {
-                GetComponent<RectTransform>().position = GetComponent<RectTransform>().parent.GetChild(1).GetChild(0).GetChild((int)nextPos.cocient - 1).GetChild((int)nextPos.rest).position;
-            }
+            //GetComponent<RectTransform>().localPosition = new Vector2(-370, 170);
+            //if(nextPos.cocient == 0)
+            //{
+            //    GetComponent<RectTransform>().position = StackBar.stackBarController.GetComponent<RectTransform>().GetChild((int)nextPos.rest + 1).position;
+            //}
+            //else
+            //{
+            //    GetComponent<RectTransform>().position = GetComponent<RectTransform>().parent.GetChild(1).GetChild(0).GetChild((int)nextPos.cocient - 1).GetChild((int)nextPos.rest).position;
+            //}
             GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = true;
+
+            // Get the position of the mouse cursor in screen space
+            Vector3 mousePosition = Input.mousePosition;
+
+            // Convert the screen space position to canvas space
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform.parent as RectTransform,
+                mousePosition,
+                null,
+                out Vector2 localPoint
+            );
+
+            // Set the position of the UI element to the converted canvas space position
+            rectTransform.localPosition = localPoint;
         }
         else if (tilePorting != -1)
         {
             gameManager.player.PlayerRelativeDrop(tilePorting, tilePortingAmount);
             
             tilePorting = -1;
-            GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = false;
-            GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().color = Color.white;
-            GetComponent<RectTransform>().GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
+            rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
+            rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;
+            rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
         }
-        else GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = false;
+        else rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
 
     }
 

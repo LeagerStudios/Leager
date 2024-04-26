@@ -46,23 +46,15 @@ public static class ManagingFunctions
 
     }
 
-    public static int ParseBoolToInt(bool value,bool inverted = false)
+    public static int ParseBoolToInt(bool value)
     {
-        if (value && !inverted)
+        if (value)
         {
             return 1;
-        }
-        else if(!value && !inverted)
-        {
-            return -1;
-        }
-        else if(value && inverted)
-        {
-            return -1;
         }
         else
         {
-            return 1;
+            return -1;
         }
     }
 
