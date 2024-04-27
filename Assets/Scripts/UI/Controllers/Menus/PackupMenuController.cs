@@ -24,6 +24,7 @@ public class PackupMenuController : MonoBehaviour
 
         StackBar.stackBarController.InventoryDeployed = true;
         StackBar.stackBarController.planetaryLoading = this;
+        StackBar.stackBarController.UpdateStacks();
 
         RefreshPackedItems();
     }

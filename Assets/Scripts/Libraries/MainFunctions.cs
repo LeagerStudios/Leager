@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public static class ManagingFunctions
 {
@@ -44,6 +44,15 @@ public static class ManagingFunctions
             }
         }
 
+    }
+
+    public static Vector2 ScreenToRectPos(Vector2 screenPos, Transform transform)
+    {
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, screenPos);
+
+        // convert the screen position to the local anchored position
+
+        return transform.InverseTransformPoint(screenPoint);
     }
 
     public static int ParseBoolToInt(bool value)

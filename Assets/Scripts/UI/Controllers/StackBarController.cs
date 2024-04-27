@@ -73,11 +73,11 @@ public class StackBarController : MonoBehaviour {
 
         if (gameManager.player.alive)
         {
-            parentRectTransform.anchoredPosition = new Vector2(400, -225);
+            parentRectTransform.anchoredPosition = new Vector2(190, -135);
         }
         else
         {
-            parentRectTransform.anchoredPosition = new Vector2(400, 225);
+            parentRectTransform.anchoredPosition = new Vector2(190, 999);
         }
 
         if (InventoryDeployed) InventoryBar.transform.GetChild(0).gameObject.SetActive(true);

@@ -127,15 +127,6 @@ public class MenuController : MonoBehaviour {
             ToggleFullScreen();
         }
 
-        if (devInterface)
-        {
-            
-        }
-        else
-        {
-
-        }
-
         if(GInput.GetKeyDown(KeyCode.F5))
         {
             UIActive = !UIActive;

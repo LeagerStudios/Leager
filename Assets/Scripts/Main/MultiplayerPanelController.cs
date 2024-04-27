@@ -106,8 +106,10 @@ public class MultiplayerPanelController : MonoBehaviour
             IPAddress broadcastAddress = IPAddress.Parse("255.255.255.255"); // Broadcasting to all devices in the LAN
 
             // Create a UDP socket
-            Socket udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            udpSocket.EnableBroadcast = true;
+            Socket udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+            {
+                EnableBroadcast = true
+            };
 
             // Message to send
             string messageToSend = "Quiero COMPRAR TU SERVIDOR DE LEAGER!!!";
