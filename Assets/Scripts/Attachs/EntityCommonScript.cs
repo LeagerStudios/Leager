@@ -103,7 +103,7 @@ public class EntityCommonScript : MonoBehaviour
                         continue;
                     }
                 }
-
+                
                 stateDuration[i] = stateDuration[i] - Time.deltaTime;
                 if (stateDuration[i] <= 0)
                 {
@@ -148,6 +148,16 @@ public class EntityCommonScript : MonoBehaviour
                 if (rb2D.transform.position.y + height < collider.transform.position.y + 0.5f)
                 {
                     AddState(EntityState.Drowning, 0.1f);
+                }
+
+                SpriteRenderer renderer = collider.gameObject.GetComponent<SpriteRenderer>();
+
+                if (renderer != null)
+                {
+                    if(renderer.sprite == GameManager.gameManagerReference.tiles[21])
+                    {
+                        AddState(EntityState.Burning, 5f);
+                    }
                 }
             }
 
@@ -200,5 +210,5 @@ public class EntityCommonScript : MonoBehaviour
 
 public enum EntityState : int
 {
-    OnFire, Paralisis, Drowning, Swimming
+    OnFire, Paralisis, Drowning, Swimming, Burning
 }

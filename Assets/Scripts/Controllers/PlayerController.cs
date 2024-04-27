@@ -72,6 +72,21 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             Hitbox();
         }
+
+        float y = transform.position.y;
+
+        if(y < gameManager.WorldHeight * 0.1f)
+        {
+            mainCamera.currentBackground = "Lava";
+        }
+        else if(y < gameManager.WorldHeight * 0.5f)
+        {
+            mainCamera.currentBackground = "Rock";
+        }
+        else
+        {
+            mainCamera.currentBackground = "Air";
+        }
     }
 
     private void LateUpdate()
@@ -416,10 +431,15 @@ public class PlayerController : MonoBehaviour, IDamager
 
     void LecterAI()
     {
-        if (entityScript.entityStates.Contains(EntityState.OnFire))
+        if (entityScript.entityStates.Contains(EntityState.Burning))
         {
             transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
-            LoseHp(1, entityScript, false, 0);
+            LoseHp(5, entityScript, false, 0, true);
+        }
+        else if (entityScript.entityStates.Contains(EntityState.OnFire))
+        {
+            transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
+            LoseHp(1, entityScript, false, 0, true);
         }
         else
         {
@@ -580,7 +600,7 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             if (Vector2.Distance(transform.position, gameManager.mouseCurrentPosition) < 2.5f) PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
             transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
-            float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX);
+            float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX);
             for (int i = 0; i < 10; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
@@ -608,7 +628,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
             }
 
-            float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX);
+            float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX);
             for (int i = 0; i < 12; i++)
             {
                 transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);

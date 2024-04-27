@@ -77,7 +77,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
     private void Update()
     {
         if (!GameManager.gameManagerReference.isNetworkClient)
-            if (amount == 0 || GetComponent<EntityCommonScript>().entityStates.Contains(EntityState.OnFire))
+            if (amount == 0 || GetComponent<EntityCommonScript>().entityStates.Contains(EntityState.OnFire) || GetComponent<EntityCommonScript>().entityStates.Contains(EntityState.Burning))
             {
                 NetworkController.networkController.UndropItem(gameObject.name);
                 Destroy(gameObject);

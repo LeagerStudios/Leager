@@ -104,7 +104,7 @@ public class MenuController : MonoBehaviour {
                 deployed = false;
                 GameManager.gameManagerReference.InGame = true;
             }
-            else if(gameManager.InGame)
+            else if(gameManager.InGame && gameManager.player.alive)
             {
                 deployed = true;
                 GameManager.gameManagerReference.InGame = false;

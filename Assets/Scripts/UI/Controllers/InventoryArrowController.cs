@@ -25,30 +25,6 @@ public class InventoryArrowController : MonoBehaviour
 
     void Update()
     {
-        idxPos = Mathf.Clamp(idxPos, 0, 44);
-
-        Vector2 dir = Vector2.zero;
-        if (gameManager.InGame && gameManager.player.alive)
-        {
-            if (GInput.GetKeyDown(KeyCode.RightArrow)) dir = Vector2.right;
-            else if (GInput.GetKeyDown(KeyCode.LeftArrow)) dir = Vector2.left;
-            else if (GInput.GetKeyDown(KeyCode.UpArrow)) dir = Vector2.up;
-            else if (GInput.GetKeyDown(KeyCode.DownArrow)) dir = Vector2.down;
-
-            if (StackBar.stackBarController.InventoryDeployed && GInput.GetKeyDown(KeyCode.Q))
-            {
-                if (tilePorting != -1)
-                {
-                    gameManager.player.PlayerRelativeDrop(tilePorting, tilePortingAmount);
-
-                    tilePorting = -1;
-                    rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
-                    rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;
-                    rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
-                }
-            }
-        }
-
         UpdatePosition();
 
         if (GInput.GetMouseButtonDown(0) && StackBar.stackBarController.InventoryDeployed && gameManager.InGame && gameManager.player.alive)
@@ -109,12 +85,12 @@ public class InventoryArrowController : MonoBehaviour
                 // Convert the screen space position to canvas space
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform.parent as RectTransform, mousePosition, null, out Vector2 localPoint);
 
+                Vector2 originalPosition = rectTransform.localPosition;
                 // Set the position of the UI element to the converted canvas space position
                 rectTransform.localPosition = localPoint;
                 Vector2 rawPosition = rectTransform.anchoredPosition - offsetConstant + centerConstant;
                 rawPosition = Vector2Int.FloorToInt(rawPosition / 40) * 40;
-
-                //8 & 4
+                rectTransform.localPosition = originalPosition;
 
                 Vector2Int indexPosition = Vector2Int.FloorToInt(rawPosition / 40);
                 bool insideLimits = indexPosition.x >= 0 && indexPosition.x < 9 && indexPosition.y <= 0 && indexPosition.y > -5;
@@ -125,7 +101,7 @@ public class InventoryArrowController : MonoBehaviour
                 idxPos = index;
 
                 if (insideLimits)
-                    rectTransform.anchoredPosition = rawPosition + offsetConstant;
+                    rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, rawPosition + offsetConstant, Time.deltaTime * 30);
                 else
                 {
                     rectTransform.anchoredPosition = localPoint;

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4613018781449416}
   - component: {fileID: 23142729517194434}
   - component: {fileID: 102042747918783098}
+  - component: {fileID: 783979380941417794}
   m_Layer: 11
   m_Name: GamerTag
   m_TagString: Untagged
@@ -91,6 +92,17 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!210 &783979380941417794
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596414362631486}
+  m_Enabled: 1
+  m_SortingLayerID: 1380487497
+  m_SortingLayer: 4
+  m_SortingOrder: 0
 --- !u!1 &1739090512988726
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,9 +217,11 @@ MonoBehaviour:
     m_Bits: 0
   deathScreenController: {fileID: 0}
   entityScript: {fileID: 0}
+  mainCamera: {fileID: 0}
   damagedCooldown: 0.5
   handOffset: 0.062
   regenTime: 0
+  drownTime: 5
   killing: 0
   alive: 1
   onControl: 1

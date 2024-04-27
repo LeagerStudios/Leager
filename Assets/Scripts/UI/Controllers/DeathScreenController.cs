@@ -97,7 +97,7 @@ public class DeathScreenController : MonoBehaviour {
         {
             Camera.main.GetComponent<CameraController>().focus = procedence.gameObject;
         }
-        finally
+        catch
         {
 
         }

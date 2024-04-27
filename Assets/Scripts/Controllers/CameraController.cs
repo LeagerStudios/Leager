@@ -7,6 +7,9 @@ public class CameraController : MonoBehaviour {
     [SerializeField] public GameObject focus;
     [SerializeField] float delay = 0f;
     public bool transparentSkybox = false;
+    public bool supportsBackgrounds = false;
+    public string currentBackground = "";
+
     Vector2 actualCameraPos = new Vector2();
     Vector2 nextCameraPos = new Vector2();
 
@@ -41,6 +44,27 @@ public class CameraController : MonoBehaviour {
 
             focus.GetComponent<PlayerController>().onControl = true;
             MenuController.menuController.UIActive = true;
+        }
+
+        if (supportsBackgrounds)
+        {
+            SpriteRenderer[] backgrounds = GetComponentsInChildren<SpriteRenderer>();
+
+            foreach(SpriteRenderer background in backgrounds)
+            {
+                Color color = background.color;
+
+                if(background.gameObject.name.Contains(currentBackground))
+                {
+                    color.a = Mathf.Clamp01(color.a + Time.deltaTime);
+                }
+                else
+                {
+                    color.a = Mathf.Clamp01(color.a - Time.deltaTime);
+                }
+
+                background.color = color;
+            }
         }
     }
 
