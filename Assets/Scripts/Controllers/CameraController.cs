@@ -63,6 +63,7 @@ public class CameraController : MonoBehaviour {
                     color.a = Mathf.Clamp01(color.a - Time.deltaTime);
                 }
 
+                background.enabled = color.a != 0f;
                 background.color = color;
             }
         }

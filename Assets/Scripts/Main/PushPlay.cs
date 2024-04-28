@@ -40,6 +40,7 @@ public class PushPlay : MonoBehaviour
 
         Debug.Log("Leager version: " + Application.version);
 
+        CreateMainSaves();
         if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/bgmvol.lgrsd"))
         {
             bgmSlider.value = System.Convert.ToSingle(DataSaver.ReadTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd")[0]);
@@ -50,7 +51,6 @@ public class PushPlay : MonoBehaviour
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");
-        CreateMainSaves();
     }
 
     private void Update()
@@ -140,9 +140,9 @@ public class PushPlay : MonoBehaviour
             {
                 DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/settings/lightstyle.lgrsd");
             }
-            if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/lightstyle.lgrsd"))
+            if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/vsync.lgrsd"))
             {
-                DataSaver.SaveStats(new string[] { (Application.platform != RuntimePlatform.Android).ToString().ToLower() }, Application.persistentDataPath + @"/settings/lightstyle.lgrsd");
+                DataSaver.SaveStats(new string[] { "true" }, Application.persistentDataPath + @"/settings/vsync.lgrsd");
             }
         }
 
