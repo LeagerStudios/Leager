@@ -39,7 +39,7 @@ public class BuildingCursorController : MonoBehaviour {
                     GetComponent<SpriteRenderer>().sprite = gameManager.tileBuildPrev[gameManager.chosenBrush];
                 }
             }
-            else if (gameManager.usingTool && gameManager.tileBreaking != -1)
+            else if (gameManager.usingTool && gameManager.tileBreaking != -1 && !gameManager.cancelPlacing)
             {
                 GetComponent<SpriteRenderer>().enabled = true;
                 Color newColor = GetComponent<SpriteRenderer>().color;

@@ -32,11 +32,11 @@ public class StackBarController : MonoBehaviour {
 	void Update () {
         if (gameManager.InGame && gameManager.player.alive)
         {
-            if (Input.mouseScrollDelta.y > 0 && !InventoryDeployed)
+            if (GInput.GetKeyDown(KeyCode.LeftArrow) || Input.mouseScrollDelta.y > 0 && !InventoryDeployed)
             {
                 StackBar.ChangeStackBarIdx(idx - 1);
             }
-            if (Input.mouseScrollDelta.y < 0 && !InventoryDeployed)
+            if (GInput.GetKeyDown(KeyCode.RightArrow) || Input.mouseScrollDelta.y < 0 && !InventoryDeployed)
             {
                 StackBar.ChangeStackBarIdx(idx + 1);
             }

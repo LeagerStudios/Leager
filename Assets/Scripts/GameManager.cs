@@ -399,32 +399,20 @@ public class GameManager : MonoBehaviour
                 if (player.alive && canEquip)
                 {
                     soundController.PlaySfxSound(SoundName.select);
-                    int equipPiece = StackBar.stackBarController.currentItem;
-                    int idx = 0;
-                    if (equipType == "helmet")
-                    {
-                        idx = 0;
-                    }
-                    else if (equipType == "chestplate")
-                    {
-                        idx = 1;
-                    }
-                    else if (equipType == "boots")
-                    {
-                        idx = 2;
-                    }
 
-                    if (equipedArmor[idx] > 0)
+                    int equipPiece = StackBar.stackBarController.currentItem;
+
+                    int equipReturned = EquipItem(equipPiece, equipType);
+
+                    if (equipReturned > 0)
                     {
-                        StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx] = equipedArmor[idx];
+                        StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx] = equipReturned;
                         StackBar.stackBarController.UpdateStacks();
                     }
                     else
                     {
                         StackBar.LoseItem();
                     }
-
-                    equipedArmor[idx] = equipPiece;
                 }
                 if (player.alive && canConsume)
                 {
@@ -526,6 +514,31 @@ public class GameManager : MonoBehaviour
         int playerChunk = (int)Mathf.Floor(player.transform.position.x / 16f);
         chunksLimits.GetChild(0).position = new Vector2((playerChunk - MenuController.menuController.chunksOnEachSide) * 16, WorldHeight / 2);
         chunksLimits.GetChild(1).position = new Vector2((playerChunk + MenuController.menuController.chunksOnEachSide) * 16, WorldHeight / 2);
+    }
+
+    public int EquipItem(int equipPiece, string type)
+    {
+        int idx = 0;
+
+        if (type == "helmet")
+        {
+            idx = 0;
+        }
+        else if (type == "chestplate")
+        {
+            idx = 1;
+        }
+        else if (type == "boots")
+        {
+            idx = 2;
+        }
+
+
+        int returnVal = equipedArmor[idx];
+
+        equipedArmor[idx] = equipPiece;
+
+        return returnVal;
     }
 
     public int GetCapacityOfCore(int core)

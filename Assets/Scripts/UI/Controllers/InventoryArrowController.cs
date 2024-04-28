@@ -252,17 +252,28 @@ public class InventoryArrowController : MonoBehaviour
         }
         else if (tilePorting != -1)
         {
-            gameManager.player.GetComponent<SpriteRenderer>().flipX = Camera.main.ScreenToWorldPoint(Input.mousePosition).x < gameManager.player.transform.position.x;
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (gameManager.tileType[tilePorting] == "equip" && Vector2.Distance(mouseWorldPos, gameManager.player.transform.position) < 0.76f)
+            {
+                tilePorting = gameManager.EquipItem(tilePorting, gameManager.tileMainProperty[tilePorting]);
+                rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[tilePorting];
 
-
-
-            gameManager.player.PlayerRelativeDrop(tilePorting, tilePortingAmount);
-
-            tilePorting = -1;
-
-            rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
-            rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;
-            rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
+                if(tilePorting == 0)
+                {
+                    rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
+                    rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;
+                    tilePorting = -1;
+                }
+            }
+            else
+            {
+                gameManager.player.GetComponent<SpriteRenderer>().flipX = mouseWorldPos.x < gameManager.player.transform.position.x;
+                gameManager.player.PlayerRelativeDrop(tilePorting, tilePortingAmount);
+                tilePorting = -1;
+                rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
+                rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
+                rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;
+            }
         }
     }
 }
