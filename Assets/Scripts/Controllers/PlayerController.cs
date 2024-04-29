@@ -82,6 +82,7 @@ public class PlayerController : MonoBehaviour, IDamager
         else if(y < gameManager.WorldHeight * 0.5f)
         {
             mainCamera.currentBackground = "Rock";
+            gameManager.PlayOST("cave");
         }
         else
         {

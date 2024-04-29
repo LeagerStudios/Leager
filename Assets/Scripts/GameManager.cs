@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Color[] rawColor;
     [SerializeField] public BlockAnimationData[] tileAnimation;
     [SerializeField] public Vector4[] tileSize;
+    [SerializeField] public AudioClip[] breakSound;
     [SerializeField] public PlayerController player;
     [SerializeField] public MainSoundController soundController;
     [SerializeField] public int WorldHeight;
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject entitiesContainer;
     [SerializeField] GameObject Transition;
     [SerializeField] GameObject savingText;
+    [SerializeField] AudioClip[] caveOST;
 
     [Header("Other")]
     public bool isNetworkClient = false;
@@ -121,6 +123,7 @@ public class GameManager : MonoBehaviour
     public string persistentDataPath = "null";
     public int tileSpawnRate = 0;
 
+
     //Lists
     List<GameObject> poolTiles = new List<GameObject>();
     public List<Vector2> platformDrops = new List<Vector2>();
@@ -131,6 +134,10 @@ public class GameManager : MonoBehaviour
     [Header("Events")]
     public bool raining = false;
     public AudioSource rainSource;
+    public float ostCooldown = 124f;
+    public AudioSource ostSource;
+    public AudioSource breakSoundSource;
+    public float breakSoundCooldown = 0f;
 
     public bool InGame
     {
@@ -290,7 +297,19 @@ public class GameManager : MonoBehaviour
         //Generate all
         GenerateAllChunks(GenerateMap());
 
-        player.Respawn((WorldWidth * 16) / 2, SearchForClearSpawn((WorldWidth * 16) / 2) + 2);
+        Vector2 respawnPosition = Vector2.zero;
+
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd"))
+        {
+            string[] pos = DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd").SavedData[0].Split(';');
+            respawnPosition = new Vector2(System.Convert.ToSingle(pos[0]), System.Convert.ToSingle(pos[1]));
+        }
+        else
+        {
+            respawnPosition = new Vector2(WorldWidth * 16 / 2, SearchForClearSpawn(WorldWidth * 16 / 2) + 2);
+        }
+
+        player.Respawn(respawnPosition.x, respawnPosition.y);
         GameObject.Find("IlluminationCape").GetComponent<LightControllerCurrent>().AddRenderQueue(player.transform.position);
         inGame = true;
         playerFocused = true;
@@ -307,10 +326,20 @@ public class GameManager : MonoBehaviour
     {
         mouseCurrentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseDelta = mouseCurrentPosition - mouseLastPosition;
+        addedFrameThisFrame = false;
 
         if (inGame)
         {
-            addedFrameThisFrame = false;
+            if(ostCooldown > 0f)
+            {
+                ostCooldown -= Time.deltaTime;
+            }
+
+            if (breakSoundCooldown > 0f)
+            {
+                breakSoundCooldown -= Time.deltaTime;
+            }
+
             frameTimerAdder += Time.deltaTime;
 
             if (frameTimerAdder > 0.016f)
@@ -516,6 +545,43 @@ public class GameManager : MonoBehaviour
         chunksLimits.GetChild(1).position = new Vector2((playerChunk + MenuController.menuController.chunksOnEachSide) * 16, WorldHeight / 2);
     }
 
+    public void PlayOST(string type)
+    {
+        if (ostCooldown <= 0f)
+        {
+            if (type == "cave")
+            {
+                AudioClip clip = caveOST[Random.Range(0, caveOST.Length)];
+
+                ostSource.Stop();
+                ostSource.clip = clip;
+                ostSource.Play();
+
+                ostCooldown = clip.length * Random.Range(15, 35);
+            }
+
+        }
+    }
+
+    public void PlayBreakSound(int block, bool ignoreCooldown = false)
+    {
+        if (block != -1)
+            if (breakSoundCooldown <= 0f || ignoreCooldown)
+            {
+                AudioClip clip = breakSound[block];
+
+                if (clip != null)
+                {
+                    breakSoundSource.Stop();
+                    breakSoundSource.clip = clip;
+                    breakSoundSource.pitch = Random.Range(0.85f, 1.15f);
+                    breakSoundSource.Play();
+
+                    breakSoundCooldown = clip.length * breakSoundSource.pitch + 0.01f;
+                }
+            }
+    }  
+
     public int EquipItem(int equipPiece, string type)
     {
         int idx = 0;
@@ -610,21 +676,6 @@ public class GameManager : MonoBehaviour
         catch
         {
             Debug.Log("==DIDNT IMPORT RESOURCES==");
-        }
-    }
-
-    public int CheckForIncomingCore()
-    {
-        try
-        {
-            string core = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("core")[0];
-
-            return System.Convert.ToInt32(core);
-        }
-        catch
-        {
-            Debug.Log("==DIDNT GET INCOMING CORE==");
-            return -1;
         }
     }
 
@@ -865,6 +916,7 @@ public class GameManager : MonoBehaviour
             }
 
             DataSaver.SaveStats(entities.ToArray(), persistentDataPath + @"/worlds/" + worldName + @"/ent.lgrsd");
+            DataSaver.SaveStats(new string[] { player.transform.position.x + ";" + player.transform.position.y }, Application.persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
         }
     }
 
@@ -1688,17 +1740,22 @@ public class GameManager : MonoBehaviour
                 if (breakingTime == -1 && toolUsing == tileDefaultBrokeTool[entryTile])
                 {
                     breakingTime = 100;
+
+                    PlayBreakSound(entryTile);
                 }
                 else if (toolUsing == tileDefaultBrokeTool[entryTile] && lastTileBrush == tile)
                 {
                     if (addedFrameThisFrame)
                         breakingTime -= (toolUsingEfficency - ToolEfficency[entryTile]);
+
+                    PlayBreakSound(entryTile);
                 }
                 else
                 {
                     breakingTime = -1;
                     tileBreaking = -1;
                 }
+
             }
 
 
@@ -1739,6 +1796,7 @@ public class GameManager : MonoBehaviour
                     brush = entryTile;
                 }
 
+                PlayBreakSound(entryTile);
 
                 tile.transform.parent.GetComponent<ChunkController>().TileGrid[System.Array.IndexOf(tile.transform.parent.GetComponent<ChunkController>().TileObject, tile)] = brush;
                 tile.transform.parent.GetComponent<ChunkController>().UpdateChunk();
