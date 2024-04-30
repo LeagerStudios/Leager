@@ -11,6 +11,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
     [SerializeField] LayerMask blockMask;
     [SerializeField] GameObject particle;
     [SerializeField] GameObject explosion;
+    EntityCommonScript entityScript;
     GameManager manager;
 
     public PlayerController followingPlayer;
@@ -57,6 +58,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
         transform.GetChild(0).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
+        entityScript = GetComponent<EntityCommonScript>();
         Active = true;
         return this;
     }
@@ -257,6 +259,21 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
                     spriteRenderer.flipX = false;
                 }
             }
+
+        if (entityScript.entityStates.Contains(EntityState.Swimming))
+        {
+            rb2D.velocity = new Vector2(rb2D.velocity.x * 0.6f, 2);
+        }
+
+        if (entityScript.entityStates.Contains(EntityState.OnFire))
+        {
+            animator.SetBool("makeboom", true);
+        }
+
+        if (entityScript.entityStates.Contains(EntityState.Burning))
+        {
+            Kill(null);
+        }
 
         GameObject nearestPlayer = null;
         float nearestDist = 999999f;

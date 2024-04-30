@@ -74,12 +74,19 @@ public class PlayerController : MonoBehaviour, IDamager
         }
 
         float y = transform.position.y;
-
-        if(y < gameManager.WorldHeight * 0.1f)
+        if (entityScript.entityStates.Contains(EntityState.Drowning))
+        {
+            mainCamera.currentBackground = "Water";
+        }
+        else if (entityScript.entityStates.Contains(EntityState.Burning))
+        {
+            mainCamera.currentBackground = "Hot";
+        }
+        else if (y < gameManager.WorldHeight * 0.1f)
         {
             mainCamera.currentBackground = "Lava";
         }
-        else if(y < gameManager.WorldHeight * 0.5f)
+        else if (y < gameManager.WorldHeight * 0.5f)
         {
             mainCamera.currentBackground = "Rock";
             gameManager.PlayOST("cave");

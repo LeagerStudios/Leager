@@ -279,6 +279,11 @@ public class ENTITY_Raideon : EntityBase, IDamager
                 }
             }
 
+        if (entityScript.entityStates.Contains(EntityState.Burning))
+        {
+            Kill(null);
+        }
+
         if (entityScript.entityStates.Contains(EntityState.Swimming))
         {
             rb2D.velocity = new Vector2(rb2D.velocity.x * 0.6f, 2);

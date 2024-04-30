@@ -207,6 +207,11 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
             rb2D.velocity = new Vector2(rb2D.velocity.x * 0.6f, 2);
         }
 
+        if (entityScript.entityStates.Contains(EntityState.Burning))
+        {
+            Kill(null);
+        }
+
         GameObject nearestPlayer = null;
         float nearestDist = 999999f;
 

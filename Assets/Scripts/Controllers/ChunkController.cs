@@ -732,7 +732,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 int idx = (x * manager.WorldHeight) + y;
                 int tile = liquidTileGrid[idx];
 
-                if (manager.TileCollisionType[tile] == "~")
+                if (tile == 62 || tile == 21)
                 {
                     if (Mathf.Repeat(manager.frameTimer, manager.ToolEfficency[tile]) == 0)
                     {
@@ -778,13 +778,19 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         if (manager.GetTileObjectAt(tilesToChunk - (manager.WorldHeight - y)) != null)
                         {
                             Transform extTransform = manager.GetTileObjectAt(tilesToChunk - (manager.WorldHeight - y)).transform;
-                            if (extTransform.parent.GetComponent<ChunkController>().loaded)
+                            ChunkController chunkController = extTransform.parent.GetComponent<ChunkController>();
+                            if (chunkController.loaded)
                             {
+                                int old = (manager.WorldHeight * 15) + y;
                                 extTransform.GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
-                                extTransform.parent.GetComponent<ChunkController>().TileGrid[(manager.WorldHeight * 15) + y] = tile;
+                                chunkController.TileGrid[old] = tile;
+                                chunkController.LightMap[old] = chunkController.GetLightForTile(old, chunkController.LightMap[old + 1] == 2f);
+                                chunkController.UpdateLayerForTile(old);
 
                                 TileGrid[idx] = residualTile;
+                                LightMap[idx] = GetLightForTile(idx, LightMap[idx] == 2f);
                                 TileObject[idx].GetComponent<SpriteRenderer>().sprite = manager.tiles[residualTile];
+                                UpdateLayerForTile(idx);
 
                                 placed = true;
                             }
@@ -824,13 +830,19 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         if (manager.GetTileObjectAt(tilesToChunk + manager.NumberOfTilesInChunk + y) != null)
                         {
                             Transform extTransform = manager.GetTileObjectAt(tilesToChunk + manager.NumberOfTilesInChunk + y).transform;
-                            if (extTransform.parent.GetComponent<ChunkController>().loaded)
+                            ChunkController chunkController = extTransform.parent.GetComponent<ChunkController>();
+                            if (chunkController.loaded)
                             {
+                                int old = y;
                                 extTransform.GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
-                                extTransform.parent.GetComponent<ChunkController>().TileGrid[y] = tile;
+                                chunkController.TileGrid[old] = tile;
+                                chunkController.LightMap[old] = chunkController.GetLightForTile(old, chunkController.LightMap[old + 1] == 2f);
+                                chunkController.UpdateLayerForTile(old);
 
                                 TileGrid[idx] = residualTile;
+                                LightMap[idx] = GetLightForTile(idx, LightMap[idx] == 2f);
                                 TileObject[idx].GetComponent<SpriteRenderer>().sprite = manager.tiles[residualTile];
+                                UpdateLayerForTile(idx);
 
                                 placed = true;
                             }

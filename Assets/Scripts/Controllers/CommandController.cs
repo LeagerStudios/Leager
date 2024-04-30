@@ -25,16 +25,16 @@ public class CommandController : MonoBehaviour {
 	
 
 	void Update () {
-        if (varraSan)
-        {
-            Vector2 pos = GameManager.gameManagerReference.player.transform.position;
-            GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
-        }
+        //if (varraSan)
+        //{
+        //    Vector2 pos = GameManager.gameManagerReference.player.transform.position;
+        //    GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
-        {
-            ENTITY_Raideon.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
-        }
+        //if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
+        //{
+        //    ENTITY_Raideon.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
+        //}
 
         if (!commandEnabled)
         {

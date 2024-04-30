@@ -73,7 +73,6 @@ public class BuildingCursorController : MonoBehaviour {
                     }
 
                 }
-                
                 gameManager.player.UseToolAnim();
             }
             else
