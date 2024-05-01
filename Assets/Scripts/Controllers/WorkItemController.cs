@@ -19,10 +19,9 @@ public class WorkItemController : MonoBehaviour {
     {
         if (GameManager.gameManagerReference.InGame)
         {
-            RaycastHit2D rayHit = new RaycastHit2D();
             Vector3 mousePos = GameManager.gameManagerReference.mouseCurrentPosition;
             mousePos.y++;
-            rayHit = Physics2D.Raycast(mousePos, Vector2.down, 1f, tilesMasks);
+            RaycastHit2D rayHit = Physics2D.Raycast(mousePos, Vector2.down, 1f, tilesMasks);
             if (rayHit.transform != null && rayHit.transform.parent != null)
             {
                 if (rayHit.transform.parent.parent != null)

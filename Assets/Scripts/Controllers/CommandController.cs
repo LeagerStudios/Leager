@@ -31,10 +31,10 @@ public class CommandController : MonoBehaviour {
         //    GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
         //}
 
-        //if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
-        //{
-        //    ENTITY_Raideon.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
-        //}
+        if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
+        {
+            ENTITY_Raideon.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
+        }
 
         if (!commandEnabled)
         {

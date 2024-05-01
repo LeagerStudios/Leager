@@ -15,8 +15,8 @@ public class ENTITY_Raideon : EntityBase, IDamager
     public Vector2 point;
 
     public PlayerController followingPlayer;
-    float HpMax = 10f;
-    float HP = 10f;
+    float HpMax = 35f;
+    float HP = 35f;
     int currentTool = 0;
     float closeFactor;
     float gunReload = 0f;
@@ -94,7 +94,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
                 g.GetComponent<ParticleController>().Spawn();
             }
             int drops = Random.Range(1, 3);
-            ManagingFunctions.DropItem(65, transform.position, amount: drops);
+            ManagingFunctions.DropItem(31, transform.position, amount: drops);
         }
         Destroy(gameObject);
 
@@ -247,7 +247,7 @@ public class ENTITY_Raideon : EntityBase, IDamager
 
                 if (damaged)
                 {
-                    rb2D.velocity = new Vector2(Mathf.Clamp(transform.position.x - manager.player.transform.position.x, -1, 1) * 3, rb2D.velocity.y);
+                    rb2D.velocity = new Vector2(Mathf.Clamp(transform.position.x - manager.player.transform.position.x, -1, 1) * 6, rb2D.velocity.y);
                 }
 
                 if (Random.Range(0, 85) == 0 && !followingPlayer)
