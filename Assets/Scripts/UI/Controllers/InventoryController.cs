@@ -92,8 +92,8 @@ public static class InventoryBar
             int[] sg = inventoryBarController.InventoryBarGrid;
             int[] sa = inventoryBarController.InventoryItemAmount;
 
-            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sg), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/ig.lgrsd");
-            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sa), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/ia.lgrsd");
+            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sg), GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/ig.lgrsd");
+            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sa), GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/ia.lgrsd");
         }
     }
 

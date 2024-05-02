@@ -25,8 +25,6 @@ public class PushPlay : MonoBehaviour
         GameManager.gameManagerReference = null;
         System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-        menuThemeAudio.Play();
-
         transition.SetActive(true);
         main = this;
         if (!GameObject.Find("SaveObject"))
@@ -48,6 +46,8 @@ public class PushPlay : MonoBehaviour
         }
         else
             DataSaver.CreateTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd", new string[] { System.Convert.ToString(1f) });
+
+        menuThemeAudio.Play();
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");

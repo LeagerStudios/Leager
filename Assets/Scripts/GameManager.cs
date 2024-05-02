@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] EntitiesGameObject;
     public GameObject[] ProjectilesGameObject;
     public GameObject[] GameChunks;
-    public GameObject[] LoadedChunks;
+    public List<GameObject> LoadedChunks;
     public Transform chunksLimits;
     public Transform dummyObjects;
 
@@ -886,17 +886,6 @@ public class GameManager : MonoBehaviour
     {
         if (!isSavingData)
         {
-            if (alternateThread)
-            {
-                Thread mapSave = new Thread(new ThreadStart(SaveGameDataThread));
-                mapSave.Start();
-            }
-            else
-            {
-                SaveGameDataThread();
-            }
-            ManagingFunctions.SaveStackBarAndInventory();
-
             EntityCommonScript[] entityCommonScripts = entitiesContainer.GetComponentsInChildren<EntityCommonScript>(true);
 
             List<string> entities = new List<string>();
@@ -914,13 +903,21 @@ public class GameManager : MonoBehaviour
                     entities.Add(string.Join("", toEncrypt.ToArray()));
                 }
             }
+            string[] playerPosition = new string[] { player.transform.position.x + ";" + player.transform.position.y };
 
-            DataSaver.SaveStats(entities.ToArray(), persistentDataPath + @"/worlds/" + worldName + @"/ent.lgrsd");
-            DataSaver.SaveStats(new string[] { player.transform.position.x + ";" + player.transform.position.y }, Application.persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
+            if (alternateThread)
+            {
+                Thread mapSave = new Thread(new ThreadStart(() => SaveGameDataThread(entities.ToArray(), playerPosition)));
+                mapSave.Start();
+            }
+            else
+            {
+                SaveGameDataThread(entities.ToArray(), playerPosition);
+            }
         }
     }
 
-    private void SaveGameDataThread()
+    private void SaveGameDataThread(string[] entities, string[] playerPosition)
     {
         isSavingData = true;
 
@@ -932,6 +929,10 @@ public class GameManager : MonoBehaviour
             DataSaver.SaveStats(new string[] { currentHexPlanetColor }, persistentDataPath + @"/worlds/" + worldName + @"/planetColor.lgrsd");
             DataSaver.SaveStats(new string[] { dayTime + "" }, persistentDataPath + @"/worlds/" + worldName + @"/daytime.lgrsd");
             DataSaver.SaveStats(new string[] { currentPlanetName }, persistentDataPath + @"/worlds/" + worldRootName + @"/lastLocation.lgrsd");
+
+            DataSaver.SaveStats(entities, persistentDataPath + @"/worlds/" + worldName + @"/ent.lgrsd");
+            DataSaver.SaveStats(playerPosition, persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
+            ManagingFunctions.SaveStackBarAndInventory();
         }
 
         isSavingData = false;
@@ -1107,11 +1108,9 @@ public class GameManager : MonoBehaviour
                                 int ore2 = Random.Range(-1, 2);
                                 if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 20) == 0) buildedMapGrid[idx + ore2] = 9;
                             }
-                            else if (e < floorUndergroundEnd * 0.25f && e > floorUndergroundEnd * 0.1f && Random.Range(0, 20) == 0)
+                            else if (e < floorUndergroundEnd * 0.25f && e > floorUndergroundEnd * 0.1f && Random.Range(0, 100) == 0)
                             {
                                 buildedMapGrid[idx] = 12;
-                                int ore2 = Random.Range(-1, 2);
-                                if (buildedMapGrid[idx + ore2] == 6 && Random.Range(0, 5) == 0) buildedMapGrid[idx + ore2] = 12;
                             }
                         }
                         if (e > floorUndergroundEnd && e < worldTileHeight[i * 16 + i2])
@@ -1618,7 +1617,7 @@ public class GameManager : MonoBehaviour
             {
                 yield return new WaitForSeconds(1);
                 UpdateChunksActive();
-                entitiesContainer.GetComponent<EntitiesManager>().UpdateEntities(LoadedChunks);
+                entitiesContainer.GetComponent<EntitiesManager>().UpdateEntities(LoadedChunks.ToArray());
                 LightController.lightController.AddRenderQueue(Camera.main.transform.position);
             }
             if (!isNetworkClient)
@@ -1630,18 +1629,8 @@ public class GameManager : MonoBehaviour
     {
         List<GameObject> gameChunksLoaded = new List<GameObject>();
         List<GameObject> gameChunksToLoad = new List<GameObject>();
-        ChunkController[] chunks = chunkContainer.GetComponentsInChildren<ChunkController>();
-        List<GameObject> previousChunks = new List<GameObject>();
-        foreach(ChunkController chunk in chunks)
-        {
-            previousChunks.Add(chunk.gameObject);
-        }
-        LoadedChunks = previousChunks.ToArray();
 
         MenuController menuController = MenuController.menuController;
-
-        int chunksActived = 0;
-        int chunksDeactived = 0;
 
         int playerChunk = (int)Mathf.Floor(player.transform.position.x / 16f);
 
@@ -1660,14 +1649,13 @@ public class GameManager : MonoBehaviour
             gameChunksToLoad.Add(chunkContainer.transform.GetChild(chunkToLoad).gameObject);
         }
 
-        foreach (GameObject chunk in previousChunks)
+        foreach (GameObject chunk in LoadedChunks)
         {
             if (!gameChunksToLoad.Contains(chunk) && chunk.activeInHierarchy)
             {
                 ChunkController chunkC = chunk.GetComponent<ChunkController>();
-                if (!chunkC.loading)
-                    chunk.GetComponent<ChunkController>().DestroyChunk();
-                chunksDeactived++;
+                if (chunkC.loaded)
+                    chunkC.DestroyChunk();
             }
         }
 
@@ -1676,7 +1664,6 @@ public class GameManager : MonoBehaviour
             if (!chunk.activeInHierarchy)
             {
                 chunk.SetActive(true);
-                chunksActived++;
             }
 
             //chunk.GetComponent<ChunkController>().UpdateWalls();
@@ -1687,7 +1674,7 @@ public class GameManager : MonoBehaviour
         chunksLimits.GetChild(0).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
         chunksLimits.GetChild(1).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
 
-        LoadedChunks = gameChunksLoaded.ToArray();
+        LoadedChunks = gameChunksLoaded;
         UpdateChunksRelPos();
     }
 
@@ -1696,8 +1683,6 @@ public class GameManager : MonoBehaviour
         foreach (GameObject chunk in LoadedChunks)
         {
             chunk.GetComponent<ChunkController>().UpdateChunkPos();
-            //if (chunk.GetComponent<ChunkController>().loaded)
-            //    chunk.GetComponent<ChunkController>().UpdateWalls();
         }
     }
 
@@ -1954,7 +1939,7 @@ public class GameManager : MonoBehaviour
             {
                 idx -= allMapGrid.Length;
             }
-            ChunkController chunk = chunkContainer.transform.GetChild((int)ManagingFunctions.EntireDivision(idx, WorldHeight * 16).cocient).GetComponent<ChunkController>();
+            ChunkController chunk = chunkContainer.transform.GetChild(ManagingFunctions.EntireDivision(idx, WorldHeight * 16).cocient).GetComponent<ChunkController>();
 
             return chunk.TileObject[idx - chunk.tilesToChunk];
         }

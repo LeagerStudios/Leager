@@ -194,8 +194,8 @@ public static class StackBar
             int[] sg = stackBarController.StackBarGrid;
             int[] sa = stackBarController.StackItemAmount;
 
-            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sg), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/sbg.lgrsd");
-            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sa), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/sba.lgrsd");
+            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sg), GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/sbg.lgrsd");
+            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sa), GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/sba.lgrsd");
         }
     }
 

@@ -95,7 +95,7 @@ public static class ManagingFunctions
         DivisionResult result = new DivisionResult(0, 0, 0, 0);
 
         int cocient = Mathf.Abs(divisor / dividend);
-        int rest = (int)Mathf.Repeat(divisor, dividend);
+        int rest = divisor % dividend;
 
         result = new DivisionResult(divisor, dividend, cocient, rest);
 
@@ -253,10 +253,10 @@ public struct DivisionResult
 {
     public float divisor;
     public float dividend;
-    public float cocient;
-    public float rest;
+    public int cocient;
+    public int rest;
 
-    public DivisionResult(float Div, float divid, float coci, float res)
+    public DivisionResult(float Div, float divid, int coci, int res)
     {
         divisor = Div;
         dividend = divid;

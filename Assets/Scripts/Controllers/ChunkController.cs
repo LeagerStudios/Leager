@@ -734,7 +734,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                 if (tile == 62 || tile == 21)
                 {
-                    if (Mathf.Repeat(manager.frameTimer, manager.ToolEfficency[tile]) == 0)
+                    if (manager.frameTimer % manager.ToolEfficency[tile] == 0)
                     {
                         if (liquidTileGrid[idx - 1] == 0)//GRAVITY
                         {
@@ -961,6 +961,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public IEnumerator SpawnChunk()
     {
+        manager.LoadedChunks.Add(gameObject);
         loading = true;
         int counter = 0;
         int tileX = 0;
@@ -1007,11 +1008,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
     {
         if(!loading && loaded)
         {
-            StartCoroutine(DestroyCunkIE());
+            StartCoroutine(DestroyChunkIE());
         }
     }
 
-    private IEnumerator DestroyCunkIE()
+    private IEnumerator DestroyChunkIE()
     {
         loading = true;
         int counter = 0;
@@ -1046,6 +1047,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         loading = false;
         loaded = false;
         //UpdateWalls();
+        manager.LoadedChunks.Remove(gameObject);
         gameObject.SetActive(false);
     }
 
