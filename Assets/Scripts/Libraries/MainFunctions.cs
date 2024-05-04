@@ -67,13 +67,6 @@ public static class ManagingFunctions
         }
     }
 
-    public static Vector2 RoundVector2(Vector2 vector2)
-    {
-        return new Vector2(
-            Mathf.Round(vector2.x),
-            Mathf.Round(vector2.y));
-    }
-
     public static int FindIndexInArrayOfVector2(Vector2 vectorToFind, Vector2[] list)
     {
         int index = -1;

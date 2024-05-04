@@ -25,7 +25,9 @@ public class LightControllerCurrent : MonoBehaviour
     public EcoTexture lightEcoTexture;
     public bool renderizingLight = false;
     public bool renderized = false;
-    public Queue<Vector3> renderQueue = new Queue<Vector3>();
+    public Vector2Int renderQueue;
+    public Vector2 renderizedTexturePosition;
+    public bool pendingRender = false;
 
     void Start()
     {
@@ -47,10 +49,9 @@ public class LightControllerCurrent : MonoBehaviour
 
     void Update()
     {
-        loadedChunks = GameManager.gameManagerReference.LoadedChunks.ToArray();
-        if (!renderizingLight && !renderized && renderQueue.Count < 1)
+        if (!renderizingLight && !renderized)
         {
-            Vector2 globalPosition = ManagingFunctions.RoundVector2(Camera.main.transform.position);
+            Vector2 globalPosition = Vector2Int.RoundToInt(Camera.main.transform.position);
             transform.position = globalPosition - Vector2.one * 0.5f;
 
             if (transform.position != previousPosition)
@@ -59,41 +60,26 @@ public class LightControllerCurrent : MonoBehaviour
                 transform.position = previousPosition;
             }
 
-
-            AddRenderQueue(ManagingFunctions.RoundVector2(Camera.main.transform.position));
-            transform.position = previousPosition;
+            if (pendingRender)
+            {
+                pendingRender = false;
+                renderizingLight = true;
+                UpdateLight((Vector2)renderQueue);
+            }
         }
-
-
-
-        if (renderQueue.Count > 0 && !renderizingLight && !renderized)
+        else if (renderized)
         {
-            renderizingLight = true;
-            Vector3 x = renderQueue.Peek();
-            renderQueue = new Queue<Vector3>();
-            renderQueue.Enqueue(x);
-            UpdateLight(x);
-        }
-
-
-        if (renderized && renderQueue.Count > 0)
-        {
-            transform.position = renderQueue.Peek();
-            renderQueue.Dequeue();
+            transform.position = renderizedTexturePosition;
             RenderizeTexture();
-        }
-        else if (renderized && renderQueue.Count < 1)
-        {
-            renderized = false;
-            renderizingLight = false;
         }
 
         previousPosition = transform.position;
     }
 
-    public void AddRenderQueue(Vector3 renderPosition)
+    public void AddRenderQueue(Vector2 renderPosition)
     {
-        renderQueue.Enqueue(ManagingFunctions.RoundVector2(renderPosition) - Vector2.one * 0.5f);
+        renderQueue = Vector2Int.RoundToInt(renderPosition);
+        pendingRender = true;
     }
 
     public void DrawLights()
@@ -191,6 +177,7 @@ public class LightControllerCurrent : MonoBehaviour
 
 
         UpdateLights(lightPosition);
+        renderizedTexturePosition = lightPosition;
 
         ThreadStart lightDrawRef = new ThreadStart(DrawLights);
         Thread lightRender = new Thread(lightDrawRef);
@@ -215,6 +202,7 @@ public class LightControllerCurrent : MonoBehaviour
 
     private void UpdateLights(Vector2 lightPosition)
     {
+        loadedChunks = GameManager.gameManagerReference.LoadedChunks.ToArray();
         renderLights = new Dictionary<Vector2, float>(lightDist*lightDist*2);
         temp1 = new List<Vector2>();
         temp2 = new List<float>();
@@ -273,6 +261,9 @@ public class LightControllerCurrent : MonoBehaviour
     {
         lightStyle = style;
         DataSaver.SaveStats(new string[] { style + "" }, Application.persistentDataPath + @"/settings/lightstyle.lgrsd");
+
+
+
         AddRenderQueue(GameManager.gameManagerReference.player.transform.position);
     }
 }
