@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Sprite[] tiles;
     [SerializeField] public Sprite[] tileBuildPrev;
     [SerializeField] public string[] tileType;
-    [SerializeField] public string[] TileCollisionType;
+    [SerializeField] public int[] TileCollisionType;
     [SerializeField] public string[] tileMainProperty;
     [SerializeField] public string[] tileDefaultBrokeTool;
     [SerializeField] public bool[] canRotate;
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Transition;
     [SerializeField] GameObject savingText;
     [SerializeField] AudioClip[] caveOST;
+    public string[] temp;
 
     [Header("Other")]
     public bool isNetworkClient = false;
@@ -148,6 +149,32 @@ public class GameManager : MonoBehaviour
             if (isNetworkClient || isNetworkHost) inGame = true;
 
             UpdateEntitiesRB2D(inGame);
+        }
+    }
+
+    private void OnValidate()
+    {
+        TileCollisionType = new int[temp.Length];
+
+        for(int i = 0; i < temp.Length; i++)
+        {
+
+            if (temp[i] == "")
+            {
+                TileCollisionType[i] = 0;
+            }
+            if (temp[i] == "#")
+            {
+                TileCollisionType[i] = 1;
+            }
+            if (temp[i] == "=")
+            {
+                TileCollisionType[i] = 2;
+            }
+            if (temp[i] == "~")
+            {
+                TileCollisionType[i] = 3;
+            }
         }
     }
 
@@ -1233,7 +1260,7 @@ public class GameManager : MonoBehaviour
                 int xPosition = Random.Range(0, WorldWidth * 16);
                 int idx = yPosition + (xPosition * WorldHeight);
 
-                if (TileCollisionType[buildedMapGrid[idx - 1]] == "#" && buildedMapGrid[idx] == 0)
+                if (TileCollisionType[buildedMapGrid[idx - 1]] == 1 && buildedMapGrid[idx] == 0)
                 {
                     buildedMapGrid[idx] = 102;
                     string[] loot = { "102@true@30:5#32:3@@0", "102@true@39:1#64:5@@0", "102@true@75:1#51:13@@0", "102@true@70:3#93:6@@0", "102@true@30:7#31:4@@0", "102@true@96:1#66:4@@0" };
@@ -1249,7 +1276,7 @@ public class GameManager : MonoBehaviour
                 int xPosition = Random.Range(0, WorldWidth * 16);
                 int idx = yPosition + (xPosition * WorldHeight);
 
-                if (TileCollisionType[buildedMapGrid[idx - 1]] == "#" && buildedMapGrid[idx] == 0)
+                if (TileCollisionType[buildedMapGrid[idx - 1]] == 1 && buildedMapGrid[idx] == 0)
                 {
                     buildedMapGrid[idx] = 103;
                 }
@@ -1324,7 +1351,7 @@ public class GameManager : MonoBehaviour
                 {
                     int idx = yPosition + (xPosition * WorldHeight);
 
-                    if (TileCollisionType[buildedMapGrid[idx]] != "")
+                    if (TileCollisionType[buildedMapGrid[idx]] != 0)
                         break;
                     else
                         yPosition--;

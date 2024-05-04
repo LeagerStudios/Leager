@@ -23,8 +23,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public const float entitiesSpawnTimeConstant = 3f;
     public float entitiesSpawnTime = 0f;
 
-    public int[] liquidTileGrid;
-
     [Header("Prefabs")]
 
     [SerializeField] GameObject grassObject;
@@ -57,7 +55,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     }
 
 
-    public void RegisterTile(int idx, int t, string prop, string mesh, GameObject o)
+    public void RegisterTile(int idx, int t, string prop, int mesh, GameObject o)
     {
         TileGrid[idx] = t;
         TileObject[idx] = o;
@@ -133,7 +131,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 bool hasSolidOnTop = false;
                 if (aux1 != -1)
                 {
-                    if (manager.TileCollisionType[aux1] != "#" && manager.TileCollisionType[aux1] != "~")
+                    if (manager.TileCollisionType[aux1] != 1 && manager.TileCollisionType[aux1] != 3)
                         hasSolidOnTop = false;
                     else
                         hasSolidOnTop = true;
@@ -161,7 +159,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     }
                 }
                 if (aux1 != -1)
-                    if (manager.TileCollisionType[aux1] == "#")//Si algo SOLIDO por encima
+                    if (manager.TileCollisionType[aux1] == 1)//Si algo SOLIDO por encima
                     {
                         if (TileGrid[e] == 1 && TileObject[e].GetComponent<Timer>() == null)
                         {
@@ -213,7 +211,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         break;
 
                     case 70:
-                        if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
+                        if (manager.TileCollisionType[TileGrid[e - 1]] == 1 || manager.TileCollisionType[TileGrid[e - 1]] == 2)
                         {
 
                         }
@@ -229,7 +227,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         break;
 
                     case 84:
-                        if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
+                        if (manager.TileCollisionType[TileGrid[e - 1]] == 1 || manager.TileCollisionType[TileGrid[e - 1]] == 2)
                         {
                             if (TileObject[e].GetComponent<Timer>() == null)
                             {
@@ -245,7 +243,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                     case 88:
                         if (e + 1 != GameManager.gameManagerReference.NumberOfTilesInChunk)
-                            if (manager.TileCollisionType[TileGrid[e + 1]] == "#")
+                            if (manager.TileCollisionType[TileGrid[e + 1]] == 1)
                             {
 
                             }
@@ -265,7 +263,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         break;
 
                     case 106:
-                        if (manager.TileCollisionType[TileGrid[e - 1]] == "#" || manager.TileCollisionType[TileGrid[e - 1]] == "=")
+                        if (manager.TileCollisionType[TileGrid[e - 1]] == 1 || manager.TileCollisionType[TileGrid[e - 1]] == 2)
                         {
 
                         }
@@ -315,7 +313,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 for (int y = manager.WorldHeight - 1; y > -1; y--)
                 {
                     int idx = (x * manager.WorldHeight) + y;
-                    if (manager.TileCollisionType[TileGrid[(x * manager.WorldHeight) + y]] == "#") isStillSunny = false;
+                    if (manager.TileCollisionType[TileGrid[(x * manager.WorldHeight) + y]] == 1) isStillSunny = false;
                     LightMap[idx] = GetLightForTile(idx, isStillSunny);
                 }
             }
@@ -326,23 +324,22 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void UpdateLayerForTile(int e)
     {
-        string cT = manager.TileCollisionType[TileGrid[e]];
+        int cT = manager.TileCollisionType[TileGrid[e]];
 
         TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
-        TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == "~" || cT == "/" || cT == @"\";
-
-        if (cT == "/" || cT == @"\")
-        {
-            TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1.05f;
-        }
-        else
-        {
-            TileObject[e].GetComponent<BoxCollider2D>().size = Vector2.one * 1f;
-        }
+        TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == 3;
 
         switch (cT)
         {
-            case "#":
+            case 0:
+                TileObject[e].layer = 9;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+                
+            case 1:
                 TileObject[e].layer = 8;
                 if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
                 {
@@ -350,23 +347,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
                 break;
 
-            case "":
-                TileObject[e].layer = 9;
-                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                {
-                    ModifyTile(false, "platform", TileObject[e]);
-                }
-                break;
-
-            case "~":
-                TileObject[e].layer = 10;
-                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                {
-                    ModifyTile(false, "platform", TileObject[e]);
-                }
-                break;
-
-            case "=":
+            case 2:
                 TileObject[e].layer = 8;
                 if (TileObject[e].GetComponent<PlatformEffector2D>() == null)
                 {
@@ -374,16 +355,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
                 break;
 
-            case "/":
-                TileObject[e].layer = 17;
-                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
-                {
-                    ModifyTile(false, "platform", TileObject[e]);
-                }
-                break;
-
-            case @"\":
-                TileObject[e].layer = 18;
+            case 3:
+                TileObject[e].layer = 10;
                 if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
                 {
                     ModifyTile(false, "platform", TileObject[e]);
@@ -723,20 +696,18 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void BlocksPhysics()
     {
-        liquidTileGrid = (int[])TileGrid.Clone();
-
         for (int x = 0; x < 16; x++)
         {
             for (int y = 0; y < manager.WorldHeight; y++)
             {
                 int idx = (x * manager.WorldHeight) + y;
-                int tile = liquidTileGrid[idx];
+                int tile = TileGrid[idx];
 
-                if (tile == 62 || tile == 21)
+                if (manager.TileCollisionType[tile] == 3)
                 {
                     if (manager.frameTimer % manager.ToolEfficency[tile] == 0)
                     {
-                        if (liquidTileGrid[idx - 1] == 0)//GRAVITY
+                        if (TileGrid[idx - 1] == 0)//GRAVITY
                         {
                             PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(0, -1));
                         }
@@ -800,12 +771,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
             else
             {
-                if (tileCondition.Contains(liquidTileGrid[idx - manager.WorldHeight]))
+                if (tileCondition.Contains(TileGrid[idx - manager.WorldHeight]))
                 {
                     int old = idx - manager.WorldHeight;
                     TileGrid[old] = tile;
                     LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
-                    liquidTileGrid[old] = 1;
                     TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
                     UpdateLayerForTile(old);
 
@@ -852,12 +822,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
             else
             {
-                if (tileCondition.Contains(liquidTileGrid[idx + manager.WorldHeight]))
+                if (tileCondition.Contains(TileGrid[idx + manager.WorldHeight]))
                 {
                     int old = idx + manager.WorldHeight;
                     TileGrid[old] = tile;
                     LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
-                    liquidTileGrid[old] = 1;
                     TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
                     UpdateLayerForTile(old);
 
@@ -874,12 +843,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (y < manager.WorldHeight - 1)
             {
-                if (tileCondition.Contains(liquidTileGrid[idx + 1]))
+                if (tileCondition.Contains(TileGrid[idx + 1]))
                 {
                     int old = idx + 1;
                     TileGrid[old] = tile;
                     LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
-                    liquidTileGrid[old] = 1;
                     TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
                     UpdateLayerForTile(old);
 
@@ -896,12 +864,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (y > 0)
             {
-                if (tileCondition.Contains(liquidTileGrid[idx - 1]))
+                if (tileCondition.Contains(TileGrid[idx - 1]))
                 {
                     int old = idx - 1;
                     TileGrid[old] = tile;
                     LightMap[old] = GetLightForTile(old, LightMap[old + 1] == 2f);
-                    liquidTileGrid[old] = 1;
                     TileObject[old].GetComponent<SpriteRenderer>().sprite = manager.tiles[tile];
                     UpdateLayerForTile(old);
 
@@ -925,11 +892,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 for (int y = 0; y < manager.WorldHeight; y++)
                 {
-                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == "#")//Nano1
+                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == 1)//Nano1
                     {
                         if (Random.Range(0, (int)(350 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
                         {
-                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
                             {
                                 ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
                             }
@@ -939,7 +906,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     {
                         if (Random.Range(0, 250) == 0)
                         {
-                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
                             {
                                 ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
                             }
@@ -949,7 +916,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     {
                         if (Random.Range(0, 450) == 0)
                         {
-                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == "" && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
                             {
                                 ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
                             }
@@ -1081,7 +1048,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     {
         if (obj.transform.parent == gameObject.transform)
         {
-            if (Mathf.Abs(player.transform.position.x - obj.transform.position.x) > 0.6f || Mathf.Abs(player.transform.position.y - obj.transform.position.y) > 0.9f || (!manager.building || manager.TileCollisionType[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]] != "#"))
+            if (Mathf.Abs(player.transform.position.x - obj.transform.position.x) > 0.6f || Mathf.Abs(player.transform.position.y - obj.transform.position.y) > 0.9f || (!manager.building || manager.TileCollisionType[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]] != 1))
             {
                 int previousBrush = manager.brush;
                 manager.ChangeBrush(TileGrid[System.Array.IndexOf(TileObject, obj)], obj);
@@ -1097,11 +1064,11 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 TileGrid[System.Convert.ToInt32(msg[1])] = System.Convert.ToInt32(msg[2]);
 
-                if ((msg[2] == "1" || msg[2] == "2") && manager.TileCollisionType[TileGrid[System.Convert.ToInt32(msg[1]) + 1]] == "#")
+                if ((msg[2] == "1" || msg[2] == "2") && manager.TileCollisionType[TileGrid[System.Convert.ToInt32(msg[1]) + 1]] == 1)
                 {
                     TileGrid[System.Convert.ToInt32(msg[1])] = 7;
                 }
-                if (msg[2] == "7" && manager.TileCollisionType[TileGrid[System.Convert.ToInt32(msg[1]) + 1]] != "#")
+                if (msg[2] == "7" && manager.TileCollisionType[TileGrid[System.Convert.ToInt32(msg[1]) + 1]] != 1)
                 {
                     TileGrid[System.Convert.ToInt32(msg[1])] = 1;
                 }

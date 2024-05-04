@@ -67,6 +67,17 @@ public static class ManagingFunctions
         }
     }
 
+    public static bool InsideRanges(Vector2 position, Vector2 min, Vector2 max)
+    {
+        bool returnn = true;
+        if (position.x < min.x) returnn = false;
+        if (position.y < min.y) returnn = false;
+        if (position.x > max.x) returnn = false;
+        if (position.y > max.y) returnn = false;
+
+        return returnn;
+    }
+
     public static int FindIndexInArrayOfVector2(Vector2 vectorToFind, Vector2[] list)
     {
         int index = -1;

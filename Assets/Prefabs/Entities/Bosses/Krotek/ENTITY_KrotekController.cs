@@ -367,7 +367,7 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
                 if (leftRay.transform.parent.GetComponent<ChunkController>() != null)
                 {
                     ChunkController chunkController = leftRay.transform.parent.GetComponent<ChunkController>();
-                    leftIsPlatform = GameManager.gameManagerReference.TileCollisionType[chunkController.TileGrid[System.Array.IndexOf(chunkController.TileObject, leftRay.transform.gameObject)]] == "=";
+                    leftIsPlatform = GameManager.gameManagerReference.TileCollisionType[chunkController.TileGrid[System.Array.IndexOf(chunkController.TileObject, leftRay.transform.gameObject)]] == 2;
                 }
             }
 
@@ -377,7 +377,7 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
                 if (rightRay.transform.parent.GetComponent<ChunkController>() != null)
                 {
                     ChunkController chunkController = rightRay.transform.parent.GetComponent<ChunkController>();
-                    rightIsPlatform = GameManager.gameManagerReference.TileCollisionType[chunkController.TileGrid[System.Array.IndexOf(chunkController.TileObject, rightRay.transform.gameObject)]] == "=";
+                    rightIsPlatform = GameManager.gameManagerReference.TileCollisionType[chunkController.TileGrid[System.Array.IndexOf(chunkController.TileObject, rightRay.transform.gameObject)]] == 2;
                 }
             }
 

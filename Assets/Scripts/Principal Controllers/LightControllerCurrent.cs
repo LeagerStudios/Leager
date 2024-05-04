@@ -232,25 +232,42 @@ public class LightControllerCurrent : MonoBehaviour
 
             int e = 0;
             Vector2 abc = Vector2.one * (lightDist / 2);
+            Vector2 min = lightPosition - (Vector2.one * (lightDist + lightRadius * 2));
+            Vector2 max = lightPosition + (Vector2.one * (lightDist + lightRadius * 2));
+            int worldHeight = GameManager.gameManagerReference.WorldHeight;
 
             foreach (GameObject loadedChunk in gameChunksToRead)
             {
                 ChunkController chunkController = loadedChunk.GetComponent<ChunkController>();
+                Vector2 chunkPosition = Vector2.right * chunkController.orgX;
+                int tileX = 0;
+                int tileY = 0;
+
                 if (!chunkController.loading)
-                    for (int i = 0; i < chunkController.LightMap.Length; i++)
-                    {
-                        if (chunkController.LightMap[i] > 0)
+                    if (chunkController.orgX + 16 > transform.position.x - (lightDist + lightRadius * 2) && chunkController.orgX < transform.position.x + (lightDist + lightRadius * 2))
+                        for (int i = 0; i < chunkController.LightMap.Length; i++)
                         {
-                            if (chunkController.TileObject[i] != null)
-                                if (Vector2.Distance(chunkController.TileObject[i].transform.position, lightPosition) < lightDist + lightRadius * 2)
+                            if (chunkController.LightMap[i] > 0)
+                            {
+                                Vector2 thePosition = new Vector2(tileX + chunkController.orgX, tileY);
+
+                                if (ManagingFunctions.InsideRanges(thePosition, min, max))
                                 {
-                                    Vector2 lightPos = (Vector3)lightPosition - (new Vector3(relative[e], 0) + chunkController.TileObject[i].transform.localPosition);
+                                    Vector2 lightPos = lightPosition - thePosition;
 
                                     temp1.Add(lightPos + abc);
                                     temp2.Add(chunkController.LightMap[i]);
                                 }
+
+                            }
+
+                            tileY++;
+                            if(tileY == worldHeight)
+                            {
+                                tileX++;
+                                tileY = 0;
+                            }
                         }
-                    }
 
                 e++;
             }
