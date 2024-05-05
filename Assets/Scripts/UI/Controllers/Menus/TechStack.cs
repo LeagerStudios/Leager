@@ -31,7 +31,7 @@ public class TechStack : MonoBehaviour
             Lock();
             Unlock();
         }
-        GetComponent<Button>().onClick.AddListener(() => TechManager.techTree.UnlockBlock(tile));
+        //GetComponent<Button>().onClick.AddListener(() => TechManager.techTree.UnlockBlock(tile));
     }
 
     public void Lock()
@@ -51,7 +51,8 @@ public class TechStack : MonoBehaviour
 
     public void Unlock()
     {
-        unlocked = true;
+        if (!parent || parent.fullyUnlocked)
+            unlocked = true;
 
         GetComponent<Button>().interactable = true;
         GetComponent<Image>().enabled = true;

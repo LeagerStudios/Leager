@@ -26,7 +26,11 @@ public class TechManager : MonoBehaviour, IDragHandler
 
     public void Start()
     {
-       
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/tech.lgrsd"))
+        {
+            int[] items = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/tech.lgrsd").SavedData);
+            StartUnlocks(new List<int>(items));
+        }
     }
 
     public void StartUnlocks(List<int> unlocks)
@@ -39,6 +43,7 @@ public class TechManager : MonoBehaviour, IDragHandler
     {
         TechStack[] techStacks = transform.GetComponentsInChildren<TechStack>(true);
         foreach (TechStack techStack in techStacks) techStack.UnlockedItem(block);
+        unlockedItems.Add(block);
     }
 
     public void Update()

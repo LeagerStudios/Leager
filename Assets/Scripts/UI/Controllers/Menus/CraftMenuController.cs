@@ -276,5 +276,7 @@ public class CraftMenuController : MonoBehaviour
             GameManager.gameManagerReference.player.PlayerRelativeDrop(tileSelected, tileSelectedAmount);
 
         tileSelectedAmount = temp;
+
+        TechManager.techTree.UnlockBlock(tileSelected);
     }
 }
