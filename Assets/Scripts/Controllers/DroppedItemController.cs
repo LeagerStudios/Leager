@@ -48,7 +48,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
                             gettingEnabled = false;
                             NetworkController.networkController.DropRequest(item, amount, gameObject.name, collision.gameObject.name);
                         }
-                        TechManager.techTree.UnlockBlock(item);
+                        TechManager.techTree.UnlockBlock(item, true);
                     }
                 }
 

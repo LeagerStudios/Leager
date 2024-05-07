@@ -18,6 +18,8 @@ public class CraftMenuController : MonoBehaviour
 
     List<int> currentTiles = new List<int>();
     List<int> currentTileAmounts = new List<int>();
+    List<int> avaliableTiles = new List<int>();
+    List<string> availableRecipes = new List<string>();
 
     public void InvokeMenu(Transform followTo)
     {
@@ -32,14 +34,20 @@ public class CraftMenuController : MonoBehaviour
         for (int i = 0; i < LIT; i++)
         {
 
-            List<char> tile = new List<char>();
+            List<char> tileList = new List<char>();
 
             for (int i2 = 0; text[i][i2] != '{'; i2++)
             {
-                tile.Add(text[i][i2]);
+                tileList.Add(text[i][i2]);
             }
+            int tile = System.Convert.ToInt32(new string(tileList.ToArray()));
 
-            options.Add(GameManager.gameManagerReference.tiles[System.Convert.ToInt32(new string(tile.ToArray()))]);
+            if (TechManager.techTree.unlockedItems.Contains(tile))
+            {
+                availableRecipes.Add(text[i]);
+                avaliableTiles.Add(tile);
+                options.Add(GameManager.gameManagerReference.tiles[System.Convert.ToInt32(new string(tileList.ToArray()))]);
+            }
         }
 
         UiMenu = transform.parent.gameObject;
@@ -107,8 +115,7 @@ public class CraftMenuController : MonoBehaviour
 
     public void BlockSelected(int blockIdx)
     {
-        string line = DataSaver.ReadTxt(Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt")[blockIdx];
-
+        string line = availableRecipes[blockIdx];
         {
             bool canRead = false;
             bool onKeys = false;
@@ -277,6 +284,6 @@ public class CraftMenuController : MonoBehaviour
 
         tileSelectedAmount = temp;
 
-        TechManager.techTree.UnlockBlock(tileSelected);
+        TechManager.techTree.UnlockBlock(tileSelected, true);
     }
 }

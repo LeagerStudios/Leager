@@ -959,7 +959,7 @@ public class GameManager : MonoBehaviour
 
             DataSaver.SaveStats(entities, persistentDataPath + @"/worlds/" + worldName + @"/ent.lgrsd");
             DataSaver.SaveStats(playerPosition, persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
-            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(TechManager.techTree.unlockedItems.ToArray()), persistentDataPath + @"/worlds/" + worldName + @"/tech.lgrsd");
+            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(TechManager.techTree.fullyUnlockedItems.ToArray()), persistentDataPath + @"/worlds/" + worldName + @"/tech.lgrsd");
             ManagingFunctions.SaveStackBarAndInventory();
         }
 

@@ -8,7 +8,9 @@ public class TechManager : MonoBehaviour, IDragHandler
 {
     [Header("Main Stuff")]
     public static TechManager techTree;
+    public Dictionary<int, TechStack> techStacks = new Dictionary<int, TechStack>();
     public List<int> unlockedItems = new List<int>();
+    public List<int> fullyUnlockedItems = new List<int>();
 
     [Header("Full Color")]
 
@@ -22,6 +24,14 @@ public class TechManager : MonoBehaviour, IDragHandler
     {
         techTree = this;
         deployed = false;
+
+        TechStack[] techStacks = transform.GetComponentsInChildren<TechStack>(true);
+        foreach (TechStack techStack in techStacks)
+        {
+            this.techStacks.Add(techStack.tile, techStack);
+            techStack.Start1();
+        }
+
     }
 
     public void Start()
@@ -36,14 +46,26 @@ public class TechManager : MonoBehaviour, IDragHandler
     public void StartUnlocks(List<int> unlocks)
     {
         foreach (int unlock in unlocks)
-            UnlockBlock(unlock);
+        {
+            UnlockBlock(unlock, true);
+        }
+
     }
-    
-    public void UnlockBlock(int block)
+
+    public void UnlockBlock(int block, bool fully)
     {
-        TechStack[] techStacks = transform.GetComponentsInChildren<TechStack>(true);
-        foreach (TechStack techStack in techStacks) techStack.UnlockedItem(block);
-        unlockedItems.Add(block);
+        if (techStacks.TryGetValue(block, out TechStack stack))
+        {
+            stack.Unlock();
+            if (fully)
+                stack.UnlockFully();
+        }
+        else
+        {
+            unlockedItems.Add(block);
+            fullyUnlockedItems.Add(block);
+        }
+       
     }
 
     public void Update()

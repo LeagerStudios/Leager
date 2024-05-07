@@ -22,7 +22,7 @@ public class TechStack : MonoBehaviour
         transform.GetChild(1).GetComponent<Image>().enabled = addPlusSimbol;
     }
 
-    void Start()
+    public void Start1()
     {
         if (parent)
             Lock();
@@ -31,7 +31,6 @@ public class TechStack : MonoBehaviour
             Lock();
             Unlock();
         }
-        //GetComponent<Button>().onClick.AddListener(() => TechManager.techTree.UnlockBlock(tile));
     }
 
     public void Lock()
@@ -52,30 +51,39 @@ public class TechStack : MonoBehaviour
     public void Unlock()
     {
         if (!parent || parent.fullyUnlocked)
+        {
             unlocked = true;
 
-        GetComponent<Button>().interactable = true;
-        GetComponent<Image>().enabled = true;
-        transform.GetChild(0).GetComponent<Image>().enabled = true;
-        transform.GetChild(1).GetComponent<Image>().enabled = addPlusSimbol;
-        GetComponent<Button>().colors = TechManager.techTree.notFullColor;
+            GetComponent<Button>().interactable = true;
+            GetComponent<Image>().enabled = true;
+            transform.GetChild(0).GetComponent<Image>().enabled = true;
+            transform.GetChild(1).GetComponent<Image>().enabled = addPlusSimbol;
+            GetComponent<Button>().colors = TechManager.techTree.notFullColor;
 
-        foreach (GameObject node in nodes)
-            node.SetActive(true);
+            transform.parent.GetComponent<TechManager>().unlockedItems.Add(tile);
 
-        if (unlockOnFullUnlock.Length == 0)
-            UnlockFully();
+            foreach (GameObject node in nodes)
+                node.SetActive(true);
+
+            if (unlockOnFullUnlock.Length == 0)
+                UnlockFully();
+        }
     }
 
     public void UnlockFully()
     {
-        fullyUnlocked = true;
-        GetComponent<Button>().interactable = true;
-        GetComponent<Button>().colors = TechManager.techTree.fullColor;
-
-        foreach (int toUnlock in unlockOnFullUnlock)
+        if (!parent || parent.fullyUnlocked)
         {
-            TechManager.techTree.UnlockBlock(toUnlock);
+            unlocked = true;
+            fullyUnlocked = true;
+            GetComponent<Button>().interactable = true;
+            GetComponent<Button>().colors = TechManager.techTree.fullColor;
+            transform.parent.GetComponent<TechManager>().fullyUnlockedItems.Add(tile);
+
+            foreach (int toUnlock in unlockOnFullUnlock)
+            {
+                TechManager.techTree.UnlockBlock(toUnlock, false);
+            }
         }
     }
 
