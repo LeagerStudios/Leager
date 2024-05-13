@@ -118,8 +118,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
             for (int e = 0; e < TileGrid.Length; e++)
             {
                 DivisionResult d = ManagingFunctions.EntireDivision(e, manager.WorldHeight);
-                int tileX = (int)d.cocient;
-                int tileY = (int)d.rest;
+                int tileX = d.cocient;
+                int tileY = d.rest;
 
                 if (TileGrid[e] < 0) TileGrid[e] = 0;
 
@@ -199,6 +199,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         {
                             Timer timer = TileObject[e].AddComponent<Timer>();
                             timer.InvokeTimer(10, new string[] { "ChangeBrick", e + "", }, this);
+                            AnimatorBlock(e, TileGrid[e]);
                             TileObject[e].GetComponent<BlockAnimationController>().PlayAnimation();
                         }
                         else if (TileObject[e].GetComponent<Timer>() != null && TileGrid[e - 1] != 5)
@@ -276,23 +277,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                 //end of behaviors
                 TileMod(e, TileGrid[e]);
-                if (manager.tileAnimation[TileGrid[e]] != null)
-                {
-                    if (TileObject[e].GetComponent<BlockAnimationController>() == null)
-                    {
-                        BlockAnimationController animationController = TileObject[e].AddComponent<BlockAnimationController>();
-                        animationController.animationData = manager.tileAnimation[TileGrid[e]];
-                        animationController.rootBIdx = e;
-                        animationController.rootChunk = this;
-                    }
-                }
-                else
-                {
-                    if (TileObject[e].GetComponent<BlockAnimationController>() != null)
-                    {
-                        Destroy(TileObject[e].GetComponent<BlockAnimationController>());
-                    }
-                }
+                AnimatorBlock(e, TileGrid[e]);
 
                 if (manager.tileAnimation[TileGrid[e]] == null)
                 {
@@ -319,6 +304,27 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
 
             //UpdateWalls();
+        }
+    }
+
+    public void AnimatorBlock(int e, int tile)
+    {
+        if (manager.tileAnimation[tile] != null)
+        {
+            if (TileObject[e].GetComponent<BlockAnimationController>() == null)
+            {
+                BlockAnimationController animationController = TileObject[e].AddComponent<BlockAnimationController>();
+                animationController.animationData = manager.tileAnimation[tile];
+                animationController.rootBIdx = e;
+                animationController.rootChunk = this;
+            }
+        }
+        else
+        {
+            if (TileObject[e].GetComponent<BlockAnimationController>() != null)
+            {
+                Destroy(TileObject[e].GetComponent<BlockAnimationController>());
+            }
         }
     }
 

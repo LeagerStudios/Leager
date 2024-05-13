@@ -8,6 +8,7 @@ public class TechManager : MonoBehaviour, IDragHandler
 {
     [Header("Main Stuff")]
     public static TechManager techTree;
+    public TechStack[] stacks;
     public Dictionary<int, TechStack> techStacks = new Dictionary<int, TechStack>();
     public List<int> unlockedItems = new List<int>();
     public List<int> fullyUnlockedItems = new List<int>();
@@ -24,9 +25,9 @@ public class TechManager : MonoBehaviour, IDragHandler
     {
         techTree = this;
         deployed = false;
+        
 
-        TechStack[] techStacks = transform.GetComponentsInChildren<TechStack>(true);
-        foreach (TechStack techStack in techStacks)
+        foreach (TechStack techStack in stacks)
         {
             this.techStacks.Add(techStack.tile, techStack);
             techStack.Start1();

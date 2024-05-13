@@ -582,6 +582,32 @@ public class PlayerController : MonoBehaviour, IDamager
                 gameManager.equipedArmor[i] = 0;
             }
         }
+
+        for (int i = 0; i < StackBar.stackBarController.StackBarGrid.Length; i++)
+        {
+            int tile = StackBar.stackBarController.StackBarGrid[i];
+            if (tile > 0)
+            {
+                if (gameManager.tileType[tile] != "tool")
+                {
+                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-2f, 2f), StackBar.stackBarController.StackItemAmount[i]);
+                    StackBar.AsignNewStack(i, 0, 0);
+                }
+            }
+        }
+
+        for (int i = 0; i < InventoryBar.inventoryBarController.InventoryBarGrid.Length; i++)
+        {
+            int tile = InventoryBar.inventoryBarController.InventoryBarGrid[i];
+            if (tile > 0)
+            {
+                if (gameManager.tileType[tile] != "tool")
+                {
+                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-2f,2f), InventoryBar.inventoryBarController.InventoryItemAmount[i]);
+                    InventoryBar.AsignNewStack(i, 0, 0);
+                }
+            }
+        }
     }
 
     IEnumerator KillAllLives(float secs)
