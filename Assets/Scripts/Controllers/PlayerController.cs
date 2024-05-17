@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour, IDamager
     void Update()
     {
         if (isMain)
+        {
             if (spawned)
             {
                 if (alive && gameManager.InGame)
@@ -68,32 +69,29 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 transform.position = new Vector2(0, 0);
             }
+
+            float y = transform.position.y;
+            if (entityScript.entityStates.Contains(EntityState.Drowning))
+            {
+                mainCamera.currentBackground = "Water";
+            }
+            else if (y < gameManager.WorldHeight * 0.1f)
+            {
+                mainCamera.currentBackground = "Lava";
+            }
+            else if (y < gameManager.WorldHeight * 0.5f)
+            {
+                mainCamera.currentBackground = "Rock";
+                gameManager.PlayOST("cave");
+            }
+            else
+            {
+                mainCamera.currentBackground = "Air";
+            }
+        }
         else
         {
             Hitbox();
-        }
-
-        float y = transform.position.y;
-        if (entityScript.entityStates.Contains(EntityState.Drowning))
-        {
-            mainCamera.currentBackground = "Water";
-        }
-        else if (entityScript.entityStates.Contains(EntityState.Burning))
-        {
-            mainCamera.currentBackground = "Hot";
-        }
-        else if (y < gameManager.WorldHeight * 0.1f)
-        {
-            mainCamera.currentBackground = "Lava";
-        }
-        else if (y < gameManager.WorldHeight * 0.5f)
-        {
-            mainCamera.currentBackground = "Rock";
-            gameManager.PlayOST("cave");
-        }
-        else
-        {
-            mainCamera.currentBackground = "Air";
         }
     }
 
@@ -590,7 +588,7 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 if (gameManager.tileType[tile] != "tool")
                 {
-                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-2f, 2f), StackBar.stackBarController.StackItemAmount[i]);
+                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f, 5f) + Vector2.up * 2, StackBar.stackBarController.StackItemAmount[i]);
                     StackBar.AsignNewStack(i, 0, 0);
                 }
             }
@@ -603,7 +601,7 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 if (gameManager.tileType[tile] != "tool")
                 {
-                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-2f,2f), InventoryBar.inventoryBarController.InventoryItemAmount[i]);
+                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f,5f) + Vector2.up * 2, InventoryBar.inventoryBarController.InventoryItemAmount[i]);
                     InventoryBar.AsignNewStack(i, 0, 0);
                 }
             }

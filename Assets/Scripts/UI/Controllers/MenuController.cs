@@ -138,8 +138,8 @@ public class MenuController : MonoBehaviour {
 
        
 
-        MiniMap.SetActive(miniMapOn);
-        MiniMapCamera.SetActive(miniMapOn);
+        MiniMap.SetActive(miniMapOn && gameManager.player.alive);
+        MiniMapCamera.SetActive(miniMapOn && gameManager.player.alive);
 
         if (miniMapOn && MiniMapButton.activeInHierarchy)
         {
@@ -426,7 +426,8 @@ public class MenuController : MonoBehaviour {
     {
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", false);
         yield return new WaitForSeconds(1);
-        gameManager.player.Respawn((gameManager.WorldWidth * 16) / 2, gameManager.SearchForClearSpawn((gameManager.WorldWidth * 16) / 2) + 2);
+        Vector2 respawnPos = gameManager.RespawnPosition();
+        gameManager.player.Respawn(respawnPos.x, respawnPos.y);
         gameManager.UpdateChunksActive();
         yield return new WaitForSeconds(Mathf.Clamp(secs - 1, 0, 100));
         deathScreenController.ResetScreen();

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4012388461021220}
   - component: {fileID: 114729877220749926}
+  - component: {fileID: 50035362822924676}
   m_Layer: 0
   m_Name: emptyChunk
   m_TagString: Untagged
@@ -59,7 +60,6 @@ MonoBehaviour:
   tilesToChunk: 0
   orgX: 0
   entitiesSpawnTime: 0
-  liquidTileGrid: 
   grassObject: {fileID: 1349882380421944, guid: 0237245838412a8438afe9831b6fdd0e,
     type: 3}
   fireObject: {fileID: 1774782936830166, guid: cd062fb7db861eb498646a4970687d29, type: 3}
@@ -93,3 +93,24 @@ MonoBehaviour:
   - {fileID: 21300022, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
   - {fileID: 21300024, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
   - {fileID: 21300026, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
+--- !u!50 &50035362822924676
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728888408477196}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

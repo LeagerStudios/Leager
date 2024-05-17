@@ -210,7 +210,6 @@ public class LightControllerCurrent : MonoBehaviour
         if (loadedChunks.Length > 0)
         {
             List<GameObject> gameChunksToRead = new List<GameObject>();
-            List<int> relative = new List<int>();
             int playerChunk = (int)Mathf.Floor(GameManager.gameManagerReference.player.transform.position.x / 16f);
 
             for (int i = playerChunk - MenuController.menuController.chunksOnEachSide; i < playerChunk + MenuController.menuController.chunksOnEachSide; i++)
@@ -226,8 +225,6 @@ public class LightControllerCurrent : MonoBehaviour
                 }
 
                 gameChunksToRead.Add(GameManager.gameManagerReference.chunkContainer.transform.GetChild(chunkToLoad).gameObject);
-                //Debug.LogError(i * 16);
-                relative.Add(i * 16);
             }
 
             int e = 0;
@@ -239,17 +236,16 @@ public class LightControllerCurrent : MonoBehaviour
             foreach (GameObject loadedChunk in gameChunksToRead)
             {
                 ChunkController chunkController = loadedChunk.GetComponent<ChunkController>();
-                Vector2 chunkPosition = Vector2.right * chunkController.orgX;
                 int tileX = 0;
                 int tileY = 0;
 
                 if (!chunkController.loading)
-                    if (chunkController.orgX + 16 > transform.position.x - (lightDist + lightRadius * 2) && chunkController.orgX < transform.position.x + (lightDist + lightRadius * 2))
+                    if (chunkController.currentX + 16 > transform.position.x - (lightDist + lightRadius * 2) && chunkController.currentX < transform.position.x + (lightDist + lightRadius * 2))
                         for (int i = 0; i < chunkController.LightMap.Length; i++)
                         {
                             if (chunkController.LightMap[i] > 0)
                             {
-                                Vector2 thePosition = new Vector2(tileX + chunkController.orgX, tileY);
+                                Vector2 thePosition = new Vector2(tileX + chunkController.currentX, tileY);
 
                                 if (ManagingFunctions.InsideRanges(thePosition, min, max))
                                 {

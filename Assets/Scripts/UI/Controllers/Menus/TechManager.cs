@@ -32,7 +32,7 @@ public class TechManager : MonoBehaviour, IDragHandler
             this.techStacks.Add(techStack.tile, techStack);
             techStack.Start1();
         }
-
+        gameObject.SetActive(false);
     }
 
     public void Start()

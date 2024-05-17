@@ -111,7 +111,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 118
+        y: 113
         width: 56
         height: 108
       alignment: 0
@@ -130,8 +130,8 @@ TextureImporter:
       name: LecterAnim_1
       rect:
         serializedVersion: 2
-        x: 60
-        y: 118
+        x: 62
+        y: 113
         width: 56
         height: 108
       alignment: 0
@@ -151,7 +151,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 121
-        y: 118
+        y: 113
         width: 56
         height: 108
       alignment: 0
@@ -171,7 +171,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 180
-        y: 118
+        y: 113
         width: 56
         height: 108
       alignment: 0

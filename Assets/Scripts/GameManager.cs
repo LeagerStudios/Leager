@@ -67,7 +67,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Transition;
     [SerializeField] GameObject savingText;
     [SerializeField] AudioClip[] caveOST;
-    public string[] temp;
 
     [Header("Other")]
     public bool isNetworkClient = false;
@@ -152,38 +151,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnValidate()
-    {
-        TileCollisionType = new int[temp.Length];
-
-        for(int i = 0; i < temp.Length; i++)
-        {
-
-            if (temp[i] == "")
-            {
-                TileCollisionType[i] = 0;
-            }
-            if (temp[i] == "#")
-            {
-                TileCollisionType[i] = 1;
-            }
-            if (temp[i] == "=")
-            {
-                TileCollisionType[i] = 2;
-            }
-            if (temp[i] == "~")
-            {
-                TileCollisionType[i] = 3;
-            }
-        }
-    }
-
     public void UpdateEntitiesRB2D(bool value)
     {
         Rigidbody2D[] rigidbodys = FindObjectsOfType<Rigidbody2D>();
         foreach (Rigidbody2D rigidbody2D in rigidbodys)
         {
-            rigidbody2D.simulated = value;
+            if(rigidbody2D.simulated != value)
+                rigidbody2D.simulated = value;
         }
     }
 
@@ -333,7 +307,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            respawnPosition = new Vector2(WorldWidth * 16 / 2, SearchForClearSpawn(WorldWidth * 16 / 2) + 2);
+            respawnPosition = RespawnPosition();
         }
 
         player.Respawn(respawnPosition.x, respawnPosition.y);
@@ -1085,7 +1059,20 @@ public class GameManager : MonoBehaviour
             {
                 for (int i2 = 0; i2 < 16; i2++)
                 {
-                    floorUndergroundEnd = worldTileHeight[i * 16 + i2] - Random.Range(2, 6);
+                    
+
+                    if (worldTileHeight[i * 16 + i2] < WorldHeight * 0.66f)
+                    {
+                        floorSurfTile = 113;
+                        floorUndergroundTile = 113;
+                        floorUndergroundEnd = worldTileHeight[i * 16 + i2] - Random.Range(4, 8);
+                    }
+                    else
+                    {
+                        floorSurfTile = 1;
+                        floorUndergroundTile = 7;
+                        floorUndergroundEnd = worldTileHeight[i * 16 + i2] - Random.Range(3, 6);
+                    }
 
                     for (int e = 0; e < WorldHeight; e++)
                     {
@@ -1345,7 +1332,7 @@ public class GameManager : MonoBehaviour
 
             if (currentPlanetName == "Korenz" || currentPlanetName == "Intersection")//enemy center
             {
-                int xPosition = Random.Range(0, WorldWidth * 15);
+                int xPosition = Random.Range(0, (int)(WorldWidth * 15 * 0.2f));
                 int yPosition = WorldHeight / 10 * 9;
 
                 while(yPosition > 0)
@@ -1919,17 +1906,33 @@ public class GameManager : MonoBehaviour
         return returnItem;
     }
 
-    public int SearchForClearSpawn(int x)
+    public int SearchForClearSpawn(ref int x)
     {
-        for (int i = WorldHeight - 2; i > 0; i--)
+        while (x < WorldWidth * 16) // Asegúrate de que no salga del límite del mundo
         {
-            if (allMapGrid[(x * WorldHeight) + i] != 0 && allMapGrid[(x * WorldHeight) + i + 1] == 0)
+            for (int i = WorldHeight - 2; i > 0; i--)
             {
-                return i;
+                int currentIndex = (x * WorldHeight) + i;
+                if (allMapGrid[currentIndex] == 62)
+                {
+                    x += 1; // Incrementa x y continúa con la siguiente columna
+                    break;
+                }
+                else if (allMapGrid[currentIndex] != 0 && allMapGrid[currentIndex + 1] == 0)
+                {
+                    return i;
+                }
             }
         }
 
-        return WorldHeight + 1;
+        return WorldHeight + 1; // Si no se encontró una posición válida, retornamos un valor por defecto
+    }
+
+    public Vector2 RespawnPosition()
+    {
+        int x = Random.Range((int)(WorldWidth * 16 * 0.45f), (int)(WorldWidth * 16 * 0.55f));
+        int y = SearchForClearSpawn(ref x);
+        return new Vector2(x, y + 2);
     }
 
     public int GetTileAt(int idx)

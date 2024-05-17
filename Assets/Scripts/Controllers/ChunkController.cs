@@ -18,6 +18,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public int childId;
     public int tilesToChunk;
     public int orgX;
+    public int currentX;
     GameManager manager;
     PlayerController player;
     public const float entitiesSpawnTimeConstant = 3f;
@@ -48,6 +49,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         LightMap = new float[h * 16];
         manager = GameManager.gameManagerReference;
         orgX = orgXpos;
+        currentX = orgX;
         player = GameObject.Find("Lecter").GetComponent<PlayerController>();
         childId = cId;
         tilesToChunk = (manager.WorldHeight * 16) * childId;
@@ -82,7 +84,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
         }
 
-
+        currentX = nearestPos;
         transform.position = new Vector2(nearestPos, 0);
     }
 
@@ -715,21 +717,21 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     {
                         if (TileGrid[idx - 1] == 0)//GRAVITY
                         {
-                            PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(0, -1));
+                            PhysicsForFluidBlocks(x, y, tile, 0, 0, new Vector2(0, -1));
                         }
                         else/* if (liquidTileGrid[idx - 1] != tile)*/
                         {
                             int dir = Random.Range(-1, 2);
-                            if (!PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(dir, 0)))
-                                PhysicsForFluidBlocks(x, y, tile, new List<int>(new int[] { 0 }), 0, new Vector2(-dir, 0));
+                            if (!PhysicsForFluidBlocks(x, y, tile, 0, 0, new Vector2(dir, 0)))
+                                PhysicsForFluidBlocks(x, y, tile,  0, 0, new Vector2(-dir, 0));
                         }
 
                         if (tile == 21)
                         {
-                            if (!PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(0, 1)))
-                                if (!PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(0, -1)))
-                                    if (!PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(-1, 0)))
-                                        PhysicsForFluidBlocks(x, y, 62, new List<int>(new int[] { 62 }), 6, new Vector2(1, 0));
+                            if (!PhysicsForFluidBlocks(x, y, 62, 62, 6, Vector2.up))
+                                if (!PhysicsForFluidBlocks(x, y, 62, 62, 6, Vector2.down))
+                                    if (!PhysicsForFluidBlocks(x, y, 62, 62, 6, Vector2.left))
+                                        PhysicsForFluidBlocks(x, y, 62, 62, 6, Vector2.right);
                         }
                     }
                 }
@@ -738,7 +740,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     }
 
 
-    bool PhysicsForFluidBlocks(int x, int y, int tile, List<int> tileCondition, int residualTile, Vector2 dir)
+    bool PhysicsForFluidBlocks(int x, int y, int tile, int tileCondition, int residualTile, Vector2 dir)
     {
         int idx = (x * manager.WorldHeight) + y;
         bool placed = false;
@@ -750,7 +752,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 int extTile = manager.GetTileAt(tilesToChunk - (manager.WorldHeight - y));
                 if (extTile != -1)
                 {
-                    if (tileCondition.Contains(extTile))
+                    if (tileCondition == extTile)
                     {
                         if (manager.GetTileObjectAt(tilesToChunk - (manager.WorldHeight - y)) != null)
                         {
@@ -777,7 +779,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
             else
             {
-                if (tileCondition.Contains(TileGrid[idx - manager.WorldHeight]))
+                if (tileCondition == TileGrid[idx - manager.WorldHeight])
                 {
                     int old = idx - manager.WorldHeight;
                     TileGrid[old] = tile;
@@ -801,7 +803,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 int extTile = manager.GetTileAt(tilesToChunk + manager.NumberOfTilesInChunk + y);
                 if (extTile != -1)
                 {
-                    if (tileCondition.Contains(extTile))
+                    if (tileCondition == extTile)
                     {
                         if (manager.GetTileObjectAt(tilesToChunk + manager.NumberOfTilesInChunk + y) != null)
                         {
@@ -828,7 +830,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
             else
             {
-                if (tileCondition.Contains(TileGrid[idx + manager.WorldHeight]))
+                if (tileCondition == TileGrid[idx + manager.WorldHeight])
                 {
                     int old = idx + manager.WorldHeight;
                     TileGrid[old] = tile;
@@ -849,7 +851,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (y < manager.WorldHeight - 1)
             {
-                if (tileCondition.Contains(TileGrid[idx + 1]))
+                if (tileCondition == TileGrid[idx + 1])
                 {
                     int old = idx + 1;
                     TileGrid[old] = tile;
@@ -870,7 +872,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (y > 0)
             {
-                if (tileCondition.Contains(TileGrid[idx - 1]))
+                if (tileCondition == TileGrid[idx - 1])
                 {
                     int old = idx - 1;
                     TileGrid[old] = tile;

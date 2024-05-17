@@ -42,12 +42,12 @@ public class CraftMenuController : MonoBehaviour
             }
             int tile = System.Convert.ToInt32(new string(tileList.ToArray()));
 
-            if (TechManager.techTree.unlockedItems.Contains(tile))
-            {
-                availableRecipes.Add(text[i]);
-                avaliableTiles.Add(tile);
-                options.Add(GameManager.gameManagerReference.tiles[System.Convert.ToInt32(new string(tileList.ToArray()))]);
-            }
+            //if (TechManager.techTree.unlockedItems.Contains(tile))
+            //{
+            availableRecipes.Add(text[i]);
+            avaliableTiles.Add(tile);
+            options.Add(GameManager.gameManagerReference.tiles[System.Convert.ToInt32(new string(tileList.ToArray()))]);
+            //}
         }
 
         UiMenu = transform.parent.gameObject;

@@ -728,13 +728,9 @@ public class Client
 
     public static bool Main(string ip, int portParam, string message)
     {
+        int serverPort = portParam;
 
-        serverIpAddress = IPAddress.Parse(ip); // replace with the IP address of the server
-        int serverPort = portParam; // replace with the port number used by the server
-
-        Debug.Log("check");
-
-        client = new TcpClient(serverIpAddress.ToString(), serverPort);
+        client = new TcpClient(ip, serverPort);
         Debug.Log("check");
         stream = client.GetStream();
         Debug.Log("check");
@@ -745,6 +741,7 @@ public class Client
 
         Debug.Log("getting version");
         string version = Read(1024);
+        Debug.Log(version);
         if (version != Application.version)
         {
             Write("d");
