@@ -1004,7 +1004,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < worldTileHeight.Length; i++)
         {
-            worldTileHeight[i] = (int)((Mathf.PerlinNoise(i * 0.04f, aaa) * 0.4f + Mathf.PerlinNoise(i * 0.01f, aaa) * 0.6f) * (WorldHeight / 3)) + (WorldHeight / 2 /*0.5*/);
+            worldTileHeight[i] = (int)((Mathf.PerlinNoise(i * 0.04f, aaa) * 0.4f + Mathf.PerlinNoise(i * 0.02f, aaa) * 0.6f) * (WorldHeight / 3)) + (WorldHeight / 2 /*0.5*/);
             if(i > worldTileHeight.Length - 16)
             {
                 worldTileHeight[i] = (int)Mathf.Lerp(worldTileHeight[i], worldTileHeight[0], (i - (worldTileHeight.Length - 16f)) / 16f);
@@ -1176,19 +1176,43 @@ public class GameManager : MonoBehaviour
                         }
                         if (Random.Range(0, 3) == 0 && i2 < 14 && i2 > 3 && e > worldTileHeight[i * 16 + i2])
                         {
-                            if (buildedMapGrid[idx - 1] == 1 && buildedMapGrid[idx] == 0 &&
-                                buildedMapGrid[idx + WorldHeight] != 53 && buildedMapGrid[idx - WorldHeight] != 53
-                                && buildedMapGrid[idx + WorldHeight * 2] != 53 && buildedMapGrid[idx - WorldHeight * 2] != 53)
+                            if (buildedMapGrid[idx] == 0)
                             {
-                                buildedMapGrid[idx] = 53;
-                                buildedMapGrid[idx + 1] = 53;
-                                buildedMapGrid[idx + 2 + WorldHeight] = 55;
-                                buildedMapGrid[idx + 2] = 55;
-                                buildedMapGrid[idx + 2 - WorldHeight] = 55;
-                                buildedMapGrid[idx + 3 + WorldHeight] = 55;
-                                buildedMapGrid[idx + 3] = 55;
-                                buildedMapGrid[idx + 3 - WorldHeight] = 55;
-                            }
+                                if (buildedMapGrid[idx - 1] == 1 &&
+                                    buildedMapGrid[idx + WorldHeight] != 53 && buildedMapGrid[idx - WorldHeight] != 53
+                                    && buildedMapGrid[idx + WorldHeight * 2] != 53 && buildedMapGrid[idx - WorldHeight * 2] != 53)
+                                {
+                                    buildedMapGrid[idx] = 53;
+                                    buildedMapGrid[idx + 1] = 53;
+                                    buildedMapGrid[idx + 2 + WorldHeight] = 55;
+                                    buildedMapGrid[idx + 2] = 55;
+                                    buildedMapGrid[idx + 2 - WorldHeight] = 55;
+                                    buildedMapGrid[idx + 3 + WorldHeight] = 55;
+                                    buildedMapGrid[idx + 3] = 55;
+                                    buildedMapGrid[idx + 3 - WorldHeight] = 55;
+                                }
+                                else if (buildedMapGrid[idx - 1] == 113 &&
+                                   buildedMapGrid[idx + WorldHeight] != 53 && buildedMapGrid[idx - WorldHeight] != 53
+                                   && buildedMapGrid[idx + WorldHeight * 2] != 53 && buildedMapGrid[idx - WorldHeight * 2] != 53)
+                                {
+                                    buildedMapGrid[idx] = 53;
+                                    buildedMapGrid[idx + 1] = 53;
+                                    buildedMapGrid[idx + 2] = 53;
+                                    buildedMapGrid[idx + 3] = 55;
+                                    buildedMapGrid[idx + 4 + WorldHeight] = 55;
+                                    buildedMapGrid[idx + 4 + WorldHeight * 2] = 55;
+                                    buildedMapGrid[idx + 3 + WorldHeight * 2] = 55;
+                                    buildedMapGrid[idx + 3 + WorldHeight] = 55;
+                                    buildedMapGrid[idx + 4] = 55;
+                                    buildedMapGrid[idx + 4 - WorldHeight] = 55;
+                                    buildedMapGrid[idx + 4 - WorldHeight * 2] = 55;
+                                    buildedMapGrid[idx + 3 - WorldHeight * 2] = 55;
+                                    buildedMapGrid[idx + 3 - WorldHeight] = 55;
+                                    buildedMapGrid[idx + 5 + WorldHeight] = 55;
+                                    buildedMapGrid[idx + 5] = 55;
+                                    buildedMapGrid[idx + 5 - WorldHeight] = 55;
+                                }
+                        }
                         }
 
                     }
@@ -1228,7 +1252,25 @@ public class GameManager : MonoBehaviour
                                 {
                                     buildedMapGrid[cavesIdx] = 21;
                                 }
-                        if(y < WorldHeight * 0.06f)
+                        if (y < WorldHeight * 0.06f)
+                        {
+                            buildedMapGrid[cavesIdx] = 21;
+                        }
+                    }
+                    else if (cavesGeneration.GetPixel(x, y).a > 0.9f && y < floorUndergroundEnd * Random.Range(0.5f, 0.4f) && y > 3)
+                    {
+                        buildedMapGrid[cavesIdx] = 112;
+                        if (y > WorldHeight * 0.2f)
+                            if (Random.Range(0, (WorldHeight - y) / 2) == 0)
+                            {
+                                buildedMapGrid[cavesIdx] = 62;
+                            }
+                            else if (y < WorldHeight * 0.3)
+                                if (Random.Range(0, y * 2) == 0 && buildedMapGrid[cavesIdx - 1] == 6)
+                                {
+                                    buildedMapGrid[cavesIdx] = 21;
+                                }
+                        if (y < WorldHeight * 0.06f)
                         {
                             buildedMapGrid[cavesIdx] = 21;
                         }
@@ -1872,7 +1914,6 @@ public class GameManager : MonoBehaviour
                 returnItem = 0;
                 break;
             case 98:
-
                 if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15)
                 {
                     SetTileAt((tileEntryPos.x + 1) * WorldHeight + tileEntryPos.y, 0);
@@ -1899,6 +1940,28 @@ public class GameManager : MonoBehaviour
                 break;
             case 106:
                 returnItem = 0;
+                break;
+            case 114:
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15)
+                {
+                    SetTileAt((tileEntryPos.x + 1) * WorldHeight + tileEntryPos.y, 0);
+                    returnItem = 116;
+                }
+                else
+                {
+                    returnItem = 0;
+                }
+                break;
+            case 115:
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 0)
+                {
+                    SetTileAt((tileEntryPos.x - 1) * WorldHeight + tileEntryPos.y, 0);
+                    returnItem = 116;
+                }
+                else
+                {
+                    returnItem = 0;
+                }
                 break;
         }
 

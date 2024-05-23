@@ -36,6 +36,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject raideonSpawnerObject;
     [SerializeField] GameObject ladderObject;
     [SerializeField] GameObject grassThingObject;
+    [SerializeField] GameObject bedLeftSideObject;
+    [SerializeField] GameObject bedRightSideObject;
 
     [SerializeField] Sprite[] waterFrames;
 
@@ -625,6 +627,52 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     GameObject ladderBlock = Instantiate(ladderObject, gameTile.transform);
                     ladderBlock.transform.localPosition = Vector2.zero;
                     ladderBlock.name = "110";
+                }
+                break;
+
+            case 114:
+                if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 115)
+                {
+                    ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.right * 0.5f);
+                    TileGrid[e] = 0;
+                }
+                break;
+
+            case 115:
+                if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 114)
+                {
+                    ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.left * 0.5f);
+                    TileGrid[e] = 0;
+                    if (e > manager.WorldHeight - 1)
+                    {
+                        TileMod(e - manager.WorldHeight, TileGrid[e - manager.WorldHeight]);
+                    }
+                }
+                else if (gameTile.transform.childCount < 1)
+                {
+                    GameObject bedBlock = Instantiate(bedRightSideObject, gameTile.transform);
+                    bedBlock.transform.localPosition = Vector2.zero;
+                    bedBlock.name = "115";
+                }
+                break;
+
+            case 116:
+                try
+                {
+                    if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) == 0)
+                    {
+                        TileGrid[e] = 114;
+                        manager.SetTileAt(tilesToChunk + e + manager.WorldHeight, 115);
+                    }
+                    else
+                    {
+                        throw new System.Exception("UH NO");
+                    }
+                }
+                catch
+                {
+                    TileGrid[e] = 0;
+                    StackBar.AddItem(116);
                 }
                 break;
         }

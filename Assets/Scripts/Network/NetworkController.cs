@@ -540,6 +540,7 @@ public class Server
             string message = Encoding.ASCII.GetString(data, 0, bytesRead);
 
             //TODO Check if username in use, if true then refuse the connect, else let client connect
+            Debug.Log("client user:" + message);
             List<string> usernamesInUse = new List<string> { hostUsername, "null", "Lecter" };
             foreach (TcpUser c in clients)
                 usernamesInUse.Add(c.username);
@@ -547,13 +548,17 @@ public class Server
             if (usernamesInUse.Contains(message))
             {
                 client.GetStream().Close();
+                Debug.Log("rejected client for repeated username");
                 return "null";
             }
+
+            Debug.Log("sending client version" + Application.version);
             Write(client, Application.version);
+
 
             Debug.Log("get ready");
             string a = Read(client, 1024);
-            Debug.Log(a);
+            Debug.Log("client response" + a);
             if (a != "d")
             {
                 Debug.Log("got here so far");
@@ -741,6 +746,7 @@ public class Client
 
         Debug.Log("getting version");
         string version = Read(1024);
+        Debug.Log("client side version: " + Application.version + "server version:" + version + "thats it");
         Debug.Log(version);
         if (version != Application.version)
         {

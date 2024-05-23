@@ -59,6 +59,7 @@ MonoBehaviour:
   childId: 0
   tilesToChunk: 0
   orgX: 0
+  currentX: 0
   entitiesSpawnTime: 0
   grassObject: {fileID: 1349882380421944, guid: 0237245838412a8438afe9831b6fdd0e,
     type: 3}
@@ -77,6 +78,10 @@ MonoBehaviour:
   ladderObject: {fileID: 7829329832030426735, guid: 6f3801fe3d09e314e834849b4b8feb38,
     type: 3}
   grassThingObject: {fileID: 3194508716061061972, guid: 4b82c662aa2fabe4d9ff2a74d9092c5f,
+    type: 3}
+  bedLeftSideObject: {fileID: 3958546898027053879, guid: d2264d168ec6e5045bf6fe654dd9fd7c,
+    type: 3}
+  bedRightSideObject: {fileID: 9129773542900688025, guid: 51e0bb7c60dfda64a830ccb92db94941,
     type: 3}
   waterFrames:
   - {fileID: 21300000, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
