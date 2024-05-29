@@ -89,6 +89,18 @@ public class NetworkController : MonoBehaviour
             blocksToReplace.Add(new string[] { Server.hostUsername, "chunkReplace", chunkIdx.ToString(), idx.ToString(), tile.ToString() });
         }
     }
+    
+    public void UpdateBackgroundBlock(int chunkIdx, int idx, int tile)
+    {
+        if (GameManager.gameManagerReference.isNetworkClient)
+        {
+            Client.Write(string.Join(";", new string[] { "chunkBgReplace", chunkIdx.ToString(), idx.ToString(), tile.ToString() + "/" }));
+        }
+        else if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            blocksToReplace.Add(new string[] { Server.hostUsername, "chunkBgReplace", chunkIdx.ToString(), idx.ToString(), tile.ToString() });
+        }
+    }
 
     public void UpdateProperties(int chunkIdx, int idx, string properties)
     {
@@ -728,6 +740,7 @@ public class Client
 
     public static int[] worldProportionsLoad;
     public static int[] worldMapLoad;
+    public static int[] backgroundMapLoad;
     public static string[] worldMapPropLoad;
     public static string[] worldBiomesLoad;
 
@@ -842,6 +855,7 @@ public class Client
         }
 
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
+        backgroundMapLoad = new int[backgroundMapLoad.Length];
         worldMapPropLoad = mapprop.Split('$');
         //leaves with server write turn
     }

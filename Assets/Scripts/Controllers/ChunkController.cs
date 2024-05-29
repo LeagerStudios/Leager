@@ -11,6 +11,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public string chunkBiome = "dumby";
     public bool loading = false;
     public int[] TileGrid;
+    public int[] BackgroundTileGrid;
     public string[] TilePropertiesArr;
     public float[] LightMap;
     public GameObject[] TileObject;
@@ -26,6 +27,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     [Header("Prefabs")]
 
+    [SerializeField] GameObject BackgroundTile;
     [SerializeField] GameObject grassObject;
     [SerializeField] GameObject fireObject;
     [SerializeField] GameObject doorObject;
@@ -46,6 +48,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         loaded = false;
         ID = id;
         TileGrid = new int[h * 16];
+        BackgroundTileGrid = new int[h * 16];
         TilePropertiesArr = new string[h * 16];
         TileObject = new GameObject[h * 16];
         LightMap = new float[h * 16];
@@ -403,23 +406,12 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
         }
 
-        if (gameTile.transform.childCount > 0)
-        {
-            for (int i = 0; i < gameTile.transform.childCount; i++)
-            {
-                if (gameTile.transform.GetChild(i).gameObject.name != tile + "")
-                {
-                    GameObject block = gameTile.transform.GetChild(i).gameObject;
-                    block.transform.parent = null;
-                    Destroy(block);
-                }
-            }
-        }
+        int childs = RevaluateLifeChoicesForTile(gameTile, tile, e);
 
         switch (tile)
         {
             case 1:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject grassBlock = Instantiate(grassObject, gameTile.transform);
                     grassBlock.transform.localPosition = Vector2.zero;
@@ -428,7 +420,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 15:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject boxBlock = Instantiate(boxObject, gameTile.transform);
                     boxBlock.transform.localPosition = Vector2.zero;
@@ -437,7 +429,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 55:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject leavesBlock = Instantiate(leavesObject, gameTile.transform);
                     leavesBlock.transform.localPosition = Vector2.zero;
@@ -446,7 +438,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 84:
-                if (tile == 84 && gameTile.transform.childCount < 1)
+                if (tile == 84 && childs < 1)
                 {
                     GameObject fireBlock = Instantiate(fireObject, gameTile.transform);
                     fireBlock.name = "84";
@@ -477,7 +469,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                                 animationController.rootChunk = this;
                             }
 
-                            if (gameTile.transform.childCount < 1)
+                            if (childs < 1)
                             {
                                 GameObject doorBlock = Instantiate(doorObject, gameTile.transform);
                                 doorBlock.name = "86";
@@ -498,28 +490,30 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 86:
-                    if (TileGrid[e + 1] != 87)
-                    {
-                        ManagingFunctions.DropItem(85, gameTile.transform.position);
-                        TileGrid[e] = 0;
-                    }
-                    else
-                    {
-                        if (gameTile.GetComponent<BlockAnimationController>() == null)
-                        {
-                            BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
-                            animationController.animationData = manager.tileAnimation[TileGrid[e]];
-                            animationController.rootBIdx = e;
-                            animationController.rootChunk = this;
-                        }
+                if (TileGrid[e + 1] != 87)
+                {
+                    ManagingFunctions.DropItem(85, gameTile.transform.position);
+                    TileGrid[e] = 0;
 
-                        if (gameTile.transform.childCount < 1)
-                        {
-                            GameObject doorBlock = Instantiate(doorObject, gameTile.transform);
-                            doorBlock.name = "86";
-                            doorBlock.transform.localPosition = Vector2.zero;
-                        }
+                    RevaluateLifeChoicesForTile(gameTile, 0, e);
+                }
+                else
+                {
+                    if (gameTile.GetComponent<BlockAnimationController>() == null)
+                    {
+                        BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
+                        animationController.animationData = manager.tileAnimation[TileGrid[e]];
+                        animationController.rootBIdx = e;
+                        animationController.rootChunk = this;
                     }
+
+                    if (childs < 1)
+                    {
+                        GameObject doorBlock = Instantiate(doorObject, gameTile.transform);
+                        doorBlock.name = "86";
+                        doorBlock.transform.localPosition = Vector2.zero;
+                    }
+                }
                 break;
 
             case 87:
@@ -531,7 +525,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 89:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject grabberObject = Instantiate(resourceGrabberObject, gameTile.transform);
                     grabberObject.name = "89";
@@ -576,7 +570,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 101:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject unitCenter = Instantiate(unitCenterObject, gameTile.transform);
                     unitCenter.name = "101";
@@ -585,7 +579,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 102:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject boxBlock = Instantiate(boxObject, gameTile.transform);
                     boxBlock.transform.localPosition = Vector2.zero;
@@ -594,7 +588,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 106:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject grassBlock = Instantiate(grassThingObject, gameTile.transform);
                     grassBlock.transform.localPosition = Vector2.zero;
@@ -604,7 +598,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
 
             case 108:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject spawnerBlock = Instantiate(raideonSpawnerObject, gameTile.transform);
                     spawnerBlock.transform.localPosition = Vector2.zero;
@@ -613,7 +607,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 109:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject ladderBlock = Instantiate(ladderObject, gameTile.transform);
                     ladderBlock.transform.localPosition = Vector2.zero;
@@ -622,7 +616,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
 
             case 110:
-                if (gameTile.transform.childCount < 1)
+                if (childs < 1)
                 {
                     GameObject ladderBlock = Instantiate(ladderObject, gameTile.transform);
                     ladderBlock.transform.localPosition = Vector2.zero;
@@ -648,7 +642,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         TileMod(e - manager.WorldHeight, TileGrid[e - manager.WorldHeight]);
                     }
                 }
-                else if (gameTile.transform.childCount < 1)
+                else if (childs < 1)
                 {
                     GameObject bedBlock = Instantiate(bedRightSideObject, gameTile.transform);
                     bedBlock.transform.localPosition = Vector2.zero;
@@ -677,6 +671,53 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 break;
         }
 
+    }
+
+    public int RevaluateLifeChoicesForTile(GameObject gameTile, int tile, int e)
+    {
+        bool properBackground = false;
+        int bgCount = 0;
+        if (gameTile.transform.childCount > 0)
+        {
+            for (int i = 0; i < gameTile.transform.childCount; i++)
+            {
+                string name = gameTile.transform.GetChild(i).gameObject.name;
+                if(name[0] == 'b')
+                {
+                    bgCount++;
+                    if (name != "b" + BackgroundTileGrid[e])
+                    {
+                        GameObject block = gameTile.transform.GetChild(i).gameObject;
+                        block.transform.parent = null;
+                        Destroy(block);
+                        properBackground = false;
+                        bgCount--;
+                    }
+                    else
+                    {
+                        properBackground = true;
+                    }
+                }
+                else if (name != tile + "")
+                {
+                    GameObject block = gameTile.transform.GetChild(i).gameObject;
+                    block.transform.parent = null;
+                    Destroy(block);
+                }
+            }
+        }
+
+        if (!properBackground && BackgroundTileGrid[e] != 0)
+        {
+            GameObject newTile = Instantiate(BackgroundTile, gameTile.transform);
+
+            newTile.transform.localPosition = Vector2.zero;
+            newTile.name = "b" + BackgroundTileGrid[e];
+            newTile.GetComponent<SpriteRenderer>().sprite = manager.tiles[BackgroundTileGrid[e]];
+            bgCount++;
+        }
+
+        return gameTile.transform.childCount - bgCount;
     }
 
     public float GetLightForTile(int idx, bool isStillSunny)
@@ -1092,6 +1133,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             for (int e = 0; e < TileGrid.Length; e++)
             {
                 manager.allMapGrid[tilesToChunk + e] = TileGrid[e];
+                manager.allBackgroundGrid[tilesToChunk + e] = BackgroundTileGrid[e];
             }
         }
         else if (!loading && !loaded)
