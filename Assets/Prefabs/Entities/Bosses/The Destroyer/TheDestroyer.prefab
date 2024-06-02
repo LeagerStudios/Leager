@@ -43,7 +43,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 243859799719048750, guid: b396ad02b291ead4aac10c9be3beaabc,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 2bcb259bb2c6f5a429c22328877566fb, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 3d5b26f917424ec47aa7ab13bb7e024c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -257,7 +257,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 823596895
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300008, guid: eb829623feff1a945a50accb9e334dc4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -396,7 +396,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 823596895
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: -3
   m_Sprite: {fileID: 21300000, guid: eb829623feff1a945a50accb9e334dc4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -446,6 +446,9 @@ MonoBehaviour:
   entityBase: {fileID: 0}
   EntityType: destroyer
   EntityFamily: worm
+  height: 1
+  width: 0.35
+  raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 1
   rb2D: {fileID: 50213022238250784}
@@ -454,3 +457,7 @@ MonoBehaviour:
   affectedByLiquids: 0
   affectedBySolids: 0
   swimming: 0
+  ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 0
