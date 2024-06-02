@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using UnityEngine.Audio;
+using System.Linq;
 
 public class PushPlay : MonoBehaviour
 {
@@ -51,11 +52,22 @@ public class PushPlay : MonoBehaviour
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");
+        if (Application.isBatchMode)
+        {
+            ServerConsole.serverConsole.StartConsole();
+        }
     }
 
     private void Update()
     {
+        if (!ServerConsole.serverConsole.awaiting)
+        {
+            ServerConsole.serverConsole.SendEmbed(new string[] { "Select world:" }.Concat(WorldPanelController.worldPanelController.listOfLoadedWorlds).ToArray());
+        }
+        else if(ServerConsole.serverConsole.GetOutput(out string output))
+        {
 
+        }
     }
 
     public void OpenSocialMedia(string link)
