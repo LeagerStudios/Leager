@@ -48,7 +48,7 @@ public class PlanetMenuController : MonoBehaviour {
 
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
         {
-            planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("25FF00FF"), 50));
+            planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("25FF00FF"), 120));
             planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 250));
             planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 340));
             //planets.Add(new PlanetData("Fortress", ManagingFunctions.HexToColor("#7A7F80"), 15));

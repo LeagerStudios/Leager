@@ -78,6 +78,11 @@ public static class ManagingFunctions
         return returnn;
     }
 
+    public static int CreateIndex(Vector2Int position)
+    {
+        return position.x * gameManager.WorldHeight + position.y;
+    }
+
     public static int FindIndexInArrayOfVector2(Vector2 vectorToFind, Vector2[] list)
     {
         int index = -1;

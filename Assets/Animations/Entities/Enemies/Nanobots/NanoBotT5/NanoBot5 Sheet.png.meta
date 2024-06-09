@@ -11,6 +11,8 @@ TextureImporter:
     21300012: NanoBot5 Sheet_6
     21300014: NanoBot5 Sheet_7
     21300016: NanoBot5 Sheet_8
+    21300018: NanoBot5 Sheet_9
+    21300020: NanoBot5 Sheet_10
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -51,7 +53,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 20
@@ -107,12 +109,12 @@ TextureImporter:
       name: NanoBot5 Sheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 27
+        x: 2
+        y: 28
+        width: 14
+        height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -127,12 +129,12 @@ TextureImporter:
       name: NanoBot5 Sheet_1
       rect:
         serializedVersion: 2
-        x: 22
-        y: 0
-        width: 16
-        height: 27
+        x: 24
+        y: 28
+        width: 14
+        height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -147,12 +149,12 @@ TextureImporter:
       name: NanoBot5 Sheet_2
       rect:
         serializedVersion: 2
-        x: 44
-        y: 0
-        width: 16
-        height: 27
+        x: 8
+        y: 53
+        width: 26
+        height: 3
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -167,12 +169,12 @@ TextureImporter:
       name: NanoBot5 Sheet_3
       rect:
         serializedVersion: 2
-        x: 66
-        y: 0
-        width: 16
-        height: 27
+        x: 40
+        y: 53
+        width: 10
+        height: 3
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -187,18 +189,18 @@ TextureImporter:
       name: NanoBot5 Sheet_4
       rect:
         serializedVersion: 2
-        x: 87
-        y: 0
-        width: 16
-        height: 27
+        x: 66
+        y: 16
+        width: 4
+        height: 4
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 59b13adfc6d47b24ca027f3d0507acb0
+      spriteID: b3d9331b2b08f6c46a25f5fa73dcc2c5
       vertices: []
       indices: 
       edges: []
@@ -207,18 +209,18 @@ TextureImporter:
       name: NanoBot5 Sheet_5
       rect:
         serializedVersion: 2
-        x: 108
-        y: 0
-        width: 16
-        height: 27
+        x: 64
+        y: 24
+        width: 8
+        height: 4
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f423061b63efe594181640f7b2fc45e6
+      spriteID: 7d3859c1d8d70864698545a0425b0708
       vertices: []
       indices: 
       edges: []
@@ -227,58 +229,58 @@ TextureImporter:
       name: NanoBot5 Sheet_6
       rect:
         serializedVersion: 2
-        x: 132
-        y: 0
-        width: 16
-        height: 27
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9d3f6aaa7ba13bd4abb7c7e8370bc285
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: NanoBot5 Sheet_7
-      rect:
-        serializedVersion: 2
-        x: 151
-        y: 0
-        width: 4
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0bf51939d907c294aab68b46365ed024
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: NanoBot5 Sheet_8
-      rect:
-        serializedVersion: 2
-        x: 159
-        y: 0
+        x: 80
+        y: 24
         width: 8
         height: 27
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed68f6fa28b22df42b04d0e26a45eaa9
+      spriteID: b75fe229eddc1f148ab05b80ac7be6fe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NanoBot5 Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a323a93cdb935454bb653475247fe199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NanoBot5 Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 6
+        width: 20
+        height: 12
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 515b8ebe71a32134f8548ad57d4f4361
       vertices: []
       indices: 
       edges: []
@@ -286,7 +288,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 524a0571a95f4c34cb3a6e7492daa3cf
     vertices: []
     indices: 
     edges: []

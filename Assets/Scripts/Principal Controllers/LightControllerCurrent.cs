@@ -195,7 +195,7 @@ public class LightControllerCurrent : MonoBehaviour
         {
             lightTexture = lightEcoTexture.Export(FilterMode.Trilinear);
         }
-        Sprite illuminationMap = Sprite.Create(lightTexture, new Rect(0.0f, 0.0f, lightTexture.width, lightTexture.height), new Vector2(0.5f, 0.5f), 1);
+        Sprite illuminationMap = Sprite.Create(lightTexture, new Rect(0.0f, 0.0f, lightTexture.width, lightTexture.height), new Vector2(0.5f, 0.5f), 1, 0, SpriteMeshType.FullRect);
         GetComponent<SpriteRenderer>().sprite = illuminationMap;
         renderized = false;
     }

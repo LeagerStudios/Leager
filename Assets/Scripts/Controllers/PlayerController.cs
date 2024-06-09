@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     mainCamera.transform.eulerAngles = Mathf.LerpAngle(mainCamera.transform.eulerAngles.z, 0, 10f * Time.deltaTime) * Vector3.forward;
                 }
 
-                if (!alive && !killing && gameManager.InGame)
+                if (!alive && !killing && gameManager.InGame && !CommandController.commandController.showcaseMode)
                 {
                     mainCamera.transform.eulerAngles += Vector3.forward * Time.deltaTime;
                     mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
@@ -143,6 +143,7 @@ public class PlayerController : MonoBehaviour, IDamager
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
         transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = true;
         rb2D.bodyType = RigidbodyType2D.Dynamic;
+        entityScript.entityStates = new List<EntityState>();
         transform.position = new Vector2(x, y);
         Camera.main.orthographicSize = 5f;
         Camera.main.GetComponent<CameraController>().focus = gameObject;
@@ -468,12 +469,12 @@ public class PlayerController : MonoBehaviour, IDamager
 
     public void LoseHp(int hpLost, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
-        soundController.PlaySfxSound(SoundName.damage);
-
         if (gameManager.InGame && alive)
         {
             if (hpLost > 0)
             {
+                soundController.PlaySfxSound(SoundName.damage);
+
                 if (!penetrate)
                 {
                     for (int i = 0; i < 3; i++)

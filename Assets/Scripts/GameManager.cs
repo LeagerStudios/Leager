@@ -1328,7 +1328,7 @@ public class GameManager : MonoBehaviour
                     {
                         int idx = dy + (dx * WorldHeight);
 
-                        buildedMapGrid[idx] = 105;
+                        allBackgroundGrid[idx] = 105;
 
                         if (dy == yPosition)
                             buildedMapGrid[idx] = 6;
@@ -1400,7 +1400,23 @@ public class GameManager : MonoBehaviour
                         buildedMapGrid[idx] = 18;
 
                         if (dy == yPosition)
-                            buildedMapGrid[idx] = 7;
+                        {
+                            int e = idx - 1;
+                            int pallete = 7;
+                            while(TileCollisionType[buildedMapGrid[e]] != 1)
+                            {
+                                e--;
+                            }
+                            pallete = buildedMapGrid[e];
+
+                            e = idx - 1;
+                            while(TileCollisionType[buildedMapGrid[e]] != 1)
+                            {
+                                buildedMapGrid[e] = pallete;
+                                e--;
+                            }
+                        }
+
 
                         if (dx == xPosition)
                         {
@@ -1419,35 +1435,43 @@ public class GameManager : MonoBehaviour
                         {
                             if (dy == yPosition + 1)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 2)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 3)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 4)
                             {
                                 buildedMapGrid[idx] = 88;
+                                allBackgroundGrid[idx] = 107;
                             }
                             if (dy == yPosition + 6)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 7)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 8)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 9)
                             {
                                 buildedMapGrid[idx] = 88;
+                                allBackgroundGrid[idx] = 107;
                             }
                             if (dy == yPosition + 11)
                             {
@@ -1472,6 +1496,7 @@ public class GameManager : MonoBehaviour
                             else
                             {
                                 buildedMapGrid[idx] = 110;
+                                allBackgroundGrid[idx] = 107;
                             }
                         }
 
@@ -1479,35 +1504,43 @@ public class GameManager : MonoBehaviour
                         {
                             if (dy == yPosition + 1)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 2)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 3)
                             {
-                                buildedMapGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
+                                allBackgroundGrid[idx] = 107;
                             }
                             if (dy == yPosition + 4)
                             {
                                 buildedMapGrid[idx] = 88;
+                                allBackgroundGrid[idx] = 107;
                             }
                             if (dy == yPosition + 6)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 7)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 8)
                             {
-                                buildedMapGrid[idx] = 107;
+                                allBackgroundGrid[idx] = 107;
+                                buildedMapGrid[idx] = 0;
                             }
                             if (dy == yPosition + 9)
                             {
                                 buildedMapGrid[idx] = 88;
+                                allBackgroundGrid[idx] = 107;
                             }
                             if (dy == yPosition + 11)
                             {
@@ -1548,6 +1581,8 @@ public class GameManager : MonoBehaviour
                         buildedMapGrid[idx] = 109;
                     else
                         buildedMapGrid[idx] = 0;
+
+                    allBackgroundGrid[idx] = 107;
 
                     if (y == 21)
                     {
@@ -1725,16 +1760,6 @@ public class GameManager : MonoBehaviour
             }
 
             gameChunksToLoad.Add(chunkContainer.transform.GetChild(chunkToLoad).gameObject);
-        }
-
-        foreach (GameObject chunk in LoadedChunks)
-        {
-            if (!gameChunksToLoad.Contains(chunk) && chunk.activeInHierarchy)
-            {
-                ChunkController chunkC = chunk.GetComponent<ChunkController>();
-                if (chunkC.loaded)
-                    chunkC.DestroyChunk();
-            }
         }
 
         foreach (GameObject chunk in gameChunksToLoad)
@@ -2103,7 +2128,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public ChunkController SetTileAt(int idx, int tile, bool updateChunk = true)
+    public ChunkController SetTileAt(int idx, int tile, bool updateChunk = true, bool markUpdateChunk = false)
     {
         try
         {
@@ -2118,6 +2143,7 @@ public class GameManager : MonoBehaviour
             ChunkController chunk = chunkContainer.transform.GetChild((int)ManagingFunctions.EntireDivision(idx, WorldHeight * 16).cocient).GetComponent<ChunkController>();
             chunk.TileGrid[idx - chunk.tilesToChunk] = tile;
             if (updateChunk) chunk.UpdateChunk();
+            if (markUpdateChunk) chunk.updateChunk = true;
             if (isNetworkClient || isNetworkHost) NetworkController.networkController.UpdateBlock(chunk.transform.GetSiblingIndex(), idx - chunk.tilesToChunk, tile);
             return chunk;
         }
@@ -2129,8 +2155,6 @@ public class GameManager : MonoBehaviour
 
     public void TileExplosionAt(int x, int y, int radius, int strength, bool dropBlocks = true)
     {
-        List<ChunkController> chunks2Update = new List<ChunkController>();
-
         for (int dx = x - radius; dx < x + radius + 1; dx++)
         {
             for (int dy = y - radius; dy < y + radius + 1; dy++)
@@ -2139,20 +2163,14 @@ public class GameManager : MonoBehaviour
 
                 if (Vector2.Distance(new Vector2(dx, dy), new Vector2(x, y)) < radius && ToolEfficency[getTile] < strength)
                 {
-                    ChunkController c = SetTileAt(dx * WorldHeight + dy, 0, false);
+                    ChunkController c = SetTileAt(dx * WorldHeight + dy, 0, false, true);
 
                     if (Random.Range(0, 2) == 0 && dropBlocks)
                     {
                         ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2Int(dx, dy)), new Vector2(dx, dy));
                     }
-
-                    if (!chunks2Update.Contains(c))
-                        chunks2Update.Add(c);
                 }
             }
         }
-
-        foreach (ChunkController chunk in chunks2Update)
-            chunk.UpdateChunk();
     }
 }

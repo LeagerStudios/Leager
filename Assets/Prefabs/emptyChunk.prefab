@@ -82,6 +82,8 @@ MonoBehaviour:
     type: 3}
   grassThingObject: {fileID: 3194508716061061972, guid: 4b82c662aa2fabe4d9ff2a74d9092c5f,
     type: 3}
+  fallingSandObject: {fileID: 2922841541217916977, guid: d869698c8eab2694b98ed15858739b22,
+    type: 3}
   bedLeftSideObject: {fileID: 3958546898027053879, guid: d2264d168ec6e5045bf6fe654dd9fd7c,
     type: 3}
   bedRightSideObject: {fileID: 9129773542900688025, guid: 51e0bb7c60dfda64a830ccb92db94941,

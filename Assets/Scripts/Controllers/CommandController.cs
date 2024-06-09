@@ -9,14 +9,17 @@ public class CommandController : MonoBehaviour {
     Text text;
     bool commandEnabled;
     bool varraSan = false;
+    public bool showcaseMode = false;
     string command = "";
     char writebar = ' ';
     int writebarFrame = 0;
-    public string thingForced;
+    public static CommandController commandController;
+
 
 	void Start () {
         background = GetComponent<Image>();
         text = transform.GetChild(0).GetComponent<Text>();
+        commandController = this;
 
         commandEnabled = false;
         background.enabled = false;
@@ -30,6 +33,17 @@ public class CommandController : MonoBehaviour {
         //    Vector2 pos = GameManager.gameManagerReference.player.transform.position;
         //    GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
         //}
+
+        if (showcaseMode)
+        {
+            GameManager.gameManagerReference.player.transform.Translate(Vector2.right * Time.deltaTime);
+            int idx = ManagingFunctions.CreateIndex(Vector2Int.RoundToInt(GameManager.gameManagerReference.player.transform.position));
+            int mesh1 = GameManager.gameManagerReference.TileCollisionType[GameManager.gameManagerReference.GetTileAt(idx - 1)];
+            if (mesh1 == 1 || mesh1 == 3) GameManager.gameManagerReference.player.transform.Translate(Vector2.up * Time.deltaTime);
+            int mesh2 = GameManager.gameManagerReference.TileCollisionType[GameManager.gameManagerReference.GetTileAt(idx - 2)];
+            if (mesh2 != 1 && mesh2 != 3) GameManager.gameManagerReference.player.transform.Translate(Vector2.down * Time.deltaTime);
+
+        }
 
         if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
         {
@@ -187,6 +201,14 @@ public class CommandController : MonoBehaviour {
             else if (input[0] == "sun")
             {
                 varraSan = true;
+            }
+            else if (input[0] == "showcase")
+            {
+                GameManager.gameManagerReference.InGame = true;
+                GameManager.gameManagerReference.player.LoseHp(99999, GameManager.gameManagerReference.player.entityScript, true, 0, true);
+                MenuController.menuController.UIActive = false;
+                showcaseMode = true;
+
             }
             else
             {

@@ -24,6 +24,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     PlayerController player;
     public const float entitiesSpawnTimeConstant = 3f;
     public float entitiesSpawnTime = 0f;
+    public bool updateChunk = false;
 
     [Header("Prefabs")]
 
@@ -38,6 +39,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject raideonSpawnerObject;
     [SerializeField] GameObject ladderObject;
     [SerializeField] GameObject grassThingObject;
+    [SerializeField] GameObject fallingSandObject;
     [SerializeField] GameObject bedLeftSideObject;
     [SerializeField] GameObject bedRightSideObject;
 
@@ -624,6 +626,16 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
                 break;
 
+            case 113:
+                if (TileGrid[e - 1] == 0)
+                {
+                    GameObject fallingSand = Instantiate(fallingSandObject, manager.entitiesContainer.transform);
+                    fallingSand.transform.position = gameTile.transform.position;
+                    fallingSand.name = "113";
+                    TileGrid[e] = 0;
+                }
+                break;
+
             case 114:
                 if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 115)
                 {
@@ -1115,15 +1127,25 @@ public class ChunkController : MonoBehaviour, ITimerCall
         gameObject.SetActive(false);
     }
 
-    void Update () {
+    void Update ()
+    {
         if (manager.InGame && loaded && !loading)
         {
+            if (updateChunk)
+            {
+                UpdateChunk();
+                updateChunk = false;
+            }
             BlocksPhysics();
 
             if (entitiesSpawnTime > entitiesSpawnTimeConstant)
             {
                 CheckEntitiesSpawn();
                 entitiesSpawnTime = 0;
+                if (!manager.LoadedChunks.Contains(gameObject))
+                {
+                    DestroyChunk();
+                }
             }
             else
             {
