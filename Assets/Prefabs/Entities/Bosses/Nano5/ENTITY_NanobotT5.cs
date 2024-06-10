@@ -12,7 +12,7 @@ public class ENTITY_NanobotT5 : MonoBehaviour
 
     public int legCount = 4;
     public int legSegmentCount = 4;
-    public float legLenght = -0.79f;
+    public float legLength = 0.79f;
 
     void Start()
     {
@@ -27,7 +27,32 @@ public class ENTITY_NanobotT5 : MonoBehaviour
 
     void AIFrame()
     {
+        for(int i = 0; i < legs.childCount; i++)
+        {
+            Transform leg = legs.GetChild(i);
+            Transform foot = leg.GetChild(legSegmentCount);
 
+            Vector2 startPosition = head.transform.position + leg.transform.localPosition;
+            Vector2 footLocalPosition = (Vector2)foot.transform.position - startPosition;
+            footLocalPosition = Vector2.ClampMagnitude(footLocalPosition, legSegmentCount * legLength);
+            foot.transform.position = footLocalPosition + startPosition;
+            Vector3 dir = Vector3.forward * ManagingFunctions.PointToPivotDown(foot.transform.position, startPosition);
+            foot.eulerAngles = dir;
+            float juan2 = Vector2.Distance(startPosition, foot.transform.position);
+
+            for (int e = leg.childCount - 1; e >= 0; e--)
+            {
+                Transform indexSegment = leg.GetChild(e);
+
+                if(e != legSegmentCount)
+                {
+                    float juan = 1f / legSegmentCount * e;
+                    indexSegment.transform.position = Vector2.Lerp(startPosition, foot.transform.position, juan);
+                    indexSegment.eulerAngles = dir;
+                    indexSegment.localScale = new Vector3(1, juan2 / (legSegmentCount * legLength), 1);
+                }
+            }
+        }
     }
 
     void Spawn()
@@ -42,8 +67,8 @@ public class ENTITY_NanobotT5 : MonoBehaviour
         for(int i = 0; i < legCount; i++)
         {
             float direction = degreesPerLeg * i - 45f;
-            float x = Mathf.Clamp(-Mathf.Sin(Mathf.Deg2Rad * direction), -0.25f, 0.25f);
-            float y = Mathf.Clamp(Mathf.Cos(Mathf.Deg2Rad * direction), -0.4f, 0.4f);
+            float x = Mathf.Clamp(-Mathf.Sin(Mathf.Deg2Rad * direction), -0.2f, 0.2f);
+            float y = Mathf.Clamp(Mathf.Cos(Mathf.Deg2Rad * direction), -0.35f, 0.35f);
 
             GameObject newLeg = new GameObject("Leg" + i);
             newLeg.transform.parent = legs;
