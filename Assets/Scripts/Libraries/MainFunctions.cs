@@ -78,6 +78,25 @@ public static class ManagingFunctions
         return returnn;
     }
 
+    public static Vector2 MoveTowardsTarget(Vector2 current, Vector2 target, float velocity)
+    {
+        // Calculate the direction from current to target
+        Vector2 direction = (target - current).normalized * velocity;
+
+        // Calculate the distance to the target
+        float distance = Vector2.Distance(current, target);
+
+        // Move one unit towards the target, but do not overshoot
+        if (distance < velocity)
+        {
+            return target;
+        }
+        else
+        {
+            return current + direction;
+        }
+    }
+
     public static int CreateIndex(Vector2Int position)
     {
         return position.x * gameManager.WorldHeight + position.y;

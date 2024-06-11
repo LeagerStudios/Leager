@@ -9,10 +9,23 @@ public class ENTITY_NanobotT5 : MonoBehaviour
     public Transform legs;
     public GameObject leg;
     public GameObject feet;
+    public Transform laser;
+    public Transform laserDepresion;
+    public Transform laserTail;
+    public SpriteRenderer laserImpact;
+
 
     public int legCount = 4;
     public int legSegmentCount = 4;
     public float legLength = 0.79f;
+    public float legSpeed = 3f;
+    public float speed = 3f;
+    public Vector2[] legTargets;
+    public EntityCommonScript target;
+    public LayerMask block;
+
+    int kuak = 0;
+    public bool laserActive = false;
 
     void Start()
     {
@@ -27,12 +40,28 @@ public class ENTITY_NanobotT5 : MonoBehaviour
 
     void AIFrame()
     {
-        for(int i = 0; i < legs.childCount; i++)
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            legTargets[kuak] = mousePos;
+            kuak++;
+            if (kuak == legCount)
+                kuak = 0;
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            head.transform.position = ManagingFunctions.MoveTowardsTarget(head.transform.position, mousePos, speed * Time.deltaTime);
+        }
+
+        for (int i = 0; i < legs.childCount; i++)
         {
             Transform leg = legs.GetChild(i);
             Transform foot = leg.GetChild(legSegmentCount);
 
             Vector2 startPosition = head.transform.position + leg.transform.localPosition;
+            foot.transform.position = ManagingFunctions.MoveTowardsTarget(foot.transform.position, legTargets[i], (legSpeed + speed) * Time.deltaTime);
             Vector2 footLocalPosition = (Vector2)foot.transform.position - startPosition;
             footLocalPosition = Vector2.ClampMagnitude(footLocalPosition, legSegmentCount * legLength);
             foot.transform.position = footLocalPosition + startPosition;
@@ -53,6 +82,41 @@ public class ENTITY_NanobotT5 : MonoBehaviour
                 }
             }
         }
+
+        laserActive = Input.GetMouseButton(2);
+        laser.gameObject.SetActive(laserDepresion.localScale.x != 0);
+
+        if (laserActive)
+        {
+            if(laserDepresion.localScale.x < 1f)
+            {
+                laserDepresion.localScale = new Vector2(Mathf.Clamp(laserDepresion.localScale.x + Time.deltaTime * 3, 0f, 1f), 1f);
+            }
+
+            laserDepresion.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(laserDepresion.position, mousePos);
+            float laserLength = 100f;
+            RaycastHit2D rayHit = Physics2D.Raycast(laserTail.position, mousePos - laser.position, 100f, block);
+            if (rayHit)
+            {
+                laserLength = rayHit.distance;
+                laserImpact.transform.position = rayHit.point;
+                laserImpact.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(Vector2.zero, rayHit.normal);
+                laserImpact.enabled = true;
+            }
+            else
+            {
+                laserImpact.enabled = false;
+            }
+
+            laserTail.localScale = new Vector2(1f, laserLength);
+        }
+        else
+        {
+            if (laserDepresion.localScale.x > 0f)
+            {
+                laserDepresion.localScale = new Vector2(Mathf.Clamp(laserDepresion.localScale.x - Time.deltaTime * 3, 0f, 1f), 1f);
+            }
+        }
     }
 
     void Spawn()
@@ -63,6 +127,7 @@ public class ENTITY_NanobotT5 : MonoBehaviour
     void BuildLegs()
     {
         float degreesPerLeg = 360 / legCount;
+        legTargets = new Vector2[legCount];
 
         for(int i = 0; i < legCount; i++)
         {
