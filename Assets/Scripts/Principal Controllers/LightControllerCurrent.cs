@@ -179,9 +179,16 @@ public class LightControllerCurrent : MonoBehaviour
         UpdateLights(lightPosition);
         renderizedTexturePosition = lightPosition + (Vector3)Vector2.one * 0.5f;
 
-        ThreadStart lightDrawRef = new ThreadStart(DrawLights);
-        Thread lightRender = new Thread(lightDrawRef);
-        lightRender.Start();
+        if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            DrawLights();
+        }
+        else
+        {
+            ThreadStart lightDrawRef = new ThreadStart(DrawLights);
+            Thread lightRender = new Thread(lightDrawRef);
+            lightRender.Start();
+        }
     }
 
     public void RenderizeTexture()
