@@ -23,6 +23,7 @@ public class ENTITY_NanobotT5 : MonoBehaviour
     public Vector2[] legTargets;
     public EntityCommonScript target;
     public LayerMask block;
+    public float legRange;
 
     int kuak = 0;
     public bool laserActive = false;
@@ -40,82 +41,109 @@ public class ENTITY_NanobotT5 : MonoBehaviour
 
     void AIFrame()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        int legsOnTarget = 0;
+        Vector2 lastPositon = head.position;
 
-        if (Input.GetMouseButtonDown(0))
+        if (target)
         {
-            legTargets[kuak] = mousePos;
-            kuak++;
-            if (kuak == legCount)
-                kuak = 0;
-        }
+            head.position = ManagingFunctions.MoveTowardsTarget(head.position, target.transform.position, speed * Time.deltaTime);
 
-        if (Input.GetMouseButton(1))
-        {
-            head.transform.position = ManagingFunctions.MoveTowardsTarget(head.transform.position, mousePos, speed * Time.deltaTime);
-        }
-
-        for (int i = 0; i < legs.childCount; i++)
-        {
-            Transform leg = legs.GetChild(i);
-            Transform foot = leg.GetChild(legSegmentCount);
-
-            Vector2 startPosition = head.transform.position + leg.transform.localPosition;
-            foot.transform.position = ManagingFunctions.MoveTowardsTarget(foot.transform.position, legTargets[i], (legSpeed + speed) * Time.deltaTime);
-            Vector2 footLocalPosition = (Vector2)foot.transform.position - startPosition;
-            footLocalPosition = Vector2.ClampMagnitude(footLocalPosition, legSegmentCount * legLength);
-            foot.transform.position = footLocalPosition + startPosition;
-            Vector3 dir = Vector3.forward * ManagingFunctions.PointToPivotDown(foot.transform.position, startPosition);
-            foot.eulerAngles = dir;
-            float juan2 = Vector2.Distance(startPosition, foot.transform.position);
-
-            for (int e = leg.childCount - 1; e >= 0; e--)
+            if (GameManager.gameManagerReference.frameTimer % 600 == 0)
             {
-                Transform indexSegment = leg.GetChild(e);
+                laserActive = true;
+            }
 
-                if(e != legSegmentCount)
+            if (GameManager.gameManagerReference.frameTimer % 720 == 0)
+            {
+                laserActive = false;
+            }
+
+            for (int i = 0; i < legs.childCount; i++)
+            {
+                Transform leg = legs.GetChild(i);
+                Transform foot = leg.GetChild(legSegmentCount);
+
+                Vector2 startPosition = head.position + leg.localPosition;
+                foot.position = ManagingFunctions.MoveTowardsTarget(foot.position, legTargets[i], (legSpeed + speed) * Time.deltaTime);
+                Vector2 footLocalPosition = (Vector2)foot.position - startPosition;
+                Vector2 footNewLocalPosition = Vector2.ClampMagnitude(footLocalPosition, legRange);
+                foot.position = footNewLocalPosition + startPosition;
+                if (footLocalPosition == footNewLocalPosition && (Vector2)foot.position == legTargets[i]) legsOnTarget++;
+                Vector3 dir = Vector3.forward * ManagingFunctions.PointToPivotDown(foot.position, startPosition);
+                foot.eulerAngles = dir;
+                float juan2 = Vector2.Distance(startPosition, foot.position);
+
+                for (int e = leg.childCount - 1; e >= 0; e--)
                 {
-                    float juan = 1f / legSegmentCount * e;
-                    indexSegment.transform.position = Vector2.Lerp(startPosition, foot.transform.position, juan);
-                    indexSegment.eulerAngles = dir;
-                    indexSegment.localScale = new Vector3(1, juan2 / (legSegmentCount * legLength), 1);
+                    Transform indexSegment = leg.GetChild(e);
+
+                    if (e != legSegmentCount)
+                    {
+                        float juan = 1f / legSegmentCount * e;
+                        indexSegment.position = Vector2.Lerp(startPosition, foot.position, juan);
+                        indexSegment.eulerAngles = dir;
+                        indexSegment.localScale = new Vector3(1, juan2 / legRange, 1);
+                    }
                 }
             }
-        }
 
-        laserActive = Input.GetMouseButton(2);
-        laser.gameObject.SetActive(laserDepresion.localScale.x != 0);
+            laser.gameObject.SetActive(laserDepresion.localScale.x != 0);
 
-        if (laserActive)
-        {
-            if(laserDepresion.localScale.x < 1f)
+            if (laserActive)
             {
-                laserDepresion.localScale = new Vector2(Mathf.Clamp(laserDepresion.localScale.x + Time.deltaTime * 3, 0f, 1f), 1f);
-            }
+                if (laserDepresion.localScale.x < 1f)
+                {
+                    laserDepresion.localScale = new Vector2(Mathf.Clamp(laserDepresion.localScale.x + Time.deltaTime * 3, 0f, 1f), 1f);
+                }
 
-            laserDepresion.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(laserDepresion.position, mousePos);
-            float laserLength = 100f;
-            RaycastHit2D rayHit = Physics2D.Raycast(laserTail.position, mousePos - laser.position, 100f, block);
-            if (rayHit)
-            {
-                laserLength = rayHit.distance;
-                laserImpact.transform.position = rayHit.point;
-                laserImpact.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(Vector2.zero, rayHit.normal);
-                laserImpact.enabled = true;
+                laserDepresion.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(laserDepresion.position, target.transform.position);
+                float laserLength = 100f;
+                RaycastHit2D rayHit = Physics2D.Raycast(laserTail.position, target.transform.position - laser.position, 100f, block);
+                if (rayHit)
+                {
+                    laserLength = rayHit.distance;
+                    laserImpact.transform.position = rayHit.point;
+                    laserImpact.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(Vector2.zero, rayHit.normal);
+                    laserImpact.enabled = true;
+                }
+                else
+                {
+                    laserImpact.enabled = false;
+                }
+
+                laserTail.localScale = new Vector2(1f, laserLength);
             }
             else
             {
-                laserImpact.enabled = false;
+                if (laserDepresion.localScale.x > 0f)
+                {
+                    laserDepresion.localScale = new Vector2(Mathf.Clamp(laserDepresion.localScale.x - Time.deltaTime * 3, 0f, 1f), 1f);
+                }
+            }
+            laserImpact.transform.localScale = laserDepresion.localScale;
+
+            if (legsOnTarget == 0)
+            {
+                head.position = lastPositon;
             }
 
-            laserTail.localScale = new Vector2(1f, laserLength);
+            if (GameManager.gameManagerReference.frameTimer % (int)(15 * speed) == 0)
+            {
+                RaycastHit2D rayHit = Physics2D.Raycast(head.position, target.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1, 1)) - head.position, legRange + 0.55f, block);
+
+                if (rayHit)
+                {
+                    legTargets[kuak] = rayHit.point;
+                    kuak++;
+                    if (kuak == legCount)
+                        kuak = 0;
+
+                }
+            }
         }
         else
         {
-            if (laserDepresion.localScale.x > 0f)
-            {
-                laserDepresion.localScale = new Vector2(Mathf.Clamp(laserDepresion.localScale.x - Time.deltaTime * 3, 0f, 1f), 1f);
-            }
+            laserActive = false;
         }
     }
 
@@ -157,5 +185,7 @@ public class ENTITY_NanobotT5 : MonoBehaviour
             feetSegment.transform.eulerAngles = Vector3.forward * direction;
             feetSegment.SetActive(true);
         }
+
+        legRange = legSegmentCount * legLength;
     }
 }
