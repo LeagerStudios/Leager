@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ENTITY_NanobotT5 : MonoBehaviour
+public class ENTITY_NanobotT5 : EntityBase, IDamager
 {
     public Transform head;
     public Transform pulse;
@@ -13,7 +13,7 @@ public class ENTITY_NanobotT5 : MonoBehaviour
     public Transform laserDepresion;
     public Transform laserTail;
     public SpriteRenderer laserImpact;
-
+    public EntityCommonScript entityScript;
 
     public int legCount = 4;
     public int legSegmentCount = 4;
@@ -25,21 +25,55 @@ public class ENTITY_NanobotT5 : MonoBehaviour
     public LayerMask block;
     public float legRange;
 
-    int kuak = 0;
+    int legIterator = 0;
     public bool laserActive = false;
 
-    void Start()
+    float HpMax = 10f;
+    float HP = 10f;
+
+
+    public override int Hp
     {
-        Spawn();
+        get { return Mathf.FloorToInt(HP); }
+
+        set
+        {
+            if (value > HpMax)
+            {
+                HP = HpMax;
+            }
+            else if (value <= 0f)
+            {
+                HP = 0;
+                Kill(null);
+            }
+            else
+            {
+                HP = value;
+            }
+        }
+    }
+
+    public override string[] GenerateArgs()
+    {
+        return null;
+    }
+
+    public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
+    {
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.NanoBotT5], Vector2.zero, Quaternion.identity).GetComponent<ENTITY_NanobotT5>().Spawn(args, spawnPos);
     }
 
     // Update is called once per frame
     void Update()
     {
-        AIFrame();
+        if (GameManager.gameManagerReference.InGame)
+        {
+            AiFrame();
+        }
     }
 
-    void AIFrame()
+    public override void AiFrame()
     {
         int legsOnTarget = 0;
         Vector2 lastPositon = head.position;
@@ -129,14 +163,14 @@ public class ENTITY_NanobotT5 : MonoBehaviour
 
             if (GameManager.gameManagerReference.frameTimer % (int)(15 * speed) == 0)
             {
-                RaycastHit2D rayHit = Physics2D.Raycast(head.position, target.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1, 1)) - head.position, legRange + 0.55f, block);
+                RaycastHit2D rayHit = Physics2D.Raycast(head.position, target.transform.position + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f)) - head.position, legRange + 0.55f, block);
 
                 if (rayHit)
                 {
-                    legTargets[kuak] = rayHit.point;
-                    kuak++;
-                    if (kuak == legCount)
-                        kuak = 0;
+                    legTargets[legIterator] = rayHit.point;
+                    legIterator++;
+                    if (legIterator == legCount)
+                        legIterator = 0;
 
                 }
             }
@@ -147,9 +181,32 @@ public class ENTITY_NanobotT5 : MonoBehaviour
         }
     }
 
-    void Spawn()
+    public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
+        Hp = Hp - damageDeal;
+    }
+
+    public override void Kill(string[] args)
+    {
+        Despawn();
+    }
+
+    public override void Despawn()
+    {
+        Destroy(gameObject);
+    }
+
+    public override EntityBase Spawn(string[] args, Vector2 spawnPos)
+    {
+        head.GetComponent<DamagersCollision>().target = this;
+        //transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+        transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
+        head.position = spawnPos;
+        entityScript = GetComponent<EntityCommonScript>();
         BuildLegs();
+        target = GameManager.gameManagerReference.player.entityScript;
+        Active = true;
+        return this;
     }
 
     void BuildLegs()

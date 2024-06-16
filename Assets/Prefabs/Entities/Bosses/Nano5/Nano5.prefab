@@ -293,16 +293,18 @@ MonoBehaviour:
   laserDepresion: {fileID: 2363450235882591653}
   laserTail: {fileID: 2363450235613802875}
   laserImpact: {fileID: 2363450235256208370}
+  entityScript: {fileID: 0}
   legCount: 4
   legSegmentCount: 8
   legLength: 0.79
-  legSpeed: 3
+  legSpeed: 5
   speed: 2.5
   legTargets: []
   target: {fileID: 0}
   block:
     serializedVersion: 2
     m_Bits: 256
+  legRange: 0
   laserActive: 0
 --- !u!1 &2363450235613802872
 GameObject:
@@ -315,6 +317,7 @@ GameObject:
   - component: {fileID: 2363450235613802875}
   - component: {fileID: 2363450235613802874}
   - component: {fileID: 2363450235613802869}
+  - component: {fileID: 8089444189039512881}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -394,7 +397,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.5}
@@ -410,6 +413,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &8089444189039512881
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2363450235613802872}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2363450235623731798
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,7 +713,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2363450236184493039}
   - component: {fileID: 2363450236184493038}
-  m_Layer: 0
+  - component: {fileID: 8626823527312195480}
+  - component: {fileID: 8441588318891426965}
+  - component: {fileID: 1563674157137534302}
+  - component: {fileID: 8701889062442047964}
+  m_Layer: 14
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -760,6 +788,98 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8626823527312195480
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2363450236184493036}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.7, y: 1}
+    newSize: {x: 0.8, y: 1.35}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.7, y: 1}
+  m_EdgeRadius: 0
+--- !u!50 &8441588318891426965
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2363450236184493036}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &1563674157137534302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2363450236184493036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f53a67a4e81a9cd4592011f49eba7ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagerObject: {fileID: 2363450235455229788}
+  entityBase: {fileID: 2363450235455229791}
+  EntityType: nanobot5
+  EntityFamily: nanobot
+  height: 0.5
+  width: 0.35
+  raycastHeight: 0
+  saveToFile: 0
+  canBeNetworked: 1
+  rb2D: {fileID: 8441588318891426965}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 1
+  affectedBySolids: 1
+  swimming: 0
+  ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 524544
+--- !u!114 &8701889062442047964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2363450236184493036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf814629d59a4f4aab616f07195c6b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 1563674157137534302}
+  team: enemy
 --- !u!1 &2363450236204424768
 GameObject:
   m_ObjectHideFlags: 0

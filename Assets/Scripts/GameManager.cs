@@ -10,7 +10,7 @@ public enum Biomes : int
 
 public enum Entities : int
 {
-    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, Raideon = 4, NanoBotT3 = 5, Darkn = 6, x
+    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, Raideon = 4, NanoBotT3 = 5, Darkn = 6, NanoBotT5 = 7, x
 }
 public enum UnitWeapons : int
 {
@@ -316,6 +316,7 @@ public class GameManager : MonoBehaviour
         inGame = true;
         playerFocused = true;
         StartCoroutine(CheckChunks());
+        Transition.transform.GetChild(0).GetChild(0).GetComponent<UnityEngine.UI.Text>().text = "Done!";
         StartCoroutine(ManageTransition("CanStart", true, 1f));
         Invoke("UpdateChunksActive", 0.1f);
 
@@ -716,6 +717,8 @@ public class GameManager : MonoBehaviour
                 return "nanobot2";
             case Entities.NanoBotT3:
                 return "nanobot3";
+            case Entities.NanoBotT5:
+                return "nanobot5";
             case Entities.TheDestroyer:
                 return "destroyer";
             case Entities.KrotekBoss:
@@ -739,6 +742,8 @@ public class GameManager : MonoBehaviour
                 return Entities.NanoBotT2;
             case "nanobot3":
                 return Entities.NanoBotT3;
+            case "nanobot5":
+                return Entities.NanoBotT5;
             case "destroyer":
                 return Entities.TheDestroyer;
             case "krotek":
@@ -767,6 +772,10 @@ public class GameManager : MonoBehaviour
         if (entityType == Entities.NanoBotT3)
         {
             entityBase = ENTITY_NanoBotT3.StaticSpawn(null, spawnPos);
+        }
+        if (entityType == Entities.NanoBotT5)
+        {
+            entityBase = ENTITY_NanobotT5.StaticSpawn(null, spawnPos);
         }
         if (entityType == Entities.Darkn)
         {
@@ -1717,7 +1726,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(wait);
         Transition.GetComponent<Animator>().SetBool(variable, managingAction);
-        Transition.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+        Transition.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
     }
 
     IEnumerator CheckChunks()

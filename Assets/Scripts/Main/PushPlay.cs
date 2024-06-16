@@ -11,7 +11,7 @@ public class PushPlay : MonoBehaviour
 {
     public static PushPlay main;
     public AudioMixer gameAudio;
-    [SerializeField] Slider loadingSlider;
+    [SerializeField] RectTransform loadingSlider;
     [SerializeField] Slider bgmSlider;
     //[SerializeField] GameObject loadingTexts;
     [SerializeField] public Button multiplayerButton;
@@ -280,13 +280,24 @@ public class PushPlay : MonoBehaviour
         loadingSlider.gameObject.SetActive(true);
         //loadingTexts.gameObject.SetActive(true);
 
+        yield return new WaitForSeconds(1.5f);
+
         AsyncOperation operation = SceneManager.LoadSceneAsync("Game");
         
 
         while (!operation.isDone)
         {
-            loadingSlider.value = Mathf.Clamp01(operation.progress / 0.9f);
-            loadingSlider.transform.GetChild(2).GetComponent<Text>().text = (int)(operation.progress * 100f) + "%";
+            loadingSlider.GetChild(1).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(Mathf.Clamp01(operation.progress / 0.9f), 1, 1);
+            loadingSlider.transform.GetChild(2).GetComponent<Text>().text = Mathf.Round(operation.progress * 100 + 10) + "%";
+
+            if (operation.progress >= 0.9f)
+            {
+                loadingSlider.transform.GetChild(3).GetComponent<Text>().text = "Generating Terrain";
+            }
+            else
+            {
+                loadingSlider.transform.GetChild(3).GetComponent<Text>().text = "Loading World";
+            }
             yield return  new WaitForEndOfFrame();
         }
     }
