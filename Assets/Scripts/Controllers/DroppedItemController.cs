@@ -97,7 +97,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
                 Destroy(gameObject);
             }
 
-            if (GameManager.gameManagerReference.GetTileObjectAt(GameManager.gameManagerReference.WorldHeight * (int)transform.position.x + (int)transform.position.y) != null)
+            if (GameManager.gameManagerReference.ChunkActive((int)transform.position.x))
             {
                 GetComponent<Rigidbody2D>().simulated = true;
             }
@@ -127,7 +127,8 @@ public class DroppedItemController : MonoBehaviour, IDamager
 											itemDrop.gettingEnabled = false;
 											imunityGrab = (itemDrop.imunityGrab + imunityGrab) / 2f;
 											transform.position = Vector2.Lerp(transform.position, itemDrop.transform.position, 0.5f);
-											NetworkController.networkController.MoveItem(gameObject.name, transform.position);											NetworkController.networkController.UndropItem(itemDrop.gameObject.name);
+											NetworkController.networkController.MoveItem(gameObject.name, transform.position);
+                                            NetworkController.networkController.UndropItem(itemDrop.gameObject.name);
 											Destroy(itemDrop.gameObject);
 										}
 									}

@@ -1061,6 +1061,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 tileY++;
                 tileName++;
                 tileIdx++;
+                
 
                 if (Mathf.Abs(transform.position.x + 16 - manager.player.transform.position.x) > 32 && counter >= manager.tileSpawnRate)
                 {

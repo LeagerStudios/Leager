@@ -81,9 +81,7 @@ public class PushPlay : MonoBehaviour
         string worldName = WorldPanelController.worldPanelController.newWorldName.GetComponent<InputField>().text;
         if (worldName == "miler sucks")
         {
-            if (Application.platform != RuntimePlatform.Android)
-                multiplayerButton.interactable = true;
-            Camera.main.GetComponent<MainCameraController>().Focus = "mainMenu";
+            Application.Quit();
         }
         else
             StartCoroutine(LoadNewWorld(1f));

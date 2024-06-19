@@ -154,7 +154,14 @@ public class GameManager : MonoBehaviour
 
     public void UpdateEntitiesRB2D(bool value)
     {
-        Rigidbody2D[] rigidbodys = FindObjectsOfType<Rigidbody2D>();
+        Rigidbody2D[] rigidbodys = entitiesContainer.GetComponentsInChildren<Rigidbody2D>();
+        foreach (Rigidbody2D rigidbody2D in rigidbodys)
+        {
+            if (rigidbody2D.simulated != value)
+                rigidbody2D.simulated = value;
+        }
+
+        rigidbodys = dummyObjects.GetComponentsInChildren<Rigidbody2D>();
         foreach (Rigidbody2D rigidbody2D in rigidbodys)
         {
             if (rigidbody2D.simulated != value)
@@ -2120,6 +2127,12 @@ public class GameManager : MonoBehaviour
         {
             return null;
         }
+    }
+
+    public bool ChunkActive(int x)
+    {
+        ChunkController c = chunkContainer.transform.GetChild(x / 16).GetComponent<ChunkController>();
+        return c.loaded && !c.loading;
     }
 
     public void Consume(int tile)

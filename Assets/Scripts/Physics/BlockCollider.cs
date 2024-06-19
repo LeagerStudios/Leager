@@ -45,10 +45,15 @@ public class BlockCollider : MonoBehaviour
     
     void FixCollisionAtPoint(float x, float y, float dx, float dy, bool isFeet, ref BlockCollisionDataOverview dataOverview)
     {
+        print(GameManager.gameManagerReference.frameTimer);
         int block = GameManager.gameManagerReference.GetTileAt(Mathf.FloorToInt(x) * worldHeight + Mathf.FloorToInt(y));
+        print(block + "b");
         int layer = GameManager.gameManagerReference.TileCollisionType[block];
+        print(layer + "l");
         float modx = x % 1;
         float mody = y % 1;
+        print(modx);
+        print(mody);
 
 
         if(layer == 0)
@@ -67,34 +72,40 @@ public class BlockCollider : MonoBehaviour
         }
 
         dataOverview.touchedSolid = true;
+        print("quak");
 
         if(dx > 0)
         {
-            transform.position.Set(x + offset.x - modx, y + offset.y, 0);
-            rb2D.velocity.Set(0, rb2D.velocity.y);
+            transform.Translate(new Vector2(-modx - 0.00001f, 0));
+            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
+            print("quak1");
             UpdatePos();
         }
         else if (dx < 0)
         {
-            transform.position.Set(x + offset.x + modx, y + offset.y, 0);
-            rb2D.velocity.Set(0, rb2D.velocity.y);
+            transform.Translate(new Vector2(1 - modx, 0));
+            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
             UpdatePos();
+            print("quak2");
         }
 
         if (dy > 0)
         {
-            transform.position.Set(x + offset.x, y + offset.y - mody, 0);
-            rb2D.velocity.Set(rb2D.velocity.x, 0);
+            transform.Translate(new Vector2(0, -mody - 0.00001f));
+            rb2D.velocity = new Vector2(rb2D.velocity.x, 0);
             UpdatePos();
+            print("quak3");
         }
         else if (dy < 0)
         {
-            transform.position.Set(x + offset.x, y + offset.y + mody, 0);
-            rb2D.velocity.Set(rb2D.velocity.x, 0);
+            transform.Translate(new Vector2(0, 1 - mody));
+            rb2D.velocity = new Vector2(rb2D.velocity.x, 0);
             UpdatePos();
 
             if (isFeet)
                 dataOverview.grounded = true;
+
+            print("quak4");
         }
     }
 }
