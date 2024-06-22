@@ -1277,9 +1277,9 @@ public class GameManager : MonoBehaviour
                             buildedMapGrid[cavesIdx] = 21;
                         }
                     }
-                    else if (cavesGeneration.GetPixel(x, y).a > 0.9f && y < floorUndergroundEnd * Random.Range(0.5f, 0.4f) && y > 3)
+                    else if (cavesGeneration.GetPixel(x, y).a > 0.96f && y < floorUndergroundEnd * Random.Range(0.5f, 0.4f) && y > 3)
                     {
-                        buildedMapGrid[cavesIdx] = 112;
+                        buildedMapGrid[cavesIdx] = 17;
                         if (y > WorldHeight * 0.2f)
                             if (Random.Range(0, (WorldHeight - y) / 2) == 0)
                             {

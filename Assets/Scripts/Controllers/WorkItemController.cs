@@ -56,7 +56,7 @@ public class WorkItemController : MonoBehaviour {
     {
         if (tile == 15)
         {
-            tileObj.transform.GetChild(0).GetComponent<Box>().ToggleItems();
+            tileObj.transform.GetComponentInChildren<Box>().ToggleItems();
         }
 
 
@@ -74,13 +74,13 @@ public class WorkItemController : MonoBehaviour {
         {
             if (GameManager.gameManagerReference.InGame)
             {
-                MenuController.menuController.PlanetMenuDeploy(tileObj.transform.GetChild(0).GetComponent<ResourceLauncher>());
+                MenuController.menuController.PlanetMenuDeploy(tileObj.transform.GetComponentInChildren<ResourceLauncher>());
             }
         }
 
         if (tile == 102)
         {
-            tileObj.transform.GetChild(0).GetComponent<Box>().ToggleItems();
+            tileObj.transform.GetComponentInChildren<Box>().ToggleItems();
         }
     }
 }
