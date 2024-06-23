@@ -153,7 +153,6 @@ public class PlayerController : MonoBehaviour, IDamager
     void Hitbox()
     {
         CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
-        //GetComponent<BlockCollider>().FixCollisions(rb2D.velocity.x, rb2D.velocity.y);
 
         if (GetComponent<SpriteRenderer>().flipX)
         {
