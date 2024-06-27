@@ -2,38 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainSoundController : MonoBehaviour {
+public class MainSoundController : MonoBehaviour
+{
 
     [SerializeField] public AudioClip[] Sounds;
     [SerializeField] public AudioClip[] Themes;
-    byte sfxPlayed = 0;
 
-    void Start ()
+    void Start()
     {
-        
-	}
-	
-	void Update ()
+
+    }
+
+    void Update()
     {
-        sfxPlayed = 0;
-	}
+    }
 
     public void PlaySfxSound(SoundName s)
     {
-        if (sfxPlayed <= 10)
-        {
-            transform.GetChild(0).GetComponent<AudioSource>().PlayOneShot(Sounds[(int)s], 1f);
-            sfxPlayed++;
-        }       
+        transform.GetChild(0).GetComponent<AudioSource>().PlayOneShot(Sounds[(int)s], 1f);
     }
 
     public void PlaySfxSound(AudioClip audioClip)
     {
-        if (sfxPlayed <= 10)
-        {
-            transform.GetChild(0).GetComponent<AudioSource>().PlayOneShot(audioClip, 1f);
-            sfxPlayed++;
-        }
+        transform.GetChild(0).GetComponent<AudioSource>().PlayOneShot(audioClip, 1f);
+
+    }
+
+    public void PlaySfxSound(AudioClip audioClip, float volume)
+    {
+        transform.GetChild(0).GetComponent<AudioSource>().PlayOneShot(audioClip, volume);
+
     }
 
     public void PlayMusicSound(ThemeName t)

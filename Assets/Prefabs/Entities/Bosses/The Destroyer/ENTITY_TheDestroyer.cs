@@ -5,6 +5,7 @@ using UnityEngine;
 public class ENTITY_TheDestroyer : EntityBase, IDamager
 {
     public Rigidbody2D rb2d;
+    public AudioClip shoot;
     [SerializeField] GameObject segment;
     [SerializeField] GameObject tail;
     [SerializeField] LayerMask blockMask;
@@ -106,6 +107,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         {
             PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z + 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
             PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z - 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
+            GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
         }
         if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
             GameManager.gameManagerReference.player.LoseHp(15, GetComponent<EntityCommonScript>());
@@ -127,7 +129,9 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 if (Random.Range(0, 10065) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
+                    GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
                 }
+
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
                     GameManager.gameManagerReference.player.LoseHp(5, GetComponent<EntityCommonScript>());
             }
@@ -137,6 +141,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 200) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
+                    GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
                 }
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
                     GameManager.gameManagerReference.player.LoseHp(16, GetComponent<EntityCommonScript>());

@@ -28,11 +28,10 @@ public class CommandController : MonoBehaviour {
 	
 
 	void Update () {
-        //if (varraSan)
-        //{
-        //    Vector2 pos = GameManager.gameManagerReference.player.transform.position;
-        //    GameManager.gameManagerReference.SetTileAt((int)pos.x * GameManager.gameManagerReference.WorldHeight + ((int)pos.y + 10), 62, false);
-        //}
+        if (varraSan)
+        {
+            GameManager.gameManagerReference.player.HP += 1;
+        }
 
         if (showcaseMode)
         {
@@ -47,7 +46,24 @@ public class CommandController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.G) && Application.isEditor && GameManager.gameManagerReference.InGame)
         {
-            ENTITY_Raideon.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position + Vector3.up * 5f);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 2);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 4);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 6);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 8);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 10);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 12);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 14);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 16);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 18);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 20);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 22);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 24);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 26);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 28);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 30);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 32);
+            ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position - Vector3.up * 34);
+
         }
 
         if (!commandEnabled)

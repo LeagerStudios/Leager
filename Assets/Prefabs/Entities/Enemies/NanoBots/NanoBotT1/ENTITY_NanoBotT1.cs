@@ -12,6 +12,9 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
     EntityCommonScript entityScript;
     GameManager manager;
 
+    [SerializeField] AudioClip randomSpeak;
+    public float speakTime = 15f;
+
     public PlayerController followingPlayer;
     float HpMax = 10f;
     float HP = 10f;
@@ -117,6 +120,18 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
             if (!followingPlayer.alive) followingPlayer = null;
         }
 
+        if(!dead && !damaged)
+        {
+            if(speakTime <= 0f)
+            {
+                speakTime = Random.Range(5, 45);
+                manager.soundController.PlaySfxSound(randomSpeak, ManagingFunctions.VolumeDistance(Vector2.Distance(manager.player.transform.position, transform.position), 6));
+            }
+            else
+            {
+                speakTime -= Time.deltaTime;
+            }
+        }
 
         if (lookingToSide)
         {

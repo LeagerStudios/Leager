@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -284374307
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 175aa921b40365f48b2b60ccc9fbdbba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -121,6 +121,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   particle: {fileID: 1524452008572986, guid: 2d42c10f67fac1f45b441f4a988085c5, type: 3}
+  randomSpeak: {fileID: 8300000, guid: d3635ff535c69aa40a1f6320e497e67a, type: 3}
+  speakTime: 15
   followingPlayer: {fileID: 0}
 --- !u!95 &95187438992497734
 Animator:

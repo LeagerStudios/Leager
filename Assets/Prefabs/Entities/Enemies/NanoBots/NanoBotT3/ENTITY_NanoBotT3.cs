@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ENTITY_NanoBotT3 : EntityBase, IDamager
 {
-
+    [SerializeField] AudioClip[] explosionSounds;
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody2D rb2D;
     [SerializeField] SpriteRenderer spriteRenderer;
@@ -71,7 +71,11 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
     {
         Hp = Hp - damageDeal;
 
-        if (HP > 0)
+        if(procedence.EntityType == "nanobot3" && procedence != entityScript && animator.enabled)
+        {
+            Boom();
+        }
+        else if (HP > 0)
         {
             if (CheckGrounded() && !animator.GetBool("damaged")) rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
             animator.SetBool("damaged", true);
@@ -82,8 +86,9 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
     public void Boom()
     {
         animator.enabled = false;
-        Instantiate(explosion, transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
+        Instantiate(explosion, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
         Invoke("Despawn", 0.3f);
+        manager.soundController.PlaySfxSound(explosionSounds[Random.Range(0, explosionSounds.Length)], ManagingFunctions.VolumeDistance(Vector2.Distance(manager.player.transform.position, transform.position), 40));
 
         foreach (EntityCommonScript entity in manager.entitiesContainer.GetComponentsInChildren<EntityCommonScript>())
         {
@@ -91,7 +96,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             {
                 if (entity.gameObject.GetComponent<IDamager>() != null)
                 {
-                    entity.gameObject.GetComponent<IDamager>().Hit(15, GetComponent<EntityCommonScript>());
+                    entity.gameObject.GetComponent<IDamager>().Hit(15, GetComponent<EntityCommonScript>(), true, 1.5f, true);
                 }
             }
         }

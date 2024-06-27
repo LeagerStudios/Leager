@@ -35,6 +35,10 @@ public class PlayerController : MonoBehaviour, IDamager
     public float falling = 0f;
     public int skin = 0;
 
+    [SerializeField] AudioClip hitSound;
+    [SerializeField] AudioClip regenerationSound;
+    [SerializeField] AudioClip deathSound;
+
     void Start() //obtener referencias
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -403,6 +407,7 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             regenTime = 1f;
             if (HP < MaxHP) LoseHp(-1, entityScript);
+            gameManager.soundController.PlaySfxSound(regenerationSound);
         }
         else
         {
@@ -492,6 +497,7 @@ public class PlayerController : MonoBehaviour, IDamager
             if (damagedCooldown < 0.1f | ignoreImunity)
             {
                 HP -= hpLost;
+                if(hpLost > 0) gameManager.soundController.PlaySfxSound(hitSound);
                 healthBar.SetHealth(HP);
 
                 if (HP < 1)
@@ -541,6 +547,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
     IEnumerator Kill(EntityCommonScript procedence)
     {
+        gameManager.soundController.PlaySfxSound(deathSound);
         alive = false;
         killing = true;
         entityScript.ladderVelocity = 0f;
@@ -587,7 +594,7 @@ public class PlayerController : MonoBehaviour, IDamager
             int tile = StackBar.stackBarController.StackBarGrid[i];
             if (tile > 0)
             {
-                if (gameManager.tileType[tile] != "tool")
+                if (gameManager.tileType[tile] != "tool" && tile != 16)
                 {
                     ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f, 5f) + Vector2.up * 2, StackBar.stackBarController.StackItemAmount[i]);
                     StackBar.AsignNewStack(i, 0, 0);

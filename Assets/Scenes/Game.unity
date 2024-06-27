@@ -13350,7 +13350,7 @@ MonoBehaviour:
   child1: {fileID: 209}
   child2: {fileID: 180}
   child3: {fileID: 130}
-  instaKillSound: {fileID: 8300000, guid: 2b3b93804d36c6a4fb6a4858dea92cc9, type: 3}
+  instaKillSound: {fileID: 8300000, guid: 11e84e835b1312a4f91e62468e0ce7ac, type: 3}
   animator: {fileID: 304}
 --- !u!114 &778
 MonoBehaviour:
@@ -23092,6 +23092,9 @@ MonoBehaviour:
   MaxHP: 0
   falling: 0
   skin: 0
+  hitSound: {fileID: 8300000, guid: e4ea25cda1e0c5e48810f576eaa065b4, type: 3}
+  regenerationSound: {fileID: 8300000, guid: 6c2bf340cf3e62644ad3171b64e17dde, type: 3}
+  deathSound: {fileID: 8300000, guid: 6902cf0b19b120d4ca469763e316a396, type: 3}
 --- !u!114 &1075
 MonoBehaviour:
   m_ObjectHideFlags: 0
