@@ -134,7 +134,8 @@ public class MenuController : MonoBehaviour {
         }
 
         FpsText.SetActive(fpsOn);
-        FpsText.GetComponent<Text>().text = Mathf.Floor(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
+
+        FpsText.GetComponent<Text>().text = Mathf.Round(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
 
        
 

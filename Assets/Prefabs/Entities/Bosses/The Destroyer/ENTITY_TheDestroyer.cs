@@ -81,7 +81,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         CheckCollision();
         float pointDir = ManagingFunctions.PointToPivotUp(transform.position, GameManager.gameManagerReference.player.transform.position);
         pointDir += 90;
-        if ((collided && Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position) > 20f) || transform.position.y < 0)
+        if ((collided && Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position) > 15f) || transform.position.y < 0)
         {
             if (!GameManager.gameManagerReference.player.alive || GameManager.gameManagerReference.dayLuminosity > 0.5f) Kill(new string[] { "waitForDescent" });
             goDown = false;
@@ -92,7 +92,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         if (!goDown)
             velocity = new Vector2(Mathf.Cos(pointDir * Mathf.Deg2Rad) * 30, Mathf.Sin(pointDir * Mathf.Deg2Rad) * 30);
 
-        if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 4 || goDown)
+        if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 3 || goDown)
         {
             velocity.y = descentVelocity;
             velocity.x = velocity.x - Mathf.Clamp(velocity.x, -0.3f * Time.deltaTime, 0.3f * Time.deltaTime);
@@ -126,7 +126,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 indexSegment.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Random.Range(0, 10065) == 0)
+                if (Random.Range(0, 5065) == 0)
                 {
                     PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
                     GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
@@ -138,11 +138,12 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             else
             {
                 indexSegment.GetChild(1).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 200) == 0)
-                {
-                    PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
-                    GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
-                }
+                if (Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.GetChild(1).position) < 7)
+                    if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 13) == 0)
+                    {
+                        PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
+                        GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
+                    }
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
                     GameManager.gameManagerReference.player.LoseHp(16, GetComponent<EntityCommonScript>());
             }
