@@ -80,6 +80,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
             if (CheckGrounded() && !animator.GetBool("damaged")) rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
             animator.SetBool("damaged", true);
             Invoke("UnDamage", 0.6f);
+            HealthBarManager.self.UpdateHealthBar(transform, HP, HpMax, Vector2.up);
         }
     }
 
@@ -117,7 +118,7 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
 
     public override void Despawn()
     {
-        if (animator.GetBool("dead") && !animator.GetBool("makeboom"))
+        if (animator.GetBool("dead") && !animator.GetBool("makeboom") && !entityScript.entityStates.Contains(EntityState.Burning))
         {
             for (int i = 0; i < 20; i++)
             {

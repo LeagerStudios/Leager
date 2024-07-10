@@ -46,7 +46,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 980946a09a266754dad1a4b559b911ca, type: 3}
     - {fileID: 2800000, guid: 15a24bcb019b71e4ba96310f0943c646, type: 3}
     - {fileID: 2800000, guid: 489298c9960f7d74fa71a38a3577222c, type: 3}
-    totalSpriteSurfaceArea: 339872
+    totalSpriteSurfaceArea: 340688
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -79,6 +79,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 285a2bd61e0d62047ad61875e4a1a7ea, type: 3}
   - {fileID: 21300000, guid: 43a1adf6ec02ae4419cc424e3006f785, type: 3}
   - {fileID: 21300000, guid: b351db07d06dc3a4a9f6ce3cc323f7c5, type: 3}
+  - {fileID: 21300002, guid: dd9d594705d03934785f2d9b21edff1a, type: 3}
+  - {fileID: 21300000, guid: dd9d594705d03934785f2d9b21edff1a, type: 3}
+  - {fileID: 21300006, guid: dd9d594705d03934785f2d9b21edff1a, type: 3}
+  - {fileID: 21300004, guid: dd9d594705d03934785f2d9b21edff1a, type: 3}
   - {fileID: 21300004, guid: 40e6af3981041ab4f87e232451011b33, type: 3}
   - {fileID: 21300000, guid: 40e6af3981041ab4f87e232451011b33, type: 3}
   - {fileID: 21300002, guid: 40e6af3981041ab4f87e232451011b33, type: 3}
@@ -124,6 +128,10 @@ SpriteAtlas:
   - LodingLine
   - ButtonPanelMask
   - Default Panel
+  - HealthBar_1
+  - HealthBar_0
+  - HealthBar_3
+  - HealthBar_2
   - MinimapAssets_2
   - MinimapAssets_0
   - MinimapAssets_1

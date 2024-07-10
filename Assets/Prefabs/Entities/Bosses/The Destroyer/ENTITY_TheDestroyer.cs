@@ -219,6 +219,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
         Hp = Hp - damageDeal;
+        HealthBarManager.self.UpdateHealthBar(transform, HP, HpMax, Vector2.up);
     }
 
     public override void Kill(string[] args)

@@ -1325,6 +1325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 268}
   - component: {fileID: 860}
+  - component: {fileID: 123}
   m_Layer: 0
   m_Name: MainFunctionsManager
   m_TagString: Untagged
@@ -2286,6 +2287,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c34b1526771f41a4bbb77bcd88cae07b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 74930469766575902, guid: 71ec32f7f524e9647a8daeabca7c4a8d,
+    type: 3}
 --- !u!1 &124
 GameObject:
   m_ObjectHideFlags: 0

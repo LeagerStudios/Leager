@@ -73,11 +73,12 @@ public class ENTITY_NanoBotT2 : EntityBase, IDamager
         animator.SetBool("damaged", true);
         if (CheckGrounded()) rb2D.AddForce(new Vector2(0, 100));
         Invoke("UnDamage", 0.3f);
+        HealthBarManager.self.UpdateHealthBar(transform, HP, HpMax, Vector2.up);
     }
 
     public override void Despawn()
     {
-        if (animator.GetBool("dead"))
+        if (animator.GetBool("dead") && !entityScript.entityStates.Contains(EntityState.Burning))
         {
             for (int i = 0; i < 20; i++)
             {
