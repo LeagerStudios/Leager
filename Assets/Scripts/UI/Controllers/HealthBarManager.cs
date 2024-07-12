@@ -21,9 +21,7 @@ public class HealthBarManager : MonoBehaviour
 
     public void RemoveHealthBar(Transform target)
     {
-        if (target != null)
-            healthBars.Remove(target);
-
+        healthBars.Remove(target);
     }
 
     public void UpdateHealthBar(Transform target, float hp, float maxHP, Vector2 offset)

@@ -342,7 +342,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         int cT = manager.TileCollisionType[TileGrid[e]];
 
         TileObject[e].GetComponent<BoxCollider2D>().enabled = true;
-        TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT == 3;
+        TileObject[e].GetComponent<BoxCollider2D>().isTrigger = cT > 2;
 
         switch (cT)
         {
@@ -372,6 +372,20 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
             case 3:
                 TileObject[e].layer = 10;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+            case 4:
+                TileObject[e].layer = 17;
+                if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
+                {
+                    ModifyTile(false, "platform", TileObject[e]);
+                }
+                break;
+            case 5:
+                TileObject[e].layer = 18;
                 if (TileObject[e].GetComponent<PlatformEffector2D>() != null)
                 {
                     ModifyTile(false, "platform", TileObject[e]);

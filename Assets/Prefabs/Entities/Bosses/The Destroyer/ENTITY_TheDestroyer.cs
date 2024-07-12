@@ -8,6 +8,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     public AudioClip shoot;
     [SerializeField] GameObject segment;
     [SerializeField] GameObject tail;
+    [SerializeField] GameObject scrap;
     [SerializeField] LayerMask blockMask;
     public Vector2 velocity;
     float HpMax = 3200;
@@ -17,6 +18,15 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     public bool collided = false;
     public bool goDown = false;
     public float descentVelocity = 0;
+
+    public bool[] droppedBomb;
+    [SerializeField] Sprite[] scraps;
+    [SerializeField] Sprite noBomb;
+    [SerializeField] GameObject bombPrefab;
+
+    [SerializeField] Transform targetHealthbar;
+    [SerializeField] Vector2 targetHealthbarPos;
+    [SerializeField] Vector2 targetHealthbarSegment;
 
     public override int Hp
     {
@@ -92,11 +102,11 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         if (!goDown)
             velocity = new Vector2(Mathf.Cos(pointDir * Mathf.Deg2Rad) * 30, Mathf.Sin(pointDir * Mathf.Deg2Rad) * 30);
 
-        if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 3 || goDown)
+        if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 5 || goDown)
         {
             velocity.y = descentVelocity;
             velocity.x = velocity.x - Mathf.Clamp(velocity.x, -0.3f * Time.deltaTime, 0.3f * Time.deltaTime);
-            descentVelocity -= 5 * Time.deltaTime;
+            descentVelocity -= 10 * Time.deltaTime;
             goDown = true;
         }
 
@@ -128,8 +138,20 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 indexSegment.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
                 if (Random.Range(0, 5065) == 0)
                 {
-                    PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
-                    GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
+                    if(!droppedBomb[i] && Random.Range(0, 6) == 0 && Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 6)
+                    {
+                        droppedBomb[i] = true;
+                        indexSegment.GetChild(0).GetComponent<SpriteRenderer>().sprite = noBomb;
+                        DestroyerBomb bomb = Instantiate(bombPrefab, indexSegment.position, indexSegment.rotation).GetComponent<DestroyerBomb>();
+                        bomb.destroyer = GetComponent<EntityCommonScript>();
+                        bomb.transform.parent = GameManager.gameManagerReference.entitiesContainer.transform;
+                        bomb.GetComponent<Rigidbody2D>().velocity = rb2d.velocity;
+                    }
+                    else
+                    {
+                        PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
+                        GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
+                    }
                 }
 
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
@@ -150,6 +172,25 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
 
             previousSegment = indexSegment;
         }
+
+        if(GameManager.gameManagerReference.frameTimer % 3 == 0)
+        {
+            float shortestDist = 9999999;
+
+            for (int i = 0; i < transform.parent.childCount; i++)
+            {
+                Transform indexSegment = transform.parent.GetChild(i);
+
+                if (Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.position) < shortestDist)
+                {
+                    shortestDist = Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.position);
+                    targetHealthbarSegment = indexSegment.position;
+                }
+            }
+        }
+        
+        targetHealthbar.position = Vector2.Lerp(targetHealthbarPos, targetHealthbarSegment, Time.deltaTime * 30);
+        targetHealthbarPos = targetHealthbar.position;
     }
 
     public void DescentIaFrame()
@@ -194,7 +235,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         transform.position = spawnPos;
         transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(1).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 75; i++)
         {
             GameObject clonedSegment = Instantiate(segment, spawnPos, Quaternion.identity, transform.parent);
             clonedSegment.transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
@@ -204,6 +245,8 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         GameObject tailSegment = Instantiate(tail, spawnPos, Quaternion.identity, transform.parent);
         tailSegment.transform.GetChild(2).GetComponent<DamagersCollision>().target = this;
         tailSegment.transform.GetChild(2).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+
+        droppedBomb = new bool[transform.parent.childCount];
 
         DescentIa = false;
         IsIaActive = true;
@@ -219,7 +262,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
         Hp = Hp - damageDeal;
-        HealthBarManager.self.UpdateHealthBar(transform, HP, HpMax, Vector2.up);
+        HealthBarManager.self.UpdateHealthBar(targetHealthbar, HP, HpMax, Vector2.up);
     }
 
     public override void Kill(string[] args)
@@ -239,6 +282,31 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 for (int i = 0; i < transform.parent.childCount; i++)
                 {
                     Transform indexSegment = transform.parent.GetChild(i);
+                    SpriteRenderer scrapp = Instantiate(scrap, indexSegment.position, indexSegment.rotation).GetComponent<SpriteRenderer>();
+                    scrapp.GetComponent<Rigidbody2D>().velocity = rb2d.velocity;
+                    scrapp.transform.parent = GameManager.gameManagerReference.entitiesContainer.transform;
+
+                    if (i == 0)
+                    {
+                        scrapp.sprite = scraps[0];
+
+                    }
+                    else if(i != transform.parent.childCount - 1)
+                    {
+                        if (!droppedBomb[i])
+                        {
+                            scrapp.sprite = scraps[1];
+                        }
+                        else
+                        {
+                            scrapp.sprite = scraps[2];
+                        }
+                    }
+                    else
+                    {
+                        scrapp.sprite = scraps[3];
+                    }
+
                     if (Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.position) < shortestDist)
                     {
                         shortestDist = Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.position);

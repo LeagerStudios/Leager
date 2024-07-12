@@ -8,6 +8,12 @@ TextureImporter:
     21300006: TheDestroyerSheet_3
     21300008: TheDestroyerSheet_4
     21300010: TheDestroyerSheet_5
+    21300012: TheDestroyerSheet_6
+    21300014: TheDestroyerSheet_7
+    21300016: TheDestroyerSheet_8
+    21300018: TheDestroyerSheet_9
+    21300020: TheDestroyerSheet_10
+    21300022: TheDestroyerSheet_11
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -200,10 +206,150 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 121
+        width: 52
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4065a7d5250d73c40abdfd5628b12379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_6
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 124
+        width: 36
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91105d43f975bc548a1e1e46954bf73f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_7
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 174
+        width: 36
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eae3e8d5224cd53489852c7f425af4d3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_8
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 116
+        width: 36
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56a20daf9aef7db4f8bd3e777fe34a3c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_9
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 108
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37519ed166adbdb449219f5dcb43d87c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_10
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 94
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a074d262971a531498588312c1560398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TheDestroyerSheet_11
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 92
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7726804cf93462d40ba654e0c09bdefe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c1ae970172313b740a1a9c6d60673faa
     vertices: []
     indices: 
     edges: []

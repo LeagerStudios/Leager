@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PROJECTILE_Laser : ProjectileBase {
 
-    private int damage = 5;
+    private int damage = 13;
     private int frame = 0;
     public Rigidbody2D rb2D;
     public EntityCommonScript from;
@@ -74,7 +74,7 @@ public class PROJECTILE_Laser : ProjectileBase {
         {
             if (collision.gameObject.GetComponent<EntityCommonScript>().EntityFamily == "yellow")
             {
-                if (Random.Range(0, 4) == 0)
+                if (Random.Range(0, 13) == 0)
                     collision.gameObject.GetComponent<EntityCommonScript>().AddState(EntityState.OnFire, 3f);
                 else
                     if (collision.gameObject.GetComponent<EntityCommonScript>().entityDamager != null)

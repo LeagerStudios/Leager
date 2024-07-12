@@ -40,7 +40,7 @@ public class HealthBarDisplay : MonoBehaviour
 
     public void CalculateLife()
     {
-        fill.localScale = new Vector3(life , 1, 1);
+        fill.localScale = new Vector3(Mathf.Lerp(fill.localScale.x, life, Time.deltaTime * 15), 1, 1);
         rightFill.localPosition = Vector2.right * Mathf.Clamp(life - 1, -0.969f, 1f);
         Color color = colorGradient.Evaluate(life);
         if(lifetimeLenght < 1)
