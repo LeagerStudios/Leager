@@ -136,9 +136,9 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 indexSegment.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Random.Range(0, 5065) == 0)
+                if (Random.Range(0, 5065) == 0 || (GameManager.gameManagerReference.frameTimer % 300 > 240 && Random.Range(0, 200) == 0))
                 {
-                    if(!droppedBomb[i] && Random.Range(0, 6) == 0 && Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 6)
+                    if(!droppedBomb[i] && Random.Range(0, 2) == 0 && Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 3.2f)
                     {
                         droppedBomb[i] = true;
                         indexSegment.GetChild(0).GetComponent<SpriteRenderer>().sprite = noBomb;

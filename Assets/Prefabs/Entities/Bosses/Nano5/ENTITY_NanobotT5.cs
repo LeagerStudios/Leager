@@ -28,8 +28,8 @@ public class ENTITY_NanobotT5 : EntityBase, IDamager
     int legIterator = 0;
     public bool laserActive = false;
 
-    float HpMax = 10f;
-    float HP = 10f;
+    float HpMax = 2500f;
+    float HP = 2500f;
 
 
     public override int Hp
@@ -199,7 +199,7 @@ public class ENTITY_NanobotT5 : EntityBase, IDamager
     public override EntityBase Spawn(string[] args, Vector2 spawnPos)
     {
         head.GetComponent<DamagersCollision>().target = this;
-        //transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+        transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         head.position = spawnPos;
         entityScript = GetComponent<EntityCommonScript>();

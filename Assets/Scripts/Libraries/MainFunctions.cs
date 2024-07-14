@@ -67,6 +67,23 @@ public static class ManagingFunctions
         }
     }
 
+    public static Dictionary<string, string> CreateArgsSingle(string key, string value)
+    {
+        Dictionary<string, string> args = new Dictionary<string, string>
+        {
+            { key, value }
+        };
+        return args;
+    }
+
+    public static Dictionary<string, string> CreateArgs(string[] keys, string[] values)
+    {
+        Dictionary<string, string> args = new Dictionary<string, string>();
+        for (int i = 0; i < keys.Length; i++)
+            args.Add(keys[i], values[i]);
+        return args;
+    }
+
     public static bool InsideRanges(Vector2 position, Vector2 min, Vector2 max)
     {
         bool returnn = true;

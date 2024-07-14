@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using PlayerIOClient;
 
 public class LoginController : MonoBehaviour {
 
@@ -13,7 +14,7 @@ public class LoginController : MonoBehaviour {
     [SerializeField] InputField loginPassField;
     [SerializeField] InputField signinUserField;
     [SerializeField] InputField signinPassField;
-    [SerializeField] InputField signinNickField;
+    [SerializeField] InputField signinEmailField;
     [SerializeField] GameObject loginButton;
     [SerializeField] Button logOffButton;
     [SerializeField] GameObject loggedUser;
@@ -21,7 +22,32 @@ public class LoginController : MonoBehaviour {
 
     void Start()
     {
-        RefreshLogin();
+        //RefreshLogin();
+    }
+
+    public void CreateUser()
+    {
+        PlayerIOClient.Client client = PlayerIO.Authenticate("leager-h3f0o1td70uyrsf0nnddw", "public", ManagingFunctions.CreateArgsSingle("userId", "default"), null);
+
+        string username = signinUserField.text;
+        string password = signinPassField.text;
+        string email = signinEmailField.text;
+
+        if(client.BigDB.Load("Users", username) == null)
+        {
+            DatabaseObject newUser = new DatabaseObject();
+            newUser.Set("Username", username);
+            newUser.Set("Email", email);
+            newUser.Set("Password", password);
+
+            client.BigDB.CreateObject("Users", username, newUser);
+            Debug.Log("User " + username + " Created");
+        }
+        else
+        {
+            Debug.Log("User already exists!!!");
+        }
+       
     }
 
     void Update()
@@ -56,107 +82,10 @@ public class LoginController : MonoBehaviour {
         //}
     }
 
-    public void Login()
-    {
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection>
-        {
-            new MultipartFormDataSection("user", loginUserField.text),
-            new MultipartFormDataSection("pass", loginPassField.text)
-        };
-
-        StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "login", formData));
-    }
-
     public void LogOff()
     {
         DataSaver.DeleteFile(Application.persistentDataPath + @"/logginSettings.lgrsd");
         RefreshLogin();
         cameraController.ChangeFocus("mainMenu");
-    }
-
-    public void SignIn()
-    {
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection>
-        {
-            new MultipartFormDataSection("user", signinUserField.text),
-            new MultipartFormDataSection("pass", signinPassField.text)
-        };
-
-        if (signinNickField.text == "")
-            formData.Add(new MultipartFormDataSection("nick", "null"));
-        else
-            formData.Add(new MultipartFormDataSection("nick", signinNickField.text));
-
-        StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/signin.php", "signin", formData));
-    }
-
-    void URLCallback(string data, string requestType)
-    {
-        Debug.Log(data + ", [" + requestType + "]");
-
-        if(requestType == "debug")
-        {
-            
-        }
-
-        if(requestType == "signin")
-        {
-            if (data != "2" && data != "-1")
-            {
-                DataSaver.SaveStats(new string[] { signinUserField.text, signinPassField.text, data }, Application.persistentDataPath + @"/logginSettings.lgrsd");
-                RefreshLogin();
-                PushPlay.main.multiplayerButton.interactable = true;
-                cameraController.ChangeFocus("mainMenu");
-            }
-        }
-
-        if (requestType == "login")
-        {
-            if (data != "1" && data != "-1")
-            {
-                DataSaver.SaveStats(new string[] { loginUserField.text, loginPassField.text, data }, Application.persistentDataPath + @"/logginSettings.lgrsd");
-                RefreshLogin();
-                PushPlay.main.multiplayerButton.interactable = true;
-                cameraController.ChangeFocus("mainMenu");
-            }
-        }
-
-        if (requestType == "userLogin")
-        {
-            if (data != "1" && data != "-1")
-            {
-                string[] logginSession = DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData;
-
-                loggedUser.transform.GetChild(0).GetComponent<Text>().text = logginSession[0];
-                loggedUser.GetComponent<RectTransform>().sizeDelta = new Vector2(logginSession[0].Length * 14 + 6, 30);
-                loggedUser.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(logginSession[0].Length * 14, 30);
-                PushPlay.main.multiplayerButton.interactable = true;
-            }
-            else
-            {
-                DataSaver.DeleteFile(Application.persistentDataPath + @"/logginSettings.lgrsd");
-                RefreshLogin();
-            }
-        }
-    }
-
-    IEnumerator GetDataFromURL(string url, string requestType, List<IMultipartFormSection> post)
-    {
-        gettingData = true;
-        string returnData = "";
-
-        UnityWebRequest www = UnityWebRequest.Post(url, post);
-        yield return www.Send();
-
-        if (www.isNetworkError)
-        {
-            Debug.LogWarning(www.error);
-        }
-        else
-        {
-            returnData = www.downloadHandler.text;
-            URLCallback(returnData, requestType);
-        }
-        gettingData = false;
     }
 }

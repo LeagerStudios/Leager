@@ -963,7 +963,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 610317574}
+      - m_Target: {fileID: 0}
         m_MethodName: Login
         m_Mode: 1
         m_Arguments:
@@ -1254,7 +1254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &161366728
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3089,7 +3089,6 @@ GameObject:
   m_Component:
   - component: {fileID: 379752547}
   - component: {fileID: 379752548}
-  - component: {fileID: 379752549}
   m_Layer: 0
   m_Name: NetworkController
   m_TagString: Untagged
@@ -3123,22 +3122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b356ff57f90e24099f5ec94933cb5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &379752549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 379752546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dce4b089652e2b43825c1c0c1e81cdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inText: []
-  gotOutput: 0
-  awaiting: 0
-  output: 
 --- !u!1 &389540524
 GameObject:
   m_ObjectHideFlags: 0
@@ -3637,7 +3620,7 @@ GameObject:
   - component: {fileID: 489828411}
   - component: {fileID: 489828410}
   m_Layer: 5
-  m_Name: NickField
+  m_Name: EmailField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3703,21 +3686,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 489828411}
   m_TextComponent: {fileID: 1096093974}
   m_Placeholder: {fileID: 1140661051}
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
-  m_CharacterLimit: 15
+  m_CharacterValidation: 5
+  m_CharacterLimit: 256
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_CaretColor: {r: 1, g: 0, b: 0, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
@@ -4291,7 +4274,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1539288963}
-        m_MethodName: SignIn
+        m_MethodName: CreateUser
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4807,7 +4790,6 @@ GameObject:
   - component: {fileID: 610317573}
   - component: {fileID: 610317576}
   - component: {fileID: 610317575}
-  - component: {fileID: 610317574}
   m_Layer: 5
   m_Name: UserPanel
   m_TagString: Untagged
@@ -4838,28 +4820,6 @@ RectTransform:
   m_AnchoredPosition: {x: -3500, y: -50.00003}
   m_SizeDelta: {x: 300, y: 330}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &610317574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610317572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad83b49e5436ec54ab4d385b6ac55b7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loggedIn: 0
-  loginUserField: {fileID: 0}
-  loginPassField: {fileID: 0}
-  signinUserField: {fileID: 703913846}
-  signinPassField: {fileID: 1870495647}
-  signinNickField: {fileID: 489828410}
-  loginButton: {fileID: 1098297694}
-  logOffButton: {fileID: 580357052}
-  loggedUser: {fileID: 2113648045}
-  cameraController: {fileID: 1521509229}
 --- !u!114 &610317575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7910,7 +7870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1098297695
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8394,7 +8354,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: efe24c5b0f99a954a8588bf6bcffff50, type: 3}
-    m_FontSize: 10
+    m_FontSize: 14
     m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 0
@@ -8405,7 +8365,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Nickname (empty for no nick)
+  m_Text: Email
 --- !u!222 &1140661052
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11696,7 +11656,7 @@ MonoBehaviour:
   loginPassField: {fileID: 7428142}
   signinUserField: {fileID: 703913846}
   signinPassField: {fileID: 1870495647}
-  signinNickField: {fileID: 489828410}
+  signinEmailField: {fileID: 489828410}
   loginButton: {fileID: 1098297694}
   logOffButton: {fileID: 580357052}
   loggedUser: {fileID: 2113648045}

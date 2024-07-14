@@ -58,18 +58,6 @@ public class PushPlay : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!ServerConsole.serverConsole.awaiting)
-        {
-            ServerConsole.serverConsole.SendEmbed(new string[] { "Select world:" }.Concat(WorldPanelController.worldPanelController.listOfLoadedWorlds).ToArray());
-        }
-        else if(ServerConsole.serverConsole.GetOutput(out string output))
-        {
-
-        }
-    }
-
     public void OpenSocialMedia(string link)
     {
         Application.OpenURL(link);
