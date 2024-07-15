@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using PlayerIOClient;
+using System.Text;
+using System.Security.Cryptography;
 
 public class LoginController : MonoBehaviour {
 
     bool gettingData = false;
     public bool loggedIn = false;
 
-    [SerializeField] InputField loginUserField;
+    [SerializeField] InputField loginEmailField;
     [SerializeField] InputField loginPassField;
     [SerializeField] InputField signinUserField;
     [SerializeField] InputField signinPassField;
@@ -20,32 +22,36 @@ public class LoginController : MonoBehaviour {
     [SerializeField] GameObject loggedUser;
     [SerializeField] MainCameraController cameraController;
 
+    [SerializeField] string serverID;
+    [SerializeField] string message;
+
     void Start()
     {
         //RefreshLogin();
     }
 
-    public void CreateUser()
+    public bool CreateUser()
     {
-        PlayerIOClient.Client client = PlayerIO.Authenticate("leager-h3f0o1td70uyrsf0nnddw", "public", ManagingFunctions.CreateArgsSingle("userId", "default"), null);
-
         string username = signinUserField.text;
         string password = signinPassField.text;
         string email = signinEmailField.text;
 
-        if(client.BigDB.Load("Users", username) == null)
+        string data = CreateHead("default", message);
+        PlayerIOClient.Client client = PlayerIO.Authenticate(serverID, "userreq", ManagingFunctions.CreateArgs(new string[] { "userId", "auth" }, new string[] { "default", data }), null);
+
+        if(client.BigDB.Load("Users", email) == null)
         {
             DatabaseObject newUser = new DatabaseObject();
             newUser.Set("Username", username);
             newUser.Set("Email", email);
             newUser.Set("Password", password);
 
-            client.BigDB.CreateObject("Users", username, newUser);
-            Debug.Log("User " + username + " Created");
+            client.BigDB.CreateObject("Users", email, newUser);
+            return true;
         }
         else
         {
-            Debug.Log("User already exists!!!");
+            return false;
         }
        
     }
@@ -56,30 +62,34 @@ public class LoginController : MonoBehaviour {
         {
             loggedUser.SetActive(cameraController.Focus == "mainMenu");
         }
+        else
+        {
+            loginButton.SetActive(cameraController.Focus == "mainMenu");
+        }
     }
 
     void RefreshLogin()
     {
-        //loggedIn = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/logginSettings.lgrsd");
+        loggedIn = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/logginSettings.lgrsd");
 
-        //PushPlay.main.multiplayerButton.interactable = false;
+        PushPlay.main.multiplayerButton.interactable = false;
 
-        //loggedUser.SetActive(loggedIn);
-        //loginButton.SetActive(!loggedIn);
-        //logOffButton.interactable = loggedIn;
+        loggedUser.SetActive(loggedIn);
+        loginButton.SetActive(!loggedIn);
+        logOffButton.interactable = loggedIn;
 
-        //if (loggedIn)
-        //{
-        //    string[] logginSession = DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData;
+        if (loggedIn)
+        {
+            string[] logginSession = DataSaver.LoadStats(Application.persistentDataPath + @"/logginSettings.lgrsd").SavedData;
 
-        //    List<IMultipartFormSection> formData = new List<IMultipartFormSection>
-        //    {
-        //        new MultipartFormDataSection("user", logginSession[0]),
-        //        new MultipartFormDataSection("pass", logginSession[1])
-        //    };
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>
+            {
+                new MultipartFormDataSection("user", logginSession[0]),
+                new MultipartFormDataSection("pass", logginSession[1])
+            };
 
-        //    StartCoroutine(GetDataFromURL("http://localhost:5559/game/database/login.php", "userLogin", formData));
-        //}
+           
+        }
     }
 
     public void LogOff()
@@ -87,5 +97,17 @@ public class LoginController : MonoBehaviour {
         DataSaver.DeleteFile(Application.persistentDataPath + @"/logginSettings.lgrsd");
         RefreshLogin();
         cameraController.ChangeFocus("mainMenu");
+    }
+
+    public static string CreateHead(string userId, string sharedSecret)
+    {
+        int unixTime = (int)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds;
+        var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(sharedSecret)).ComputeHash(Encoding.UTF8.GetBytes(unixTime + ":" + userId));
+        return unixTime + ":" + ToHexString(hmac);
+    }
+
+    public static string ToHexString(byte[] bytes)
+    {
+        return System.BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
     }
 }

@@ -11652,7 +11652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loggedIn: 0
-  loginUserField: {fileID: 1839607873}
+  loginEmailField: {fileID: 1839607873}
   loginPassField: {fileID: 7428142}
   signinUserField: {fileID: 703913846}
   signinPassField: {fileID: 1870495647}
@@ -11661,6 +11661,8 @@ MonoBehaviour:
   logOffButton: {fileID: 580357052}
   loggedUser: {fileID: 2113648045}
   cameraController: {fileID: 1521509229}
+  serverID: leager-h3f0o1td70uyrsf0nnddw
+  message: papipopi33
 --- !u!1 &1569869966
 GameObject:
   m_ObjectHideFlags: 0
@@ -12573,7 +12575,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Username
+  m_Text: Email
 --- !u!222 &1636658053
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13584,13 +13586,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1839607874}
   m_TextComponent: {fileID: 1493633981}
   m_Placeholder: {fileID: 1636658052}
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 5
   m_CharacterLimit: 15
   m_OnEndEdit:
     m_PersistentCalls:
