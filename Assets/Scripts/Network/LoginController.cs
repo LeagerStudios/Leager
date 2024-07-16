@@ -30,7 +30,7 @@ public class LoginController : MonoBehaviour {
         //RefreshLogin();
     }
 
-    public bool CreateUser()
+    public void CreateUser()
     {
         string username = signinUserField.text;
         string password = signinPassField.text;
@@ -39,19 +39,19 @@ public class LoginController : MonoBehaviour {
         string data = CreateHead("default", message);
         PlayerIOClient.Client client = PlayerIO.Authenticate(serverID, "userreq", ManagingFunctions.CreateArgs(new string[] { "userId", "auth" }, new string[] { "default", data }), null);
 
-        if(client.BigDB.Load("Users", email) == null)
+        if(client.BigDB.Load("Users", username) == null)
         {
             DatabaseObject newUser = new DatabaseObject();
             newUser.Set("Username", username);
             newUser.Set("Email", email);
             newUser.Set("Password", password);
 
-            client.BigDB.CreateObject("Users", email, newUser);
-            return true;
+            client.BigDB.CreateObject("Users", username, newUser);
+            //true stuff
         }
         else
         {
-            return false;
+            //false stuff
         }
        
     }
