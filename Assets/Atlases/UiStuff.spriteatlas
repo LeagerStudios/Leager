@@ -46,7 +46,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 980946a09a266754dad1a4b559b911ca, type: 3}
     - {fileID: 2800000, guid: 15a24bcb019b71e4ba96310f0943c646, type: 3}
     - {fileID: 2800000, guid: 489298c9960f7d74fa71a38a3577222c, type: 3}
-    totalSpriteSurfaceArea: 340688
+    totalSpriteSurfaceArea: 341712
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -88,6 +88,7 @@ SpriteAtlas:
   - {fileID: 21300002, guid: 40e6af3981041ab4f87e232451011b33, type: 3}
   - {fileID: 21300000, guid: 11ae9db968e5442428dec7cee0c07e9e, type: 3}
   - {fileID: 21300000, guid: 489298c9960f7d74fa71a38a3577222c, type: 3}
+  - {fileID: 21300000, guid: 903432f948206584ea9781985d9727b1, type: 3}
   - {fileID: 21300000, guid: bea6dc7a693287542a381f7467b76635, type: 3}
   - {fileID: 21300000, guid: a2cb009a1b6b7ff428abb02d31034cb1, type: 3}
   - {fileID: 21300000, guid: 257a920b47232f745becd41aed80447b, type: 3}
@@ -137,6 +138,7 @@ SpriteAtlas:
   - MinimapAssets_1
   - Death Icon
   - Title
+  - Stack
   - OptionsLogos_0
   - NavigationArrow
   - DirtIcon
