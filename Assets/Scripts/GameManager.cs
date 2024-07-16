@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     public Vector3 mouseDelta;
     public int NumberOfTilesInChunk;
 
-    public int[] equipedArmor = new int[3];
+    public int[] equipedArmor = new int[6];
 
     //Auxiliar for build
     GameObject lastTileBrush;
@@ -139,6 +139,8 @@ public class GameManager : MonoBehaviour
     public AudioSource ostSource;
     public AudioSource breakSoundSource;
     public float breakSoundCooldown = 0f;
+
+    public ArmorBarController armorBarController;
 
     public bool InGame
     {
@@ -298,7 +300,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-
+        armorBarController.Initialize(equipedArmor);
 
         frameTimer = 0;
         Transition.SetActive(true);
