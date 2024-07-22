@@ -20,9 +20,9 @@ public class ArmorBarController : MonoBehaviour
                 stackStorage.SetAt(i, equips[i], equips[i] == 0 ? 0 : 1);
             } 
         }
-        catch
+        finally
         {
-
+            GameManager.gameManagerReference.equipedArmor = stackStorage.items;
         }
     }
 
@@ -56,7 +56,6 @@ public class ArmorBarController : MonoBehaviour
 
     void Update()
     {
-        GameManager.gameManagerReference.equipedArmor = stackStorage.items;
         if (StackBar.stackBarController.InventoryDeployed && GameManager.gameManagerReference.player.alive)
         {
             rectTransform.anchoredPosition = new Vector2(0, 0);

@@ -34,10 +34,28 @@ public class PlayerController : MonoBehaviour, IDamager
     GameManager gameManager;
     public float falling = 0f;
     public int skin = 0;
+    public int FlyTime
+    {
+        get
+        {
+            return flyTime;
+        }
+
+        set
+        {
+            flyTime = value;
+
+            int val = Mathf.Clamp((flyTime - 300) * -1, 0, 300);
+            HealthBarManager.self.UpdateHealthBar(transform, val, 300, Vector2.up);
+        }
+    }
+    public int flyTime = 0;
 
     [SerializeField] AudioClip hitSound;
     [SerializeField] AudioClip regenerationSound;
     [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip jetpack;
+    public Transform accesories;
 
     void Start() //obtener referencias
     {
@@ -61,6 +79,13 @@ public class PlayerController : MonoBehaviour, IDamager
                         PlayerControl();
                     LecterAI();
                     mainCamera.transform.eulerAngles = Mathf.LerpAngle(mainCamera.transform.eulerAngles.z, 0, 10f * Time.deltaTime) * Vector3.forward;
+
+                    List<string> list = new List<string>(ManagingFunctions.ConvertIntToStringArray(gameManager.equipedArmor));
+                    for (int i = 0; i < accesories.childCount; i++)
+                    {
+                        Transform child = accesories.GetChild(i);
+                        child.gameObject.SetActive(list.Contains(child.name));
+                    }
                 }
 
                 if (!alive && !killing && gameManager.InGame && !CommandController.commandController.showcaseMode)
@@ -68,6 +93,9 @@ public class PlayerController : MonoBehaviour, IDamager
                     mainCamera.transform.eulerAngles += Vector3.forward * Time.deltaTime;
                     mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
                 }
+
+                accesories.gameObject.SetActive(alive);
+                accesories.localScale = new Vector3(GetComponent<SpriteRenderer>().flipX ? -1f : 1f, 1f, 1f);
             }
             else
             {
@@ -201,6 +229,10 @@ public class PlayerController : MonoBehaviour, IDamager
 
         animations.SetBool("walking", false);
 
+        if(FlyTime != 0)
+            if (Grounded && !Input.GetKey(KeyCode.W))
+                FlyTime = 0;
+
         if (GInput.GetKey(KeyCode.A))
         {
             if (rb2D.velocity.x > (0 - MaxSpeed))
@@ -273,10 +305,11 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else falling = 0f;
 
-        if (GInput.GetKeyDown(KeyCode.W) && Grounded && rb2D.velocity.y >= 0)
-        {
-            rb2D.velocity = new Vector2(rb2D.velocity.x, JumpForce);
-        }
+        if (gameManager.equipedArmor[4] != 124)
+            if (GInput.GetKeyDown(KeyCode.W) && Grounded && rb2D.velocity.y >= 0)
+            {
+                rb2D.velocity = new Vector2(rb2D.velocity.x, JumpForce);
+            }
 
         if (GInput.GetKey(KeyCode.W))
         {
@@ -299,10 +332,32 @@ public class PlayerController : MonoBehaviour, IDamager
             entityScript.swimming = 0f;
         }
 
-        //if (GInput.GetKey(KeyCode.W))
-        //{
-        //    gameManager.FloatOn(transform.position - new Vector3(0f, 0.6f, 0f), 0.5f);
-        //}
+        if (gameManager.equipedArmor[4] == 124)
+        {
+            if (GInput.GetKey(KeyCode.W) && FlyTime < 300)
+            {
+                rb2D.AddForce(new Vector2(0, 40));
+                accesories.Find("124").GetChild(0).gameObject.SetActive(true);
+                mainCamera.transform.eulerAngles = Random.Range(-1.5f, 1.5f) * Vector3.forward;
+                if(FlyTime % 8 == 0)
+                {
+                    gameManager.soundController.PlaySfxSound(jetpack);
+                }
+                if (gameManager.addedFrameThisFrame)
+                    FlyTime++;
+            }
+            else
+            {
+                accesories.Find("124").GetChild(0).gameObject.SetActive(false);
+            }
+
+            if(transform.position.y > gameManager.WorldHeight)
+            {
+                gameManager.equipedArmor[4] = 0;
+                ManagingFunctions.DropItem(124, transform.position, new Vector2(rb2D.velocity.x * 3, 0), 1, 4);
+            }
+        }
+        
 
         if (GInput.GetKey(KeyCode.Space))
         {

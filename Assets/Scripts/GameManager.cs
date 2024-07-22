@@ -610,6 +610,18 @@ public class GameManager : MonoBehaviour
         {
             idx = 2;
         }
+        else if (type == "helmetAcc")
+        {
+            idx = 3;
+        }
+        else if (type == "chestplateAcc")
+        {
+            idx = 4;
+        }
+        else if (type == "bootsAcc")
+        {
+            idx = 5;
+        }
 
 
         int returnVal = equipedArmor[idx];
