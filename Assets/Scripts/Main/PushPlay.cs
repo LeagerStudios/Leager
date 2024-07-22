@@ -243,9 +243,9 @@ public class PushPlay : MonoBehaviour
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(ManagingFunctions.ConvertIntToStringArray(wp), "newWorldSize");
     }
 
-    public void Tutorial(string language)
+    public void Tutorial()
     {
-        
+
     }
 
     public void OpenSaveDataFolder()

@@ -18,6 +18,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     public bool collided = false;
     public bool goDown = false;
     public float descentVelocity = 0;
+    public float maxSpeed = 50f;
 
     public bool[] droppedBomb;
     [SerializeField] Sprite[] scraps;
@@ -96,11 +97,11 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (!GameManager.gameManagerReference.player.alive || GameManager.gameManagerReference.dayLuminosity > 0.5f) Kill(new string[] { "waitForDescent" });
             goDown = false;
             descentVelocity = 0;
-            velocity = new Vector2(Mathf.Cos(pointDir * Mathf.Deg2Rad) * 30, Mathf.Sin(pointDir * Mathf.Deg2Rad) * 30);
+            velocity = new Vector2(Mathf.Cos(pointDir * Mathf.Deg2Rad) * maxSpeed, Mathf.Sin(pointDir * Mathf.Deg2Rad) * maxSpeed);
         }
 
         if (!goDown)
-            velocity = new Vector2(Mathf.Cos(pointDir * Mathf.Deg2Rad) * 30, Mathf.Sin(pointDir * Mathf.Deg2Rad) * 30);
+            velocity = new Vector2(Mathf.Cos(pointDir * Mathf.Deg2Rad) * maxSpeed, Mathf.Sin(pointDir * Mathf.Deg2Rad) * maxSpeed);
 
         if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 5 || goDown)
         {
@@ -136,7 +137,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 indexSegment.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(indexSegment.position, GameManager.gameManagerReference.player.transform.position));
-                if (Random.Range(0, 5065) == 0 || (GameManager.gameManagerReference.frameTimer % 300 > 240 && Random.Range(0, 200) == 0))
+                if (Random.Range(0, 5065) == 0 || (GameManager.gameManagerReference.frameTimer % 1200 > 1140 && Random.Range(0, 200) == 0))
                 {
                     if(!droppedBomb[i] && Random.Range(0, 2) == 0 && Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 3.2f)
                     {
@@ -235,7 +236,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         transform.position = spawnPos;
         transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
         transform.GetChild(1).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
-        for (int i = 0; i < 75; i++)
+        for (int i = 0; i < 128; i++)
         {
             GameObject clonedSegment = Instantiate(segment, spawnPos, Quaternion.identity, transform.parent);
             clonedSegment.transform.GetChild(1).GetComponent<DamagersCollision>().target = this;

@@ -231,5 +231,5 @@ public class EntityCommonScript : MonoBehaviour
 
 public enum EntityState : int
 {
-    OnFire, Paralisis, Drowning, Swimming, Burning
+    OnFire, Paralisis, Drowning, Swimming, Burning, FireResistance,
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7491547590723694036}
   - component: {fileID: 4986804575568354589}
   - component: {fileID: 5095775980194753038}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 823596895
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 99
   m_Sprite: {fileID: 21300018, guid: eb829623feff1a945a50accb9e334dc4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -92,7 +92,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -111,7 +111,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 2
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 069c94f5df2e85a43b33baaaf9297d0a, type: 2}
@@ -140,3 +140,4 @@ MonoBehaviour:
   - {fileID: 21300018, guid: eb829623feff1a945a50accb9e334dc4, type: 3}
   - {fileID: 21300020, guid: eb829623feff1a945a50accb9e334dc4, type: 3}
   spriteRenderer: {fileID: 119622299153782008}
+  makeBoom: 1

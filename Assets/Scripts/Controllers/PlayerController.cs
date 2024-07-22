@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 if (alive && gameManager.InGame)
                 {
-                    Hitbox();
+                    transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
                     if (onControl)
                         PlayerControl();
                     LecterAI();
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else
         {
-            Hitbox();
+            transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
         }
     }
 
@@ -154,30 +154,13 @@ public class PlayerController : MonoBehaviour, IDamager
         spawned = true;//confirmación final
     }
 
-    void Hitbox()
-    {
-        CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
-
-        if (GetComponent<SpriteRenderer>().flipX)
-        {
-            collider2D.offset = new Vector2(0.075f, 0);
-            transform.GetChild(2).localPosition = new Vector2(handOffset, transform.GetChild(2).localPosition.y);
-        }
-        else
-        {
-            collider2D.offset = new Vector2(-0.075f, 0);
-            transform.GetChild(2).localPosition = new Vector2(-handOffset, transform.GetChild(2).localPosition.y);
-        }
-        transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
-    }
-
     void PlayerControl()
     {
         CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
 
         float raycastDistance = 0.7f;
         bool Grounded = false;
-        Vector2 pos = new Vector2(transform.position.x + collider2D.offset.x, transform.position.y);
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
@@ -189,7 +172,7 @@ public class PlayerController : MonoBehaviour, IDamager
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
 
-        pos = new Vector2(transform.position.x + collider2D.size.x / 2.1f + collider2D.offset.x, pos.y);
+        pos = new Vector2(transform.position.x + collider2D.size.x / 2.1f, pos.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
@@ -202,7 +185,7 @@ public class PlayerController : MonoBehaviour, IDamager
         }
 
         pos = new Vector2(transform.position.x, transform.position.y);
-        pos = new Vector2(transform.position.x - collider2D.size.x / 2.1f + collider2D.offset.x, pos.y);
+        pos = new Vector2(transform.position.x - collider2D.size.x / 2.1f, pos.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
@@ -252,14 +235,6 @@ public class PlayerController : MonoBehaviour, IDamager
             }
         }
 
-        if (GetComponent<SpriteRenderer>().flipX)
-        {
-            transform.GetChild(2).localPosition = new Vector2(handOffset, transform.GetChild(2).localPosition.y);
-        }
-        else
-        {
-            transform.GetChild(2).localPosition = new Vector2(-handOffset, transform.GetChild(2).localPosition.y);
-        }
         transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
 
         if ((GInput.GetKeyDown(KeyCode.A) || GInput.GetKeyDown(KeyCode.D)) && Grounded)
@@ -380,15 +355,24 @@ public class PlayerController : MonoBehaviour, IDamager
                     StackBar.LoseItem(StackBar.Search(64, 1));
                     Vector2 vector = gameManager.mouseCurrentPosition - transform.position;
                     vector.x = vector.x * -1;
-                    PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]], GetComponent<EntityCommonScript>());
+                    PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.currentItem], entityScript);
                 }
                 else if (InventoryBar.Search(64, 1) != -1)
                 {
                     InventoryBar.LoseItem(InventoryBar.Search(64, 1));
                     Vector2 vector = gameManager.mouseCurrentPosition - transform.position;
                     vector.x = vector.x * -1;
-                    PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]], GetComponent<EntityCommonScript>());
+                    PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.currentItem], entityScript);
                 }
+            }
+            else if(gameManager.armUsing == "plasmabomb")
+            {
+                DestroyerBomb bomb = Instantiate(gameManager.ProjectilesGameObject[(int)Projectiles.PlasmaBomb], transform.position, Quaternion.identity).GetComponent<DestroyerBomb>();
+                bomb.destroyer = entityScript;
+                bomb.transform.parent = GameManager.gameManagerReference.entitiesContainer.transform;
+                bomb.GetComponent<Rigidbody2D>().velocity = Vector2.ClampMagnitude((gameManager.mouseCurrentPosition - transform.position) * 10, 20);
+                StackBar.LoseItem();
+                bomb.makeBoom = false;
             }
         }
 
@@ -443,16 +427,21 @@ public class PlayerController : MonoBehaviour, IDamager
 
     void LecterAI()
     {
-        if (entityScript.entityStates.Contains(EntityState.Burning))
-        {
-            transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
-            LoseHp(5, entityScript, false, 0, true);
-        }
-        else if (entityScript.entityStates.Contains(EntityState.OnFire))
-        {
-            transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
-            LoseHp(1, entityScript, false, 0, true);
-        }
+        if (!entityScript.entityStates.Contains(EntityState.FireResistance))
+            if (entityScript.entityStates.Contains(EntityState.Burning))
+            {
+                transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
+                LoseHp(5, entityScript, false, 0, true);
+            }
+            else if (entityScript.entityStates.Contains(EntityState.OnFire))
+            {
+                transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = true;
+                LoseHp(1, entityScript, false, 0, true);
+            }
+            else
+            {
+                transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = false;
+            }
         else
         {
             transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = false;
@@ -607,7 +596,7 @@ public class PlayerController : MonoBehaviour, IDamager
             int tile = InventoryBar.inventoryBarController.InventoryBarGrid[i];
             if (tile > 0)
             {
-                if (gameManager.tileType[tile] != "tool")
+                if (gameManager.tileType[tile] != "tool" && tile != 16)
                 {
                     ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f,5f) + Vector2.up * 2, InventoryBar.inventoryBarController.InventoryItemAmount[i]);
                     InventoryBar.AsignNewStack(i, 0, 0);

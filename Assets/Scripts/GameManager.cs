@@ -19,7 +19,7 @@ public enum UnitWeapons : int
 
 public enum Projectiles : int
 {
-    Arrow = 0, SwordParticle = 1, Laser = 2,
+    Arrow = 0, SwordParticle = 1, Laser = 2, PlasmaBomb = 3,
 }
 
 public class GameManager : MonoBehaviour
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int[] TileCollisionType;
     [SerializeField] public string[] tileMainProperty;
     [SerializeField] public string[] tileDefaultBrokeTool;
-    [SerializeField] public bool[] canRotate;
+    [SerializeField] public int[] stackLimit;
     [SerializeField] public int[] ToolEfficency;
     [SerializeField] public string[] tileName;
     [SerializeField] public Color[] rawColor;
@@ -517,17 +517,17 @@ public class GameManager : MonoBehaviour
                 ScreenCapture.CaptureScreenshot(Application.persistentDataPath + @"/screenshots/screenshot" + freeFile + ".png");
             }
 
-            if (!building || (building && !canRotate[chosenBrush]))
-            {
-                buildRotation = 0;
-            }
-            else
-            {
-                if (GInput.GetKeyDown(KeyCode.R))
-                {
-                    buildRotation = (int)Mathf.Repeat(buildRotation - 90, 360);
-                }
-            }
+            //if (!building || (building && !canRotate[chosenBrush]))
+            //{
+            //    buildRotation = 0;
+            //}
+            //else
+            //{
+            //    if (GInput.GetKeyDown(KeyCode.R))
+            //    {
+            //        buildRotation = (int)Mathf.Repeat(buildRotation - 90, 360);
+            //    }
+            //}
 
             //EVENTS
 
@@ -2148,6 +2148,10 @@ public class GameManager : MonoBehaviour
                     soundController.PlaySfxSound(SoundName.select);
                 }
                 else StackBar.AddItem(78);
+                break;
+            case 122:
+                player.entityScript.AddState(EntityState.FireResistance, 90f);
+                soundController.PlaySfxSound(SoundName.select);
                 break;
         }
     }

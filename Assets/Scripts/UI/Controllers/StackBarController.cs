@@ -102,7 +102,7 @@ public class StackBarController : MonoBehaviour {
 
             selectedStack.GetComponent<Image>().sprite = gameManager.tiles[StackBarGrid[i - 1]];
 
-            if (!(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "tool" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "arm" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "equip" || gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "core") && !(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == ""))
+            if (gameManager.stackLimit[StackBarGrid[i - 1]] > 1)
             {
                 childTransform.GetChild(0).gameObject.SetActive(true);
                 childTransform.GetChild(0).GetComponent<Text>().text = StackItemAmount[i - 1] + "";
@@ -117,29 +117,29 @@ public class StackBarController : MonoBehaviour {
                 currentItem = StackBarGrid[i - 1];
                 childTransform.localScale = new Vector3(1.3f, 1.3f, 1);
                 rectTransform.GetChild(0).gameObject.GetComponent<RectTransform>().position = childTransform.position;
-                if (gameManager.tileMainProperty[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "placeable")
+                if (gameManager.tileMainProperty[currentItem] == "placeable")
                 {
                     gameManager.canBuild = true;
-                    gameManager.chosenBrush = System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite);
+                    gameManager.chosenBrush = currentItem;
                 }
-                else if(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "tool")
+                else if(gameManager.tileType[currentItem] == "tool")
                 {
                     gameManager.canUseTool = true;
-                    gameManager.toolUsing = gameManager.tileMainProperty[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)];
-                    gameManager.toolUsingEfficency = gameManager.ToolEfficency[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)];
+                    gameManager.toolUsing = gameManager.tileMainProperty[currentItem];
+                    gameManager.toolUsingEfficency = gameManager.ToolEfficency[currentItem];
                 }
-                else if (gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "arm")
+                else if (gameManager.tileType[currentItem] == "arm")
                 {
                     gameManager.canAtack = true;
-                    gameManager.armUsing = gameManager.tileMainProperty[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)];
-                    gameManager.armUsingDamageDeal = gameManager.ToolEfficency[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)];
+                    gameManager.armUsing = gameManager.tileMainProperty[currentItem];
+                    gameManager.armUsingDamageDeal = gameManager.ToolEfficency[currentItem];
                 }
-                else if(gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "equip")
+                else if(gameManager.tileType[currentItem] == "equip")
                 {
                     gameManager.canEquip = true;
-                    gameManager.equipType = gameManager.tileMainProperty[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)];
+                    gameManager.equipType = gameManager.tileMainProperty[currentItem];
                 }
-                else if (gameManager.tileType[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "item" && gameManager.tileMainProperty[System.Array.IndexOf(gameManager.tiles, childTransform.GetComponent<Image>().sprite)] == "usable")
+                else if (gameManager.tileType[currentItem] == "item" && gameManager.tileMainProperty[currentItem] == "usable")
                 {
                     gameManager.canConsume = true;
                 }
@@ -247,7 +247,7 @@ public static class StackBar
         {
             for(int i = 0; i < 9; i++)
             {
-                if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < 99 && !typeAlreadyExists && GameManager.gameManagerReference.tileType[item] != "tool" && GameManager.gameManagerReference.tileType[item] != "arm" && GameManager.gameManagerReference.tileType[item] != "equip" && GameManager.gameManagerReference.tileType[item] != "core")
+                if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < GameManager.gameManagerReference.stackLimit[stackBarController.StackBarGrid[i]])
                 {
                     typeAlreadyExists = true;
                     existingIdx = i;

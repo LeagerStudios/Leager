@@ -9,6 +9,7 @@ public class DestroyerBomb : MonoBehaviour
     public EntityCommonScript destroyer;
     [SerializeField] Sprite[] animationFrames;
     [SerializeField] SpriteRenderer spriteRenderer;
+    public bool makeBoom = true;
 
     void Update()
     {
@@ -22,36 +23,39 @@ public class DestroyerBomb : MonoBehaviour
         }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.gameObject.layer == 8)
+        if (collision.gameObject.layer == 8 || (collision.gameObject.layer == 14 && collision.gameObject.GetComponentInParent<EntityCommonScript>() != destroyer))
         {
             Instantiate(explosion, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
             GameManager.gameManagerReference.soundController.PlaySfxSound(explosionSounds[Random.Range(0, explosionSounds.Length)], ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 100));
 
             foreach (EntityCommonScript entity in GameManager.gameManagerReference.entitiesContainer.GetComponentsInChildren<EntityCommonScript>())
             {
-                if (Vector2.Distance(entity.transform.position, transform.position) < 4f)
-                {
-                    if (entity.gameObject.GetComponent<IDamager>() != null)
+                if (entity != destroyer)
+                    if (Vector2.Distance(entity.transform.position, transform.position) < 4f)
                     {
-                        entity.gameObject.GetComponent<IDamager>().Hit(15, GetComponent<EntityCommonScript>(), true, 1.5f, true);
+                        if (entity.gameObject.GetComponent<IDamager>() != null)
+                        {
+                            entity.gameObject.GetComponent<IDamager>().Hit(36, destroyer, true, 1.5f, true);
+                        }
                     }
-                }
             }
 
             foreach (EntityCommonScript entity in GameManager.gameManagerReference.dummyObjects.GetComponentsInChildren<EntityCommonScript>())
             {
-                if (Vector2.Distance(entity.transform.position, transform.position) < 4f)
-                {
-                    if (entity.gameObject.GetComponent<PlayerController>() != null)
+                if (entity != destroyer)
+                    if (Vector2.Distance(entity.transform.position, transform.position) < 4f)
                     {
-                        entity.gameObject.GetComponent<PlayerController>().LoseHp(15, GetComponent<EntityCommonScript>(), true, 1.5f, true);
+                        if (entity.gameObject.GetComponent<PlayerController>() != null)
+                        {
+                            entity.gameObject.GetComponent<PlayerController>().LoseHp(36, destroyer, true, 1.5f, true);
+                        }
                     }
-                }
             }
 
-            GameManager.gameManagerReference.TileExplosionAt((int)transform.position.x, (int)transform.position.y, 5, 5);
+            if (makeBoom && Random.Range(0, 6) == 0)
+                GameManager.gameManagerReference.TileExplosionAt((int)transform.position.x, (int)transform.position.y, 5, 5);
             Destroy(gameObject);
         }
     }
