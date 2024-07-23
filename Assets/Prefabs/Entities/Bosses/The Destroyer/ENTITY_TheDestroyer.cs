@@ -28,6 +28,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     [SerializeField] Transform targetHealthbar;
     [SerializeField] Vector2 targetHealthbarPos;
     [SerializeField] Vector2 targetHealthbarSegment;
+    [SerializeField] EntityCommonScript entityCommonScript;
 
     public override int Hp
     {
@@ -116,12 +117,12 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         transform.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(transform.position, GameManager.gameManagerReference.player.transform.position));
         if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 140) == 0)
         {
-            PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z + 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
-            PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z - 5, transform.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
+            PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z + 5, transform.GetChild(0).position, 0, entityCommonScript);
+            PROJECTILE_Laser.StaticSpawn(transform.GetChild(0).eulerAngles.z - 5, transform.GetChild(0).position, 0, entityCommonScript);
             GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
         }
         if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-            GameManager.gameManagerReference.player.LoseHp(15, GetComponent<EntityCommonScript>());
+            GameManager.gameManagerReference.player.LoseHp(15, entityCommonScript);
 
 
         Transform previousSegment = transform;
@@ -144,19 +145,19 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                         droppedBomb[i] = true;
                         indexSegment.GetChild(0).GetComponent<SpriteRenderer>().sprite = noBomb;
                         DestroyerBomb bomb = Instantiate(bombPrefab, indexSegment.position, indexSegment.rotation).GetComponent<DestroyerBomb>();
-                        bomb.destroyer = GetComponent<EntityCommonScript>();
+                        bomb.destroyer = entityCommonScript;
                         bomb.transform.parent = GameManager.gameManagerReference.entitiesContainer.transform;
                         bomb.GetComponent<Rigidbody2D>().velocity = rb2d.velocity;
                     }
                     else
                     {
-                        PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, GetComponent<EntityCommonScript>());
+                        PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(0).eulerAngles.z, indexSegment.GetChild(0).position, 0, entityCommonScript);
                         GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
                     }
                 }
 
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(5, GetComponent<EntityCommonScript>());
+                    GameManager.gameManagerReference.player.LoseHp(5, entityCommonScript);
             }
             else
             {
@@ -164,11 +165,11 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 if (Vector2.Distance(GameManager.gameManagerReference.player.transform.position, indexSegment.GetChild(1).position) < 7)
                     if (Mathf.Repeat(GameManager.gameManagerReference.frameTimer, 13) == 0)
                     {
-                        PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, GetComponent<EntityCommonScript>());
+                        PROJECTILE_Laser.StaticSpawn(indexSegment.GetChild(1).eulerAngles.z, indexSegment.GetChild(1).position, 0, entityCommonScript);
                         GameManager.gameManagerReference.soundController.PlaySfxSound(shoot, ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 60));
                     }
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(16, GetComponent<EntityCommonScript>());
+                    GameManager.gameManagerReference.player.LoseHp(16, entityCommonScript);
             }
 
             previousSegment = indexSegment;
@@ -204,7 +205,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, velocity, 0.1f);
         transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.1f));
         if (Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-            GameManager.gameManagerReference.player.LoseHp(15, GetComponent<EntityCommonScript>());
+            GameManager.gameManagerReference.player.LoseHp(15, entityCommonScript);
 
         Transform previousSegment = transform;
         for (int i = 1; i < transform.parent.childCount; i++)
@@ -219,12 +220,12 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
             if (i != transform.parent.childCount - 1)
             {
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(5, GetComponent<EntityCommonScript>());
+                    GameManager.gameManagerReference.player.LoseHp(5, entityCommonScript);
             }
             else
             {
                 if (Vector2.Distance(indexSegment.position, GameManager.gameManagerReference.player.transform.position) < 1.5f)
-                    GameManager.gameManagerReference.player.LoseHp(16, GetComponent<EntityCommonScript>());
+                    GameManager.gameManagerReference.player.LoseHp(16, entityCommonScript);
             }
             previousSegment = indexSegment;
         }
@@ -235,17 +236,17 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         transform.parent.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         transform.position = spawnPos;
         transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
-        transform.GetChild(1).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+        transform.GetChild(1).GetComponent<DamagersCollision>().entity = entityCommonScript;
         for (int i = 0; i < 128; i++)
         {
             GameObject clonedSegment = Instantiate(segment, spawnPos, Quaternion.identity, transform.parent);
             clonedSegment.transform.GetChild(1).GetComponent<DamagersCollision>().target = this;
-            clonedSegment.transform.GetChild(1).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+            clonedSegment.transform.GetChild(1).GetComponent<DamagersCollision>().entity = entityCommonScript;
         }
 
         GameObject tailSegment = Instantiate(tail, spawnPos, Quaternion.identity, transform.parent);
         tailSegment.transform.GetChild(2).GetComponent<DamagersCollision>().target = this;
-        tailSegment.transform.GetChild(2).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+        tailSegment.transform.GetChild(2).GetComponent<DamagersCollision>().entity = entityCommonScript;
 
         droppedBomb = new bool[transform.parent.childCount];
 
@@ -318,6 +319,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
 
                 ManagingFunctions.DropItem(65, targetSegment.position, amount: Random.Range(20, 40));
                 ManagingFunctions.DropItem(34, targetSegment.position, amount: Random.Range(5, 10));
+                ManagingFunctions.DropItem(121, targetSegment.position, amount: Random.Range(89, 121));
                 Despawn();
             }
         }

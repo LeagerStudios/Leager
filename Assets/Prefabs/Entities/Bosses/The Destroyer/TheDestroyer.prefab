@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4992267569824162}
   - component: {fileID: 82637329737651422}
+  - component: {fileID: 4116580747799105205}
   m_Layer: 0
   m_Name: TheDestroyer
   m_TagString: Untagged
@@ -129,6 +130,37 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &4116580747799105205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396369739670316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f53a67a4e81a9cd4592011f49eba7ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagerObject: {fileID: 1908897961920216}
+  entityBase: {fileID: 114464213351407388}
+  EntityType: destroyer
+  EntityFamily: worm
+  height: 1.1
+  width: 0.35
+  raycastHeight: 0
+  saveToFile: 0
+  canBeNetworked: 1
+  rb2D: {fileID: 50213022238250784}
+  entityStates: 
+  stateDuration: []
+  affectedByLiquids: 0
+  affectedBySolids: 0
+  swimming: 0
+  ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1406238649186210
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +344,6 @@ GameObject:
   - component: {fileID: 114464213351407388}
   - component: {fileID: 212044308708351108}
   - component: {fileID: 50213022238250784}
-  - component: {fileID: 114306130823769322}
   m_Layer: 13
   m_Name: TheDestroyerHead
   m_TagString: Untagged
@@ -364,6 +395,7 @@ MonoBehaviour:
   collided: 0
   goDown: 1
   descentVelocity: 0
+  maxSpeed: 50
   droppedBomb: 
   scraps:
   - {fileID: 21300010, guid: eb829623feff1a945a50accb9e334dc4, type: 3}
@@ -376,6 +408,7 @@ MonoBehaviour:
   targetHealthbar: {fileID: 624598108721144485}
   targetHealthbarPos: {x: 0, y: 0}
   targetHealthbarSegment: {x: 0, y: 0}
+  entityCommonScript: {fileID: 4116580747799105205}
 --- !u!212 &212044308708351108
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -445,37 +478,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &114306130823769322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1908897961920216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f53a67a4e81a9cd4592011f49eba7ffc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damagerObject: {fileID: 1908897961920216}
-  entityBase: {fileID: 0}
-  EntityType: destroyer
-  EntityFamily: worm
-  height: 1
-  width: 0.35
-  raycastHeight: 0
-  saveToFile: 0
-  canBeNetworked: 1
-  rb2D: {fileID: 50213022238250784}
-  entityStates: 
-  stateDuration: []
-  affectedByLiquids: 0
-  affectedBySolids: 0
-  swimming: 0
-  ladderVelocity: 0
-  blockMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &5794691326994024543
 GameObject:
   m_ObjectHideFlags: 0

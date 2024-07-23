@@ -25,7 +25,7 @@ public class DestroyerBomb : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 8 || (collision.gameObject.layer == 14 && collision.gameObject.GetComponentInParent<EntityCommonScript>() != destroyer))
+        if (collision.gameObject.layer == 8 || collision.gameObject.GetComponent<DamagersCollision>() != null && collision.gameObject.GetComponent<DamagersCollision>().entity != destroyer)
         {
             Instantiate(explosion, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
             GameManager.gameManagerReference.soundController.PlaySfxSound(explosionSounds[Random.Range(0, explosionSounds.Length)], ManagingFunctions.VolumeDistance(Vector2.Distance(GameManager.gameManagerReference.player.transform.position, transform.position), 100));
@@ -52,6 +52,15 @@ public class DestroyerBomb : MonoBehaviour
                             entity.gameObject.GetComponent<PlayerController>().LoseHp(36, destroyer, true, 1.5f, true);
                         }
                     }
+            }
+
+            DamagersCollision damager = collision.gameObject.GetComponent<DamagersCollision>();
+            if (damager != null)
+            {
+                if(damager.entity != destroyer)
+                {
+                    damager.Hit(46, destroyer, true, 1.5f, true);
+                }
             }
 
             if (makeBoom && Random.Range(0, 6) == 0)
