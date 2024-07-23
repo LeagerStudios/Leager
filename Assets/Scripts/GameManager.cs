@@ -726,6 +726,23 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        if (DataSaver.CheckIfFileExists(persistentDataPath + @"/worlds/" + worldName + @"/dro.lgrsd"))
+        {
+            string[] drops = DataSaver.LoadStats(persistentDataPath + @"/worlds/" + worldName + @"/dro.lgrsd").SavedData;
+            foreach (string drop in drops)
+            {
+                string[] datas = drop.Split(';');
+
+                Vector2 spawnPos = new Vector2(System.Convert.ToSingle(datas[2]), System.Convert.ToSingle(datas[3]));
+                Vector2 spawnVelocity = new Vector2(System.Convert.ToSingle(datas[4]), System.Convert.ToSingle(datas[5]));
+                int item = System.Convert.ToInt32(datas[0]);
+                int amount = System.Convert.ToInt32(datas[1]);
+                float imunityGrab = System.Convert.ToSingle(datas[6]);
+
+                ManagingFunctions.DropItem(item, spawnPos, spawnVelocity, amount, imunityGrab);
+            }
+        }
     }
 
     public string EntityToString(Entities entity)
@@ -935,21 +952,48 @@ public class GameManager : MonoBehaviour
                     entities.Add(string.Join("", toEncrypt.ToArray()));
                 }
             }
+
+            //Vector2 spawnPos = new Vector2(System.Convert.ToSingle(datas[2]), System.Convert.ToSingle(datas[3]));
+            //Vector2 spawnVelocity = new Vector2(System.Convert.ToSingle(datas[4]), System.Convert.ToSingle(datas[5]));
+            //int item = System.Convert.ToInt32(datas[0]);
+            //int amount = System.Convert.ToInt32(datas[1]);
+            //int imunityGrab = System.Convert.ToInt32(datas[6]);
+
+            DroppedItemController[] drops = ManagingFunctions.dropContainer.GetComponentsInChildren<DroppedItemController>(true);
+
+            List<string> dropsSaves = new List<string>();
+
+            foreach (DroppedItemController drop in drops)
+            {
+                List<string> toEncrypt = new List<string>
+                {
+                     drop.item + "",
+                     drop.amount + "",
+                     drop.transform.position.x + "",
+                     drop.transform.position.y + "",
+                     drop.GetComponent<Rigidbody2D>().velocity.x + "",
+                     drop.GetComponent<Rigidbody2D>().velocity.y + "",
+                     drop.imunityGrab + ""
+                };
+
+                dropsSaves.Add(string.Join(";", toEncrypt.ToArray()));
+            }
+
             string[] playerPosition = new string[] { player.transform.position.x + ";" + player.transform.position.y };
 
             if (alternateThread)
             {
-                Thread mapSave = new Thread(new ThreadStart(() => SaveGameDataThread(entities.ToArray(), playerPosition)));
+                Thread mapSave = new Thread(new ThreadStart(() => SaveGameDataThread(entities.ToArray(), playerPosition, dropsSaves.ToArray())));
                 mapSave.Start();
             }
             else
             {
-                SaveGameDataThread(entities.ToArray(), playerPosition);
+                SaveGameDataThread(entities.ToArray(), playerPosition, dropsSaves.ToArray());
             }
         }
     }
 
-    private void SaveGameDataThread(string[] entities, string[] playerPosition)
+    private void SaveGameDataThread(string[] entities, string[] playerPosition, string[] drops)
     {
         isSavingData = true;
 
@@ -963,6 +1007,7 @@ public class GameManager : MonoBehaviour
             DataSaver.SaveStats(new string[] { dayTime + "" }, persistentDataPath + @"/worlds/" + worldName + @"/daytime.lgrsd");
             DataSaver.SaveStats(new string[] { currentPlanetName }, persistentDataPath + @"/worlds/" + worldRootName + @"/lastLocation.lgrsd");
 
+            DataSaver.SaveStats(drops, persistentDataPath + @"/worlds/" + worldName + @"/dro.lgrsd");
             DataSaver.SaveStats(entities, persistentDataPath + @"/worlds/" + worldName + @"/ent.lgrsd");
             DataSaver.SaveStats(playerPosition, persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
             DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(TechManager.techTree.fullyUnlockedItems.ToArray()), persistentDataPath + @"/worlds/" + worldName + @"/tech.lgrsd");

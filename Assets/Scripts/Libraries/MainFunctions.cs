@@ -285,7 +285,7 @@ class MainFunctions : MonoBehaviour
     [SerializeField] GameObject dropReference;
     [SerializeField] GameObject dropContainerReference;
 
-    void Start()
+    private void Awake()
     {
         ManagingFunctions.emptyDrop = dropReference;
         ManagingFunctions.dropContainer = dropContainerReference;

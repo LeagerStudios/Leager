@@ -97,7 +97,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
                 Destroy(gameObject);
             }
 
-            if (GameManager.gameManagerReference.ChunkActive((int)transform.position.x) && GameManager.gameManagerReference.InGame)
+            if (GameManager.gameManagerReference.ChunkActive((int)transform.position.x))
             {
                 GetComponent<Rigidbody2D>().simulated = true;
             }
@@ -137,6 +137,10 @@ public class DroppedItemController : MonoBehaviour, IDamager
                         }
                     }
                 }
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().simulated = false;
         }
     }
 }
