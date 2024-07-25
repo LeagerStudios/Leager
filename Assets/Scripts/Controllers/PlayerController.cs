@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour, IDamager
         }
     }
     public int flyTime = 0;
+    public bool flyMode = false;
+    public float wingTime = 0f;
 
     [SerializeField] AudioClip hitSound;
     [SerializeField] AudioClip regenerationSound;
@@ -186,8 +188,16 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
 
+        float offsetIDX = Mathf.Abs(Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad));
+
+        //0.5 (1.05 / 2.1f)
+        //1.5
+
         float raycastDistance = 0.7f;
         bool Grounded = false;
+
+        float offset = Mathf.Lerp(0.26f, 0.8f, offsetIDX);
+
         Vector2 pos = new Vector2(transform.position.x, transform.position.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
@@ -200,7 +210,7 @@ public class PlayerController : MonoBehaviour, IDamager
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
 
-        pos = new Vector2(transform.position.x + collider2D.size.x / 2.1f, pos.y);
+        pos = new Vector2(transform.position.x + offset, pos.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
@@ -212,8 +222,7 @@ public class PlayerController : MonoBehaviour, IDamager
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
 
-        pos = new Vector2(transform.position.x, transform.position.y);
-        pos = new Vector2(transform.position.x - collider2D.size.x / 2.1f, pos.y);
+        pos = new Vector2(transform.position.x - offset, transform.position.y);
 
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
         if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
@@ -224,54 +233,48 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
-
-        pos = new Vector2();
 
         animations.SetBool("walking", false);
 
-        if(FlyTime != 0)
+        if (FlyTime != 0)
             if (Grounded && !Input.GetKey(KeyCode.W))
                 FlyTime = 0;
 
-        if (GInput.GetKey(KeyCode.A))
+        if (!flyMode)
         {
-            if (rb2D.velocity.x > (0 - MaxSpeed))
+            if (GInput.GetKey(KeyCode.A))
             {
-                if (Grounded)
+                if (rb2D.velocity.x > (0 - MaxSpeed))
                 {
-                    rb2D.AddForce(new Vector2((0 - AccelerationInGround) * Time.deltaTime, 0));
+                    if (Grounded)
+                    {
+                        rb2D.AddForce(new Vector2((0 - AccelerationInGround) * Time.deltaTime, 0));
+                    }
+                    else
+                    {
+                        rb2D.AddForce(new Vector2((0 - AccelerationInAir) * Time.deltaTime, 0));
+                    }
+                    GetComponent<SpriteRenderer>().flipX = true;
+                    animations.SetBool("walking", true);
                 }
-                else
-                {
-                    rb2D.AddForce(new Vector2((0 - AccelerationInAir) * Time.deltaTime, 0));
-                }
-                GetComponent<SpriteRenderer>().flipX = true;
-                animations.SetBool("walking", true);
             }
-        }
 
-        if (GInput.GetKey(KeyCode.D))
-        {
-            if (rb2D.velocity.x < MaxSpeed)
+            if (GInput.GetKey(KeyCode.D))
             {
-                if (Grounded)
+                if (rb2D.velocity.x < MaxSpeed)
                 {
-                    rb2D.AddForce(new Vector2(AccelerationInGround * Time.deltaTime, 0));
+                    if (Grounded)
+                    {
+                        rb2D.AddForce(new Vector2(AccelerationInGround * Time.deltaTime, 0));
+                    }
+                    else
+                    {
+                        rb2D.AddForce(new Vector2(AccelerationInAir * Time.deltaTime, 0));
+                    }
+                    GetComponent<SpriteRenderer>().flipX = false;
+                    animations.SetBool("walking", true);
                 }
-                else
-                {
-                    rb2D.AddForce(new Vector2(AccelerationInAir * Time.deltaTime, 0));
-                }
-                GetComponent<SpriteRenderer>().flipX = false;
-                animations.SetBool("walking", true);
             }
-        }
-
-        transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
-
-        if ((GInput.GetKeyDown(KeyCode.A) || GInput.GetKeyDown(KeyCode.D)) && Grounded)
-        {
-            SoundOndaSpawner.MakeSoundOnda(new Vector2(transform.position.x, transform.position.y - 0.65f));
         }
 
         if (GInput.GetKey(KeyCode.S))
@@ -283,7 +286,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (Grounded && alive)
         {
-            if (Mathf.Round(falling) >= 5f)
+            if (Mathf.Round(falling) >= 5f && rb2D.velocity.y < -2f && !flyMode)
             {
                 if (!entityScript.entityStates.Contains(EntityState.Swimming))
                 {
@@ -295,7 +298,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     {
                         deathScreenController.InstaKill();
                     }
-                } 
+                }
             }
         }
 
@@ -305,7 +308,7 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else falling = 0f;
 
-        if (gameManager.equipedArmor[4] != 124)
+        if (gameManager.equipedArmor[4] != 124 && gameManager.equipedArmor[4] != 123)
             if (GInput.GetKeyDown(KeyCode.W) && Grounded && rb2D.velocity.y >= 0)
             {
                 rb2D.velocity = new Vector2(rb2D.velocity.x, JumpForce);
@@ -332,14 +335,30 @@ public class PlayerController : MonoBehaviour, IDamager
             entityScript.swimming = 0f;
         }
 
-        if (gameManager.equipedArmor[4] == 124)
+        if (gameManager.equipedArmor[4] == 123)
         {
-            if (GInput.GetKey(KeyCode.W) && FlyTime < 300)
+            Transform backflip = accesories.Find("123").GetChild(3);
+
+            if (Grounded)
+            {
+                flyMode = false;
+            }
+            else if (!Grounded && GInput.GetKeyDown(KeyCode.W))
+            {
+                flyMode = true;
+                wingTime = 0f;
+                if (GInput.GetKey(KeyCode.A))
+                    transform.eulerAngles = Vector3.forward * 90;
+                if (GInput.GetKey(KeyCode.D))
+                    transform.eulerAngles = Vector3.forward * -90;
+            }
+
+            if (!flyMode && GInput.GetKey(KeyCode.W) && FlyTime < 300)
             {
                 rb2D.AddForce(new Vector2(0, 40));
-                accesories.Find("124").GetChild(0).gameObject.SetActive(true);
+                accesories.Find("123").GetChild(0).gameObject.SetActive(true);
                 mainCamera.transform.eulerAngles = Random.Range(-1.5f, 1.5f) * Vector3.forward;
-                if(FlyTime % 8 == 0)
+                if (FlyTime % 8 == 0)
                 {
                     gameManager.soundController.PlaySfxSound(jetpack);
                 }
@@ -348,16 +367,73 @@ public class PlayerController : MonoBehaviour, IDamager
             }
             else
             {
-                accesories.Find("124").GetChild(0).gameObject.SetActive(false);
+                accesories.Find("123").GetChild(0).gameObject.SetActive(false);
             }
 
-            if(transform.position.y > gameManager.WorldHeight)
+            if (!flyMode)
+            {
+                backflip.localScale = new Vector2(Mathf.MoveTowards(backflip.localScale.x, 0, 2f * Time.deltaTime), 1f);
+                transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, 0, 720 * Time.deltaTime);
+            }
+            else
+            {
+                backflip.localScale = new Vector2(Mathf.MoveTowards(backflip.localScale.x, 1, 2f * Time.deltaTime), 1f);
+                if (GInput.GetKey(KeyCode.A))
+                    transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, transform.eulerAngles.z + 90, 180 * Time.deltaTime);
+                if (GInput.GetKey(KeyCode.D))
+                    transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, transform.eulerAngles.z - 90, 180 * Time.deltaTime);
+                
+                float sin = Mathf.Sin((transform.eulerAngles.z) * Mathf.Deg2Rad) * -1;
+                float cos = Mathf.Cos((transform.eulerAngles.z) * Mathf.Deg2Rad);
+                float maxVelocity = 16;
+                wingTime -= cos * Time.deltaTime;
+                wingTime = Mathf.Clamp(wingTime, 0, 1000f);
+                Vector2 targetVelocity = new Vector2(sin * maxVelocity, cos * maxVelocity);
+                rb2D.velocity = Vector2.Lerp(rb2D.velocity, targetVelocity, wingTime / 3f);
+                GetComponent<SpriteRenderer>().flipX = sin < 0f;
+            }
+
+            if (transform.position.y > gameManager.WorldHeight)
             {
                 gameManager.equipedArmor[4] = 0;
-                ManagingFunctions.DropItem(124, transform.position, new Vector2(rb2D.velocity.x * 3, 0), 1, 4);
+                ManagingFunctions.DropItem(123, transform.position, new Vector2(rb2D.velocity.x * 3, 0), 1, 4);
             }
         }
-        
+        else
+        {
+            flyMode = false;
+            wingTime = 0f;
+            transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, 0, 720 * Time.deltaTime);
+            accesories.Find("123").GetChild(3).localScale = Vector3.zero;
+
+            if (gameManager.equipedArmor[4] == 124)
+            {
+                if (GInput.GetKey(KeyCode.W) && FlyTime < 300)
+                {
+                    rb2D.AddForce(new Vector2(0, 40));
+                    accesories.Find("124").GetChild(0).gameObject.SetActive(true);
+                    mainCamera.transform.eulerAngles = Random.Range(-1.5f, 1.5f) * Vector3.forward;
+                    if (FlyTime % 8 == 0)
+                    {
+                        gameManager.soundController.PlaySfxSound(jetpack);
+                    }
+                    if (gameManager.addedFrameThisFrame)
+                        FlyTime++;
+                }
+                else
+                {
+                    accesories.Find("124").GetChild(0).gameObject.SetActive(false);
+                }
+
+                if (transform.position.y > gameManager.WorldHeight)
+                {
+                    gameManager.equipedArmor[4] = 0;
+                    ManagingFunctions.DropItem(124, transform.position, new Vector2(rb2D.velocity.x * 3, 0), 1, 4);
+                }
+            }
+        }
+
+
 
         if (GInput.GetKey(KeyCode.Space))
         {
@@ -420,7 +496,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.currentItem], entityScript);
                 }
             }
-            else if(gameManager.armUsing == "plasmabomb")
+            else if (gameManager.armUsing == "plasmabomb")
             {
                 DestroyerBomb bomb = Instantiate(gameManager.ProjectilesGameObject[(int)Projectiles.PlasmaBomb], transform.position, Quaternion.identity).GetComponent<DestroyerBomb>();
                 bomb.destroyer = entityScript;
@@ -459,7 +535,7 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             drownTime -= Time.deltaTime;
 
-            if(drownTime <= 0)
+            if (drownTime <= 0)
             {
                 LoseHp(1, entityScript, true, 0, true);
                 drownTime = 1f;
@@ -467,7 +543,7 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else
         {
-                drownTime += Time.deltaTime;
+            drownTime += Time.deltaTime;
         }
 
         for (int i = 0; i < 3; i++)
@@ -478,6 +554,8 @@ public class PlayerController : MonoBehaviour, IDamager
 
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[1]];
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
+
+        transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
     }
 
     void LecterAI()
