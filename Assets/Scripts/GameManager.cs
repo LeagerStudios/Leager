@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject entitiesContainer;
     [SerializeField] GameObject Transition;
     [SerializeField] GameObject savingText;
+    [SerializeField] AudioClip[] surfaceOST;
     [SerializeField] AudioClip[] caveOST;
 
     [Header("Other")]
@@ -561,7 +562,17 @@ public class GameManager : MonoBehaviour
     {
         if (ostCooldown <= 0f)
         {
-            if (type == "cave")
+            if(type == "surface")
+            {
+                AudioClip clip = surfaceOST[Random.Range(0, surfaceOST.Length)];
+
+                ostSource.Stop();
+                ostSource.clip = clip;
+                ostSource.Play();
+
+                ostCooldown = clip.length * Random.Range(5, 15);
+            }
+            else if (type == "cave")
             {
                 AudioClip clip = caveOST[Random.Range(0, caveOST.Length)];
 
@@ -569,7 +580,7 @@ public class GameManager : MonoBehaviour
                 ostSource.clip = clip;
                 ostSource.Play();
 
-                ostCooldown = clip.length * Random.Range(15, 35);
+                ostCooldown = clip.length * Random.Range(5, 15);
             }
 
         }
@@ -1162,6 +1173,14 @@ public class GameManager : MonoBehaviour
                             if (Random.Range(0, e + 1) == 0)
                             {
                                 buildedMapGrid[idx] = 13;
+                                
+                                if(e == 4 && Random.Range(0,2) == 0)
+                                {
+                                    if(buildedMapGrid[idx + 1] == 6)
+                                    {
+                                        buildedMapGrid[idx + 1] = 117;
+                                    }
+                                }
                             }
                         }
                         if (!(e > floorUndergroundEnd) && buildedMapGrid[idx] == 6)
@@ -1334,6 +1353,19 @@ public class GameManager : MonoBehaviour
                         if (y < WorldHeight * 0.06f)
                         {
                             buildedMapGrid[cavesIdx] = 21;
+                            if(buildedMapGrid[cavesIdx - 1] == 6)
+                            {
+                                buildedMapGrid[cavesIdx - 1] = 116;
+
+                                if (buildedMapGrid[cavesIdx - 2] == 6)
+                                {
+                                    buildedMapGrid[cavesIdx - 2] = 117;
+                                }
+                            }
+                            else if (buildedMapGrid[cavesIdx - 1] == 117)
+                            {
+                                buildedMapGrid[cavesIdx - 1] = 116;
+                            }
                         }
                     }
                     else if (cavesGeneration.GetPixel(x, y).a > 0.96f && y < floorUndergroundEnd * Random.Range(0.5f, 0.4f) && y > 3)

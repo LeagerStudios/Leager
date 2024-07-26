@@ -15469,6 +15469,8 @@ MonoBehaviour:
   entitiesContainer: {fileID: 148}
   Transition: {fileID: 127}
   savingText: {fileID: 418275460}
+  surfaceOST:
+  - {fileID: 8300000, guid: 39b96c3ea7be5a947b83e57ce0e2444a, type: 3}
   caveOST:
   - {fileID: 8300000, guid: 19bb931ec403d1546a0ec2fcf197af54, type: 3}
   isNetworkClient: 0
@@ -15526,7 +15528,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0fe9dae3b5a3bbc49baf42437b0f5d36, type: 2}
   raining: 0
   rainSource: {fileID: 1170192903}
-  ostCooldown: 124
+  ostCooldown: 20
   ostSource: {fileID: 1346220336}
   breakSoundSource: {fileID: 2093779108}
   breakSoundCooldown: 0

@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour, IDamager
             else
             {
                 mainCamera.currentBackground = "Air";
+                gameManager.PlayOST("surface");
             }
         }
         else
