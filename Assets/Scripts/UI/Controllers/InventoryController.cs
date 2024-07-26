@@ -125,16 +125,22 @@ public static class InventoryBar
     public static bool AddItem(int item)
     {
         bool typeAlreadyExists = false;
-        {//check if type already exists
+        int existingIdx = -1;
+        {
             for (int i = 0; i < 36; i++)
             {
-                if (inventoryBarController.InventoryBarGrid[i] == item) typeAlreadyExists = true;
+                if (inventoryBarController.InventoryBarGrid[i] == item && inventoryBarController.InventoryItemAmount[i] < GameManager.gameManagerReference.stackLimit[inventoryBarController.InventoryBarGrid[i]])
+                {
+                    typeAlreadyExists = true;
+                    existingIdx = i;
+                }
+
             }
         }
 
-        if (typeAlreadyExists && inventoryBarController.InventoryItemAmount[System.Array.IndexOf(inventoryBarController.InventoryBarGrid, item)] < 99)
+        if (typeAlreadyExists)
         {
-            inventoryBarController.InventoryItemAmount[System.Array.IndexOf(inventoryBarController.InventoryBarGrid, item)] += 1;
+            inventoryBarController.InventoryItemAmount[existingIdx] += 1;
             inventoryBarController.UpdateStacks();
             return true;
         }

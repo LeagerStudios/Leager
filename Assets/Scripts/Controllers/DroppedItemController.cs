@@ -30,7 +30,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
                         {
                             for (int i = 0; i < amount; i++)
                             {
-                                if (!StackBar.AddItem(item)) itemReturn++;
+                                if (!StackBar.AddItemInv(item)) itemReturn++;
                             }
                             if (itemReturn == 0)
                             {
@@ -97,7 +97,8 @@ public class DroppedItemController : MonoBehaviour, IDamager
                 Destroy(gameObject);
             }
 
-            if (GameManager.gameManagerReference.ChunkActive((int)transform.position.x))
+
+            if (GameManager.gameManagerReference.ChunkActive(Mathf.RoundToInt(transform.position.x)))
             {
                 GetComponent<Rigidbody2D>().simulated = true;
             }

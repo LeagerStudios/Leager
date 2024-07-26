@@ -284,30 +284,6 @@ public class PlayerController : MonoBehaviour, IDamager
 
         }
 
-        if (Grounded && alive)
-        {
-            if (Mathf.Round(falling) >= 5f && rb2D.velocity.y < -2f && !flyMode)
-            {
-                if (!entityScript.entityStates.Contains(EntityState.Swimming))
-                {
-                    int HpLose = Mathf.RoundToInt(falling);
-                    LoseHp(HpLose, entityScript, true, 0f, true);
-                    falling = 0;
-
-                    if (HP <= 0)
-                    {
-                        deathScreenController.InstaKill();
-                    }
-                }
-            }
-        }
-
-        if (rb2D.velocity.y < 0)
-        {
-            falling -= rb2D.velocity.y * Time.deltaTime;
-        }
-        else falling = 0f;
-
         if (gameManager.equipedArmor[4] != 124 && gameManager.equipedArmor[4] != 123)
             if (GInput.GetKeyDown(KeyCode.W) && Grounded && rb2D.velocity.y >= 0)
             {
@@ -339,9 +315,13 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             Transform backflip = accesories.Find("123").GetChild(3);
 
-            if (Grounded)
+            if (Grounded || entityScript.entityStates.Contains(EntityState.Swimming))
             {
-                flyMode = false;
+                if (flyMode)
+                {
+                    flyMode = false;
+                    falling = 0;
+                }
             }
             else if (!Grounded && GInput.GetKeyDown(KeyCode.W))
             {
@@ -506,6 +486,30 @@ public class PlayerController : MonoBehaviour, IDamager
                 bomb.makeBoom = false;
             }
         }
+        
+        if (Grounded && alive)
+        {
+            if (Mathf.Round(falling) >= 5f)
+            {
+                if (!entityScript.entityStates.Contains(EntityState.Swimming))
+                {
+                    int HpLose = Mathf.RoundToInt(falling);
+                    LoseHp(HpLose, entityScript, true, 0f, true);
+                    falling = 0;
+
+                    if (HP <= 0)
+                    {
+                        deathScreenController.InstaKill();
+                    }
+                }
+            }
+        }
+
+        if (rb2D.velocity.y < 0)
+        {
+            falling -= rb2D.velocity.y * Time.deltaTime;
+        }
+        else falling = 0f;
 
         if (damagedCooldown > 0f)
         {

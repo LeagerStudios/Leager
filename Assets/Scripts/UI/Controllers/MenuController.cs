@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class MenuController : MonoBehaviour {
 
@@ -16,6 +17,7 @@ public class MenuController : MonoBehaviour {
     public int chunksOnEachSide;
     public bool devInterface = false;
     public Resolution[] resolutions;
+    public AudioMixer audioMixer;
     [SerializeField] GameObject menu;
     [SerializeField] public GameObject planetMenu;
     [SerializeField] public Canvas canvas;
@@ -37,6 +39,9 @@ public class MenuController : MonoBehaviour {
     [SerializeField] InputField ipHost;
     [SerializeField] InputField portHost;
     [SerializeField] Button serverButton;
+    [SerializeField] Slider masterSlider;
+    [SerializeField] Slider bgmSlider;
+    [SerializeField] Slider sfxSlider;
 
     GameManager gameManager;
     public Coroutine travelCoroutine;
@@ -91,6 +96,30 @@ public class MenuController : MonoBehaviour {
         }
         QualitySettings.vSyncCount = System.Convert.ToInt32(vSync);
 
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/mastervol.lgrsd"))
+        {
+            masterSlider.value = System.Convert.ToSingle(DataSaver.ReadTxt(Application.persistentDataPath + @"/settings/mastervol.lgrsd")[0]);
+            UpdateMasterVolume(masterSlider.value);
+        }
+        else
+            DataSaver.CreateTxt(Application.persistentDataPath + @"/settings/mastervol.lgrsd", new string[] { System.Convert.ToString(1f) });
+
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/bgmvol.lgrsd"))
+        {
+            bgmSlider.value = System.Convert.ToSingle(DataSaver.ReadTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd")[0]);
+            UpdateBGMVolume(bgmSlider.value);
+        }
+        else
+            DataSaver.CreateTxt(Application.persistentDataPath + @"/settings/bgmvol.lgrsd", new string[] { System.Convert.ToString(1f) });
+
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/settings/sfxvol.lgrsd"))
+        {
+            sfxSlider.value = System.Convert.ToSingle(DataSaver.ReadTxt(Application.persistentDataPath + @"/settings/sfxvol.lgrsd")[0]);
+            UpdateSFXVolume(sfxSlider.value);
+        }
+        else
+            DataSaver.CreateTxt(Application.persistentDataPath + @"/settings/sfxvol.lgrsd", new string[] { System.Convert.ToString(1f) });
+
         ChunkUpdateNotifier.text = System.Convert.ToString(ChunkUpdateSlider.value);
         Application.targetFrameRate = 60;
     }
@@ -135,7 +164,7 @@ public class MenuController : MonoBehaviour {
 
         FpsText.SetActive(fpsOn);
 
-        FpsText.GetComponent<Text>().text = Mathf.Round(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
+        FpsText.GetComponent<Text>().text = "FPS:" + Mathf.Round(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
 
        
 
@@ -183,6 +212,29 @@ public class MenuController : MonoBehaviour {
             MiniMapButton.GetComponent<Button>().interactable = false;
             ResolutionDropdown.interactable = false;
         }
+    }
+
+    public void UpdateMasterVolume(float vol)
+    {
+        UpdateVolume("Master", vol);
+    }
+
+    public void UpdateBGMVolume(float vol)
+    {
+        UpdateVolume("BGM", vol);
+    }
+
+    public void UpdateSFXVolume(float vol)
+    {
+        UpdateVolume("SFX", vol);
+    }
+
+    public void UpdateVolume(string group, float vol)
+    {
+        float db = 20 * Mathf.Log10(vol);
+        audioMixer.SetFloat(group, db);
+
+        DataSaver.ModifyTxt(Application.persistentDataPath + @"/settings/" + group.ToLower() + "vol.lgrsd", new string[] { System.Convert.ToString(vol) });
     }
 
     public void StartServer()

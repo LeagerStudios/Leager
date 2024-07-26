@@ -229,7 +229,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         {
                             TileGrid[e] = 0;
                             if (StackBar.stackBarController.currentItem == 70)
-                                StackBar.AddItem(70);
+                                StackBar.AddItemInv(70);
                             else
                                 ManagingFunctions.DropItem(70, TileObject[e].transform.position);
 
@@ -261,14 +261,14 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             {
                                 TileGrid[e] = 0;
                                 if (StackBar.stackBarController.currentItem == 88)
-                                    StackBar.AddItem(88);
+                                    StackBar.AddItemInv(88);
                                 else
                                     ManagingFunctions.DropItem(88, TileObject[e].transform.position);
                             }
                         else
                         {
                             TileGrid[e] = 0;
-                            StackBar.AddItem(88);
+                            StackBar.AddItemInv(88);
                         }
                         break;
 
@@ -501,7 +501,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 catch
                 {
                     TileGrid[e] = 0;
-                    StackBar.AddItem(85);
+                    StackBar.AddItemInv(85);
                 }
                 break;
 
@@ -581,7 +581,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     catch
                     {
                         TileGrid[e] = 0;
-                        StackBar.AddItem(100);
+                        StackBar.AddItemInv(100);
                     }
                 break;
 
@@ -692,7 +692,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 catch
                 {
                     TileGrid[e] = 0;
-                    StackBar.AddItem(116);
+                    StackBar.AddItemInv(116);
                 }
                 break;
         }

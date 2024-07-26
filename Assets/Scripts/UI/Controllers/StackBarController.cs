@@ -289,6 +289,18 @@ public static class StackBar
             }
         }
     }
+    
+    public static bool AddItemInv(int item)
+    {
+        if (!AddItem(item))
+        {
+            return InventoryBar.AddItem(item);
+        }
+        else
+        {
+            return true;
+        }
+    }
 
     public static void QuitItems(int idx, int Amount)
     {

@@ -449,7 +449,7 @@ public class NetworkController : MonoBehaviour
                                 {
                                     for (int i = 0; i < amount; i++)
                                     {
-                                        if (!StackBar.AddItem(item)) itemReturn++;
+                                        if (!StackBar.AddItemInv(item)) itemReturn++;
                                     }
 
                                     DropCallback(item, itemReturn, dropName);

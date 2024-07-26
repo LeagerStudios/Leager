@@ -36,7 +36,7 @@ public class PackupMenuController : MonoBehaviour
         {
             if (currentCore != 0)
             {
-                if (!StackBar.AddItem(currentCore)) GameManager.gameManagerReference.player.PlayerRelativeDrop(currentCore, 1);
+                if (!StackBar.AddItemInv(currentCore)) GameManager.gameManagerReference.player.PlayerRelativeDrop(currentCore, 1);
 
                 if (planetPanel.GetComponent<PlanetMenuController>().targetResourceLauncher != null)
                 {
@@ -135,7 +135,7 @@ public class PackupMenuController : MonoBehaviour
             int toDrop = datas[1];
             for (int i = 0; i < datas[1]; i++)
             {
-                bool booleanBool = StackBar.AddItem(datas[0]);
+                bool booleanBool = StackBar.AddItemInv(datas[0]);
                 if (!booleanBool)
                 {
                     break;

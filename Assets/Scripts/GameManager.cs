@@ -689,7 +689,7 @@ public class GameManager : MonoBehaviour
 
                     for (int e = 0; e < tileAmount; e++)
                     {
-                        if (!StackBar.AddItem(tile))
+                        if (!StackBar.AddItemInv(tile))
                         {
                             ManagingFunctions.DropItem(tile, player.transform.position);
                         }
@@ -2204,7 +2204,7 @@ public class GameManager : MonoBehaviour
                     ENTITY_TheDestroyer.StaticSpawn(null, new Vector2(player.transform.position.x + Random.Range(-10f, 10f), 0));
                     soundController.PlaySfxSound(SoundName.select);
                 }
-                else StackBar.AddItem(78);
+                else StackBar.AddItemInv(78);
                 break;
             case 122:
                 player.entityScript.AddState(EntityState.FireResistance, 90f);

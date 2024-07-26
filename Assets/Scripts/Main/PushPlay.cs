@@ -52,10 +52,6 @@ public class PushPlay : MonoBehaviour
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");
-        if (Application.isBatchMode)
-        {
-            ServerConsole.serverConsole.StartConsole();
-        }
     }
 
     public void OpenSocialMedia(string link)
