@@ -20,6 +20,10 @@ public class ArmorBarController : MonoBehaviour
                 stackStorage.SetAt(i, equips[i], equips[i] == 0 ? 0 : 1);
             } 
         }
+        catch
+        {
+
+        }
         finally
         {
             GameManager.gameManagerReference.equipedArmor = stackStorage.items;

@@ -1182,6 +1182,10 @@ public class GameManager : MonoBehaviour
                                     }
                                 }
                             }
+                            else if(Random.Range(0, 2) == 0)
+                            {
+                                buildedMapGrid[idx] = 118;
+                            }
                         }
                         if (!(e > floorUndergroundEnd) && buildedMapGrid[idx] == 6)
                         {
@@ -1355,16 +1359,16 @@ public class GameManager : MonoBehaviour
                             buildedMapGrid[cavesIdx] = 21;
                             if(buildedMapGrid[cavesIdx - 1] == 6)
                             {
-                                buildedMapGrid[cavesIdx - 1] = 116;
+                                buildedMapGrid[cavesIdx - 1] = 117;
 
                                 if (buildedMapGrid[cavesIdx - 2] == 6)
                                 {
-                                    buildedMapGrid[cavesIdx - 2] = 117;
+                                    buildedMapGrid[cavesIdx - 2] = 118;
                                 }
                             }
-                            else if (buildedMapGrid[cavesIdx - 1] == 117)
+                            else if (buildedMapGrid[cavesIdx - 1] == 118)
                             {
-                                buildedMapGrid[cavesIdx - 1] = 116;
+                                buildedMapGrid[cavesIdx - 1] = 117;
                             }
                         }
                     }
