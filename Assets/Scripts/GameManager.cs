@@ -727,9 +727,13 @@ public class GameManager : MonoBehaviour
                 Vector2 spawnPos = new Vector2(System.Convert.ToSingle(datas[2]), System.Convert.ToSingle(datas[3]));
                 int entityHp = System.Convert.ToInt32(datas[1]);
                 string entityType = datas[0];
+                string[] args = null;
+                if (datas.Length > 4)
+                    args = datas[4].Split('#');
+
                 EntityBase entityBase = null;
 
-                SpawnEntity(StringToEntity(entityType), null, spawnPos);
+                entityBase = SpawnEntity(StringToEntity(entityType), args, spawnPos);
 
                 if (entityBase != null)
                 {
@@ -812,35 +816,35 @@ public class GameManager : MonoBehaviour
 
         if (entityType == Entities.NanoBotT1)
         {
-            entityBase = ENTITY_NanoBotT1.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_NanoBotT1.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.NanoBotT2)
         {
-            entityBase = ENTITY_NanoBotT2.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_NanoBotT2.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.NanoBotT3)
         {
-            entityBase = ENTITY_NanoBotT3.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_NanoBotT3.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.NanoBotT5)
         {
-            entityBase = ENTITY_NanobotT5.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_NanobotT5.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.Darkn)
         {
-            entityBase = UNIT_Darkn.StaticSpawn(null, spawnPos);
+            entityBase = UNIT_Darkn.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.TheDestroyer)
         {
-            entityBase = ENTITY_TheDestroyer.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_TheDestroyer.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.KrotekBoss)
         {
-            entityBase = ENTITY_KrotekController.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_KrotekController.StaticSpawn(args, spawnPos);
         }
         if (entityType == Entities.Raideon)
         {
-            entityBase = ENTITY_Raideon.StaticSpawn(null, spawnPos);
+            entityBase = ENTITY_Raideon.StaticSpawn(args, spawnPos);
         }
 
         //entityBase.IsLocal = !isNetworkClient;
@@ -958,8 +962,14 @@ public class GameManager : MonoBehaviour
                     {
                         entity.EntityType + ";",
                         entity.entityBase.Hp + ";",
-                        entity.transform.position.x + ";" + entity.transform.position.y
+                        entity.transform.position.x + ";",
+                        entity.transform.position.y+ ";",
                     };
+                    if(entity.entityBase != null)
+                    {
+                        toEncrypt.Add(string.Join("#", entity.entityBase.GenerateArgs()));
+                    }
+
                     entities.Add(string.Join("", toEncrypt.ToArray()));
                 }
             }
