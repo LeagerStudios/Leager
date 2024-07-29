@@ -47,6 +47,8 @@ public class ENTITY_NanoBotT3 : EntityBase, IDamager
         }
     }
 
+    public override EntityCommonScript EntityCommonScript => entityScript;
+
     public override string[] GenerateArgs()
     {
         return null;

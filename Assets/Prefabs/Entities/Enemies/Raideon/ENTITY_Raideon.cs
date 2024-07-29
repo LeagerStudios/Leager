@@ -50,6 +50,8 @@ public class ENTITY_Raideon : EntityBase, IDamager
         }
     }
 
+    public override EntityCommonScript EntityCommonScript => entityScript;
+
     public override string[] GenerateArgs()
     {
         return null;

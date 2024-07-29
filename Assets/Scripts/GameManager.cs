@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 
+public enum Difficulty : int
+{
+    normal = 1, hard = 2, extreme = 3,
+}
+
 public enum Biomes : int
 {
     meadow = 0, forest = 1, mountain = 2, ocean = 3,
@@ -31,6 +36,7 @@ public class GameManager : MonoBehaviour
     public float frameTimerAdder = 0f;
     public int frameTimer = 0;
     public bool addedFrameThisFrame = false;
+    public Difficulty gameDifficulty = Difficulty.normal;
 
     public GameObject[] EntitiesGameObject;
     public GameObject[] ProjectilesGameObject;
@@ -738,6 +744,10 @@ public class GameManager : MonoBehaviour
                 if (entityBase != null)
                 {
                     entityBase.Hp = entityHp;
+                    if(entityBase.EntityCommonScript != null)
+                    {
+                        entityBase.EntityCommonScript.saveToFile = true;
+                    }
                 }
             }
         }

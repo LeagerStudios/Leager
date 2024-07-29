@@ -48,9 +48,11 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         }
     }
 
+    public override EntityCommonScript EntityCommonScript => entityScript;
+
     public override string[] GenerateArgs()
     {
-        return new string[] { "I have "+ HP+ " HP left. :thumbsup:" };
+        return null;
     }
 
     public override EntityBase Spawn(string[] args, Vector2 spawnPos)
@@ -61,15 +63,6 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         entityScript = GetComponent<EntityCommonScript>();
         Active = true;
-
-        if(args != null)
-        {
-            Debug.Log(args[0], gameObject);
-        }
-        else
-        {
-            Debug.Log("Great, I have no life :thumbsdown:", gameObject);
-        }
 
         return this;
     }

@@ -5,10 +5,12 @@ using UnityEngine;
 public class UNIT_Darkn : UnitBase, IDamager
 {
     public Rigidbody2D rb2d;
+    public EntityCommonScript entityScript;
     [SerializeField] GameObject fireParticle;
     [SerializeField] GameObject fireZone;
     [SerializeField] GameObject explosion;
     [SerializeField] LayerMask blockMask;
+    [SerializeField] GameObject[] attachs;
     public Vector2 targetVelocity;
     public Vector2 targetPosition;
     bool positionControlled = false;
@@ -37,6 +39,9 @@ public class UNIT_Darkn : UnitBase, IDamager
             }
         }
     }
+
+    public override EntityCommonScript EntityCommonScript => entityScript;
+    public override GameObject[] Attachs => attachs;
 
     public override bool PositionControlled
     {

@@ -55,6 +55,8 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
         }
     }
 
+    public override EntityCommonScript EntityCommonScript => null;
+
     float leftLegPosition = -0.445f;
     float leftKneePosition = -0.85f;
     float rightLegPosition = 0.445f;

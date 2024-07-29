@@ -52,6 +52,8 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         }
     }
 
+    public override EntityCommonScript EntityCommonScript => entityCommonScript;
+
     void Update()
     {
         if (GameManager.gameManagerReference.InGame && IsIaActive) AiFrame();

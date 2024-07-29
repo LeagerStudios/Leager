@@ -52,6 +52,7 @@ public class PushPlay : MonoBehaviour
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");
+        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0" }, "newWorldDifficulty");
     }
 
     public void OpenSocialMedia(string link)
@@ -152,6 +153,8 @@ public class PushPlay : MonoBehaviour
         worldPanel.newWorldSeed.GetComponent<InputField>().interactable = false;
         worldPanel.newWorldButton.GetComponent<Button>().interactable = false;
 
+        SetWorldSize(120);
+
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", false);
         yield return new WaitForSeconds(secs);
 
@@ -237,6 +240,13 @@ public class PushPlay : MonoBehaviour
         int[] wp = { width, 160 };
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldSize");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(ManagingFunctions.ConvertIntToStringArray(wp), "newWorldSize");
+    }
+
+    public void SetGameDifficulty(int difficulty)
+    {
+        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldDifficulty");
+        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { difficulty + "" }, "newWorldDifficulty");
+        Debug.Log("Difficulty selected: " + (Difficulty)difficulty);
     }
 
     public void Tutorial()

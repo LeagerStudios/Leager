@@ -66,7 +66,7 @@ public class WorldPanelController : MonoBehaviour {
         }
 
         if (newWorldName.GetComponent<InputField>().text == "" ||
-            (ManagingFunctions.ConvertStringToIntArray(saveObject.LoadData("newWorldSize"))[0] < 1 && ManagingFunctions.ConvertStringToIntArray(saveObject.LoadData("newWorldSize"))[1] < 1) ||
+            ManagingFunctions.ConvertStringToIntArray(saveObject.LoadData("newWorldDifficulty"))[0] < 1 ||
             GameObject.Find("Transition").GetComponent<Animator>().GetBool("Open") == false ||
             listOfLoadedWorlds.Contains(newWorldName.GetComponent<InputField>().text) || !CheckWorldChars(newWorldName.GetComponent<InputField>().text))
         {

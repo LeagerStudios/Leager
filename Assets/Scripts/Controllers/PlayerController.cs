@@ -495,7 +495,7 @@ public class PlayerController : MonoBehaviour, IDamager
                 if (!entityScript.entityStates.Contains(EntityState.Swimming))
                 {
                     int HpLose = Mathf.RoundToInt(falling);
-                    LoseHp(HpLose, entityScript, true, 0f, true);
+                    LoseHp(Mathf.CeilToInt((float)HpLose / (int)gameManager.gameDifficulty), entityScript, true, 0f, true);
                     falling = 0;
 
                     if (HP <= 0)
@@ -525,7 +525,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (regenTime < 0f)
         {
-            regenTime = 1f;
+            regenTime = 2f * (int)gameManager.gameDifficulty;
             if (HP < MaxHP) LoseHp(-1, entityScript);
             gameManager.soundController.PlaySfxSound(regenerationSound);
         }
@@ -605,6 +605,7 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             if (hpLost > 0)
             {
+                hpLost *= (int)gameManager.gameDifficulty;
                 soundController.PlaySfxSound(SoundName.damage);
 
                 if (!penetrate)
@@ -657,7 +658,7 @@ public class PlayerController : MonoBehaviour, IDamager
                             rb2D.velocity = new Vector2(-9f * knockback, JumpForce * 0.6f * knockback);
                         }
                     damagedCooldown = 0.6f;
-                    regenTime = 3.5f;
+                    regenTime = 3.5f * (int)gameManager.gameDifficulty;
                 }
             }
         }
@@ -707,6 +708,7 @@ public class PlayerController : MonoBehaviour, IDamager
             GameObject g = Instantiate(particle, transform.position, Quaternion.identity);
             g.GetComponent<ParticleController>().Spawn();
         }
+
         for (int i = 0; i < gameManager.equipedArmor.Length; i++)
         {
             if (gameManager.equipedArmor[i] > 0)
@@ -716,28 +718,31 @@ public class PlayerController : MonoBehaviour, IDamager
             }
         }
 
-        for (int i = 0; i < StackBar.stackBarController.StackBarGrid.Length; i++)
+        if ((int)gameManager.gameDifficulty > 1)
         {
-            int tile = StackBar.stackBarController.StackBarGrid[i];
-            if (tile > 0)
+            for (int i = 0; i < StackBar.stackBarController.StackBarGrid.Length; i++)
             {
-                if (gameManager.tileType[tile] != "tool" && tile != 16)
+                int tile = StackBar.stackBarController.StackBarGrid[i];
+                if (tile > 0)
                 {
-                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f, 5f) + Vector2.up * 2, StackBar.stackBarController.StackItemAmount[i]);
-                    StackBar.AsignNewStack(i, 0, 0);
+                    if (gameManager.tileType[tile] != "tool" && tile != 16)
+                    {
+                        ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f, 5f) + Vector2.up * 2, StackBar.stackBarController.StackItemAmount[i]);
+                        StackBar.AsignNewStack(i, 0, 0);
+                    }
                 }
             }
-        }
 
-        for (int i = 0; i < InventoryBar.inventoryBarController.InventoryBarGrid.Length; i++)
-        {
-            int tile = InventoryBar.inventoryBarController.InventoryBarGrid[i];
-            if (tile > 0)
+            for (int i = 0; i < InventoryBar.inventoryBarController.InventoryBarGrid.Length; i++)
             {
-                if (gameManager.tileType[tile] != "tool" && tile != 16)
+                int tile = InventoryBar.inventoryBarController.InventoryBarGrid[i];
+                if (tile > 0)
                 {
-                    ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f,5f) + Vector2.up * 2, InventoryBar.inventoryBarController.InventoryItemAmount[i]);
-                    InventoryBar.AsignNewStack(i, 0, 0);
+                    if (gameManager.tileType[tile] != "tool" && tile != 16)
+                    {
+                        ManagingFunctions.DropItem(tile, transform.position + Vector3.up, Vector2.right * Random.Range(-5f, 5f) + Vector2.up * 2, InventoryBar.inventoryBarController.InventoryItemAmount[i]);
+                        InventoryBar.AsignNewStack(i, 0, 0);
+                    }
                 }
             }
         }
