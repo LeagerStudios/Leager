@@ -6,6 +6,7 @@ public class UNIT_Darkn : UnitBase, IDamager
 {
     public Rigidbody2D rb2d;
     public EntityCommonScript entityScript;
+    [SerializeField] StackStorage stackStorage;
     [SerializeField] GameObject fireParticle;
     [SerializeField] GameObject fireZone;
     [SerializeField] GameObject explosion;
@@ -13,8 +14,7 @@ public class UNIT_Darkn : UnitBase, IDamager
     [SerializeField] GameObject[] attachs;
     public Vector2 targetVelocity;
     public Vector2 targetPosition;
-    bool positionControlled = false;
-    bool rotationControlled = false;
+    UnitTool control;
     float HpMax = 32;
     float HP = 32;
 
@@ -42,13 +42,8 @@ public class UNIT_Darkn : UnitBase, IDamager
 
     public override EntityCommonScript EntityCommonScript => entityScript;
     public override GameObject[] Attachs => attachs;
-
-    public override bool PositionControlled
-    {
-        get { return positionControlled; }
-
-        set { positionControlled = value; }
-    }
+    public override UnitTool Control { get => control; set { control = value; } }
+    public override StackStorage Storage { get => stackStorage; set => stackStorage = value; }
 
     private bool isLocal;
     public override bool IsLocal
@@ -56,13 +51,6 @@ public class UNIT_Darkn : UnitBase, IDamager
         get { return isLocal; }
 
         set { isLocal = value; }
-    }
-
-    public override bool RotationControlled
-    {
-        get { return rotationControlled; }
-
-        set { rotationControlled = value; }
     }
 
     void Update()
@@ -93,8 +81,7 @@ public class UNIT_Darkn : UnitBase, IDamager
         else
             targetVelocity = Vector2.zero;
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, targetVelocity, 0.8f * Time.deltaTime);
-        if (!rotationControlled)
-            transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.3f));
+        transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.3f));
 
         if (rb2d.velocity.magnitude > 0.1f && fireZone.transform.childCount == 0)
         {

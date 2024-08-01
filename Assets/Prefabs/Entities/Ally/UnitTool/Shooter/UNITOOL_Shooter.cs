@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UNITOOL_Shooter : MonoBehaviour
+public class UNITOOL_Shooter : UnitTool
 {
     public UnitBase unit;
-    public bool controllingUnit = false;
     DamagersCollision target = null;
     public bool targetAlive = false;
 
@@ -48,11 +47,10 @@ public class UNITOOL_Shooter : MonoBehaviour
                     if (nearest < 100f)
                     {
                         target = nearesT;
-                        if (!unit.PositionControlled)
+                        if (!unit.Control)
                         {
                             unit.SetTargetPosition(nearesT.transform.position);
-                            unit.PositionControlled = true;
-                            controllingUnit = true;
+                            unit.Control = this;
                         }
                     }
                 }
@@ -61,12 +59,11 @@ public class UNITOOL_Shooter : MonoBehaviour
         else if (targetAlive)
         {
             targetAlive = false;
-            unit.PositionControlled = false;
-            controllingUnit = false;
+            unit.Control = null;
         }
         else
         {
-            if (controllingUnit)
+            if (unit.Control == this)
                 unit.SetTargetPosition(target.transform.position);
             transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, target.transform.position);
 

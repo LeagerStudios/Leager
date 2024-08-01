@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 3541840519257593117}
   - component: {fileID: 2662883963005854071}
   - component: {fileID: 50922432798917964}
+  - component: {fileID: 114029465198223946}
   m_Layer: 0
   m_Name: Darkn
   m_TagString: Untagged
@@ -165,7 +166,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -284374307
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4e3e3ee7bff9b5f4082d5d2d4931ec6c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -191,6 +192,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb2d: {fileID: 50922432798917964}
+  entityScript: {fileID: 2662883963005854071}
+  stackStorage: {fileID: 114029465198223946}
   fireParticle: {fileID: 1057892237317143119, guid: acd6455bd645a224e8e2eca92bd67154,
     type: 3}
   fireZone: {fileID: 5644879634192473716}
@@ -198,6 +201,9 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 256
+  attachs:
+  - {fileID: 7791379123395858725}
+  - {fileID: 7791379123384516720}
   targetVelocity: {x: 0, y: 0}
   targetPosition: {x: 0, y: 0}
 --- !u!114 &2662883963005854071
@@ -217,6 +223,7 @@ MonoBehaviour:
   EntityType: darkn
   EntityFamily: yellow
   height: 0.5
+  width: 0.35
   raycastHeight: 0
   saveToFile: 1
   canBeNetworked: 1
@@ -226,6 +233,10 @@ MonoBehaviour:
   affectedByLiquids: 0
   affectedBySolids: 0
   swimming: 0
+  ladderVelocity: 0
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!50 &50922432798917964
 Rigidbody2D:
   serializedVersion: 4
@@ -247,6 +258,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &114029465198223946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7791379123253765221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403e7c332e6556b469fede7a6db1bf47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: 0000000000000000000000000000000000000000
+  amounts: 0000000000000000000000000000000000000000
 --- !u!1 &7791379123384516720
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class MainCameraController : MonoBehaviour {
     public string Focus = "mainMenu";
     public float focusX = 0f;
     public float focusY = 0f;
+    public Color skyboxColor;
+    public AnimationCurve dayNightCycle;
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject backgroundTrees;
     [SerializeField] GameObject backgroundMountains;
@@ -19,6 +21,8 @@ public class MainCameraController : MonoBehaviour {
 
     void Update()
     {
+        SetSkybox();
+
         if(Focus == "selectWorldOptionsExit")
         {
             if (WorldPanelController.worldPanelController.listOfLoadedWorlds.Count < 1)
@@ -93,5 +97,18 @@ public class MainCameraController : MonoBehaviour {
     {
         focusX = x;
         focusY = y;
+    }
+
+    private void SetSkybox()
+    {
+        float dayLuminosity = 0;
+        float value = 1;
+        float time = Time.time;
+
+        value = dayNightCycle.Evaluate(time % 120 / 120);
+
+        dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
+
+        GetComponent<Camera>().backgroundColor = skyboxColor * dayLuminosity;
     }
 }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UNITOOL_LaserDrill : MonoBehaviour
+public class UNITOOL_LaserDrill : UnitTool
 {
     public UnitBase unit;
-    public bool controllingUnit = false;
     public int resourceToMine = -1;
     public Vector2Int targetPos;
     public bool blockAlive = false;
@@ -24,6 +23,9 @@ public class UNITOOL_LaserDrill : MonoBehaviour
 
     public void AiFrame()
     {
+        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
         if (resourceToMine != -1)
         {
             if (blockAlive)
@@ -70,12 +72,10 @@ public class UNITOOL_LaserDrill : MonoBehaviour
                     if (nearest < 100f)
                     {
                         targetPos = targetPosi;
-                        if (!unit.PositionControlled)
+                        if (!unit.Control == this)
                         {
                             unit.SetTargetPosition(nearesT);
-                            unit.PositionControlled = true;
-                            unit.RotationControlled = true;
-                            controllingUnit = true;
+                            unit.Control = this;
                             blockAlive = true;
                         }
                     }
@@ -87,16 +87,14 @@ public class UNITOOL_LaserDrill : MonoBehaviour
                 {
                     targetPos = Vector2Int.one * -1;
 
-                    if (controllingUnit)
+                    if (unit.Control == this)
                     {
-                        unit.PositionControlled = false;
-                        unit.RotationControlled = false;
-                        controllingUnit = false;
+                        unit.Control = null;
                     }
                 }
                 else
                 {
-                    if (controllingUnit)
+                    if (unit.Control == this)
                     {
                         unit.SetTargetPosition((Vector3)(Vector2)targetPos - Vector3.left * 2f);
                         unit.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(unit.transform.position, targetPos);
@@ -129,11 +127,9 @@ public class UNITOOL_LaserDrill : MonoBehaviour
         {
             targetPos = Vector2Int.one * -1;
 
-            if (controllingUnit)
+            if (unit.Control == this)
             {
-                unit.PositionControlled = false;
-                unit.RotationControlled = false;
-                controllingUnit = false;
+                unit.Control = null;
             }
         }
     }

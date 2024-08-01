@@ -292,13 +292,13 @@ public static class StackBar
     
     public static bool AddItemInv(int item)
     {
-        if (!AddItem(item))
+        if (InventoryBar.Search(item, 1) != -1)
         {
             return InventoryBar.AddItem(item);
         }
         else
         {
-            return true;
+            return AddItem(item);
         }
     }
 

@@ -20,10 +20,15 @@ public abstract class EntityBase : MonoBehaviour {
 
 public abstract class UnitBase : EntityBase
 {
-    public abstract bool PositionControlled { get; set; }
-    public abstract bool RotationControlled { get; set; }
+    public abstract UnitTool Control { get; set; }
     public abstract bool IsLocal { get; set; }
     public abstract void SetTargetPosition(Vector2 targetPos);
     public abstract Vector2 GetTargetPosition();
     public abstract GameObject[] Attachs { get; }
+    public abstract StackStorage Storage { get; set; }
+}
+
+public abstract class UnitTool : MonoBehaviour
+{
+    
 }

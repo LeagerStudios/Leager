@@ -744,6 +744,7 @@ public class Client
     static IPAddress serverIpAddress;
     public static TcpClient client;
     public static NetworkStream stream;
+    public static Difficulty difficulty = Difficulty.normal;
 
     public static int[] worldProportionsLoad;
     public static int[] worldMapLoad;

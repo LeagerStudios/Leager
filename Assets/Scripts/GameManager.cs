@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
     //Events and game data
     public Color skyboxColor;
     public Color daytimeUpdatedSkyboxColor;
+    public AnimationCurve dayNightCycle;
     public float dayFloat = 0;
     public int dayTime = fullDay / 5;
     public const int fullDay = 54000;
@@ -281,6 +282,19 @@ public class GameManager : MonoBehaviour
             {
                 DataSaver.SaveStats(new string[] { (fullDay / 5) + "" }, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd");
             }
+
+            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd"))
+            {
+                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd").SavedData)[0];
+            }
+            else
+            {
+                DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd");
+            }
+        }
+        else
+        {
+            gameDifficulty = Client.difficulty;
         }
 
         PlanetMenuController.planetMenu = MenuController.menuController.canvas.transform.Find("PlanetsPanel").GetComponent<PlanetMenuController>();
@@ -863,61 +877,7 @@ public class GameManager : MonoBehaviour
 
     private void SetSkybox()
     {
-        float value = 1;
-        bool afterMiddleDay = dayTime > (fullDay / 2);
-
-        if (!afterMiddleDay)
-        {
-            value = (float)dayTime / (fullDay / 2);
-        }
-        else
-        {
-            value = 1f - ((float)dayTime / (fullDay / 2)) + 1f;
-        }
-
-
-        if (!afterMiddleDay)
-        {
-            if (value > 0.05f)
-            {
-                value = value * 2;
-            }
-            else if (value > 0.1f)
-            {
-                value = value * 3;
-            }
-            else if (value > 0.2f)
-            {
-                value = value * 4;
-            }
-            else if (value > 0.3f)
-            {
-                value = value * 5;
-            }
-        }
-        else
-        {
-            if (value < 0.3f)
-            {
-                value = value / 10f;
-            }
-            else if (value < 0.6f)
-            {
-                value = value / 5f;
-            }
-            else if (value < 0.65f)
-            {
-                value = value / 2f;
-            }
-            else if (value < 0.7f)
-            {
-                value = value / 1.6f;
-            }
-            else if (value < 0.75f)
-            {
-                value = value / 1.2f;
-            }
-        }
+        float value = dayNightCycle.Evaluate((float)dayTime / fullDay);
 
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
 
@@ -975,9 +935,14 @@ public class GameManager : MonoBehaviour
                         entity.transform.position.x + ";",
                         entity.transform.position.y+ ";",
                     };
-                    if(entity.entityBase != null)
+                    if (entity.entityBase != null)
                     {
-                        toEncrypt.Add(string.Join("#", entity.entityBase.GenerateArgs()));
+                        string[] args = entity.entityBase.GenerateArgs();
+
+                        if (args == null)
+                            toEncrypt.Add(string.Join("#", new string[] { "" }));
+                        else
+                            toEncrypt.Add(string.Join("#", entity.entityBase.GenerateArgs()));
                     }
 
                     entities.Add(string.Join("", toEncrypt.ToArray()));
@@ -1089,6 +1054,8 @@ public class GameManager : MonoBehaviour
     {
         WorldWidth = ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldSize"))[0];
         WorldHeight = ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldSize"))[1];
+        gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldDifficulty"))[0];
+        DataSaver.SaveStats(new string[] { (int)gameDifficulty + "" }, Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd");
 
         int[] buildedMapGrid = new int[(WorldWidth * 16) * WorldHeight];
         allBackgroundGrid = new int[(WorldWidth * 16) * WorldHeight];
@@ -1207,7 +1174,7 @@ public class GameManager : MonoBehaviour
                                 buildedMapGrid[idx] = 118;
                             }
                         }
-                        if (!(e > floorUndergroundEnd) && buildedMapGrid[idx] == 6)
+                        if (e <= floorUndergroundEnd && buildedMapGrid[idx] == 6)
                         {
                             if (e < floorUndergroundEnd * 0.9f && e > floorUndergroundEnd * 0.65f && Random.Range(0, 15) == 0)
                             {

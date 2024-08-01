@@ -278,7 +278,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 IsIaActive = false;
                 DescentIa = true;
             }
-            if(args[0] == "dead")
+            if (args[0] == "dead")
             {
                 float shortestDist = 9999999;
                 int segmentShortestDist = 0;
@@ -295,7 +295,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                         scrapp.sprite = scraps[0];
 
                     }
-                    else if(i != transform.parent.childCount - 1)
+                    else if (i != transform.parent.childCount - 1)
                     {
                         if (!droppedBomb[i])
                         {
@@ -319,9 +319,14 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
                 }
                 Transform targetSegment = transform.parent.GetChild(segmentShortestDist);
 
-                ManagingFunctions.DropItem(65, targetSegment.position, amount: Random.Range(20, 40));
-                ManagingFunctions.DropItem(34, targetSegment.position, amount: Random.Range(5, 10));
-                ManagingFunctions.DropItem(121, targetSegment.position, amount: Random.Range(89, 121));
+                ManagingFunctions.DropItem(65, targetSegment.position, amount: Random.Range(20, 40), velocity: velocity);
+                ManagingFunctions.DropItem(34, targetSegment.position, amount: Random.Range(5, 10), velocity: velocity);
+                ManagingFunctions.DropItem(121, targetSegment.position, amount: Random.Range(19, 32), velocity: velocity);
+                //ManagingFunctions.DropItem(121, targetSegment.position, amount: Random.Range(19, 32), velocity: velocity);
+                ManagingFunctions.DropItem(66, targetSegment.position, amount: Random.Range(18, 33), velocity: velocity);
+                if (Random.Range(0, 2 / (int)GameManager.gameManagerReference.gameDifficulty) == 0)
+                    ManagingFunctions.DropItem(124, targetSegment.position, velocity: velocity);
+
                 Despawn();
             }
         }
