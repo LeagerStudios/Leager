@@ -6,6 +6,7 @@ public class TileProperties : MonoBehaviour
 {
     public int parentTile = 0;
     public ChunkController chunk;
+    public ITilePropertiesAttach attach;
 
     public bool canDropStoredItems = true;
     public bool destroy = false;
@@ -19,9 +20,9 @@ public class TileProperties : MonoBehaviour
         chunk = transform.GetComponentInParent<ChunkController>();
     }
 
-    public void Update()
+    public void CallAttach()
     {
-        
+        if (attach != null) attach.Break();
     }
 
     public string Export()
@@ -60,4 +61,9 @@ public class TileProperties : MonoBehaviour
         chunk.TilePropertiesArr[transform.GetSiblingIndex()] = a;
         GameManager.gameManagerReference.allMapProp[chunk.tilesToChunk + transform.GetSiblingIndex()] = a;
     }
+}
+
+public interface ITilePropertiesAttach
+{
+    void Break();
 }

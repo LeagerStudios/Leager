@@ -7,7 +7,8 @@ public enum NodeType
     Node, SourceNode, EndPointNode
 }
 
-public class NodeInstance : MonoBehaviour
+public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
+
 {
     public GameObject[] nodeObjects;
     public NodeType[] nodeTypes;
@@ -54,7 +55,7 @@ public class NodeInstance : MonoBehaviour
         }
     }
 
-    private void Destroy()
+    public void Break()
     {
         for (int i = 0; i < nodes.Length; i++)
         {

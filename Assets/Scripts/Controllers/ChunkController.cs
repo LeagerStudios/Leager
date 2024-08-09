@@ -418,6 +418,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 TilePropertiesArr[e] = "null";
                 manager.allMapProp[tilesToChunk + e] = "null";
                 tileProperties.destroy = true;
+                tileProperties.CallAttach();
                 Destroy(tileProperties);
             }
         }

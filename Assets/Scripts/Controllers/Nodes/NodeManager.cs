@@ -44,7 +44,10 @@ class NodeManager : MonoBehaviour
             node.UpdatePower(0, new HashSet<Node>());
         }
 
-
+        foreach (EndPointNode node in endPoints)
+        {
+            node.Update();
+        }
     }
 
     public void RegisterNode(Node node)

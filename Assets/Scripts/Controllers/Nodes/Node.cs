@@ -40,7 +40,7 @@ public class Node
     }
 }
 
-class SourceNode : Node
+public class SourceNode : Node
 {
     public float TargetOutputPower { get; set; }
     public float OutputPower { get; private set; }
@@ -68,7 +68,7 @@ class SourceNode : Node
     }
 }
 
-class EndPointNode : Node
+public class EndPointNode : Node
 {
     public List<INodeEndPoint> endPoints = new List<INodeEndPoint>();
 
@@ -85,10 +85,18 @@ class EndPointNode : Node
 
         updatedNodes.Add(this); // Ensure it's marked as updated
     }
+
+    public void Update()
+    {
+        foreach(INodeEndPoint endPoint in endPoints)
+        {
+            endPoint.Update(this);
+        }
+    }
 }
 
 
-interface INodeEndPoint
+public interface INodeEndPoint
 {
     void Update(EndPointNode endPoint);
 }
