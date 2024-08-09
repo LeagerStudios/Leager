@@ -4,41 +4,61 @@ using UnityEngine;
 
 class NodeManager : MonoBehaviour
 {
-    public void RunSimulation()
+    public static NodeManager self;
+    public List<Node> nodes;
+    public System.Type sourceNode = typeof(SourceNode);
+    public System.Type endPointNode = typeof(EndPointNode);
+
+    private void Awake()
     {
-        // Create the nodes
-        SourceNode source1 = new SourceNode
+        self = this;
+    }
+
+    public void Update()
+    {
+        List<SourceNode> sources = new List<SourceNode>();
+        List<EndPointNode> endPoints = new List<EndPointNode>();
+
+        foreach(Node node in nodes)
         {
-            TargetOutputPower = 100,
-            OutputPowerDuration = 10 // Duration of power supply in seconds
-        };
+            System.Type nodeType = node.GetType();
 
-        SourceNode source2 = new SourceNode
+            if (nodeType == sourceNode)
+            {
+                sources.Add((SourceNode)node);
+            }
+
+            if (nodeType == endPointNode)
+            {
+                endPoints.Add((EndPointNode)node);
+            }
+
+            if (!node.isBattery)
+            {
+                node.Power = 0;
+            }
+        }
+
+        foreach(SourceNode node in sources)
         {
-            TargetOutputPower = 50,
-            OutputPowerDuration = 5 // Another source with different duration
-        };
+            node.UpdatePower(0, new HashSet<Node>());
+        }
 
-        Node intermediaryNode = new Node();
-        EndPointNode endPoint = new EndPointNode();
 
-        // Connect the nodes
-        source1.AddConnection(intermediaryNode);
-        source2.AddConnection(intermediaryNode);
-        intermediaryNode.AddConnection(endPoint);
+    }
 
-        // Simulate the system over time (for example, 1-second steps)
-        float simulationTime = 0;
-        float deltaTime = 1; // Time step of 1 second
+    public void RegisterNode(Node node)
+    {
+        nodes.Add(node);
+    }
 
-        // Create a set to track updated nodes
-        HashSet<Node> updatedNodes = new HashSet<Node>();
+    public void DeleteNode(Node node)
+    {
+        foreach(Node connection in node.connections)
+        {
+            connection.RemoveConnection(node);
+        }
 
-        // Update the power distribution for each source
-        source1.UpdatePower(updatedNodes);
-        source2.UpdatePower(updatedNodes);
-
-        // Increase the simulation time
-        simulationTime += deltaTime;
+        nodes.Remove(node);
     }
 }

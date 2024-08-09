@@ -25,7 +25,7 @@ public class Node
         }
     }
 
-    public virtual void UpdatePower(HashSet<Node> updatedNodes)
+    public virtual void UpdatePower(float power, HashSet<Node> updatedNodes)
     {
         if (updatedNodes.Contains(this)) return;
 
@@ -33,8 +33,9 @@ public class Node
 
         foreach (var node in connections)
         {
-            node.Power += Power / (connections.Count - 1); 
-            node.UpdatePower(updatedNodes); 
+            float value = Power / (connections.Count - 1);
+            node.Power += value; 
+            node.UpdatePower(value, updatedNodes); 
         }
     }
 }
@@ -45,7 +46,7 @@ class SourceNode : Node
     public float OutputPower { get; private set; }
     public float OutputPowerDuration { get; set; }
 
-    public override void UpdatePower(HashSet<Node> updatedNodes)
+    public override void UpdatePower(float power, HashSet<Node> updatedNodes)
     {
         if (OutputPowerDuration > 0)
         {
@@ -62,20 +63,32 @@ class SourceNode : Node
         // Now, distribute power to attached nodes
         if(Power > 0f)
         {
-            base.UpdatePower(updatedNodes);
+            base.UpdatePower(Power, updatedNodes);
         }
     }
 }
 
 class EndPointNode : Node
 {
-    public override void UpdatePower(HashSet<Node> updatedNodes)
+    public List<INodeEndPoint> endPoints = new List<INodeEndPoint>();
+
+    public override void UpdatePower(float power, HashSet<Node> updatedNodes)
     {
-        // For this example, the EndPoint just consumes the power it receives
+        Power += power;
         Debug.Log("EndPoint received power: " + Power);
+        Debug.Log("EndPoint current power: " + Power);
+
+        foreach(INodeEndPoint endPoint in endPoints)
+        {
+            endPoint.Update(this);
+        }
 
         updatedNodes.Add(this); // Ensure it's marked as updated
     }
 }
 
 
+interface INodeEndPoint
+{
+    void Update(EndPointNode endPoint);
+}
