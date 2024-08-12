@@ -47,7 +47,6 @@ class NodeManager : MonoBehaviour
         foreach (EndPointNode node in endPoints)
         {
             node.Update();
-
         }
     }
 
