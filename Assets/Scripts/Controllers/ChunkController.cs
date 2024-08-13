@@ -29,7 +29,19 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [Header("Prefabs")]
 
     [SerializeField] GameObject BackgroundTile;
+    [SerializeField] GameObject grassObject;
+    [SerializeField] GameObject fireObject;
+    [SerializeField] GameObject doorObject;
+    [SerializeField] GameObject boxObject;
+    [SerializeField] GameObject resourceGrabberObject;
+    [SerializeField] GameObject unitCenterObject;
+    [SerializeField] GameObject leavesObject;
+    [SerializeField] GameObject raideonSpawnerObject;
+    [SerializeField] GameObject ladderObject;
+    [SerializeField] GameObject grassThingObject;
     [SerializeField] GameObject fallingSandObject;
+    [SerializeField] GameObject bedLeftSideObject;
+    [SerializeField] GameObject bedRightSideObject;
 
     [SerializeField] Sprite[] waterFrames;
 
@@ -413,112 +425,148 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
         int childs = RevaluateLifeChoicesForTile(gameTile, tile, e);
 
-        if (TileBehaviorLibrary.library[tile] != null)
+        switch (tile)
         {
-            if (childs < 1)
-            {
-                GameObject grassBlock = Instantiate(TileBehaviorLibrary.library[tile], gameTile.transform);
-                grassBlock.transform.localPosition = Vector2.zero;
-                grassBlock.name = tile + "";
-            }
-        }
-        else switch (tile)
-        {
-                case 85:
-                    try
+            case 1:
+                if (childs < 1)
+                {
+                    GameObject grassBlock = Instantiate(grassObject, gameTile.transform);
+                    grassBlock.transform.localPosition = Vector2.zero;
+                    grassBlock.name = "1";
+                }
+                break;
+
+            case 15:
+                if (childs < 1)
+                {
+                    GameObject boxBlock = Instantiate(boxObject, gameTile.transform);
+                    boxBlock.transform.localPosition = Vector2.zero;
+                    boxBlock.name = "15";
+                }
+                break;
+
+            case 55:
+                if (childs < 1)
+                {
+                    GameObject leavesBlock = Instantiate(leavesObject, gameTile.transform);
+                    leavesBlock.transform.localPosition = Vector2.zero;
+                    leavesBlock.name = "55";
+                }
+                break;
+
+            case 84:
+                if (tile == 84 && childs < 1)
+                {
+                    GameObject fireBlock = Instantiate(fireObject, gameTile.transform);
+                    fireBlock.name = "84";
+                    fireBlock.transform.localPosition = Vector2.zero;
+                }
+                break;
+
+            case 85:
+                try
+                {
+                    if (TileGrid[e + 1] == 0 && TileGrid[e - 1] != 0)
                     {
-                        if (TileGrid[e + 1] == 0 && TileGrid[e - 1] != 0)
+                        TileGrid[e] = 86;
+                        TileGrid[e + 1] = 87;
+
+                        if (TileGrid[e + 1] != 87)
                         {
-                            TileGrid[e] = 86;
-                            TileGrid[e + 1] = 87;
-
-                            if (TileGrid[e + 1] != 87)
-                            {
-                                ManagingFunctions.DropItem(85, gameTile.transform.position);
-                                TileGrid[e] = 0;
-                            }
-                            else
-                            {
-                                if (gameTile.GetComponent<BlockAnimationController>() == null)
-                                {
-                                    BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
-                                    animationController.animationData = manager.tileAnimation[TileGrid[e]];
-                                    animationController.rootBIdx = e;
-                                    animationController.rootChunk = this;
-                                }
-
-                                if (childs < 1)
-                                {
-                                    GameObject doorBlock = Instantiate(TileBehaviorLibrary.library[86], gameTile.transform);
-                                    doorBlock.name = "86";
-                                    doorBlock.transform.localPosition = Vector2.zero;
-                                }
-                            }
+                            ManagingFunctions.DropItem(85, gameTile.transform.position);
+                            TileGrid[e] = 0;
                         }
                         else
                         {
-                            throw new System.Exception("UH NO");
+                            if (gameTile.GetComponent<BlockAnimationController>() == null)
+                            {
+                                BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
+                                animationController.animationData = manager.tileAnimation[TileGrid[e]];
+                                animationController.rootBIdx = e;
+                                animationController.rootChunk = this;
+                            }
+
+                            if (childs < 1)
+                            {
+                                GameObject doorBlock = Instantiate(doorObject, gameTile.transform);
+                                doorBlock.name = "86";
+                                doorBlock.transform.localPosition = Vector2.zero;
+                            }
                         }
-                    }
-                    catch
-                    {
-                        TileGrid[e] = 0;
-                        StackBar.AddItemInv(85);
-                    }
-                    break;
-
-                case 86:
-                    if (TileGrid[e + 1] != 87)
-                    {
-                        ManagingFunctions.DropItem(85, gameTile.transform.position);
-                        TileGrid[e] = 0;
-
-                        RevaluateLifeChoicesForTile(gameTile, 0, e);
                     }
                     else
                     {
-                        if (gameTile.GetComponent<BlockAnimationController>() == null)
-                        {
-                            BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
-                            animationController.animationData = manager.tileAnimation[TileGrid[e]];
-                            animationController.rootBIdx = e;
-                            animationController.rootChunk = this;
-                        }
-
-                        if (childs < 1)
-                        {
-                            GameObject doorBlock = Instantiate(TileBehaviorLibrary.library[86], gameTile.transform);
-                            doorBlock.name = "86";
-                            doorBlock.transform.localPosition = Vector2.zero;
-                        }
+                        throw new System.Exception("UH NO");
                     }
-                    break;
+                }
+                catch
+                {
+                    TileGrid[e] = 0;
+                    StackBar.AddItemInv(85);
+                }
+                break;
 
-                case 87:
+            case 86:
+                if (TileGrid[e + 1] != 87)
+                {
+                    ManagingFunctions.DropItem(85, gameTile.transform.position);
+                    TileGrid[e] = 0;
+
+                    RevaluateLifeChoicesForTile(gameTile, 0, e);
+                }
+                else
+                {
+                    if (gameTile.GetComponent<BlockAnimationController>() == null)
+                    {
+                        BlockAnimationController animationController = gameTile.AddComponent<BlockAnimationController>();
+                        animationController.animationData = manager.tileAnimation[TileGrid[e]];
+                        animationController.rootBIdx = e;
+                        animationController.rootChunk = this;
+                    }
+
+                    if (childs < 1)
+                    {
+                        GameObject doorBlock = Instantiate(doorObject, gameTile.transform);
+                        doorBlock.name = "86";
+                        doorBlock.transform.localPosition = Vector2.zero;
+                    }
+                }
+                break;
+
+            case 87:
                     if (TileGrid[e - 1] != 86)
                     {
                         ManagingFunctions.DropItem(85, gameTile.transform.position - Vector3.up);
                         TileGrid[e] = 0;
                     }
-                    break;
+                break;
 
-                case 98:
+            case 89:
+                if (childs < 1)
+                {
+                    GameObject grabberObject = Instantiate(resourceGrabberObject, gameTile.transform);
+                    grabberObject.name = "89";
+                    grabberObject.transform.localPosition = Vector2.zero;
+                }
+                break;
+
+            case 98:
                     if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 99)
                     {
                         ManagingFunctions.DropItem(100, gameTile.transform.position + Vector3.right * 0.5f);
                         TileGrid[e] = 0;
                     }
-                    break;
+                break;
 
-                case 99:
+            case 99:
                     if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 98)
                     {
                         ManagingFunctions.DropItem(100, gameTile.transform.position + Vector3.left * 0.5f);
                         TileGrid[e] = 0;
                     }
-                    break;
+                break;
 
-                case 100:
+            case 100:
                     try
                     {
                         if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) == 0)
@@ -536,17 +584,118 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         TileGrid[e] = 0;
                         StackBar.AddItemInv(100);
                     }
-                    break;
+                break;
 
-                case 113:
-                    if (TileGrid[e - 1] == 0)
+            case 101:
+                if (childs < 1)
+                {
+                    GameObject unitCenter = Instantiate(unitCenterObject, gameTile.transform);
+                    unitCenter.name = "101";
+                    unitCenter.transform.localPosition = Vector2.zero;
+                }
+                break;
+
+            case 102:
+                if (childs < 1)
+                {
+                    GameObject boxBlock = Instantiate(boxObject, gameTile.transform);
+                    boxBlock.transform.localPosition = Vector2.zero;
+                    boxBlock.name = "102";
+                }
+                break;
+
+            case 106:
+                if (childs < 1)
+                {
+                    GameObject grassBlock = Instantiate(grassThingObject, gameTile.transform);
+                    grassBlock.transform.localPosition = Vector2.zero;
+                    grassBlock.name = "106";
+                }
+                break;
+
+
+            case 108:
+                if (childs < 1)
+                {
+                    GameObject spawnerBlock = Instantiate(raideonSpawnerObject, gameTile.transform);
+                    spawnerBlock.transform.localPosition = Vector2.zero;
+                    spawnerBlock.name = "108";
+                }
+                break;
+
+            case 109:
+                if (childs < 1)
+                {
+                    GameObject ladderBlock = Instantiate(ladderObject, gameTile.transform);
+                    ladderBlock.transform.localPosition = Vector2.zero;
+                    ladderBlock.name = "109";
+                }
+                break;
+
+            case 110:
+                if (childs < 1)
+                {
+                    GameObject ladderBlock = Instantiate(ladderObject, gameTile.transform);
+                    ladderBlock.transform.localPosition = Vector2.zero;
+                    ladderBlock.name = "110";
+                }
+                break;
+
+            case 113:
+                if (TileGrid[e - 1] == 0)
+                {
+                    GameObject fallingSand = Instantiate(fallingSandObject, manager.entitiesContainer.transform);
+                    fallingSand.transform.position = gameTile.transform.position;
+                    fallingSand.name = "113";
+                    TileGrid[e] = 0;
+                }
+                break;
+
+            case 114:
+                if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 115)
+                {
+                    ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.right * 0.5f);
+                    TileGrid[e] = 0;
+                }
+                break;
+
+            case 115:
+                if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 114)
+                {
+                    ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.left * 0.5f);
+                    TileGrid[e] = 0;
+                    if (e > manager.WorldHeight - 1)
                     {
-                        GameObject fallingSand = Instantiate(fallingSandObject, manager.entitiesContainer.transform);
-                        fallingSand.transform.position = gameTile.transform.position;
-                        fallingSand.name = "113";
-                        TileGrid[e] = 0;
+                        TileMod(e - manager.WorldHeight, TileGrid[e - manager.WorldHeight]);
                     }
-                    break;
+                }
+                else if (childs < 1)
+                {
+                    GameObject bedBlock = Instantiate(bedRightSideObject, gameTile.transform);
+                    bedBlock.transform.localPosition = Vector2.zero;
+                    bedBlock.name = "115";
+                }
+                break;
+
+            case 116:
+                try
+                {
+                    if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) == 0)
+                    {
+                        TileGrid[e] = 114;
+                        manager.SetTileAt(tilesToChunk + e + manager.WorldHeight, 115);
+                    }
+                    else
+                    {
+                        throw new System.Exception("UH NO");
+                    }
+                }
+                catch
+                {
+                    TileGrid[e] = 0;
+                    StackBar.AddItemInv(116);
+                }
+                break;
         }
 
     }
