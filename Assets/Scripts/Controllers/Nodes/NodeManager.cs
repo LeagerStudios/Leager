@@ -14,6 +14,11 @@ class NodeManager : MonoBehaviour
         self = this;
     }
 
+    public void Start()
+    {
+        nodes = new List<Node>();
+    }
+
     public void Update()
     {
         List<SourceNode> sources = new List<SourceNode>();
@@ -50,9 +55,12 @@ class NodeManager : MonoBehaviour
         }
     }
 
+
+
     public void RegisterNode(Node node)
     {
         nodes.Add(node);
+
     }
 
     public void DeleteNode(Node node)
@@ -64,4 +72,15 @@ class NodeManager : MonoBehaviour
 
         nodes.Remove(node);
     }
+
+
+    public Texture aTexture;
+
+    //void OnGUI()
+    //{
+    //    if (Event.current.type.Equals(EventType.Repaint))
+    //    {
+    //        Graphics.DrawTexture(new Rect(GameManager.gameManagerReference.mouseCurrentPosition, Vector2.one * 20), aTexture);
+    //    }
+    //}
 }
