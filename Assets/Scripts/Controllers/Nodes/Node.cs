@@ -8,6 +8,8 @@ public class Node
     public float Power { get; set; }
     public int connectionLimit;
     public bool isBattery = false;
+    public Vector3Int index;
+    public Vector2 position;
 
     public void AddConnection(Node connection)
     {
@@ -25,7 +27,7 @@ public class Node
         }
     }
 
-    public virtual void UpdatePower(float power, HashSet<Node> updatedNodes)
+    public virtual void UpdatePower(float power, List<Node> updatedNodes)
     {
         if (updatedNodes.Contains(this)) return;
 
@@ -46,7 +48,7 @@ public class SourceNode : Node
     public float OutputPower { get; private set; }
     public float OutputPowerDuration { get; set; }
 
-    public override void UpdatePower(float power, HashSet<Node> updatedNodes)
+    public override void UpdatePower(float power, List<Node> updatedNodes)
     {
         if (OutputPowerDuration > 0)
         {
@@ -72,7 +74,7 @@ public class EndPointNode : Node
 {
     public List<INodeEndPoint> endPoints = new List<INodeEndPoint>();
 
-    public override void UpdatePower(float power, HashSet<Node> updatedNodes)
+    public override void UpdatePower(float power, List<Node> updatedNodes)
     {
         Power += power;
         Debug.Log("EndPoint received power: " + Power);
@@ -84,6 +86,7 @@ public class EndPointNode : Node
         }
 
         updatedNodes.Add(this); // Ensure it's marked as updated
+        NodeManager.self.AddPath(updatedNodes);
     }
 
     public void Update()

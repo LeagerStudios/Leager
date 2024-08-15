@@ -8,6 +8,9 @@ class NodeManager : MonoBehaviour
     public List<Node> nodes;
     public System.Type sourceNode = typeof(SourceNode);
     public System.Type endPointNode = typeof(EndPointNode);
+    public Dictionary<Vector3Int, Node> nodesDictionary;
+
+    public List<List<Node>> nodesPaths = new List<List<Node>>();
 
     private void Awake()
     {
@@ -46,7 +49,7 @@ class NodeManager : MonoBehaviour
 
         foreach(SourceNode node in sources)
         {
-            node.UpdatePower(0, new HashSet<Node>());
+            node.UpdatePower(0, new List<Node>());
         }
 
         foreach (EndPointNode node in endPoints)
@@ -73,14 +76,28 @@ class NodeManager : MonoBehaviour
         nodes.Remove(node);
     }
 
+    public void AddPath(List<Node> path)
+    {
+        nodesPaths.Add(path);
+    }
 
-    public Texture aTexture;
+    public Texture nodeConnectionTexture;
 
-    //void OnGUI()
-    //{
-    //    if (Event.current.type.Equals(EventType.Repaint))
-    //    {
-    //        Graphics.DrawTexture(new Rect(GameManager.gameManagerReference.mouseCurrentPosition, Vector2.one * 20), aTexture);
-    //    }
-    //}
+    void OnGUI()
+    {
+        if (Event.current.type.Equals(EventType.Repaint))
+        {
+            Camera camera = Camera.main;
+
+            foreach (List<Node> list in nodesPaths)
+            {
+                foreach (Node segment in list)
+                {
+                    
+                }
+            }
+
+            nodesPaths = new List<List<Node>>();
+        }
+    }
 }
