@@ -10,6 +10,7 @@ public class LoadingSceneScript : MonoBehaviour
     [SerializeField] GameObject loadingBarBg;
     [SerializeField] GameObject loadingTxt;
     [SerializeField] RectTransform canvas;
+    [SerializeField] RectTransform load;
     [SerializeField] string[] craftingT1DefaultConfig;
     [SerializeField] string[] craftingT2DefaultConfig;
     [SerializeField] string[] craftingT3DefaultConfig;
@@ -31,6 +32,7 @@ public class LoadingSceneScript : MonoBehaviour
         isLoading = true;
         Debug.Log("===STARTED INITIAL LOADING===");
 
+        DontDestroyOnLoad(canvas.gameObject);
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 1;
@@ -129,42 +131,41 @@ public class LoadingSceneScript : MonoBehaviour
         loadingTxt.GetComponent<Text>().text = randomMessage[Random.Range(0, randomMessage.Length)];
         Debug.Log("Load Text:" + loadingTxt.GetComponent<Text>().text);
 
-        for (int i = 0; i < 10; i++)
+        Scene scene = SceneManager.GetActiveScene();
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
+
+        while(asyncOperation.progress < 1f)
         {
-            for (int i2 = 0; i2 < 10; i2++)
-            {
-                loadingBar.GetComponent<RectTransform>().localScale = new Vector2(loadingBar.GetComponent<RectTransform>().localScale.x + 0.01f, 1f);
-                yield return new WaitForSeconds(0.016f);
-            }
+            loadingBar.GetComponent<RectTransform>().localScale = new Vector3(asyncOperation.progress / 2f + 0.05f, 1f, 1f);
+            yield return new WaitForEndOfFrame();
         }
 
-        yield return new WaitForSeconds(.5f);
+        asyncOperation = SceneManager.UnloadSceneAsync(scene);
 
-        StartCoroutine(ExitLoadMenu());
-    }
+        while (asyncOperation.progress < 1f)
+        {
+            loadingBar.GetComponent<RectTransform>().localScale = new Vector3(asyncOperation.progress + 0.1f, 1f, 1f);
+            yield return new WaitForEndOfFrame();
+        }
 
-    IEnumerator ExitLoadMenu()
-    {
+        loadingBar.GetComponent<RectTransform>().localScale = Vector3.one;
+
+        yield return new WaitForSeconds(.1f);
+        Debug.Log("===ENDED INITIAL LOADING===");
+
         Color color = loadingBarBg.GetComponent<Image>().color;
         color.a = 0f;
         loadingBarBg.GetComponent<Image>().color = color;
 
-        for (int i = 0; i < 50; i++)
+        float speed = 0;
+        while (load.anchoredPosition.y > -25)
         {
-            color = loadingBar.GetComponent<Image>().color;
-            color.a -= 0.02f;
-            loadingBar.GetComponent<Image>().color = color;
-
-            color = loadingTxt.GetComponent<Text>().color;
-            color.a -= 0.02f;
-            loadingTxt.GetComponent<Text>().color = color;
+            speed -= 2 * Time.deltaTime;
+            load.anchoredPosition = load.anchoredPosition + Vector2.up * speed;
             yield return new WaitForSeconds(0.016f);
         }
 
-        Debug.Log("===ENDED INITIAL LOADING===");
-
         isLoading = false;
-
-        SceneManager.LoadScene("MainMenu");
+        Destroy(canvas.gameObject);
     }
 }

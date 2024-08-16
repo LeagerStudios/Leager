@@ -12,6 +12,7 @@ public class ButtonToMouse : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public void OnPointerDown(PointerEventData eventData)
     {
         GInput.PressMouse(key);
+        //SOYELGOFREDEBJGIERJEIJIWGIEJIGEJ
     }
 
     public void OnPointerUp(PointerEventData eventData)
