@@ -633,7 +633,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     healthBar.SetHealth(0);
 
                     if (knockback != 0f)
-                        if (GetComponent<SpriteRenderer>().flipX)
+                        if (procedence.transform.position.x < transform.position.x)
                         {
                             rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
                         }
@@ -649,7 +649,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     mainCamera.Turn();
 
                     if (knockback != 0f)
-                        if (GetComponent<SpriteRenderer>().flipX)
+                        if (procedence.transform.position.x < transform.position.x)
                         {
                             rb2D.velocity = new Vector2(9f * knockback, JumpForce * 0.6f * knockback);
                         }

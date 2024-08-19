@@ -30514,7 +30514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dedde2d84267be46b4376c5b03f2b84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aTexture: {fileID: 2800000, guid: 8250de81695039540b7d9404032143a5, type: 3}
+  nodeConnectionTexture: {fileID: 0}
 --- !u!4 &446433120
 Transform:
   m_ObjectHideFlags: 0
