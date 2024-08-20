@@ -29,10 +29,10 @@ public class TechManager : MonoBehaviour, IDragHandler
 
         foreach (TechStack techStack in stacks)
         {
-            this.techStacks.Add(techStack.tile, techStack);
+            techStacks.Add(techStack.tile, techStack);
             techStack.Start1();
         }
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     public void Start()
@@ -71,7 +71,7 @@ public class TechManager : MonoBehaviour, IDragHandler
 
     public void Update()
     {
-        if ((GInput.GetKeyDown(KeyCode.Tab) || (GInput.leagerInput.platform == "Mobile" && GInput.GetKeyDown(KeyCode.Escape))) && (deployed || (!deployed && GameManager.gameManagerReference.InGame)))
+        if (GInput.GetKeyDown(KeyCode.Tab) && (deployed || (!deployed && GameManager.gameManagerReference.InGame)))
         {
             deployed = !deployed;
             GameManager.gameManagerReference.InGame = !deployed;

@@ -296,9 +296,13 @@ public static class StackBar
         {
             return InventoryBar.AddItem(item);
         }
+        else if(AddItem(item))
+        {
+            return true;
+        }
         else
         {
-            return AddItem(item);
+            return InventoryBar.AddItem(item);
         }
     }
 
