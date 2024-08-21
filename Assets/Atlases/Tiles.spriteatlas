@@ -54,7 +54,9 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 5be508be06567e1439a25f12253cccfe, type: 3}
     - {fileID: 2800000, guid: f57c889b72625654ba0f921897e5dce5, type: 3}
     - {fileID: 2800000, guid: 91418bbc5c71f67408c26bdfda721cf8, type: 3}
-    totalSpriteSurfaceArea: 190529
+    - {fileID: 2800000, guid: 00666c6fceaa0224bbd4947b826a9c3e, type: 3}
+    - {fileID: 2800000, guid: 6d78d6bc209a43a4fbe689fa3ec9a97f, type: 3}
+    totalSpriteSurfaceArea: 196673
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -76,6 +78,8 @@ SpriteAtlas:
   - {fileID: 21300016, guid: fb9c5e6ab28342844a7d597dfb5aff4d, type: 3}
   - {fileID: 21300000, guid: 6e6c7adae3a70314094365773c2220e5, type: 3}
   - {fileID: 21300000, guid: f57c889b72625654ba0f921897e5dce5, type: 3}
+  - {fileID: 21300000, guid: 6d78d6bc209a43a4fbe689fa3ec9a97f, type: 3}
+  - {fileID: 21300002, guid: 6d78d6bc209a43a4fbe689fa3ec9a97f, type: 3}
   - {fileID: 21300010, guid: 91418bbc5c71f67408c26bdfda721cf8, type: 3}
   - {fileID: 21300008, guid: 91418bbc5c71f67408c26bdfda721cf8, type: 3}
   - {fileID: 21300006, guid: 91418bbc5c71f67408c26bdfda721cf8, type: 3}
@@ -227,6 +231,10 @@ SpriteAtlas:
   - {fileID: 21300006, guid: f0d1c85f06ddba94c9972767c43fb2ca, type: 3}
   - {fileID: 21300000, guid: f0d1c85f06ddba94c9972767c43fb2ca, type: 3}
   - {fileID: 21300002, guid: f0d1c85f06ddba94c9972767c43fb2ca, type: 3}
+  - {fileID: 21300002, guid: 00666c6fceaa0224bbd4947b826a9c3e, type: 3}
+  - {fileID: 21300000, guid: 00666c6fceaa0224bbd4947b826a9c3e, type: 3}
+  - {fileID: 21300006, guid: 00666c6fceaa0224bbd4947b826a9c3e, type: 3}
+  - {fileID: 21300004, guid: 00666c6fceaa0224bbd4947b826a9c3e, type: 3}
   m_PackedSpriteNamesToIndex:
   - LeavesSheet_1
   - LeavesSheet_0
@@ -246,6 +254,8 @@ SpriteAtlas:
   - BricksAnim_8
   - AlliancePreview
   - BedSheet2_0
+  - EnergyGeneratorSheet_0
+  - EnergyGeneratorSheet_1
   - SaplingSheet_5
   - SaplingSheet_4
   - SaplingSheet_3
@@ -397,5 +407,9 @@ SpriteAtlas:
   - PackagePicker_3
   - PackagePicker_0
   - PackagePicker_1
+  - ArmorPreview_1
+  - ArmorPreview_0
+  - ArmorPreview_3
+  - ArmorPreview_2
   m_Tag: Tiles
   m_IsVariant: 0

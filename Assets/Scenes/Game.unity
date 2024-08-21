@@ -6072,7 +6072,7 @@ SpriteRenderer:
   m_SortingLayerID: -284374307
   m_SortingLayer: 3
   m_SortingOrder: 98
-  m_Sprite: {fileID: 21300000, guid: 32a5924ecf1dee94e856ff59b2bb378b, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6080,7 +6080,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!212 &314
@@ -14895,7 +14895,7 @@ MonoBehaviour:
   - Wooden Sword
   - Stone Sword
   - Iron Sword
-  - Copper Sword
+  - Copper Blade
   - Gold Sword
   - Rubber-Covered Electrite Sword
   - Water
@@ -15276,12 +15276,12 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 1, z: 0, w: 0}
+  - {x: 1, y: 1, z: 0.5, w: 0}
+  - {x: 1, y: 1, z: 0.5, w: 0}
+  - {x: 1, y: 1, z: 0.5, w: 0}
+  - {x: 1.42, y: 1.42, z: 0.25, w: 0}
+  - {x: 1, y: 1, z: 1, w: 0}
+  - {x: 1, y: 1, z: 0.6, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}

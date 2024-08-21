@@ -767,6 +767,8 @@ public class PlayerController : MonoBehaviour, IDamager
         transform.GetChild(0).eulerAngles = Vector3.zero;
         transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]];
         transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
+         
+        //1.2
 
         if (armType == "sword")
         {
