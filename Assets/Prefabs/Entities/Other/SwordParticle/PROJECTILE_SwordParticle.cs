@@ -16,22 +16,23 @@ public class PROJECTILE_SwordParticle : ProjectileBase {
 
     public override void Frame()
     {
-        if(frame > 2)
+        if(frame > 20)
         {
             Despawn();
         }
         frame++;
     }
 
-    public override void Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
+    public override ProjectileBase Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {
         damage = extraDamage;
         this.procedence = procedence;
+        return this;
     }
 
-    public static void StaticSpawn(Vector2 spawnPos, int damage, EntityCommonScript procedence)
+    public static ProjectileBase StaticSpawn(Vector2 spawnPos, int damage, EntityCommonScript procedence)
     {
-        Instantiate(GameManager.gameManagerReference.ProjectilesGameObject[(int)Projectiles.SwordParticle], spawnPos, Quaternion.identity).GetComponent<PROJECTILE_SwordParticle>().Spawn(0, spawnPos, damage, procedence);
+        return Instantiate(GameManager.gameManagerReference.ProjectilesGameObject[(int)Projectiles.SwordParticle], spawnPos, Quaternion.identity).GetComponent<PROJECTILE_SwordParticle>().Spawn(0, spawnPos, damage, procedence); ;
     }
 
     public override void Despawn()
@@ -47,10 +48,5 @@ public class PROJECTILE_SwordParticle : ProjectileBase {
             damage = 0;
             Despawn();
         }
-    }
-
-    public override void CallStaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
-    {
-        StaticSpawn(spawnPos, extraDamage, procedence);
     }
 }

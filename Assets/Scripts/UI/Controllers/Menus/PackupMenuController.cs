@@ -180,7 +180,7 @@ public class PackupMenuController : MonoBehaviour
                 if (tileAmount > 0)
                 {
                     GameObject gameObject = Instantiate(itemPackedPrefab, viewport);
-                    gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -50) + 147.5f);
+                    gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -50) + -72.5f);
                     gameObject.transform.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[tile];
                     gameObject.transform.GetChild(1).GetComponent<Text>().text = GameManager.gameManagerReference.tileName[tile];
                     gameObject.transform.GetChild(2).GetComponent<Text>().text = tileAmount + "";

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 50651112814301266}
   - component: {fileID: 114376682308461924}
   - component: {fileID: 96774512458894006}
+  - component: {fileID: 210575111042027346}
   m_Layer: 16
   m_Name: Arrow
   m_TagString: Untagged
@@ -265,3 +266,14 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 1
   m_Emitting: 1
+--- !u!210 &210575111042027346
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178076033168696}
+  m_Enabled: 1
+  m_SortingLayerID: -284374307
+  m_SortingLayer: 3
+  m_SortingOrder: 97

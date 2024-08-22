@@ -64,7 +64,7 @@ public class PlanetMenuController : MonoBehaviour {
             if (planet.planetName != "Korenz")
             {
                 RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
-                newPlanet.anchoredPosition = new Vector2(0f, 197.5f - (newPlanet.GetSiblingIndex() * 50f));
+                newPlanet.anchoredPosition = new Vector2(0f, -25f - (newPlanet.GetSiblingIndex() * 50f));
                 int idx = newPlanet.GetSiblingIndex();
                 newPlanet.GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
 
@@ -183,7 +183,7 @@ public class PlanetMenuController : MonoBehaviour {
         if (canSpawn)
         {
             RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
-            newPlanet.anchoredPosition = new Vector2(0f, 197.5f - (newPlanet.GetSiblingIndex() * 50f));
+            newPlanet.anchoredPosition = new Vector2(0f, -25f - (newPlanet.GetSiblingIndex() * 50f));
             int idx = newPlanet.GetSiblingIndex();
             newPlanet.GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
             int size = Random.Range(20, 250);

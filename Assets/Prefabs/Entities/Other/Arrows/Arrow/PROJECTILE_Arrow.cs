@@ -30,7 +30,7 @@ public class PROJECTILE_Arrow : ProjectileBase
         }
     }
 
-    public override void Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
+    public override ProjectileBase Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         transform.eulerAngles = new Vector3(0, 0, dir);
@@ -39,11 +39,12 @@ public class PROJECTILE_Arrow : ProjectileBase
         this.procedence = procedence;
         flying = true;
         rb2D.AddForce(new Vector2(Mathf.Sin(dir * Mathf.Deg2Rad) * 350, Mathf.Cos(dir * Mathf.Deg2Rad) * 350));
+        return this;
     }
 
-    public static void StaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
+    public static ProjectileBase StaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {
-        Instantiate(GameManager.gameManagerReference.ProjectilesGameObject[(int)Projectiles.Arrow], spawnPos, Quaternion.identity).GetComponent<PROJECTILE_Arrow>().Spawn(dir, spawnPos, extraDamage, procedence);
+        return Instantiate(GameManager.gameManagerReference.ProjectilesGameObject[(int)Projectiles.Arrow], spawnPos, Quaternion.identity).GetComponent<PROJECTILE_Arrow>().Spawn(dir, spawnPos, extraDamage, procedence);
     }
 
     public override void Despawn()
@@ -76,10 +77,5 @@ public class PROJECTILE_Arrow : ProjectileBase
 
             }
         }
-    }
-
-    public override void CallStaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
-    {
-        StaticSpawn(dir, spawnPos, extraDamage, procedence);
     }
 }

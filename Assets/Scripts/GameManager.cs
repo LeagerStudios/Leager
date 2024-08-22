@@ -283,13 +283,13 @@ public class GameManager : MonoBehaviour
                 DataSaver.SaveStats(new string[] { (fullDay / 5) + "" }, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd");
             }
 
-            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd"))
+            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd"))
             {
-                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd").SavedData)[0];
+                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd").SavedData)[0];
             }
             else
             {
-                DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd");
+                DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd");
             }
         }
         else

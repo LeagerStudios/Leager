@@ -84,13 +84,14 @@ public class LightControllerCurrent : MonoBehaviour
 
     public void DrawLights()
     {
-        for(int i = 0; i < temp1.Count; i++)
+        renderLights = new Dictionary<Vector2, float>(temp1.Count);
+        for (int i = 0; i < temp1.Count; i++)
         {
             renderLights.Add(temp1[i], temp2[i]);
         }
 
         lightEcoTexture = new EcoTexture(lightDist, lightDist);
-        lightEcoTexture.FillWith(Color.black);
+        lightEcoTexture.Alpha1();
 
         int index = 0;
 
@@ -203,7 +204,6 @@ public class LightControllerCurrent : MonoBehaviour
     private void UpdateLights(Vector2 lightPosition)
     {
         loadedChunks = GameManager.gameManagerReference.LoadedChunks.ToArray();
-        renderLights = new Dictionary<Vector2, float>(lightDist*lightDist*2);
         temp1 = new List<Vector2>();
         temp2 = new List<float>();
 
@@ -314,12 +314,20 @@ public class EcoTexture
 
     public void FillWith(Color color)
     {
-        for(int i = 0; i < width * height; i++)
+        for (int i = 0; i < width * height; i++)
         {
             r[i] = color.r;
             g[i] = color.g;
             b[i] = color.b;
             a[i] = color.a;
+        }
+    }
+
+    public void Alpha1()
+    {
+        for (int i = 0; i < width * height; i++)
+        {
+            a[i] = 1;
         }
     }
 

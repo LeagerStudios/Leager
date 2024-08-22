@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PROJECTILE_Laser : ProjectileBase {
+public class PROJECTILE_Laser : ProjectileBase
+{
 
     private int damage = 13;
     private int frame = 0;
@@ -26,18 +27,19 @@ public class PROJECTILE_Laser : ProjectileBase {
         transform.eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2D.velocity));
     }
 
-    public override void Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
+    public override ProjectileBase Spawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {
         transform.eulerAngles = new Vector3(0, 0, dir);
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         damage += extraDamage;
         rb2D.AddForce(new Vector2(Mathf.Sin(dir * Mathf.Deg2Rad) * -400, Mathf.Cos(dir * Mathf.Deg2Rad) * 400));
         from = procedence;
+        return this;
     }
 
-    public static void StaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
+    public static ProjectileBase StaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
     {
-        Instantiate(GameManager.gameManagerReference.ProjectilesGameObject[(int)Projectiles.Laser], spawnPos, Quaternion.identity).GetComponent<PROJECTILE_Laser>().Spawn(dir, spawnPos, extraDamage, procedence);
+        return Instantiate(GameManager.gameManagerReference.ProjectilesGameObject[(int)Projectiles.Laser], spawnPos, Quaternion.identity).GetComponent<PROJECTILE_Laser>().Spawn(dir, spawnPos, extraDamage, procedence);
     }
 
     public override void Despawn()
@@ -82,10 +84,5 @@ public class PROJECTILE_Laser : ProjectileBase {
                 Despawn();
             }
         }
-}
-
-    public override void CallStaticSpawn(float dir, Vector2 spawnPos, int extraDamage, EntityCommonScript procedence)
-    {
-        StaticSpawn(dir, spawnPos, extraDamage, procedence);
     }
 }
