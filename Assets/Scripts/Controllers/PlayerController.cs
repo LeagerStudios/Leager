@@ -780,6 +780,7 @@ public class PlayerController : MonoBehaviour, IDamager
         transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[tile];
         transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().Clear();
         transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = false;
+        transform.GetChild(0).GetChild(0).GetChild(0).localPosition = new Vector2(0.435f, GetComponent<SpriteRenderer>().flipX ? -0.435f : 0.435f);
 
         //1.2
 

@@ -37,9 +37,9 @@ public class TechManager : MonoBehaviour, IDragHandler
 
     public void Start()
     {
-        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/tech.lgrsd"))
+        if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/tech.lgrsd"))
         {
-            int[] items = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/tech.lgrsd").SavedData);
+            int[] items = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/tech.lgrsd").SavedData);
             StartUnlocks(new List<int>(items));
         }
     }

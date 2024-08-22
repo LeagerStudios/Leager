@@ -1006,7 +1006,7 @@ public class GameManager : MonoBehaviour
             DataSaver.SaveStats(drops, persistentDataPath + @"/worlds/" + worldName + @"/dro.lgrsd");
             DataSaver.SaveStats(entities, persistentDataPath + @"/worlds/" + worldName + @"/ent.lgrsd");
             DataSaver.SaveStats(playerPosition, persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
-            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(TechManager.techTree.fullyUnlockedItems.ToArray()), persistentDataPath + @"/worlds/" + worldName + @"/tech.lgrsd");
+            DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(TechManager.techTree.fullyUnlockedItems.ToArray()), persistentDataPath + @"/worlds/" + worldRootName + @"/tech.lgrsd");
             ManagingFunctions.SaveStackBarAndInventory();
         }
 
