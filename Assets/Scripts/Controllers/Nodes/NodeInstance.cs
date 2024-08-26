@@ -35,7 +35,7 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
                 node = new EndPointNode();
             }
 
-            NodeManager.self.RegisterNode(node);
+            NodeManager.self.RegisterNode(node, new Vector3Int((int)transform.position.x, (int)transform.position.y, i));
 
             if (node.GetType() == NodeManager.self.endPointNode)
             {
@@ -65,4 +65,6 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
             }
         }
     }
+
+    
 }

@@ -11,6 +11,8 @@ class NodeManager : MonoBehaviour
     public Dictionary<Vector3Int, Node> nodesDictionary;
 
     public List<List<Node>> nodesPaths = new List<List<Node>>();
+    public GameObject nodeConnectionPrefab;
+    public List<GameObject> nodeConnections;
 
     private void Awake()
     {
@@ -27,7 +29,7 @@ class NodeManager : MonoBehaviour
         List<SourceNode> sources = new List<SourceNode>();
         List<EndPointNode> endPoints = new List<EndPointNode>();
 
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             System.Type nodeType = node.GetType();
 
@@ -47,7 +49,7 @@ class NodeManager : MonoBehaviour
             }
         }
 
-        foreach(SourceNode node in sources)
+        foreach (SourceNode node in sources)
         {
             node.UpdatePower(0, new List<Node>());
         }
@@ -58,17 +60,25 @@ class NodeManager : MonoBehaviour
         }
     }
 
+    public bool TryGetNode(Vector3Int index, out Node node)
+    {
+        if(nodesDictionary.TryGetValue(index, out Node outValue))
+        {
+            node = outValue;
+        }
+        node = null;
+        return false;
+    }
 
-
-    public void RegisterNode(Node node)
+    public void RegisterNode(Node node, Vector3Int index)
     {
         nodes.Add(node);
-
+        nodesDictionary.Add(index, node);
     }
 
     public void DeleteNode(Node node)
     {
-        foreach(Node connection in node.connections)
+        foreach (Node connection in node.connections)
         {
             connection.RemoveConnection(node);
         }
@@ -79,25 +89,34 @@ class NodeManager : MonoBehaviour
     public void AddPath(List<Node> path)
     {
         nodesPaths.Add(path);
+
     }
 
-    public Texture nodeConnectionTexture;
-
-    void OnGUI()
+    void LateUpdate()
     {
-        if (Event.current.type.Equals(EventType.Repaint))
+        while (nodeConnections.Count < nodesPaths.Count)
         {
-            Camera camera = Camera.main;
-
-            foreach (List<Node> list in nodesPaths)
-            {
-                foreach (Node segment in list)
-                {
-                    
-                }
-            }
-
-            nodesPaths = new List<List<Node>>();
+            GameObject nodeConnection = Instantiate(nodeConnectionPrefab, transform);
+            nodeConnections.Add(nodeConnection);
         }
+
+        while (nodeConnections.Count > nodesPaths.Count)
+        {
+            Destroy(nodeConnections[nodesPaths.Count]);
+            nodeConnections.Remove(nodeConnections[nodesPaths.Count]);
+        }
+
+        for (int i = 0; i < nodesPaths.Count; i++)
+        {
+            List<Node> list = nodesPaths[i];
+            LineRenderer lineRenderer = nodeConnections[i].GetComponent<LineRenderer>();
+            lineRenderer.positionCount = list.Count;
+            for(int idx = 0; i < list.Count; i++)
+            {
+                lineRenderer.SetPosition(idx, list[idx].position);
+            }
+        }
+
+        nodesPaths = new List<List<Node>>();
     }
 }

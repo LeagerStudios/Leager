@@ -30516,7 +30516,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dedde2d84267be46b4376c5b03f2b84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeConnectionTexture: {fileID: 0}
+  nodeConnectionPrefab: {fileID: 4331220593377142875, guid: 7be8e5369a60cba4d97735309254956b,
+    type: 3}
+  nodeConnections: []
 --- !u!4 &446433120
 Transform:
   m_ObjectHideFlags: 0
