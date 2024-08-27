@@ -125,7 +125,48 @@ public class LoadingSceneScript : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        string[] randomMessage = { "The Loading Time is Long, Isn't It?", "Loading, loading, loading...", "Waiting for the Loadingbar to Reach the End", "Writing stupid Phrases", "Undoing Stuff", "We are on " + Application.version + ", Right?", "You Don't Know How to Play? Read the Instructions.", ":)", "JifteDev is Life", "Go to Eat a Waffle While this Loads", "Creating the Creator", "Waiting for a Good Idea", "Go to The Sur and Craft a Core", "Get Ready to Play", "Programming Useless Mechanics", "Miler is slow", "[something has to be put in here]", "12 + 1, Everything matches.", "Enemies are not your allies", "Doors don't close unless you close them.", "The Krotek is Behind you", "Exploring the entire world", "añañañaño", "Changing from LoadScene.unity to MainMenu.unity", "Nobody talks about how good waffles are", "Razor is taking a Rocket to Space", "Duals... AHHHHH", "WOW! LOOK! Is that a fortress? Oh... no, its not.", ":(", "miler sucks", "Just wait...", "DROP! WAW WAWAWAWAWAWA", "Some load messages are just... Load messages, I guess.", "LoadingSceneScript.cs", "Work? Nah. Jetpack video.", "" };
+        string[] randomMessage = {
+            "The Loading Time is Long, Isn't It?",
+            "Loading, loading, loading...",
+            "Waiting for the Loadingbar to Reach the End",
+            "Writing stupid Phrases",
+            "Undoing Stuff",
+            "We are on " + Application.version + ", Right?",
+            "You Don't Know How to Play? Read the Instructions.",
+            ":)",
+            "JifteDev is Life",
+            "Go to Eat a Waffle While this Loads",
+            "Creating the Creator",
+            "Waiting for a Good Idea",
+            "Go to The Sur and Craft a Core",
+            "Get Ready to Play",
+            "Programming Useless Mechanics",
+            "Programming Useful Mechanics Nobody will Use",
+            "Miler is slow",
+            "[something has to be put in here]",
+            "12 + 1, Everything matches.",
+            "Enemies are not your allies",
+            "Doors don't close unless you close them.",
+            "The Krotek is Behind you",
+            "Exploring the entire world",
+            "añañañaño",
+            "Changing from LoadScene.unity to MainMenu.unity",
+            "Nobody talks about how good waffles are",
+            "Razor is taking a Rocket to Space",
+            "Nodes... AHHHHH",
+            "WOW! LOOK! Is that a fortress? Oh... no, its not.",
+            ":(",
+            "miler sucks",
+            "Just wait...",
+            "DROP! WAW WAWAWAWAWAWA",
+            "Some load messages are just... Load messages, I guess.",
+            "LoadingSceneScript.cs is not scripting",
+            "Work? Nah. Jetpack video.",
+            "Hey! If the game runs slow, isn't my fault ok?",
+            "You should try a JifteDev game... wait... he doesn't have one...",
+            "Testing gamer skillz",
+            "These will be the best graphics you'll ever see"
+        };
 
 
         loadingTxt.GetComponent<Text>().text = randomMessage[Random.Range(0, randomMessage.Length)];
