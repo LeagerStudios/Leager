@@ -43,6 +43,10 @@ public class ChunkController : MonoBehaviour, ITimerCall
     [SerializeField] GameObject bedLeftSideObject;
     [SerializeField] GameObject bedRightSideObject;
 
+    [SerializeField] GameObject energyGenerator;
+    [SerializeField] GameObject nodeTowerT1;
+    [SerializeField] GameObject laserDrill;
+
     [SerializeField] Sprite[] waterFrames;
 
     public void CreateChunk(int h, float id, int cId, string chunkBiomeParam, int orgXpos)
@@ -550,6 +554,24 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 }
                 break;
 
+            case 92:
+                if (childs < 1)
+                {
+                    GameObject laserDrillObj = Instantiate(laserDrill, gameTile.transform);
+                    laserDrillObj.transform.localPosition = Vector2.zero;
+                    laserDrillObj.name = "92";
+                }
+                break;
+
+            case 94:
+                if (childs < 1)
+                {
+                    GameObject nodeTower = Instantiate(nodeTowerT1, gameTile.transform);
+                    nodeTower.transform.localPosition = Vector2.zero;
+                    nodeTower.name = "94";
+                }
+                break;
+
             case 98:
                     if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 99)
                     {
@@ -694,6 +716,15 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 {
                     TileGrid[e] = 0;
                     StackBar.AddItemInv(116);
+                }
+                break;
+
+            case 125:
+                if (childs < 1)
+                {
+                    GameObject energyGeneratorObj = Instantiate(energyGenerator, gameTile.transform);
+                    energyGeneratorObj.transform.localPosition = Vector2.zero;
+                    energyGeneratorObj.name = "125";
                 }
                 break;
         }

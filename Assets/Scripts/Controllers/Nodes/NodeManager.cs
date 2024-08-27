@@ -8,11 +8,13 @@ class NodeManager : MonoBehaviour
     public List<Node> nodes;
     public System.Type sourceNode = typeof(SourceNode);
     public System.Type endPointNode = typeof(EndPointNode);
-    public Dictionary<Vector3Int, Node> nodesDictionary;
+    public Dictionary<Vector3Int, Node> nodesDictionary = new Dictionary<Vector3Int, Node>();
 
     public List<List<Node>> nodesPaths = new List<List<Node>>();
     public GameObject nodeConnectionPrefab;
-    public List<GameObject> nodeConnections;
+    public List<GameObject> nodeConnections = new List<GameObject>();
+
+    public Node nodeSelected = null;
 
     private void Awake()
     {
@@ -26,6 +28,11 @@ class NodeManager : MonoBehaviour
 
     public void Update()
     {
+        if (GInput.GetKeyDown(KeyCode.C))
+        {
+            nodeSelected = null;
+        }
+
         List<SourceNode> sources = new List<SourceNode>();
         List<EndPointNode> endPoints = new List<EndPointNode>();
 
@@ -49,9 +56,10 @@ class NodeManager : MonoBehaviour
             }
         }
 
+
         foreach (SourceNode node in sources)
         {
-            node.UpdatePower(0, new List<Node>());
+            node.Update();
         }
 
         foreach (EndPointNode node in endPoints)
@@ -70,10 +78,10 @@ class NodeManager : MonoBehaviour
         return false;
     }
 
-    public void RegisterNode(Node node, Vector3Int index)
+    public void RegisterNode(Node node)
     {
         nodes.Add(node);
-        nodesDictionary.Add(index, node);
+        nodesDictionary.Add(node.index, node);
     }
 
     public void DeleteNode(Node node)
@@ -84,6 +92,7 @@ class NodeManager : MonoBehaviour
         }
 
         nodes.Remove(node);
+        nodesDictionary.Remove(node.index);
     }
 
     public void AddPath(List<Node> path)
@@ -111,7 +120,8 @@ class NodeManager : MonoBehaviour
             List<Node> list = nodesPaths[i];
             LineRenderer lineRenderer = nodeConnections[i].GetComponent<LineRenderer>();
             lineRenderer.positionCount = list.Count;
-            for(int idx = 0; i < list.Count; i++)
+            lineRenderer.rendererPriority = i;
+            for(int idx = 0; idx < list.Count; idx++)
             {
                 lineRenderer.SetPosition(idx, list[idx].position);
             }

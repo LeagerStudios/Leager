@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Node
 {
-    public List<Node> connections;
+    public List<Node> connections = new List<Node>();
     public float Power { get; set; }
-    public int connectionLimit;
+    public int connectionLimit = 3;
     public bool isBattery = false;
     public Vector3Int index;
     public Vector2 position;
+
 
     public void AddConnection(Node connection)
     {
@@ -18,6 +19,16 @@ public class Node
             connections.Add(connection);
         }
     }
+
+    public void AddConnectionRecursive(Node connection)
+    {
+        if (connection != this && !connections.Contains(connection) && connections.Count < connectionLimit)
+        {
+            connections.Add(connection);
+            connection.AddConnection(this);
+        }
+    }
+
 
     public void RemoveConnection(Node node)
     {
@@ -29,15 +40,16 @@ public class Node
 
     public virtual void UpdatePower(float power, List<Node> updatedNodes)
     {
-        if (updatedNodes.Contains(this)) return;
-
-        updatedNodes.Add(this);
-
-        foreach (var node in connections)
+        Power += power;
+        foreach (Node node in connections)
         {
-            float value = Power / (connections.Count - 1);
-            node.Power += value; 
-            node.UpdatePower(value, updatedNodes); 
+            if (!updatedNodes.Contains(node))
+            {
+                updatedNodes.Add(this);
+
+                float value = Power / (connections.Count - (connections.Count > 1 ? 1 : 0));
+                node.UpdatePower(value, new List<Node>(updatedNodes));
+            }
         }
     }
 }
@@ -47,8 +59,8 @@ public class SourceNode : Node
     public float TargetOutputPower { get; set; }
     public float OutputPower { get; private set; }
     public float OutputPowerDuration { get; set; }
-
-    public override void UpdatePower(float power, List<Node> updatedNodes)
+    
+    public void Update()
     {
         if (OutputPowerDuration > 0)
         {
@@ -60,13 +72,7 @@ public class SourceNode : Node
             OutputPower = 0;
         }
 
-        Power = OutputPower; // The source node's power is its output power
-
-        // Now, distribute power to attached nodes
-        if(Power > 0f)
-        {
-            base.UpdatePower(Power, updatedNodes);
-        }
+        base.UpdatePower(OutputPower, new List<Node>() { this });
     }
 }
 
@@ -76,11 +82,12 @@ public class EndPointNode : Node
 
     public override void UpdatePower(float power, List<Node> updatedNodes)
     {
+        Debug.Log("EndPoint previous power: " + Power);
         Power += power;
-        Debug.Log("EndPoint received power: " + Power);
+        Debug.Log("EndPoint received power: " + power);
         Debug.Log("EndPoint current power: " + Power);
 
-        foreach(INodeEndPoint endPoint in endPoints)
+        foreach (INodeEndPoint endPoint in endPoints)
         {
             endPoint.Update(this);
         }

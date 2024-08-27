@@ -48,6 +48,7 @@ MonoBehaviour:
   nodeObjects:
   - {fileID: 6174695624366076435}
   nodeTypes: 02000000
+  tile: 92
 --- !u!114 &6174695624009214244
 MonoBehaviour:
   m_ObjectHideFlags: 0

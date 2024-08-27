@@ -101,8 +101,8 @@ TextureImporter:
       name: ConnectionNodes_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
+        x: 2
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -121,8 +121,8 @@ TextureImporter:
       name: ConnectionNodes_1
       rect:
         serializedVersion: 2
-        x: 41
-        y: 1
+        x: 42
+        y: 0
         width: 8
         height: 32
       alignment: 7
@@ -141,8 +141,8 @@ TextureImporter:
       name: ConnectionNodes_2
       rect:
         serializedVersion: 2
-        x: 53
-        y: 1
+        x: 54
+        y: 0
         width: 7
         height: 32
       alignment: 7
@@ -160,7 +160,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 52561921c057dad488e5be0466f78794
     vertices: []
     indices: 
     edges: []

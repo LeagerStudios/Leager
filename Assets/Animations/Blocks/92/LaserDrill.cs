@@ -10,19 +10,6 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
     void Start()
     {
         nodeInstance = GetComponent<NodeInstance>();
-
-        if (transform.parent.GetComponent<TileProperties>())
-        {
-            TileProperties properties = transform.parent.GetComponent<TileProperties>();
-            properties.attach = GetComponent<NodeInstance>();
-        }
-        else
-        {
-            TileProperties properties = transform.parent.gameObject.AddComponent<TileProperties>();
-            properties.parentTile = 92;
-            properties.canDropStoredItems = true;
-            properties.attach = nodeInstance;
-        }
     }
 
     void Update()
@@ -32,6 +19,6 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
 
     public void Update(EndPointNode endPoint)
     {
-
+        transform.parent.GetComponent<SpriteRenderer>().color = endPoint.Power > 0f ? Color.white : Color.gray;
     }
 }

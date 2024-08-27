@@ -42,7 +42,7 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 0
   m_DynamicOccludee: 0
-  m_MotionVectors: 0
+  m_MotionVectors: 2
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 1
@@ -65,9 +65,9 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 823596895
+  m_SortingLayer: 2
+  m_SortingOrder: 2
   m_Positions: []
   m_Parameters:
     serializedVersion: 3
@@ -122,5 +122,5 @@ LineRenderer:
     textureMode: 0
     shadowBias: 0
     generateLightingData: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0

@@ -89,6 +89,12 @@ MonoBehaviour:
     type: 3}
   bedRightSideObject: {fileID: 9129773542900688025, guid: 51e0bb7c60dfda64a830ccb92db94941,
     type: 3}
+  energyGenerator: {fileID: 2839788871766195270, guid: 1b1b963234557734c9ec0058bf7b0e56,
+    type: 3}
+  nodeTowerT1: {fileID: 634969063627566776, guid: 74eaba94cc234c0488101f17f0d7a917,
+    type: 3}
+  laserDrill: {fileID: 6174695624009214243, guid: 58502f99805d0804090eed0b62b9c4fc,
+    type: 3}
   waterFrames:
   - {fileID: 21300000, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}
   - {fileID: 21300002, guid: c905cc67012a0a148a83994b33ce68ed, type: 3}

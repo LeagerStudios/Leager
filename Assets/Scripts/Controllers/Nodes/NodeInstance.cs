@@ -8,15 +8,27 @@ public enum NodeType
 }
 
 public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
-
 {
     public GameObject[] nodeObjects;
     public NodeType[] nodeTypes;
-    Node[] nodes;
+    public Node[] nodes;
+    public int tile;
 
-    // Start is called before the first frame update
     void Start()
     {
+        if (transform.parent.GetComponent<TileProperties>() == null)
+        {
+            TileProperties properties = transform.parent.gameObject.AddComponent<TileProperties>();
+            properties.parentTile = tile;
+            properties.canDropStoredItems = true;
+            properties.attach = this;
+        }
+        else
+        {
+            TileProperties properties = GetComponentInParent<TileProperties>();
+            properties.attach = this;
+        }
+
         nodes = new Node[nodeObjects.Length];
         for (int i = 0; i < nodes.Length; i++)
         {
@@ -35,36 +47,57 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
                 node = new EndPointNode();
             }
 
-            NodeManager.self.RegisterNode(node, new Vector3Int((int)transform.position.x, (int)transform.position.y, i));
+            node.position = nodeObjects[i].transform.position;
+            node.index = new Vector3Int((int)transform.position.x, (int)transform.position.y, i);
+            NodeManager.self.RegisterNode(node);
 
             if (node.GetType() == NodeManager.self.endPointNode)
             {
                 ((EndPointNode)node).endPoints.Add(GetComponent<INodeEndPoint>());
             }
+
+            nodes[i] = node;
         }
+    }
+
+    public void Update()
+    {
+        if (GInput.GetMouseButtonDown(1))
+        {
+            if (Vector2.Distance(transform.position, GameManager.gameManagerReference.mouseCurrentPosition) < 0.2f)
+            {
+                if (NodeManager.self.nodeSelected == null)
+                {
+                    NodeManager.self.nodeSelected = nodes[0];
+                }
+                else if(NodeManager.self.nodeSelected != nodes[0])
+                {
+                    NodeManager.self.nodeSelected.AddConnectionRecursive(nodes[0]);
+                    NodeManager.self.nodeSelected = nodes[0];
+                }
+            }
+        }
+        
     }
 
     private void OnDestroy()
     {
-        for (int i = 0; i < nodes.Length; i++)
-        {
-            if (nodes[i].GetType() == NodeManager.self.endPointNode)
+        if (NodeManager.self != null)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                ((EndPointNode)nodes[i]).endPoints.Remove(GetComponent<INodeEndPoint>());
+                if (nodes[i] != null)
+                    if (nodes[i].GetType() == NodeManager.self.endPointNode)
+                    {
+                        ((EndPointNode)nodes[i]).endPoints.Remove(GetComponent<INodeEndPoint>());
+                    }
             }
-        }
     }
 
     public void Break()
     {
         for (int i = 0; i < nodes.Length; i++)
         {
-            if (nodes[i].GetType() == NodeManager.self.endPointNode)
-            {
-                NodeManager.self.DeleteNode(nodes[i]);
-            }
+            NodeManager.self.DeleteNode(nodes[i]);
         }
     }
-
-    
 }

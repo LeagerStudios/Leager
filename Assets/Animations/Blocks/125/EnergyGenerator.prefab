@@ -193,6 +193,7 @@ MonoBehaviour:
   nodeObjects:
   - {fileID: 2839788871395745230}
   nodeTypes: 01000000
+  tile: 125
 --- !u!114 &2839788871766195275
 MonoBehaviour:
   m_ObjectHideFlags: 0
