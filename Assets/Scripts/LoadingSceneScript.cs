@@ -163,9 +163,10 @@ public class LoadingSceneScript : MonoBehaviour
             "LoadingSceneScript.cs is not scripting",
             "Work? Nah. Jetpack video.",
             "Hey! If the game runs slow, isn't my fault ok?",
-            "You should try a JifteDev game... wait... he doesn't have one...",
+            "You should try a DavidDEV game... wait... he doesn't have one...",
             "Testing gamer skillz",
-            "These will be the best graphics you'll ever see"
+            "These will be the best graphics you'll ever see",
+            "Fun Fact: A left-handed person can eat a 98% faster than a person without hands"
         };
 
 
@@ -177,19 +178,19 @@ public class LoadingSceneScript : MonoBehaviour
 
         while(asyncOperation.progress < 1f)
         {
-            loadingBar.GetComponent<RectTransform>().localScale = new Vector3(asyncOperation.progress / 2f + 0.05f, 1f, 1f);
+            loadingBar.GetComponent<RectTransform>().localScale = new Vector3(Mathf.MoveTowards(loadingBar.GetComponent<RectTransform>().localScale.z, asyncOperation.progress / 2f, 0.6f * Time.deltaTime), 1f, 1f);
             yield return new WaitForEndOfFrame();
         }
 
         asyncOperation = SceneManager.UnloadSceneAsync(scene);
 
-        while (asyncOperation.progress < 1f)
+        while (asyncOperation.progress < 1f || loadingBar.GetComponent<RectTransform>().localScale.x < 1f)
         {
-            loadingBar.GetComponent<RectTransform>().localScale = new Vector3(asyncOperation.progress + 0.1f, 1f, 1f);
+            loadingBar.GetComponent<RectTransform>().localScale = new Vector3(Mathf.MoveTowards(loadingBar.GetComponent<RectTransform>().localScale.z, asyncOperation.progress, 0.6f * Time.deltaTime), 1f, 1f);
             yield return new WaitForEndOfFrame();
         }
 
-        loadingBar.GetComponent<RectTransform>().localScale = Vector3.one;
+
 
         yield return new WaitForSeconds(.1f);
         Debug.Log("===ENDED INITIAL LOADING===");

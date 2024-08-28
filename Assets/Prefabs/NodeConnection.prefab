@@ -39,7 +39,7 @@ LineRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4331220593377142875}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 0
   m_MotionVectors: 2
@@ -65,9 +65,9 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 823596895
-  m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingLayerID: -284374307
+  m_SortingLayer: 3
+  m_SortingOrder: 999
   m_Positions: []
   m_Parameters:
     serializedVersion: 3

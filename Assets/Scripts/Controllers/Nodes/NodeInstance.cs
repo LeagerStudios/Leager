@@ -49,7 +49,7 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
 
             node.position = nodeObjects[i].transform.position;
             node.index = new Vector3Int((int)transform.position.x, (int)transform.position.y, i);
-            NodeManager.self.RegisterNode(node);
+            node = NodeManager.self.RegisterNode(node);
 
             if (node.GetType() == NodeManager.self.endPointNode)
             {

@@ -4213,7 +4213,6 @@ GameObject:
   m_Component:
   - component: {fileID: 286}
   - component: {fileID: 293}
-  - component: {fileID: 303}
   - component: {fileID: 309}
   - component: {fileID: 299}
   - component: {fileID: 1043}
@@ -5775,14 +5774,6 @@ Behaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173}
-  m_Enabled: 1
---- !u!92 &303
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225}
   m_Enabled: 1
 --- !u!95 &304
 Animator:
@@ -15187,7 +15178,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 72b65ac3b1cad37459370db6fefdea15, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -30519,6 +30510,9 @@ MonoBehaviour:
   nodeConnectionPrefab: {fileID: 4331220593377142875, guid: 7be8e5369a60cba4d97735309254956b,
     type: 3}
   nodeConnections: []
+  nodeMaterial: {fileID: 2100000, guid: c73da544082bad64db82ada78f34701a, type: 2}
+  disconnectedNodeMaterial: {fileID: 2100000, guid: d12260d0edb6a174488fd98ebaf31628,
+    type: 2}
 --- !u!4 &446433120
 Transform:
   m_ObjectHideFlags: 0

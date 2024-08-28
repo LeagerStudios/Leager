@@ -41,14 +41,23 @@ public class Node
     public virtual void UpdatePower(float power, List<Node> updatedNodes)
     {
         Power += power;
+        int i = 0;
+        updatedNodes.Add(this);
         foreach (Node node in connections)
         {
             if (!updatedNodes.Contains(node))
             {
-                updatedNodes.Add(this);
-
+                i++;
                 float value = Power / (connections.Count - (connections.Count > 1 ? 1 : 0));
                 node.UpdatePower(value, new List<Node>(updatedNodes));
+            }
+        }
+
+        if (i == 0)
+        {
+            if (connections.Count > 0)
+            {
+                NodeManager.self.AddPath(new NodePath(updatedNodes, false));
             }
         }
     }
@@ -93,7 +102,7 @@ public class EndPointNode : Node
         }
 
         updatedNodes.Add(this); // Ensure it's marked as updated
-        NodeManager.self.AddPath(updatedNodes);
+        NodeManager.self.AddPath(new NodePath(updatedNodes, true));
     }
 
     public void Update()
@@ -109,4 +118,16 @@ public class EndPointNode : Node
 public interface INodeEndPoint
 {
     void Update(EndPointNode endPoint);
+}
+
+public class NodePath
+{
+    public List<Node> path = new List<Node>();
+    public bool connected = false;
+
+    public NodePath(List<Node> pathParam, bool ended)
+    {
+        path = pathParam;
+        connected = ended;
+    }
 }

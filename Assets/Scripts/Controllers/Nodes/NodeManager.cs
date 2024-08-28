@@ -10,11 +10,14 @@ class NodeManager : MonoBehaviour
     public System.Type endPointNode = typeof(EndPointNode);
     public Dictionary<Vector3Int, Node> nodesDictionary = new Dictionary<Vector3Int, Node>();
 
-    public List<List<Node>> nodesPaths = new List<List<Node>>();
+    public List<NodePath> nodesPaths = new List<NodePath>();
     public GameObject nodeConnectionPrefab;
     public List<GameObject> nodeConnections = new List<GameObject>();
 
     public Node nodeSelected = null;
+
+    public Material nodeMaterial;
+    public Material disconnectedNodeMaterial;
 
     private void Awake()
     {
@@ -28,60 +31,63 @@ class NodeManager : MonoBehaviour
 
     public void Update()
     {
-        if (GInput.GetKeyDown(KeyCode.C))
+        if (GameManager.gameManagerReference.InGame)
         {
-            nodeSelected = null;
-        }
 
-        List<SourceNode> sources = new List<SourceNode>();
-        List<EndPointNode> endPoints = new List<EndPointNode>();
-
-        foreach (Node node in nodes)
-        {
-            System.Type nodeType = node.GetType();
-
-            if (nodeType == sourceNode)
+            if (GInput.GetKeyDown(KeyCode.C))
             {
-                sources.Add((SourceNode)node);
+                nodeSelected = null;
             }
 
-            if (nodeType == endPointNode)
+            List<SourceNode> sources = new List<SourceNode>();
+            List<EndPointNode> endPoints = new List<EndPointNode>();
+
+            foreach (Node node in nodes)
             {
-                endPoints.Add((EndPointNode)node);
+                System.Type nodeType = node.GetType();
+
+                if (nodeType == sourceNode)
+                {
+                    sources.Add((SourceNode)node);
+                }
+
+                if (nodeType == endPointNode)
+                {
+                    endPoints.Add((EndPointNode)node);
+                }
+
+                if (!node.isBattery)
+                {
+                    node.Power = 0;
+                }
             }
 
-            if (!node.isBattery)
+
+            foreach (SourceNode node in sources)
             {
-                node.Power = 0;
+                node.Update();
             }
-        }
 
+            foreach (EndPointNode node in endPoints)
+            {
+                node.Update();
+            }
 
-        foreach (SourceNode node in sources)
-        {
-            node.Update();
-        }
-
-        foreach (EndPointNode node in endPoints)
-        {
-            node.Update();
         }
     }
 
-    public bool TryGetNode(Vector3Int index, out Node node)
+    public Node RegisterNode(Node node)
     {
-        if(nodesDictionary.TryGetValue(index, out Node outValue))
+        if (nodesDictionary.TryGetValue(node.index, out Node outValue))
         {
             node = outValue;
         }
-        node = null;
-        return false;
-    }
-
-    public void RegisterNode(Node node)
-    {
-        nodes.Add(node);
-        nodesDictionary.Add(node.index, node);
+        else
+        {
+            nodes.Add(node);
+            nodesDictionary.Add(node.index, node);
+        }
+        return node;
     }
 
     public void DeleteNode(Node node)
@@ -95,10 +101,9 @@ class NodeManager : MonoBehaviour
         nodesDictionary.Remove(node.index);
     }
 
-    public void AddPath(List<Node> path)
+    public void AddPath(NodePath path)
     {
         nodesPaths.Add(path);
-
     }
 
     void LateUpdate()
@@ -117,16 +122,26 @@ class NodeManager : MonoBehaviour
 
         for (int i = 0; i < nodesPaths.Count; i++)
         {
-            List<Node> list = nodesPaths[i];
+            List<Node> list = nodesPaths[i].path;
             LineRenderer lineRenderer = nodeConnections[i].GetComponent<LineRenderer>();
             lineRenderer.positionCount = list.Count;
             lineRenderer.rendererPriority = i;
+
+            if (nodesPaths[i].connected)
+            {
+                lineRenderer.material = nodeMaterial;
+            }
+            else
+            {
+                lineRenderer.material = disconnectedNodeMaterial;
+            }
+
             for(int idx = 0; idx < list.Count; idx++)
             {
                 lineRenderer.SetPosition(idx, list[idx].position);
             }
         }
 
-        nodesPaths = new List<List<Node>>();
+        nodesPaths = new List<NodePath>();
     }
 }
