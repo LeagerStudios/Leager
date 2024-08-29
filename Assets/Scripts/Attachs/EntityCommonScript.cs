@@ -62,6 +62,7 @@ public class EntityCommonScript : MonoBehaviour
         if (raycastHeight)
         {
             Debug.DrawLine(transform.position, transform.position + Vector3.down * height, Color.blue, 1f);
+            Debug.DrawLine(transform.position, transform.position + Vector3.right * width, Color.blue, 1f);
         }
     }
 
