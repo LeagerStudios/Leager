@@ -92,8 +92,10 @@ public static class DataSaver
         if (!File.Exists(directory)) Debug.LogError(directory + "doesn't exist!");
         else
         {
-            List<string> exitTxtList = new List<string>(ReadTxt(directory));
-            exitTxtList.Add(txt);
+            List<string> exitTxtList = new List<string>(ReadTxt(directory))
+            {
+                txt
+            };
             ModifyTxt(directory, exitTxtList.ToArray());
         }
     }

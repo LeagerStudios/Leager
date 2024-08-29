@@ -6,27 +6,37 @@ public class Node
 {
     public List<Node> connections = new List<Node>();
     public float Power { get; set; }
-    public int connectionLimit = 3;
+    public int connectionLimit = 4;
     public bool isBattery = false;
     public Vector3Int index;
     public Vector2 position;
+    public bool updatedThis = false;
 
 
-    public void AddConnection(Node connection)
+    public bool AddConnection(Node connection)
     {
         if(connection != this && !connections.Contains(connection) && connections.Count < connectionLimit)
         {
             connections.Add(connection);
+            updatedThis = true;
+            return true;
         }
+        return false;
     }
 
-    public void AddConnectionRecursive(Node connection)
+    public bool AddConnectionRecursive(Node connection)
     {
         if (connection != this && !connections.Contains(connection) && connections.Count < connectionLimit)
         {
             connections.Add(connection);
-            connection.AddConnection(this);
+            if (connection.AddConnection(this)) return true;
+            else
+            {
+                connections.Remove(connection);
+                return false;
+            }
         }
+        return false;
     }
 
 
@@ -38,18 +48,26 @@ public class Node
         }
     }
 
-    public virtual void UpdatePower(float power, List<Node> updatedNodes)
+    public virtual void UpdatePower(float power, NodePath updatedNodes)
     {
         Power += power;
         int i = 0;
         updatedNodes.Add(this);
+        updatedThis = true;
         foreach (Node node in connections)
         {
             if (!updatedNodes.Contains(node))
             {
                 i++;
+
+                if (i > 1)
+                {
+                    updatedNodes.ResetRender();
+                    updatedNodes.Add(this);
+                }
+
                 float value = Power / (connections.Count - (connections.Count > 1 ? 1 : 0));
-                node.UpdatePower(value, new List<Node>(updatedNodes));
+                node.UpdatePower(value, updatedNodes.ClonePath());
             }
         }
 
@@ -57,7 +75,7 @@ public class Node
         {
             if (connections.Count > 0)
             {
-                NodeManager.self.AddPath(new NodePath(updatedNodes, false));
+                NodeManager.self.AddPath(updatedNodes);
             }
         }
     }
@@ -81,7 +99,7 @@ public class SourceNode : Node
             OutputPower = 0;
         }
 
-        base.UpdatePower(OutputPower, new List<Node>() { this });
+        base.UpdatePower(OutputPower, new NodePath());
     }
 }
 
@@ -89,7 +107,7 @@ public class EndPointNode : Node
 {
     public List<INodeEndPoint> endPoints = new List<INodeEndPoint>();
 
-    public override void UpdatePower(float power, List<Node> updatedNodes)
+    public override void UpdatePower(float power, NodePath updatedNodes)
     {
         Debug.Log("EndPoint previous power: " + Power);
         Power += power;
@@ -101,8 +119,10 @@ public class EndPointNode : Node
             endPoint.Update(this);
         }
 
+        updatedThis = true;
         updatedNodes.Add(this); // Ensure it's marked as updated
-        NodeManager.self.AddPath(new NodePath(updatedNodes, true));
+        updatedNodes.MarkAsConnected();
+        NodeManager.self.AddPath(updatedNodes);
     }
 
     public void Update()
@@ -123,11 +143,38 @@ public interface INodeEndPoint
 public class NodePath
 {
     public List<Node> path = new List<Node>();
+    public List<Node> render = new List<Node>();
     public bool connected = false;
 
-    public NodePath(List<Node> pathParam, bool ended)
+    public void Add(Node element)
     {
-        path = pathParam;
-        connected = ended;
+        path.Add(element);
+        render.Add(element);
+    }
+
+    public bool Contains(Node element)
+    {
+        return path.Contains(element);
+    }
+
+    public void ResetRender()
+    {
+        render = new List<Node>();
+    }
+
+    public void MarkAsConnected()
+    {
+        connected = true;
+    }
+
+    public NodePath ClonePath()
+    {
+        NodePath clone = new NodePath
+        {
+            path = new List<Node>(path),
+            render = new List<Node>(render),
+            connected = connected
+        };
+        return clone;
     }
 }

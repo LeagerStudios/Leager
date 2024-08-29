@@ -50,16 +50,31 @@ class NodeManager : MonoBehaviour
                 {
                     sources.Add((SourceNode)node);
                 }
+                else if(node.updatedThis == false)
+                {
+                    List<Node> connections = new List<Node>(node.connections);
+                    foreach (Node connection in connections)
+                    {
+                        if (!connection.updatedThis)
+                        {
+                            connection.RemoveConnection(node);
+                            node.RemoveConnection(connection);
+                        }
+                    }
+                }
 
                 if (nodeType == endPointNode)
                 {
                     endPoints.Add((EndPointNode)node);
                 }
 
+
                 if (!node.isBattery)
                 {
                     node.Power = 0;
                 }
+
+                node.updatedThis = false;
             }
 
 
@@ -108,40 +123,43 @@ class NodeManager : MonoBehaviour
 
     void LateUpdate()
     {
-        while (nodeConnections.Count < nodesPaths.Count)
+        if (GameManager.gameManagerReference.InGame)
         {
-            GameObject nodeConnection = Instantiate(nodeConnectionPrefab, transform);
-            nodeConnections.Add(nodeConnection);
-        }
-
-        while (nodeConnections.Count > nodesPaths.Count)
-        {
-            Destroy(nodeConnections[nodesPaths.Count]);
-            nodeConnections.Remove(nodeConnections[nodesPaths.Count]);
-        }
-
-        for (int i = 0; i < nodesPaths.Count; i++)
-        {
-            List<Node> list = nodesPaths[i].path;
-            LineRenderer lineRenderer = nodeConnections[i].GetComponent<LineRenderer>();
-            lineRenderer.positionCount = list.Count;
-            lineRenderer.rendererPriority = i;
-
-            if (nodesPaths[i].connected)
+            while (nodeConnections.Count < nodesPaths.Count)
             {
-                lineRenderer.material = nodeMaterial;
-            }
-            else
-            {
-                lineRenderer.material = disconnectedNodeMaterial;
+                GameObject nodeConnection = Instantiate(nodeConnectionPrefab, transform);
+                nodeConnections.Add(nodeConnection);
             }
 
-            for(int idx = 0; idx < list.Count; idx++)
+            while (nodeConnections.Count > nodesPaths.Count)
             {
-                lineRenderer.SetPosition(idx, list[idx].position);
+                Destroy(nodeConnections[nodesPaths.Count]);
+                nodeConnections.Remove(nodeConnections[nodesPaths.Count]);
             }
-        }
 
-        nodesPaths = new List<NodePath>();
+            for (int i = 0; i < nodesPaths.Count; i++)
+            {
+                List<Node> list = nodesPaths[i].render;
+                LineRenderer lineRenderer = nodeConnections[i].GetComponent<LineRenderer>();
+                lineRenderer.positionCount = list.Count;
+                lineRenderer.rendererPriority = i;
+
+                if (nodesPaths[i].connected)
+                {
+                    lineRenderer.material = nodeMaterial;
+                }
+                else
+                {
+                    lineRenderer.material = disconnectedNodeMaterial;
+                }
+
+                for (int idx = 0; idx < list.Count; idx++)
+                {
+                    lineRenderer.SetPosition(idx, list[idx].position);
+                }
+            }
+
+            nodesPaths = new List<NodePath>();
+        }
     }
 }
