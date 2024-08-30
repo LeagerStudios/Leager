@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 50364822081270122}
   - component: {fileID: 114744902720893070}
   - component: {fileID: 114243162542600446}
+  - component: {fileID: 1712937355}
+  - component: {fileID: 1712937354}
   m_Layer: 11
   m_Name: Sheep
   m_TagString: Untagged
@@ -72,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -284374307
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 93dd0b43d7950ed41be1ebd8c768c018, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,8 +99,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.1, y: 1.05}
+  m_Offset: {x: 0, y: -0.065}
+  m_Size: {x: 0.92, y: 0.93}
   m_Direction: 1
 --- !u!50 &50364822081270122
 Rigidbody2D:
@@ -148,11 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f53a67a4e81a9cd4592011f49eba7ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagerObject: {fileID: 0}
-  entityBase: {fileID: 0}
+  damagerObject: {fileID: 1257472813224810}
+  entityBase: {fileID: 1712937355}
   EntityType: sheep
-  EntityFamily: animals
-  height: 0.525
+  EntityFamily: animal
+  height: 0.53
   width: 0.55
   raycastHeight: 1
   saveToFile: 0
@@ -167,6 +169,48 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &1712937355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257472813224810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac8552a0ac7c504d8c8fd296633e0c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1712937354}
+  rb2D: {fileID: 50364822081270122}
+  spriteRenderer: {fileID: 212806798947387812}
+  woolRenderer: {fileID: 679415610489951130}
+  blockMask:
+    serializedVersion: 2
+    m_Bits: 256
+  particle: {fileID: 1524452008572986, guid: 2d42c10f67fac1f45b441f4a988085c5, type: 3}
+  randomSpeak: {fileID: 0}
+  speakTime: 15
+  followingPlayer: {fileID: 0}
+--- !u!95 &1712937354
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257472813224810}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 42a9eff845910a742aed213fe1106ce0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &837029512570931540
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,9 +222,8 @@ GameObject:
   - component: {fileID: 831338889402810982}
   - component: {fileID: 679415610489951130}
   - component: {fileID: 820458550606901118}
-  - component: {fileID: 804773018663627604}
-  - component: {fileID: 724632741292862128}
-  m_Layer: 11
+  - component: {fileID: 837029512570931541}
+  m_Layer: 12
   m_Name: Wool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,8 +280,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -284374307
   m_SortingLayer: 3
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 93dd0b43d7950ed41be1ebd8c768c018, type: 3}
+  m_SortingOrder: -1
+  m_Sprite: {fileID: 21300006, guid: 93dd0b43d7950ed41be1ebd8c768c018, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -259,34 +302,13 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.1, y: 1.05}
+  m_Offset: {x: 0, y: -0.065}
+  m_Size: {x: 1.02, y: 1.03}
   m_Direction: 1
---- !u!50 &804773018663627604
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 837029512570931540}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 2
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 069c94f5df2e85a43b33baaaf9297d0a, type: 2}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!114 &724632741292862128
+--- !u!114 &837029512570931541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -295,9 +317,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 837029512570931540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a20641b63d96c614381708e0560c77d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cf814629d59a4f4aab616f07195c6b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 837029512570931540}
-  isThis: 1
-  canDespawn: 1
+  entity: {fileID: 114243162542600446}
+  team: animal

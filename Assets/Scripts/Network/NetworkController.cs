@@ -863,7 +863,7 @@ public class Client
         }
 
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
-        backgroundMapLoad = new int[backgroundMapLoad.Length];
+        backgroundMapLoad = new int[worldMapLoad.Length];
         worldMapPropLoad = mapprop.Split('$');
         //leaves with server write turn
     }

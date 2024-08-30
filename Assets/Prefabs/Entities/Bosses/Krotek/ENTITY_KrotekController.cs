@@ -448,7 +448,7 @@ public class ENTITY_KrotekController : EntityBase, ISoundHearer, IDamager, IColl
 
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.KrotekBoss], spawnPos, Quaternion.identity).GetComponent<ENTITY_KrotekController>().Spawn(args, spawnPos);
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.Krotek], spawnPos, Quaternion.identity).GetComponent<ENTITY_KrotekController>().Spawn(args, spawnPos);
     }
 
     public override EntityBase Spawn(string[] args, Vector2 spawnPos)

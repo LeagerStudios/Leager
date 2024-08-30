@@ -266,23 +266,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114243162542600446, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-        type: 3}
-      propertyPath: EntityFamily
-      value: animal
-      objectReference: {fileID: 0}
-    - target: {fileID: 114243162542600446, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-        type: 3}
-      propertyPath: damagerObject
-      value: 
-      objectReference: {fileID: 1712937353}
-    - target: {fileID: 114243162542600446, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-        type: 3}
-      propertyPath: entityBase
-      value: 
-      objectReference: {fileID: 1712937355}
-    m_RemovedComponents:
-    - {fileID: 724632741292862128, guid: 5823cfbe2fff7584fb8e59f5f9266949, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5823cfbe2fff7584fb8e59f5f9266949, type: 3}
 --- !u!1001 &209216436
 PrefabInstance:
@@ -1295,59 +1279,6 @@ MonoBehaviour:
   a: 5
   b: 5
   perlinOffsetY: 0
---- !u!1 &1712937353 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1257472813224810, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-    type: 3}
-  m_PrefabInstance: {fileID: 68657571}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1712937354 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114243162542600446, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-    type: 3}
-  m_PrefabInstance: {fileID: 68657571}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1712937353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f53a67a4e81a9cd4592011f49eba7ffc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1712937355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1712937353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dac8552a0ac7c504d8c8fd296633e0c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  rb2D: {fileID: 1712937356}
-  spriteRenderer: {fileID: 1712937358}
-  woolRenderer: {fileID: 679415610489951130}
-  blockMask:
-    serializedVersion: 2
-    m_Bits: 256
-  particle: {fileID: 0}
-  randomSpeak: {fileID: 0}
-  speakTime: 15
-  followingPlayer: {fileID: 0}
---- !u!50 &1712937356 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 50364822081270122, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-    type: 3}
-  m_PrefabInstance: {fileID: 68657571}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &1712937358 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 212806798947387812, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-    type: 3}
-  m_PrefabInstance: {fileID: 68657571}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1826725319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1621,29 +1552,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4fc7b9389df74043a74f8956046e92a, type: 3}
---- !u!212 &679415610489951130 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 679415610489951130, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-    type: 3}
-  m_PrefabInstance: {fileID: 68657571}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &837029512570931540 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 837029512570931540, guid: 5823cfbe2fff7584fb8e59f5f9266949,
-    type: 3}
-  m_PrefabInstance: {fileID: 68657571}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &837029512570931541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 837029512570931540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cf814629d59a4f4aab616f07195c6b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entity: {fileID: 1712937354}
-  team: animal

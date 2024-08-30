@@ -15,7 +15,7 @@ public enum Biomes : int
 
 public enum Entities : int
 {
-    NanoBotT1 = 0, KrotekBoss = 1, TheDestroyer = 2, NanoBotT2 = 3, Raideon = 4, NanoBotT3 = 5, Darkn = 6, NanoBotT5 = 7, x
+    NanoBotT1 = 0, Krotek = 1, TheDestroyer = 2, NanoBotT2 = 3, Raideon = 4, NanoBotT3 = 5, Darkn = 6, NanoBotT5 = 7, Sheep = 8, Cow = 9, NanoBotT4 = 10, x
 }
 public enum UnitWeapons : int
 {
@@ -798,7 +798,7 @@ public class GameManager : MonoBehaviour
                 return "nanobot5";
             case Entities.TheDestroyer:
                 return "destroyer";
-            case Entities.KrotekBoss:
+            case Entities.Krotek:
                 return "krotek";
             case Entities.Darkn:
                 return "darkn";
@@ -824,7 +824,7 @@ public class GameManager : MonoBehaviour
             case "destroyer":
                 return Entities.TheDestroyer;
             case "krotek":
-                return Entities.KrotekBoss;
+                return Entities.Krotek;
             case "darkn":
                 return Entities.Darkn;
             case "raideon":
@@ -862,7 +862,7 @@ public class GameManager : MonoBehaviour
         {
             entityBase = ENTITY_TheDestroyer.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.KrotekBoss)
+        if (entityType == Entities.Krotek)
         {
             entityBase = ENTITY_KrotekController.StaticSpawn(args, spawnPos);
         }
