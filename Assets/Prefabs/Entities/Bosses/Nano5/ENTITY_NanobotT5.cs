@@ -202,7 +202,7 @@ public class ENTITY_NanobotT5 : EntityBase, IDamager
     public override EntityBase Spawn(string[] args, Vector2 spawnPos)
     {
         head.GetComponent<DamagersCollision>().target = this;
-        transform.GetChild(0).GetComponent<DamagersCollision>().entity = GetComponent<EntityCommonScript>();
+        head.GetComponent<DamagersCollision>().entity = head.GetComponent<EntityCommonScript>();
         transform.SetParent(GameManager.gameManagerReference.entitiesContainer.transform);
         head.position = spawnPos;
         entityScript = GetComponent<EntityCommonScript>();

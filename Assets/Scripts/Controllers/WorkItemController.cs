@@ -44,11 +44,10 @@ public class WorkItemController : MonoBehaviour {
                 {
                     if (GInput.GetMouseButton(0))
                     {
-                        Vector4 tileSize = GameManager.gameManagerReference.tileSize[tileSelected];
-                        collider2d.size = tileSize;
-                        collider2d.offset = new Vector2(-tileSize.z, -tileSize.w);
+                        Vector4 tileSize = GameManager.gameManagerReference.tileSize[StackBar.stackBarController.currentItem];
+                        Vector3 offset = new Vector3(0.5f * (tileSize.x - 1) - tileSize.z, 0.5f * (tileSize.y - 1) - tileSize.w);
 
-                        if (collider2d.Cast(Vector2.zero, new RaycastHit2D[99]) == 0)
+                        if (!GameManager.gameManagerReference.building || !Physics2D.OverlapBox(tile.transform.position + offset, tileSize, 0, entitiesMasks))
                             tile.transform.parent.GetComponent<ChunkController>().ClickedTile(tile);
                     }
                 }

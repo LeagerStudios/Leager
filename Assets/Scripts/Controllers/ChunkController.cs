@@ -1058,7 +1058,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                                 }
                             }
                         }
-                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
+                        else if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
                         {
                             if (Random.Range(0, 250) == 0)
                             {
@@ -1068,7 +1068,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                                 }
                             }
                         }
-                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
+                        else if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
                         {
                             if (Random.Range(0, 450) == 0)
                             {
@@ -1078,13 +1078,13 @@ public class ChunkController : MonoBehaviour, ITimerCall
                                 }
                             }
                         }
-                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == 1)//Nano1
+                        else if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 1)
                         {
-                            if (Random.Range(0, (int)(250 * manager.dayLuminosity)) == 0)
+                            if (Random.Range(0, (int)(300 * manager.dayLuminosity)) == 0)
                             {
                                 if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
                                 {
-                                    ENTITY_Sheep.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                    ENTITY_Sheep.StaticSpawn(null, new Vector2(x + transform.position.x, y));
                                 }
                             }
                         }
