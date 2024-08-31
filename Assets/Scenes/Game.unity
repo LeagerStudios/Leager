@@ -15597,6 +15597,8 @@ MonoBehaviour:
   breakSoundSource: {fileID: 2093779108}
   breakSoundCooldown: 0
   armorBarController: {fileID: 1887665160}
+  damageTextPrefab: {fileID: 6737338835871540675, guid: dc518be5b77e94c5bbe9ef8138f6ab2f,
+    type: 3}
 --- !u!114 &806
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -149,6 +149,7 @@ public class GameManager : MonoBehaviour
     public float breakSoundCooldown = 0f;
 
     public ArmorBarController armorBarController;
+    public GameObject damageTextPrefab;
 
     public bool InGame
     {
@@ -660,6 +661,11 @@ public class GameManager : MonoBehaviour
         equipedArmor[idx] = equipPiece;
 
         return returnVal;
+    }
+
+    public void DisplayDamage(int dmg, Vector2 position)
+    {
+        Instantiate(damageTextPrefab, position, Quaternion.identity).GetComponent<DamageText>().StartCall(dmg);
     }
 
     public int GetCapacityOfCore(int core)

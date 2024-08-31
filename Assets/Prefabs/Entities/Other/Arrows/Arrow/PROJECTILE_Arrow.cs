@@ -71,6 +71,7 @@ public class PROJECTILE_Arrow : ProjectileBase
                 else
                 {
                     collision.gameObject.GetComponent<DamagersCollision>().Hit(damage, procedence);
+                    GameManager.gameManagerReference.DisplayDamage(damage, transform.position + Vector3.up);
                     Despawn();
                     flying = false;
                 }

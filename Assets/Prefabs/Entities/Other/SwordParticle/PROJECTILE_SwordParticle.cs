@@ -45,6 +45,7 @@ public class PROJECTILE_SwordParticle : ProjectileBase {
         if (collision.gameObject.GetComponent<DamagersCollision>() != null)
         {
             collision.gameObject.GetComponent<DamagersCollision>().Hit(damage, procedence);
+            GameManager.gameManagerReference.DisplayDamage(damage, transform.position + Vector3.up);
             damage = 0;
             Despawn();
         }
