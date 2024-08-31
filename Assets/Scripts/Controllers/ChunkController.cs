@@ -780,8 +780,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public float GetLightForTile(int idx, bool isStillSunny)
     {
-        float returnVal = 0f;
-
+        float returnVal;
         if (isStillSunny)
         {
             returnVal = 2;
@@ -1047,33 +1046,46 @@ public class ChunkController : MonoBehaviour, ITimerCall
             {
                 for (int y = 0; y < manager.WorldHeight; y++)
                 {
-                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == 1)//Nano1
+                    if (BackgroundTileGrid[x * manager.WorldHeight + y] == 0)
                     {
-                        if (Random.Range(0, (int)(350 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
+                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == 1)//Nano1
                         {
-                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            if (Random.Range(0, (int)(350 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
                             {
-                                ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                {
+                                    ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                }
                             }
                         }
-                    }
-                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
-                    {
-                        if (Random.Range(0, 250) == 0)
+                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
                         {
-                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            if (Random.Range(0, 250) == 0)
                             {
-                                ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                {
+                                    ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                }
                             }
                         }
-                    }
-                    if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
-                    {
-                        if (Random.Range(0, 450) == 0)
+                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
                         {
-                            if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                            if (Random.Range(0, 450) == 0)
                             {
-                                ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                {
+                                    ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                }
+                            }
+                        }
+                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == 1)//Nano1
+                        {
+                            if (Random.Range(0, (int)(250 * manager.dayLuminosity)) == 0)
+                            {
+                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                {
+                                    ENTITY_Sheep.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                }
                             }
                         }
                     }
@@ -1215,11 +1227,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
     {
         if (obj.transform.parent == gameObject.transform)
         {
-            if (Mathf.Abs(player.transform.position.x - obj.transform.position.x) > 0.6f || Mathf.Abs(player.transform.position.y - obj.transform.position.y) > 0.9f || (!manager.building || manager.TileCollisionType[StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx]] != 1))
-            {
-                int previousBrush = manager.brush;
-                manager.ChangeBrush(TileGrid[System.Array.IndexOf(TileObject, obj)], obj);
-            }
+            manager.ChangeBrush(TileGrid[System.Array.IndexOf(TileObject, obj)], obj);
         }
     }
 

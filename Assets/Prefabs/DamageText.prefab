@@ -111,7 +111,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 63
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e5042aa74a6e44bc896e78c0d1faa64, type: 2}
   m_sharedMaterial: {fileID: 21321044169106632, guid: 1e5042aa74a6e44bc896e78c0d1faa64,
@@ -140,8 +140,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4892224870987740750}
-    characterCount: 2
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -218,4 +218,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 4892224870987740750}
   damage: 0
-  ySpeed: 5
+  ySpeed: 4

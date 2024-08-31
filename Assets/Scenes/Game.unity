@@ -4552,7 +4552,9 @@ GameObject:
   - component: {fileID: 320}
   - component: {fileID: 1061}
   - component: {fileID: 1060}
-  m_Layer: 0
+  - component: {fileID: 438}
+  - component: {fileID: 303}
+  m_Layer: 23
   m_Name: SpecialCursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5775,6 +5777,32 @@ Behaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173}
   m_Enabled: 1
+--- !u!61 &303
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!95 &304
 Animator:
   serializedVersion: 3
@@ -7519,6 +7547,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 136}
   m_CullTransparentMesh: 0
+--- !u!50 &438
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!222 &439
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14175,6 +14224,7 @@ MonoBehaviour:
   - {fileID: 1029631959894262, guid: 771f2de9be0f6574082d76156ae62e15, type: 3}
   - {fileID: 7791379123253765221, guid: 178aa65c6f9e00543b3d591db722ffdf, type: 3}
   - {fileID: 2363450235455229788, guid: aa670b70aaf81ba46a9a440a784eea98, type: 3}
+  - {fileID: 1257472813224810, guid: 5823cfbe2fff7584fb8e59f5f9266949, type: 3}
   ProjectilesGameObject:
   - {fileID: 1178076033168696, guid: 11c3d9f514e79734a8282212f28d68b0, type: 3}
   - {fileID: 1254184956392732, guid: f85a6f2133d3243469bff370fe848613, type: 3}
@@ -22781,6 +22831,9 @@ MonoBehaviour:
   tilesMasks:
     serializedVersion: 2
     m_Bits: 395008
+  entitiesMasks:
+    serializedVersion: 2
+    m_Bits: 10240
   CraftMenu: {fileID: 1082114432784878, guid: dfa0a87c77fe19e45b510f9a51d09542, type: 3}
   spritesRenders:
   - {fileID: 0}
@@ -22911,6 +22964,7 @@ MonoBehaviour:
   - {fileID: 21300058, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 0}
   canInteract: 00000000000000000000000000000001010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000101000000000000000000000001010000000000000000000100
+  collider2d: {fileID: 303}
 --- !u!114 &1062
 MonoBehaviour:
   m_ObjectHideFlags: 0

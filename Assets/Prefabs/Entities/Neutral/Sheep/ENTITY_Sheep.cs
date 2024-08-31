@@ -13,9 +13,6 @@ public class ENTITY_Sheep : EntityBase, IDamager
     EntityCommonScript entityScript;
     GameManager manager;
 
-    [SerializeField] AudioClip randomSpeak;
-    public float speakTime = 15f;
-
     public PlayerController followingPlayer;
     float HpMax = 10f;
     float HP = 10f;
@@ -69,7 +66,7 @@ public class ENTITY_Sheep : EntityBase, IDamager
     }
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
     {
-        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.NanoBotT1], spawnPos, Quaternion.identity).GetComponent<ENTITY_NanoBotT1>().Spawn(args, spawnPos);
+        return Instantiate(GameManager.gameManagerReference.EntitiesGameObject[(int)Entities.Sheep], spawnPos, Quaternion.identity).GetComponent<ENTITY_Sheep>().Spawn(args, spawnPos);
     }
 
     public void Hit(int damageDeal, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
@@ -78,6 +75,7 @@ public class ENTITY_Sheep : EntityBase, IDamager
         if (CheckGrounded() && !animator.GetBool("damaged")) rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
         animator.SetBool("damaged", true);
         Invoke("UnDamage", 0.6f);
+        followingPlayer = procedence.GetComponent<PlayerController>();
         HealthBarManager.self.UpdateHealthBar(transform, HP, HpMax, Vector2.up);
     }
 
@@ -115,7 +113,6 @@ public class ENTITY_Sheep : EntityBase, IDamager
 
     public override void AiFrame()
     {
-        bool lookingToSide = animator.GetBool("lookingSide");
         bool moving = animator.GetBool("isMoving");
         bool dead = animator.GetBool("dead");
         bool damaged = animator.GetBool("damaged");
@@ -125,21 +122,6 @@ public class ENTITY_Sheep : EntityBase, IDamager
             if (!followingPlayer.alive) followingPlayer = null;
         }
 
-        if (!dead && !damaged)
-        {
-            if (speakTime <= 0f)
-            {
-                speakTime = Random.Range(5, 45);
-                manager.soundController.PlaySfxSound(randomSpeak, ManagingFunctions.VolumeDistance(Vector2.Distance(manager.player.transform.position, transform.position), 6));
-            }
-            else
-            {
-                speakTime -= Time.deltaTime;
-            }
-        }
-
-        if (lookingToSide)
-        {
             if (!moving)
             {
                 if (Random.Range(0, 250) == 0)
@@ -174,7 +156,7 @@ public class ENTITY_Sheep : EntityBase, IDamager
                     }
                     else
                     {
-                        if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.79f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
+                        if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.52f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.52f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
                         {
                             rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
                         }
@@ -195,22 +177,16 @@ public class ENTITY_Sheep : EntityBase, IDamager
 
                 if (Random.Range(0, 85) == 0 && !followingPlayer)
                 {
-                    animator.SetBool("lookingSide", false);
-                    lookingToSide = false;
+                    animator.SetBool("isMoving", false);
+                    moving = false;
                 }
             }
-        }
-        else
-        {
-            animator.SetBool("isMoving", false);
-            moving = false;
-        }
 
         if (!moving)
             if (Random.Range(0, 100) == 0)
             {
-                animator.SetBool("lookingSide", true);
-                lookingToSide = true;
+                animator.SetBool("isMoving", true);
+                moving = true;
 
                 if (Random.Range(0, 2) == 0)
                 {
@@ -233,32 +209,15 @@ public class ENTITY_Sheep : EntityBase, IDamager
         {
             Kill(null);
         }
-
-        GameObject nearestPlayer = null;
-        float nearestDist = 999999f;
-
-        for (int i = 0; i < manager.dummyObjects.childCount; i++)
-        {
-            GameObject player = manager.dummyObjects.GetChild(i).gameObject;
-            if (Vector2.Distance(player.transform.position, transform.position) < nearestDist)
+        if (followingPlayer != null)
+            if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 15 && followingPlayer.alive)
             {
-                nearestDist = Vector2.Distance(player.transform.position, transform.position);
-                nearestPlayer = player;
-            }
-        }
-
-        if (nearestPlayer != null)
-            if (Vector2.Distance(nearestPlayer.transform.position, transform.position) < 15 && nearestPlayer.GetComponent<PlayerController>().alive)
-            {
-                followingPlayer = nearestPlayer.GetComponent<PlayerController>();
                 animator.SetBool("isMoving", true);
-                animator.SetBool("lookingSide", true);
                 moving = true;
-                lookingToSide = true;
 
                 if (Mathf.Repeat(manager.frameTimer, 10) == 0)
                 {
-                    if (Mathf.Sign(followingPlayer.transform.position.x - transform.position.x) < 0)
+                    if (Mathf.Sign(followingPlayer.transform.position.x - transform.position.x) > 0)
                     {
                         spriteRenderer.flipX = true;
                         woolRenderer.flipX = true;
@@ -283,25 +242,12 @@ public class ENTITY_Sheep : EntityBase, IDamager
         {
             if (Vector2.Distance(transform.position, Camera.main.transform.position) > 20) Despawn();
         }
-
-        if (followingPlayer)
-        {
-            if (followingPlayer.transform.position.y < transform.position.y - 1)
-            {
-                manager.DropOn(transform.position - Vector3.up * 0.8f, 0.5f);
-            }
-
-            if (Vector2.Distance(followingPlayer.transform.position, transform.position) < 1 && !dead && followingPlayer != null)
-            {
-                followingPlayer.LoseHp(4, GetComponent<EntityCommonScript>());
-            }
-        }
     }
 
 
     public bool CheckGrounded()
     {
-        return SendRaycast(0.85f, Vector2.down, Vector2.zero);
+        return SendRaycast(0.55f, Vector2.down, Vector2.zero);
     }
 
     public bool SendRaycast(float raycastDist, Vector2 raycastDir, Vector2 localOffset, bool ignoreSlabs = false)
@@ -313,7 +259,7 @@ public class ENTITY_Sheep : EntityBase, IDamager
         {
             RaycastHit2D rayHit = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
             if (rayHit)
-                colliding = rayHit.transform.GetComponent<PlatformEffector2D>() == null;
+                colliding = rayHit.collider.transform.GetComponent<PlatformEffector2D>() == null;
             else colliding = false;
         }
         else

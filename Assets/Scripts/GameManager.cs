@@ -810,6 +810,8 @@ public class GameManager : MonoBehaviour
                 return "darkn";
             case Entities.Raideon:
                 return "raideon";
+            case Entities.Sheep:
+                return "sheep";
             default:
                 return "null";
         }
@@ -835,6 +837,8 @@ public class GameManager : MonoBehaviour
                 return Entities.Darkn;
             case "raideon":
                 return Entities.Raideon;
+            case "sheep":
+                return Entities.Sheep;
             default:
                 return Entities.x;
         }
@@ -848,33 +852,37 @@ public class GameManager : MonoBehaviour
         {
             entityBase = ENTITY_NanoBotT1.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.NanoBotT2)
+        else if (entityType == Entities.NanoBotT2)
         {
             entityBase = ENTITY_NanoBotT2.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.NanoBotT3)
+        else if (entityType == Entities.NanoBotT3)
         {
             entityBase = ENTITY_NanoBotT3.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.NanoBotT5)
+        else if (entityType == Entities.NanoBotT5)
         {
             entityBase = ENTITY_NanobotT5.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.Darkn)
+        else if (entityType == Entities.Darkn)
         {
             entityBase = UNIT_Darkn.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.TheDestroyer)
+        else if (entityType == Entities.TheDestroyer)
         {
             entityBase = ENTITY_TheDestroyer.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.Krotek)
+        else if (entityType == Entities.Krotek)
         {
             entityBase = ENTITY_KrotekController.StaticSpawn(args, spawnPos);
         }
-        if (entityType == Entities.Raideon)
+        else if (entityType == Entities.Raideon)
         {
             entityBase = ENTITY_Raideon.StaticSpawn(args, spawnPos);
+        }
+        else if (entityType == Entities.Sheep)
+        {
+            entityBase = ENTITY_Sheep.StaticSpawn(args, spawnPos);
         }
 
         //entityBase.IsLocal = !isNetworkClient;

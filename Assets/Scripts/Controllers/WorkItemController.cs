@@ -5,10 +5,12 @@ using UnityEngine;
 public class WorkItemController : MonoBehaviour {
 
     [SerializeField] public LayerMask tilesMasks;
+    [SerializeField] public LayerMask entitiesMasks;
     [SerializeField] GameObject CraftMenu;
     [SerializeField] public Sprite[] spritesRenders;
     [SerializeField] public bool[] canInteract;
     GameObject workIcon;
+    public BoxCollider2D collider2d;
 
     void Start ()
     {
@@ -22,15 +24,13 @@ public class WorkItemController : MonoBehaviour {
             Vector3Int mousePos = Vector3Int.FloorToInt((Vector2)GameManager.gameManagerReference.mouseCurrentPosition + Vector2.one * 0.5f);
             int idx = mousePos.x * GameManager.gameManagerReference.WorldHeight + mousePos.y;
             GameObject tile = GameManager.gameManagerReference.GetTileObjectAt(idx);
+            int tileSelected = GameManager.gameManagerReference.GetTileAt(idx);
 
             workIcon.GetComponent<SpriteRenderer>().sprite = GameManager.gameManagerReference.tiles[0];
 
             if (tile != null)
                 if (!GameManager.gameManagerReference.doingAnAction)
                 {
-                    ChunkController chunkController = tile.transform.parent.GetComponent<ChunkController>();
-                    int tileSelected = GameManager.gameManagerReference.GetTileAt(idx);
-
                     if (canInteract[tileSelected] == true)
                     {
                         workIcon.GetComponent<SpriteRenderer>().sprite = spritesRenders[tileSelected];
@@ -44,9 +44,12 @@ public class WorkItemController : MonoBehaviour {
                 {
                     if (GInput.GetMouseButton(0))
                     {
-                        tile.transform.parent.GetComponent<ChunkController>().ClickedTile(tile);
+                        Vector4 tileSize = GameManager.gameManagerReference.tileSize[tileSelected];
+                        collider2d.size = tileSize;
+                        collider2d.offset = new Vector2(-tileSize.z, -tileSize.w);
 
-                        Debug.DrawRay(GameManager.gameManagerReference.player.transform.position, GameManager.gameManagerReference.mouseCurrentPosition - GameManager.gameManagerReference.player.transform.position, Color.blue);
+                        if (collider2d.Cast(Vector2.zero, new RaycastHit2D[99]) == 0)
+                            tile.transform.parent.GetComponent<ChunkController>().ClickedTile(tile);
                     }
                 }
         }

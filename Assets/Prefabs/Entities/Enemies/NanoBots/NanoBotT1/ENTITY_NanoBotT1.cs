@@ -308,7 +308,7 @@ public class ENTITY_NanoBotT1 : EntityBase, IDamager
         {
             RaycastHit2D rayHit = Physics2D.Raycast(startpos, raycastDir, raycastDist, blockMask);
             if (rayHit)
-                colliding = rayHit.transform.GetComponent<PlatformEffector2D>() == null;
+                colliding = rayHit.collider.transform.GetComponent<PlatformEffector2D>() == null;
             else colliding = false;
         }
         else

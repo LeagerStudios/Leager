@@ -189,8 +189,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   particle: {fileID: 1524452008572986, guid: 2d42c10f67fac1f45b441f4a988085c5, type: 3}
-  randomSpeak: {fileID: 0}
-  speakTime: 15
   followingPlayer: {fileID: 0}
 --- !u!95 &1712937354
 Animator:

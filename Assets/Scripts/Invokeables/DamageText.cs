@@ -10,34 +10,31 @@ public class DamageText : MonoBehaviour
     public int damage = 0;
     public float ySpeed = 1f;
 
-    // Start is called before the first frame update
     public void StartCall(int dmg)
     {
         damage = dmg;
         text.text = damage + "";
         text.color = Color.red;
+        text.fontSize = 3.5f + damage / 10;
+        transform.Translate(new Vector3(Random.Range(-0.5f, 0.5f), 0));
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (/*GameManager.gameManagerReference.InGame*/true)
         {
             sinValue += Time.deltaTime;
-            float grav = Time.deltaTime * Physics2D.gravity.y;
-            ySpeed += grav;
-            if (ySpeed < 0) ySpeed = -grav;
+            float grav = Time.deltaTime * 5;
+            ySpeed -= grav;
             transform.Translate(Vector2.up * ySpeed * Time.deltaTime);
-        }
-            
 
-        
-        
-        float green = Mathf.Sin(sinValue * Mathf.Deg2Rad * 720);
-        text.color = new Color(1, Mathf.Abs(green), 0, 1f + (2 - sinValue * 2));
-        if(text.color.a <= 0)
-        {
-            Destroy(gameObject);
+
+            float green = Mathf.Sin(sinValue * Mathf.Deg2Rad * 720);
+            text.color = new Color(1, Mathf.Abs(green), 0, 1f + (2 - sinValue * 2));
+            if (text.color.a <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
