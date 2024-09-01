@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
     public Color daytimeUpdatedSkyboxColor;
     public AnimationCurve dayNightCycle;
     public float dayFloat = 0;
-    public int dayTime = fullDay / 5;
+    public int dayTime = 2000;
     public const int fullDay = 54000;
     public float dayLuminosity = 1;
     public string worldName = "null";
@@ -281,7 +281,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                DataSaver.SaveStats(new string[] { (fullDay / 5) + "" }, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd");
+                DataSaver.SaveStats(new string[] { 2000 + "" }, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd");
             }
 
             if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd"))
@@ -1714,8 +1714,8 @@ public class GameManager : MonoBehaviour
         DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(allBackgroundGrid), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/bgmap.lgrsd");
 
 
-        int[] sg = { 22, 23, 24, 0, 0, 0, 0, 0, 16 };
-        int[] sa = { 1, 1, 1, 0, 0, 0, 0, 0, 1 };
+        int[] sg = { 24, 16, 0, 0, 0, 0, 0, 0, 0 };
+        int[] sa = { 1, 1, 0, 0, 0, 0, 0, 0, 0 };
         int[] ig = new int[36];
         int[] ia = new int[36];
         int[] wp = { WorldWidth, WorldHeight };

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class EntitiesManager : MonoBehaviour {
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public static EntitiesManager self;
+    public int currentEntities = 0;
+    public int entityLimit = 0;
+    public bool canNaturalSpawn = true;
+
+    private void Awake()
+    {
+        currentEntities = 0;
+        entityLimit = 9999;
+        canNaturalSpawn = true;
+        self = this;
+    }
 
 
     public void UpdateEntities(GameObject[] loadedChunks)
@@ -47,5 +50,15 @@ public class EntitiesManager : MonoBehaviour {
             }
         }
 
+        currentEntities = 0;
+        entityLimit = MenuController.menuController.chunksOnEachSide * 10;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                currentEntities++;
+            }
+        }
+        canNaturalSpawn = currentEntities < entityLimit;
     }
 }

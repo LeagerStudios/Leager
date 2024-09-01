@@ -1041,50 +1041,49 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
     public void CheckEntitiesSpawn()
     {
-        if (!manager.isNetworkClient)
+        int caveLayer = manager.WorldHeight / 2;
+
+
+        if (!manager.isNetworkClient && EntitiesManager.self.canNaturalSpawn)
             for (int x = 0; x < 16; x++)
             {
                 for (int y = 0; y < manager.WorldHeight; y++)
                 {
-                    if (BackgroundTileGrid[x * manager.WorldHeight + y] == 0)
+                    int idx = x * manager.WorldHeight + y;
+                    if (TileGrid[idx] == 0 && BackgroundTileGrid[idx] == 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[idx + 1]] == 0)
                     {
-                        if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y - 1]] == 1)//Nano1
+                        if (Vector2.Distance(new Vector2(currentX, y), manager.player.transform.position) > 20)
                         {
-                            if (Random.Range(0, (int)(350 * manager.dayLuminosity)) == 0 && manager.dayLuminosity > 0.5f)
+                            if (manager.TileCollisionType[TileGrid[idx - 1]] == 1)//Nano1
                             {
-                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                if (Random.Range(0, (int)(350 / manager.dayLuminosity)) == 0 && (manager.dayLuminosity > 0.5f || y < caveLayer))
                                 {
                                     ENTITY_NanoBotT1.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
                                 }
                             }
-                        }
-                        else if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && TileGrid[x * manager.WorldHeight + y - 1] == 6 && y < manager.WorldHeight * 0.5f)//Nano2
-                        {
-                            if (Random.Range(0, 250) == 0)
+
+                            if (y > caveLayer)
                             {
-                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                if (TileGrid[idx - 1] == 1)
                                 {
-                                    ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                    if (Random.Range(0, (int)(250 / manager.dayLuminosity)) == 0)
+                                    {
+                                        ENTITY_Sheep.StaticSpawn(null, new Vector2(x + transform.position.x, y));
+                                    }
                                 }
                             }
-                        }
-                        else if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 6)//Nano3
-                        {
-                            if (Random.Range(0, 450) == 0)
+                            else
                             {
-                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
+                                if (TileGrid[idx - 1] == 6)
                                 {
-                                    ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
-                                }
-                            }
-                        }
-                        else if (TileGrid[x * manager.WorldHeight + y] == 0 && y > 0 && y < manager.WorldHeight - 1 && TileGrid[x * manager.WorldHeight + y - 1] == 1)
-                        {
-                            if (Random.Range(0, (int)(300 * manager.dayLuminosity)) == 0)
-                            {
-                                if (manager.TileCollisionType[TileGrid[x * manager.WorldHeight + y + 1]] == 0 && Vector2.Distance(new Vector2(x + transform.position.x, y + 0.3f), manager.player.transform.position) > 20)
-                                {
-                                    ENTITY_Sheep.StaticSpawn(null, new Vector2(x + transform.position.x, y));
+                                    if (Random.Range(0, 250) == 0)
+                                    {
+                                        ENTITY_NanoBotT2.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                    }
+                                    else if (Random.Range(0, 450) == 0)
+                                    {
+                                        ENTITY_NanoBotT3.StaticSpawn(null, new Vector2(x + transform.position.x, y + 0.3f));
+                                    }
                                 }
                             }
                         }

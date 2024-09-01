@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftMenuController : MonoBehaviour
+public class CraftMenuController : MonoBehaviour, IDraggable
 {
-    [SerializeField] GameObject arrowButtons;
     RectTransform rectTransform;
     RectTransform canvasRect;
     RectTransform viewport;
@@ -15,6 +14,8 @@ public class CraftMenuController : MonoBehaviour
     GameObject UiMenu;
     Dropdown dropdown;
     bool canCraft = false;
+    bool canDrag = false;
+    public bool CanDrag { get => canDrag; }
 
     List<int> currentTiles = new List<int>();
     List<int> currentTileAmounts = new List<int>();
@@ -241,18 +242,27 @@ public class CraftMenuController : MonoBehaviour
             currentTileAmounts.Add(tileAmount);
 
             GameObject gameObject = Instantiate(itemReqPrefab, viewport);
-            gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (i * -30) + 18f);
+            gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, i * -30 -15);
             gameObject.transform.GetChild(0).GetComponent<Image>().sprite = GameManager.gameManagerReference.tiles[tile];
             gameObject.transform.GetChild(1).GetComponent<Text>().text = tileAmount + "";
         }
 
-        arrowButtons.SetActive(items.Count > 2);
+        canDrag = items.Count > 2;
+        RectTransform rectViewport = (RectTransform)rectTransform.GetChild(1).GetChild(3);
+        rectViewport.sizeDelta = new Vector2(30, Mathf.Clamp(items.Count, 0, 2) * 30 + (items.Count > 2 ? 10 : 0));
+        Drag();
     }
 
-    public void MoveBlocksReq(int move)
+    public void Drag()
     {
         RectTransform rectViewport = (RectTransform)rectTransform.GetChild(1).GetChild(3).GetChild(1);
-        rectViewport.anchoredPosition = new Vector2(0, Mathf.Clamp(rectViewport.anchoredPosition.y + (move * 15), 0, -rectViewport.GetChild(viewport.childCount - 1).GetComponent<RectTransform>().anchoredPosition.y));
+
+        if(rectViewport.childCount < 3)
+        {
+            rectViewport.anchoredPosition = Vector2.zero;
+        }
+        else
+            rectViewport.anchoredPosition = new Vector2(0, Mathf.Clamp(rectViewport.anchoredPosition.y, 0,(rectViewport.childCount - 2) * 30 - 10));
     }
 
     public void Craft()

@@ -180,8 +180,8 @@ public static class StackBar
         }
         else
         {
-            stackBarController.StackBarGrid = new int[] { 22, 23, 24, 0, 0, 0, 0, 0, 16 };
-            stackBarController.StackItemAmount = new int[] { 1, 1, 1, 0, 0, 0, 0, 0, 1 };
+            stackBarController.StackBarGrid = new int[] { 24, 16, 0, 0, 0, 0, 0, 0, 0 };
+            stackBarController.StackItemAmount = new int[] { 1, 1, 0, 0, 0, 0, 0, 0, 0 };
         }
 
         stackBarController.UpdateStacks();
