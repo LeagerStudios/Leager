@@ -166,7 +166,7 @@ public class LoadingSceneScript : MonoBehaviour
             "You should try a DavidDEV game... wait... he doesn't have one...",
             "Testing gamer skillz",
             "These will be the best graphics you'll ever see",
-            "Fun Fact: A left-handed person can eat a 98% faster than a person without hands"
+            "Fun Fact: There aren't Fun Facts"
         };
 
 
