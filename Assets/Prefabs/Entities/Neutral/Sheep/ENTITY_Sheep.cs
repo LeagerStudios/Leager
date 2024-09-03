@@ -122,65 +122,71 @@ public class ENTITY_Sheep : EntityBase, IDamager
             if (!followingPlayer.alive) followingPlayer = null;
         }
 
-            if (!moving)
+        if (!moving)
+        {
+            if (Random.Range(0, 250) == 0)
             {
-                if (Random.Range(0, 250) == 0)
-                {
-                    animator.SetBool("isMoving", true);
-                    moving = true;
-                }
+                animator.SetBool("isMoving", true);
+                moving = true;
             }
-            else
+        }
+        else
+        {
+            if (!dead && !damaged)
             {
-                if (!dead && !damaged)
+                if (CheckGrounded())
                 {
-                    if (CheckGrounded())
-                    {
+                    if (followingPlayer == null)
                         rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                    else
+                        rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 5, rb2D.velocity.y);
 
-                        int boolint = ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX);
+                    int boolint = ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX);
 
-                        if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.up, true))
-                        {
-                            rb2D.velocity = new Vector2(rb2D.velocity.x, 13f);
-                        }
-                        else if (SendRaycast(0.85f, Vector2.right * boolint, Vector2.zero))
-                        {
-                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
-                        }
-                        else if (!SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 0.7f) && (!SendRaycast(1.85f, Vector2.down, Vector2.right * boolint * 0.7f) || SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f)))
-                        {
-                            rb2D.velocity = new Vector2(rb2D.velocity.x, 10.5f);
-                        }
+                    if (SendRaycast(0.85f * Mathf.Abs(rb2D.velocity.x / 2), Vector2.right * boolint, Vector2.up, true))
+                    {
+                        rb2D.velocity = new Vector2(rb2D.velocity.x, 13f);
+                    }
+                    else if (SendRaycast(0.85f * Mathf.Abs(rb2D.velocity.x / 2), Vector2.right * boolint, Vector2.zero))
+                    {
+                        rb2D.velocity = new Vector2(rb2D.velocity.x, 10f);
+                    }
+                    else if (!SendRaycast(0.85f * Mathf.Abs(rb2D.velocity.x / 2), Vector2.down, Vector2.right * boolint * 0.7f) && (!SendRaycast(1.85f, Vector2.down, Vector2.right * boolint * 0.7f * Mathf.Abs(rb2D.velocity.x / 2)) || SendRaycast(0.85f, Vector2.down, Vector2.right * boolint * 1.4f * Mathf.Abs(rb2D.velocity.x / 2))))
+                    {
+                        rb2D.velocity = new Vector2(rb2D.velocity.x, 10.5f);
+                    }
 
+                }
+                else
+                {
+                    if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.52f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.52f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
+                    {
+                        if (followingPlayer == null)
+                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
+                        else
+                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 5, rb2D.velocity.y);
                     }
                     else
                     {
-                        if (!SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.down * 0.52f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.up * 0.52f, true) && !SendRaycast(0.5f, Vector2.right * ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX), Vector2.zero, true))
-                        {
-                            rb2D.velocity = new Vector2(ManagingFunctions.ParseBoolToInt(!spriteRenderer.flipX) * 2, rb2D.velocity.y);
-                        }
-                        else
-                        {
-                            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
-                        }
+                        rb2D.velocity = new Vector2(0, rb2D.velocity.y);
                     }
-
-
-
                 }
 
-                if (damaged)
-                {
-                    rb2D.velocity = new Vector2(Mathf.Clamp(transform.position.x - manager.player.transform.position.x, -1, 1) * 3, rb2D.velocity.y);
-                }
 
-                if (Random.Range(0, 85) == 0 && !followingPlayer)
-                {
-                    animator.SetBool("isMoving", false);
-                    moving = false;
-                }
+
             }
+
+            if (damaged)
+            {
+                rb2D.velocity = new Vector2(Mathf.Clamp(transform.position.x - manager.player.transform.position.x, -1, 1) * 3, rb2D.velocity.y);
+            }
+
+            if (Random.Range(0, 85) == 0 && !followingPlayer)
+            {
+                animator.SetBool("isMoving", false);
+                moving = false;
+            }
+        }
 
         if (!moving)
             if (Random.Range(0, 100) == 0)
