@@ -16,6 +16,8 @@ TextureImporter:
     21300022: MobileSheet_InventoryCrossEnter
     21300024: MobileSheet_LeftMouseButton
     21300026: MobileSheet_InventoryDeploy
+    21300028: MobileSheet_0
+    21300030: MobileSheet_1
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -377,7 +379,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -388,10 +390,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: MobileSheet_0
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 16
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e52c51212643748699c59d478ef82a99
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MobileSheet_1
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 118
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a7f89238fb2b4de1b1d62622acd4f15
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 3d158b7d07a534280b4c8a5368fd7121
     vertices: []
     indices: 
     edges: []

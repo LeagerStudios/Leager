@@ -46,7 +46,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 980946a09a266754dad1a4b559b911ca, type: 3}
     - {fileID: 2800000, guid: 15a24bcb019b71e4ba96310f0943c646, type: 3}
     - {fileID: 2800000, guid: 489298c9960f7d74fa71a38a3577222c, type: 3}
-    totalSpriteSurfaceArea: 341712
+    totalSpriteSurfaceArea: 352224
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -76,6 +76,8 @@ SpriteAtlas:
   - {fileID: 21300022, guid: 9ac27336cf593f9449fd2c40fbff842b, type: 3}
   - {fileID: 21300008, guid: 9ac27336cf593f9449fd2c40fbff842b, type: 3}
   - {fileID: 21300016, guid: 9ac27336cf593f9449fd2c40fbff842b, type: 3}
+  - {fileID: 21300030, guid: 9ac27336cf593f9449fd2c40fbff842b, type: 3}
+  - {fileID: 21300028, guid: 9ac27336cf593f9449fd2c40fbff842b, type: 3}
   - {fileID: 21300000, guid: 285a2bd61e0d62047ad61875e4a1a7ea, type: 3}
   - {fileID: 21300000, guid: 43a1adf6ec02ae4419cc424e3006f785, type: 3}
   - {fileID: 21300000, guid: b351db07d06dc3a4a9f6ce3cc323f7c5, type: 3}
@@ -126,6 +128,8 @@ SpriteAtlas:
   - MobileSheet_InventoryCrossEnter
   - MobileSheet_CrossDown
   - MobileSheet_InventoryScrollLeft
+  - MobileSheet_1
+  - MobileSheet_0
   - LodingLine
   - ButtonPanelMask
   - Default Panel

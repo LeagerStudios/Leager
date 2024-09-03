@@ -7,6 +7,7 @@ public class DraggableController : MonoBehaviour, IDragHandler
 {
     public GameObject target;
     IDraggable iTarget;
+    Vector2 speed;
 
     void OnValidate()
     {
@@ -31,9 +32,30 @@ public class DraggableController : MonoBehaviour, IDragHandler
         Validate();
     }
 
+    void Update()
+    {
+        if(iTarget != null)
+        {
+            if (iTarget.CanDrag)
+            {
+                if (speed.magnitude > 0.01f)
+                {
+                    GetComponent<RectTransform>().anchoredPosition += speed;
+                    speed *= 0.9f;
+                    iTarget.Drag();
+                }
+            }
+            else
+            {
+                speed = Vector2.zero;
+            }
+        }
+    }
+
     public void OnDrag(PointerEventData data)
     {
-        GetComponent<RectTransform>().anchoredPosition += data.delta / MenuController.menuController.canvas.scaleFactor;
+        speed = data.delta / MenuController.menuController.canvas.scaleFactor;
+        GetComponent<RectTransform>().anchoredPosition += speed;
         iTarget.Drag();
     }
 }

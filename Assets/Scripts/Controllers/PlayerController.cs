@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] AudioClip regenerationSound;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip jetpack;
+    [SerializeField] AudioClip swing;
     public Transform accesories;
 
     void Start() //obtener referencias
@@ -786,6 +787,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (armType == "sword")
         {
+            gameManager.soundController.PlaySfxSound(swing);
             transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = true;
             if (GetComponent<SpriteRenderer>().flipX)
             {

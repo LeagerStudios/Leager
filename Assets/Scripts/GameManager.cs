@@ -1768,6 +1768,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
+
         return buildedMapGrid;
     }
 

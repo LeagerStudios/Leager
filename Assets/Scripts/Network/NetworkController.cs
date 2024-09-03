@@ -816,12 +816,12 @@ public class Client
     public static void GetMap()
     {
         string map = "";
+        string bgMap = "";
         string mapprop = "";
 
         for (int i = 0; i < worldProportionsLoad[1]; i++)
         {
             string ab = Read(8192);
-            Debug.Log("buffer" + i + ";;" + ab);
             int buffer = System.Convert.ToInt32(ab);
             Write("a weno");
 
@@ -833,7 +833,6 @@ public class Client
             } while (mapGrid[mapGrid.Length - 1] != 'd');
             mapGrid = mapGrid.Remove(mapGrid.Length - 1);
 
-            Debug.Log("map" + i + ";;" + mapGrid);
             if (map == "")
                 map = mapGrid;
             else
@@ -843,7 +842,6 @@ public class Client
 
             //tileproperties
             string ac = Read(8192);
-            Debug.Log("buffer" + i + ";;" + ac);
             int buffer2 = System.Convert.ToInt32(ac);
             Write("a weno");
 
@@ -854,16 +852,33 @@ public class Client
                 mapProp += Read(buffer2);
             } while (mapProp.Length < buffer2);
 
-            Debug.Log("mapprop" + i + ";;" + mapProp);
             if (mapprop == "")
                 mapprop = mapProp;
             else
                 mapprop = string.Join("$", new string[] { mapprop, mapProp });
             Write("a weno");
+
+            string ad = Read(8192);
+            int buffer3 = System.Convert.ToInt32(ad);
+            Write("a weno");
+
+
+            string bgMapGrid = "";
+            do
+            {
+                bgMapGrid += Read(buffer3);
+            } while (bgMapGrid[bgMapGrid.Length - 1] != 'd');
+            bgMapGrid = bgMapGrid.Remove(bgMapGrid.Length - 1);
+
+            if (bgMap == "")
+                bgMap = bgMapGrid;
+            else
+                bgMap = string.Join(";", new string[] { bgMap, bgMapGrid });
+            Write("a weno");
         }
 
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
-        backgroundMapLoad = new int[worldMapLoad.Length];
+        backgroundMapLoad = ManagingFunctions.ConvertStringToIntArray(bgMap.Split(';'));
         worldMapPropLoad = mapprop.Split('$');
         //leaves with server write turn
     }
@@ -883,6 +898,7 @@ public class Client
         serverIpAddress = null;
         worldProportionsLoad = null;
         worldMapLoad = null;
+        backgroundMapLoad = null;
         worldBiomesLoad = null;
     }
 }

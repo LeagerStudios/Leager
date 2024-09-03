@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class PlanetMenuController : MonoBehaviour {
+public class PlanetMenuController : MonoBehaviour, IDraggable
+{
 
     public ResourceLauncher targetResourceLauncher;
     public static PlanetMenuController planetMenu;
@@ -36,6 +37,8 @@ public class PlanetMenuController : MonoBehaviour {
 
     public bool planetSelectionFocused = true;
     public int planetFocused = -1;
+
+    public bool CanDrag { get => planetSelectionFocused; }
 
     private void Awake()
     {
@@ -83,6 +86,14 @@ public class PlanetMenuController : MonoBehaviour {
             return;
         }
 
+        Drag();
+
+        planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
+    }
+
+    public void Drag()
+    {
+        
         if (planetSelectionFocused)
             if (planetPanelViewportRectTransform.childCount < 9)
             {
@@ -90,10 +101,8 @@ public class PlanetMenuController : MonoBehaviour {
             }
             else
             {
-                planetPanelViewportRectTransform.anchoredPosition = new Vector2(0, Mathf.Clamp(planetPanelViewportRectTransform.anchoredPosition.y + (Input.mouseScrollDelta.y * 10), 0, (planetPanelViewportRectTransform.childCount - 8) * 50 + 5));
+                planetPanelViewportRectTransform.anchoredPosition = new Vector2(0, Mathf.Clamp(planetPanelViewportRectTransform.anchoredPosition.y, 0, (planetPanelViewportRectTransform.childCount - 8) * 50 + 5));
             }
-
-        planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
     }
 
     public void FocusPlanet(int idx)

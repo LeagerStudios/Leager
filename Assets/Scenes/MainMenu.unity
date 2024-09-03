@@ -9768,7 +9768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fa5f83e0decac4a803f59ce5b592bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platform: PC
+  platform: Mobile
   keys: 
 --- !u!1 &1140661049
 GameObject:
