@@ -184,6 +184,8 @@ public class PlayerController : MonoBehaviour, IDamager
         transform.position = new Vector2(x, y);
         Camera.main.orthographicSize = 5f;
         Camera.main.GetComponent<CameraController>().focus = gameObject;
+        rb2D.freezeRotation = true;
+        transform.eulerAngles = Vector3.zero;
         spawned = true;//confirmación final
     }
 
@@ -317,6 +319,7 @@ public class PlayerController : MonoBehaviour, IDamager
         if (gameManager.equipedArmor[4] == 123)
         {
             Transform backflip = accesories.Find("123").GetChild(3);
+            ParticleSystem particles = accesories.Find("123").GetChild(4).GetComponent<ParticleSystem>();
 
             if (Grounded || entityScript.entityStates.Contains(EntityState.Swimming))
             {
@@ -324,6 +327,13 @@ public class PlayerController : MonoBehaviour, IDamager
                 {
                     flyMode = false;
                     falling = 0;
+
+                    LoseHp((int)wingTime * 5, entityScript);
+
+                    if(HP <= 0)
+                    {
+                        rb2D.freezeRotation = false;
+                    }
                 }
             }
             else if (!Grounded && GInput.GetKeyDown(KeyCode.W))
@@ -355,17 +365,25 @@ public class PlayerController : MonoBehaviour, IDamager
 
             if (!flyMode)
             {
+                if (!particles.isStopped)
+                    particles.Stop();
                 backflip.localScale = new Vector2(Mathf.MoveTowards(backflip.localScale.x, 0, 2f * Time.deltaTime), 1f);
                 transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, 0, 720 * Time.deltaTime);
             }
             else
             {
+                if (!particles.isPlaying)
+                    particles.Play();
+
+                ParticleSystem.MainModule main = particles.main;
+                main.startSpeed = rb2D.velocity.magnitude;
+
                 backflip.localScale = new Vector2(Mathf.MoveTowards(backflip.localScale.x, 1, 2f * Time.deltaTime), 1f);
                 if (GInput.GetKey(KeyCode.A))
                     transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, transform.eulerAngles.z + 90, 180 * Time.deltaTime);
                 if (GInput.GetKey(KeyCode.D))
                     transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, transform.eulerAngles.z - 90, 180 * Time.deltaTime);
-                
+
                 float sin = Mathf.Sin((transform.eulerAngles.z) * Mathf.Deg2Rad) * -1;
                 float cos = Mathf.Cos((transform.eulerAngles.z) * Mathf.Deg2Rad);
                 float maxVelocity = 16;
