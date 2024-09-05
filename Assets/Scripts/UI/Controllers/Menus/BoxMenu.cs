@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class BoxMenu : MonoBehaviour
 {
     [SerializeField] RectTransform innerViewport;
+    [SerializeField] RectTransform outerViewport;
     [SerializeField] CanvasGroup canvasGroup;
-    
+    [SerializeField] Text text;
+
     [SerializeField] GameObject itemPrefab;
     public Box targetBox;
     public RectTransform rectTransform;
@@ -41,12 +43,13 @@ public class BoxMenu : MonoBehaviour
             rectTransform.anchoredPosition = FollowerScreenPosition;
 
             innerViewport.anchoredPosition += new Vector2((35 * (innerViewport.childCount - 1) - innerViewport.anchoredPosition.x) * Time.deltaTime * 5f , 0f);
+            text.text = innerViewport.childCount + "/" + targetBox.maxStacks;
         }
         else
         {
             closing = true;
 
-            canvasGroup.alpha -= Time.deltaTime * 2f;
+            canvasGroup.alpha -= Time.deltaTime * 30f;
             if(canvasGroup.alpha <= 0f)
             {
                 Destroy(gameObject);
@@ -87,6 +90,24 @@ public class BoxMenu : MonoBehaviour
 
     public void RemoveLast()
     {
-        Destroy(innerViewport.GetChild(innerViewport.childCount - 1).gameObject);
+        RectTransform child = innerViewport.GetChild(innerViewport.childCount - 1).GetComponent<RectTransform>();
+        Vector2 pos = child.position;
+        child.SetParent(outerViewport, false);
+        child.position = pos;
+        StartCoroutine(FadeOut(child));
+    }
+
+    IEnumerator FadeOut(RectTransform tile)
+    {
+        CanvasGroup group = tile.GetComponent<CanvasGroup>();
+
+        while(group.alpha > 0)
+        {
+            tile.localScale += Vector3.one * 2 * Time.deltaTime;
+            group.alpha -= Time.deltaTime * 2;
+            yield return new WaitForEndOfFrame();
+        }
+
+        Destroy(tile.gameObject);
     }
 }

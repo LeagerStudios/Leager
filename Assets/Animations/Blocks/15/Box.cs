@@ -55,7 +55,7 @@ public class Box : MonoBehaviour
         }
         else
         {
-            if(StackBar.stackBarController.currentItem != 0 && items.Count <= maxStacks)
+            if(StackBar.stackBarController.currentItem != 0 && items.Count < maxStacks)
             {
                 items.Add(StackBar.stackBarController.currentItem + ":" + StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx]);
                 if (targetMenu != null) targetMenu.Add(StackBar.stackBarController.currentItem, StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx], false);
@@ -100,6 +100,7 @@ public class Box : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if(GameManager.gameManagerReference.InGame && !StackBar.stackBarController.InventoryDeployed)
         if(targetMenu == null)
         {
             targetMenu = Instantiate(MenuController.menuController.boxMenu, MenuController.menuController.uiMenus).GetComponent<BoxMenu>();
