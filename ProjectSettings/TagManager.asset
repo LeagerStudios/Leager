@@ -25,13 +25,13 @@ TagManager:
   - EnemyDamageBox
   - IgnoreEntitiesCollision
   - Damager
-  - Slope<
-  - Slope>
-  - FalseBlock
+  - 
+  - 
+  - 
   - Ladder
   - Background
   - Node
-  - HitboxDetector
+  - MouseHover
   - 
   - 
   - 

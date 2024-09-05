@@ -27,6 +27,8 @@ public class MenuController : MonoBehaviour {
     [SerializeField] public Dropdown ResolutionDropdown;
     [SerializeField] public GameObject settingsMenu;
     [SerializeField] GameObject MiniMap;
+    [SerializeField] public GameObject boxMenu;
+    [SerializeField] public RectTransform uiMenus;
 
     [SerializeField] GameObject MiniMapCamera;
     [SerializeField] GameObject MiniMapButton;

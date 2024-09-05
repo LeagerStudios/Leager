@@ -1,16 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Box : MonoBehaviour
 {
-    int maxStacks = 9;
-
+    public int maxStacks = 9;
+    public BoxMenu targetMenu;
 
     void Start()
     {
         if (transform.parent.GetComponent<TileProperties>() == null)
             transform.parent.gameObject.AddComponent<TileProperties>().parentTile = System.Array.IndexOf(GameManager.gameManagerReference.tiles, transform.parent.GetComponent<SpriteRenderer>().sprite);
+    }
+
+    public int[][] FetchItems()
+    {
+        List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
+        List<int> retItems = new List<int>();
+        List<int> retAmounts = new List<int>();
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            int[] data = ManagingFunctions.ConvertStringToIntArray(items[i].Split(':'));
+
+            retItems.Add(data[0]);
+            retAmounts.Add(data[1]);
+        }
+
+        return new int[][] { retItems.ToArray(), retAmounts.ToArray() };
     }
 
     public void ToggleItems()
@@ -33,12 +51,14 @@ public class Box : MonoBehaviour
                 GameManager.gameManagerReference.player.PlayerRelativeDrop(tile, tileAmount);
 
             items.RemoveAt(items.Count - 1);
+            if (targetMenu != null) targetMenu.RemoveLast();
         }
         else
         {
             if(StackBar.stackBarController.currentItem != 0 && items.Count <= maxStacks)
             {
                 items.Add(StackBar.stackBarController.currentItem + ":" + StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx]);
+                if (targetMenu != null) targetMenu.Add(StackBar.stackBarController.currentItem, StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx], false);
                 StackBar.AsignNewStack(StackBar.stackBarController.idx, 0, 0);
             }
         }
@@ -53,6 +73,7 @@ public class Box : MonoBehaviour
         if (items.Count <= maxStacks)
         {
             items.Add(item + ":" + amount);
+            if (targetMenu != null) targetMenu.Add(item, amount, false);
             return true;
         }
         else return false;
@@ -70,9 +91,29 @@ public class Box : MonoBehaviour
             int tileAmount = data[1];
 
             items.RemoveAt(items.Count - 1);
+            if (targetMenu != null) targetMenu.RemoveLast();
 
             return tile + ":" + tileAmount;
         }
         else return "null";
+    }
+
+    private void OnMouseOver()
+    {
+        if(targetMenu == null)
+        {
+            targetMenu = Instantiate(MenuController.menuController.boxMenu, MenuController.menuController.uiMenus).GetComponent<BoxMenu>();
+            targetMenu.targetBox = this;
+            targetMenu.gameObject.name = "BoxMenu";
+        }
+    }
+
+    public void OnMouseExit()
+    {
+        if(targetMenu != null)
+        {
+            targetMenu.targetBox = null;
+            targetMenu = null;
+        }
     }
 }

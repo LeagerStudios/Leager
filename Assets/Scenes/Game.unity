@@ -18386,6 +18386,8 @@ MonoBehaviour:
   ResolutionDropdown: {fileID: 929}
   settingsMenu: {fileID: 234}
   MiniMap: {fileID: 32}
+  boxMenu: {fileID: 1082114432784878, guid: 7c7851e5d9d151a41b1e9121a089f647, type: 3}
+  uiMenus: {fileID: 645}
   MiniMapCamera: {fileID: 173}
   MiniMapButton: {fileID: 76}
   FpsButton: {fileID: 14}

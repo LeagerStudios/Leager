@@ -64,9 +64,9 @@ public class WorkItemController : MonoBehaviour {
 
         if (tile == 16)
         {
-            if (GameObject.Find("CraftMenu") == null /*&& TechManager.techTree.fullyUnlockedItems.Count > 0*/)
+            if (MenuController.menuController.uiMenus.Find("CraftMenu") == null /*&& TechManager.techTree.fullyUnlockedItems.Count > 0*/)
             {
-                GameObject a = Instantiate(CraftMenu, GameObject.Find("UI Menus").transform);
+                GameObject a = Instantiate(CraftMenu, MenuController.menuController.uiMenus);
                 a.name = "CraftMenu";
                 a.GetComponent<CraftMenuController>().InvokeMenu(tileObj.transform);
             }
