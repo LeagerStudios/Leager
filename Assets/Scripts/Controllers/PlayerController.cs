@@ -894,13 +894,17 @@ public class PlayerController : MonoBehaviour, IDamager
                     transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
                     transform.GetChild(0).Translate(Vector2.down);
 
+                    RaycastHit raycastHit;
+                    int loopback = 0;
                     for (int i = 0; i < 24; i++)
                     {
                         transform.GetChild(0).Translate(Vector2.up * 0.05f);
+                        loopback++;
+
                         yield return new WaitForSeconds(0.016f);
                     }
 
-                    for (int i = 0; i < 24; i++)
+                    for (int i = 0; i < loopback; i++)
                     {
                         transform.GetChild(0).Translate(Vector2.up * -0.05f);
                         yield return new WaitForSeconds(0.016f);
