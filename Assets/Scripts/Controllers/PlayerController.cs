@@ -483,6 +483,8 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 StartCoroutine(ArmAnimation(gameManager.armUsing));
                 armCooldown = gameManager.tileSize[StackBar.stackBarController.currentItem].z;
+                healthBar.MaxCooldown = armCooldown;
+                healthBar.cooldown = armCooldown;
 
                 if (gameManager.armUsing == "bow")
                 {
@@ -515,6 +517,7 @@ public class PlayerController : MonoBehaviour, IDamager
         else if (armCooldown > 0f)
         {
             armCooldown -= Time.deltaTime;
+            healthBar.cooldown = Mathf.Clamp(armCooldown, 0, 9999f);
         }
         
         if (Grounded && alive)

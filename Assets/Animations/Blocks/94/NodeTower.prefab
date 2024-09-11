@@ -168,7 +168,6 @@ MonoBehaviour:
   down: {fileID: 2534643453052319704}
   feet: {fileID: 5346593057440268027}
   scale: 0
-  deploying: 1
   speed: 0
 --- !u!1 &1296700219126482995
 GameObject:
