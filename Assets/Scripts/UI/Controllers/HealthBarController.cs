@@ -5,13 +5,17 @@ using UnityEngine.UI;
 
 public class HealthBarController : MonoBehaviour {
 
-    [SerializeField] Slider slider;
+    [SerializeField] RectTransform bar;
+    [SerializeField] RectTransform armorBar;
     [SerializeField] RectTransform cooldownBar;
+    [SerializeField] Image blueHeart;
     [SerializeField] Text nLives;
     float targetSlider = 0;
     float previousSlider = 0;
     float timeSlider = 0;
     float maxCooldown = 0.01f;
+    int maxHealth = 20;
+    public int defense = 0;
 
     public float MaxCooldown
     {
@@ -23,26 +27,34 @@ public class HealthBarController : MonoBehaviour {
 
     public void Update()
     {
-        if(timeSlider < 1f)
+        defense = GameManager.gameManagerReference.ToolEfficency[GameManager.gameManagerReference.equipedArmor[0]] + GameManager.gameManagerReference.ToolEfficency[GameManager.gameManagerReference.equipedArmor[1]] + GameManager.gameManagerReference.ToolEfficency[GameManager.gameManagerReference.equipedArmor[2]];
+        defense = Mathf.Clamp(defense, 0, maxHealth);
+
+        if (timeSlider < 1f)
         {
             timeSlider += Time.deltaTime * 10;
         }
         if (timeSlider > 1) timeSlider = 1;
 
-        slider.value = Mathf.Lerp(previousSlider, targetSlider, timeSlider);
+
+
+        bar.sizeDelta = new Vector2(Mathf.Lerp(previousSlider, targetSlider, timeSlider) * 130 / maxHealth, 20);
         cooldownBar.sizeDelta = new Vector2(cooldown / maxCooldown * 65, 5);
+        armorBar.sizeDelta = new Vector2(defense * 130 / maxHealth * (bar.sizeDelta.x / 130), 20);
+        blueHeart.fillAmount = Mathf.MoveTowards(blueHeart.fillAmount, (float)defense / maxHealth, Time.deltaTime * Mathf.Abs(defense - blueHeart.fillAmount * maxHealth));
     }
 
     public void SetHealth(int health)
     {
         timeSlider = 0;
-        previousSlider = slider.value;
-        targetSlider = Mathf.Clamp(health, 0, slider.maxValue);
-        nLives.text = Mathf.Clamp(health, 0, slider.maxValue) + "";
+        previousSlider = bar.sizeDelta.x / 130 * maxHealth;
+        targetSlider = Mathf.Clamp(health, 0, maxHealth);
+        nLives.text = Mathf.Clamp(health, 0, maxHealth) + "";
     }
 
     public void SetMaxHealth(int value)
     {
-        slider.maxValue = value;
+        maxHealth = value;
+        SetHealth((int)targetSlider);
     }
 }
