@@ -331,7 +331,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
                     LoseHp((int)wingTime * 5, entityScript);
 
-                    if(HP <= 0)
+                    if (HP <= 0)
                     {
                         rb2D.freezeRotation = false;
                     }
@@ -477,7 +477,7 @@ public class PlayerController : MonoBehaviour, IDamager
             StackBar.LoseItem();
         }
 
-        if (GInput.GetMouseButtonDown(0) && gameManager.usingArm && armCooldown <= 0f)
+        if (GInput.GetMouseButtonDown(0) && gameManager.usingArm && armCooldown <= 0f && )
         {
             if (!gameManager.cancelPlacing)
             {
@@ -519,7 +519,7 @@ public class PlayerController : MonoBehaviour, IDamager
             armCooldown -= Time.deltaTime;
             healthBar.cooldown = Mathf.Clamp(armCooldown, 0, 9999f);
         }
-        
+
         if (Grounded && alive)
         {
             if (Mathf.Round(falling) >= 5f)
@@ -662,7 +662,7 @@ public class PlayerController : MonoBehaviour, IDamager
             if (damagedCooldown < 0.1f | ignoreImunity)
             {
                 HP -= hpLost;
-                if(hpLost > 0) gameManager.soundController.PlaySfxSound(hitSound);
+                if (hpLost > 0) gameManager.soundController.PlaySfxSound(hitSound);
                 healthBar.SetHealth(HP);
 
                 if (HP < 1)
@@ -705,8 +705,8 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         if (!alive && killing)
         {
-            if(collision.collider.gameObject.layer == 8 && collision.collider.gameObject.GetComponent<PlatformEffector2D>() == null)
-            DeathFase();
+            if (collision.collider.gameObject.layer == 8 && collision.collider.gameObject.GetComponent<PlatformEffector2D>() == null)
+                DeathFase();
         }
     }
 
@@ -801,125 +801,123 @@ public class PlayerController : MonoBehaviour, IDamager
 
     public IEnumerator ArmAnimation(string armType)
     {
-        if (transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite == gameManager.tiles[0])
+        int tile = StackBar.stackBarController.currentItem;
+        Vector4 size = gameManager.tileSize[tile];
+        transform.GetChild(0).eulerAngles = Vector3.zero;
+        transform.GetChild(0).localScale = new Vector3(size.x * 0.7f, size.y * 0.7f, 1);
+        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[tile];
+        transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().Clear();
+        transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = false;
+        transform.GetChild(0).GetChild(0).GetChild(0).localPosition = new Vector2(0.435f, GetComponent<SpriteRenderer>().flipX ? -0.435f : 0.435f);
+
+        //1.2
+
+        if (armType == "sword")
         {
-            int tile = StackBar.stackBarController.currentItem;
-            Vector4 size = gameManager.tileSize[tile];
-            transform.GetChild(0).eulerAngles = Vector3.zero;
-            transform.GetChild(0).localScale = new Vector3(size.x * 0.7f, size.y * 0.7f, 1);
-            transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[tile];
-            transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().Clear();
-            transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = false;
-            transform.GetChild(0).GetChild(0).GetChild(0).localPosition = new Vector2(0.435f, GetComponent<SpriteRenderer>().flipX ? -0.435f : 0.435f);
-
-            //1.2
-
-            if (armType == "sword")
+            gameManager.soundController.PlaySfxSound(swing);
+            transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = true;
+            if (GetComponent<SpriteRenderer>().flipX)
             {
-                gameManager.soundController.PlaySfxSound(swing);
-                transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = true;
-                if (GetComponent<SpriteRenderer>().flipX)
-                {
-                    transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 135);
-                    transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = true;
-                }
-                else
-                {
-                    transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
-                    transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
-                }
+                transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 135);
+                transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = true;
+            }
+            else
+            {
+                transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
+                transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
+            }
 
-                PROJECTILE_SwordParticle swordParticle = (PROJECTILE_SwordParticle)PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
-                float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX);
-                for (int i = 0; i < 10; i++)
+            PROJECTILE_SwordParticle swordParticle = (PROJECTILE_SwordParticle)PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
+            float armRotation = 180 / 10 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX);
+            for (int i = 0; i < 10; i++)
+            {
+                transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
+                if (swordParticle != null)
                 {
-                    transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
+                    swordParticle.transform.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                }
+                yield return new WaitForSeconds(0.016f);
+            }
+            if (gameManager.tileSize[StackBar.stackBarController.currentItem].z > 0.25f)
+            {
+                yield return new WaitForSeconds(0.1f);
+
+                if (swordParticle == null)
+                    swordParticle = (PROJECTILE_SwordParticle)PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
+
+                for (int i = 0; i < 20; i++)
+                {
+                    transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z - armRotation * 0.5f);
                     if (swordParticle != null)
                     {
                         swordParticle.transform.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
                     }
                     yield return new WaitForSeconds(0.016f);
                 }
-                if (gameManager.tileSize[StackBar.stackBarController.currentItem].z > 0.25f)
-                {
-                    yield return new WaitForSeconds(0.1f);
-
-                    if (swordParticle == null)
-                        swordParticle = (PROJECTILE_SwordParticle)PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
-
-                    for (int i = 0; i < 20; i++)
-                    {
-                        transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z - armRotation * 0.5f);
-                        if (swordParticle != null)
-                        {
-                            swordParticle.transform.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
-                        }
-                        yield return new WaitForSeconds(0.016f);
-                    }
-                }
-
-                if (swordParticle != null)
-                    swordParticle.Despawn();
             }
 
-            if (armType == "bow")
-            {
-                transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, -45);
-                transform.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(Vector2.zero, gameManager.mouseCurrentPosition - transform.position));
-
-                yield return new WaitForSeconds(0.1f);
-            }
-
-            if (armType == "tool")
-            {
-                if (!GetComponent<SpriteRenderer>().flipX)
-                {
-                    transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 135);
-                    transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = true;
-                }
-                else
-                {
-                    transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
-                    transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
-                }
-
-                if (gameManager.toolUsing != "nodeConnector")
-                {
-                    float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX);
-                    for (int i = 0; i < 12; i++)
-                    {
-                        transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
-                        yield return new WaitForSeconds(0.016f);
-                    }
-                }
-                else
-                {
-                    transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
-                    transform.GetChild(0).Translate(Vector2.down);
-
-                    RaycastHit raycastHit;
-                    int loopback = 0;
-                    for (int i = 0; i < 24; i++)
-                    {
-                        transform.GetChild(0).Translate(Vector2.up * 0.05f);
-                        loopback++;
-
-                        yield return new WaitForSeconds(0.016f);
-                    }
-
-                    for (int i = 0; i < loopback; i++)
-                    {
-                        transform.GetChild(0).Translate(Vector2.up * -0.05f);
-                        yield return new WaitForSeconds(0.016f);
-                    }
-
-                    transform.GetChild(0).localPosition = Vector2.zero;
-                }
-            }
-
-            transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = false;
-            transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[0];
-            transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
+            if (swordParticle != null)
+                swordParticle.Despawn();
         }
+
+        if (armType == "bow")
+        {
+            transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, -45);
+            transform.GetChild(0).eulerAngles = new Vector3(0, 0, ManagingFunctions.PointToPivotUp(Vector2.zero, gameManager.mouseCurrentPosition - transform.position));
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (armType == "tool")
+        {
+            if (!GetComponent<SpriteRenderer>().flipX)
+            {
+                transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 135);
+                transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = true;
+            }
+            else
+            {
+                transform.GetChild(0).GetChild(0).eulerAngles = new Vector3(0, 0, 45);
+                transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
+            }
+
+            if (gameManager.toolUsing != "nodeConnector")
+            {
+                float armRotation = 180 / 12 * ManagingFunctions.ParseBoolToInt(GetComponent<SpriteRenderer>().flipX);
+                for (int i = 0; i < 12; i++)
+                {
+                    transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z + armRotation);
+                    yield return new WaitForSeconds(0.016f);
+                }
+            }
+            else
+            {
+                transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
+                transform.GetChild(0).Translate(Vector2.down);
+
+                RaycastHit raycastHit;
+                int loopback = 0;
+                for (int i = 0; i < 24; i++)
+                {
+                    transform.GetChild(0).Translate(Vector2.up * 0.05f);
+                    loopback++;
+
+                    yield return new WaitForSeconds(0.016f);
+                }
+
+                for (int i = 0; i < loopback; i++)
+                {
+                    transform.GetChild(0).Translate(Vector2.up * -0.05f);
+                    yield return new WaitForSeconds(0.016f);
+                }
+
+                transform.GetChild(0).localPosition = Vector2.zero;
+            }
+        }
+
+        transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = false;
+        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[0];
+        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
     }
+
 }

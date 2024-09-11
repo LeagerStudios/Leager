@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 public class CameraController : MonoBehaviour {
 
@@ -9,7 +8,6 @@ public class CameraController : MonoBehaviour {
     [SerializeField] float delay = 0f;
     public bool transparentSkybox = false;
     public bool supportsBackgrounds = false;
-    public PostProcessProfile blurProfile;
     public string currentBackground = "";
 
     Vector2 actualCameraPos = new Vector2();
@@ -45,23 +43,6 @@ public class CameraController : MonoBehaviour {
 
             focus.GetComponent<PlayerController>().onControl = true;
             MenuController.menuController.UIActive = true;
-        }
-
-        if(blurProfile != null)
-        {
-            if(blurProfile.TryGetSettings(out DepthOfField depth))
-            {
-                if (GameManager.gameManagerReference.InGame)
-                {
-                    depth.focusDistance.value += Time.deltaTime * 2;
-                }
-                else
-                {
-                    depth.focusDistance.value -= Time.deltaTime;
-                }
-
-                depth.focusDistance.value = Mathf.Clamp01(depth.focusDistance);
-            }
         }
 
         if (supportsBackgrounds)
