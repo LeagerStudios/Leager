@@ -895,12 +895,17 @@ public class PlayerController : MonoBehaviour, IDamager
                 else
                 {
                     transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
+                    transform.GetChild(0).GetChild(0).GetChild(0).localPosition = new Vector2(0.435f, GetComponent<SpriteRenderer>().flipX ? 0.435f : -0.435f);
                     transform.GetChild(0).Translate(Vector2.down);
 
-                    RaycastHit raycastHit;
+                    Collider2D raycastHit = null;
                     int loopback = 0;
                     for (int i = 0; i < 24; i++)
                     {
+                        raycastHit = Physics2D.OverlapCircle(transform.GetChild(0).GetChild(0).GetChild(0).position, 0.1f, nodeLayer);
+                        if (raycastHit != null)
+                            i = 9999;
+
                         transform.GetChild(0).Translate(Vector2.up * 0.05f);
                         loopback++;
 
