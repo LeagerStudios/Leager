@@ -2918,6 +2918,7 @@ GameObject:
   - component: {fileID: 452}
   - component: {fileID: 963}
   - component: {fileID: 962}
+  - component: {fileID: 438}
   m_Layer: 5
   m_Name: LessButton
   m_TagString: Untagged
@@ -4862,6 +4863,7 @@ GameObject:
   - component: {fileID: 533}
   - component: {fileID: 1081}
   - component: {fileID: 1080}
+  - component: {fileID: 303}
   m_Layer: 5
   m_Name: MoreButton
   m_TagString: Untagged
@@ -5773,6 +5775,19 @@ Behaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173}
   m_Enabled: 1
+--- !u!114 &303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ead3502fa5cf9744bdece492d7f7949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 46
 --- !u!95 &304
 Animator:
   serializedVersion: 3
@@ -7517,6 +7532,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 136}
   m_CullTransparentMesh: 0
+--- !u!114 &438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ead3502fa5cf9744bdece492d7f7949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 45
 --- !u!222 &439
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19894,18 +19922,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 963}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 811}
-        m_MethodName: AZoom
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23487,18 +23504,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1081}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 811}
-        m_MethodName: Zoom
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1081
 MonoBehaviour:
   m_ObjectHideFlags: 0

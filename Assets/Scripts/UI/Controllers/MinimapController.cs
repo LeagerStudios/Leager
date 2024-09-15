@@ -17,19 +17,29 @@ public class MinimapController : MonoBehaviour
         minimapController = this;
     }
 
-    public void Zoom()
+    void Update()
     {
-        mapSize -= 1;
-        mapSize = Mathf.Clamp(mapSize, minMapSize, maxMapSize);
-        minimapCamera.GetComponent<Camera>().orthographicSize = mapSize;
-        LightController.lightController.AddRenderQueue(GameManager.gameManagerReference.player.transform.position);
+        if (GInput.GetKey(KeyCode.Period))
+        {
+            Zoom();
+        }
+        if (GInput.GetKey(KeyCode.Minus))
+        {
+            UnZoom();
+        }
     }
 
-    public void AZoom()
+    public void Zoom()
     {
-        mapSize += 1;
+        mapSize -= 5 * Time.deltaTime;
         mapSize = Mathf.Clamp(mapSize, minMapSize, maxMapSize);
         minimapCamera.GetComponent<Camera>().orthographicSize = mapSize;
-        LightController.lightController.AddRenderQueue(GameManager.gameManagerReference.player.transform.position);
+    }
+
+    public void UnZoom()
+    {
+        mapSize += 5 * Time.deltaTime;
+        mapSize = Mathf.Clamp(mapSize, minMapSize, maxMapSize);
+        minimapCamera.GetComponent<Camera>().orthographicSize = mapSize;
     }
 }

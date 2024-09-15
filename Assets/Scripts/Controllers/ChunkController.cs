@@ -26,6 +26,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
     public float entitiesSpawnTime = 0f;
     public bool updateChunk = false;
 
+    public bool rendering = true;
+
     [Header("Prefabs")]
 
     [SerializeField] GameObject BackgroundTile;
@@ -1290,5 +1292,23 @@ public class ChunkController : MonoBehaviour, ITimerCall
         }
 
         UpdateChunk();
+    }
+
+    private void OnBecameVisible()
+    {
+        print("kuak2");
+        for (int i = 0; i < TileObject.Length; i++)
+        {
+            TileObject[i].GetComponent<SpriteRenderer>().enabled = true;
+        }
+    }
+
+    private void OnBecameInvisible()
+    {
+        print("kuak1");
+        for (int i = 0; i < TileObject.Length; i++)
+        {
+            TileObject[i].GetComponent<SpriteRenderer>().enabled = false;
+        }
     }
 }

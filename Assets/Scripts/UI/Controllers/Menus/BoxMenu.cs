@@ -32,18 +32,26 @@ public class BoxMenu : MonoBehaviour
         innerViewport.anchoredPosition = Vector2.right * 35 * (datas[0].Length - 1);
     }
 
+    public void UpdatePos()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        canvasRect = MenuController.menuController.canvas.GetComponent<RectTransform>();
+
+        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(targetBox.transform.position);
+        Vector2 FollowerScreenPosition = new Vector2((ViewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
+                                                     (ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
+
+        rectTransform.anchoredPosition = FollowerScreenPosition;
+
+        innerViewport.anchoredPosition += new Vector2((35 * (innerViewport.childCount - 1) - innerViewport.anchoredPosition.x) * Time.deltaTime * 5f, 0f);
+        text.text = innerViewport.childCount + "/" + targetBox.maxStacks;
+    }
+
     void Update()
     {
         if(targetBox != null && !closing)
         {
-            Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(targetBox.transform.position);
-            Vector2 FollowerScreenPosition = new Vector2((ViewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
-                                                         (ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
-
-            rectTransform.anchoredPosition = FollowerScreenPosition;
-
-            innerViewport.anchoredPosition += new Vector2((35 * (innerViewport.childCount - 1) - innerViewport.anchoredPosition.x) * Time.deltaTime * 5f , 0f);
-            text.text = innerViewport.childCount + "/" + targetBox.maxStacks;
+            UpdatePos();
         }
         else
         {

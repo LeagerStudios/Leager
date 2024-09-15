@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour, IDamager
 
     public Transform accesories;
 
+    EndPointNode endPointNode;
+
     void Start() //obtener referencias
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -69,6 +71,9 @@ public class PlayerController : MonoBehaviour, IDamager
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
         gameManager = GameManager.gameManagerReference;
         mainCamera = Camera.main.GetComponent<CameraController>();
+        endPointNode = new EndPointNode();
+        endPointNode.position = transform.position;
+        endPointNode.index = new Vector3Int(-1, -transform.GetSiblingIndex(), 9999);
     }
 
     void Update()
@@ -538,6 +543,7 @@ public class PlayerController : MonoBehaviour, IDamager
             }
         }
 
+        if(!gameManager.cancelPlacing)
         if (GInput.GetMouseButtonDown(0))
             if (gameManager.usingTool)
                 if (gameManager.toolUsing == "nodeConnector")
@@ -808,6 +814,7 @@ public class PlayerController : MonoBehaviour, IDamager
             transform.GetChild(0).eulerAngles = Vector3.zero;
             transform.GetChild(0).localScale = new Vector3(size.x * 0.7f, size.y * 0.7f, 1);
             transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = gameManager.tiles[tile];
+            transform.GetChild(0).GetChild(0).localPosition = new Vector2(0, 1.1f);
             transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().Clear();
             transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TrailRenderer>().emitting = false;
             transform.GetChild(0).GetChild(0).GetChild(0).localPosition = new Vector2(0.435f, GetComponent<SpriteRenderer>().flipX ? -0.435f : 0.435f);
@@ -896,26 +903,68 @@ public class PlayerController : MonoBehaviour, IDamager
                 {
                     transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
                     transform.GetChild(0).GetChild(0).GetChild(0).localPosition = new Vector2(0.435f, GetComponent<SpriteRenderer>().flipX ? 0.435f : -0.435f);
-                    transform.GetChild(0).Translate(Vector2.down);
+                    transform.GetChild(0).GetChild(0).localPosition = Vector2.zero;
 
-                    Collider2D raycastHit = null;
+                    Collider2D raycastHit;
                     int loopback = 0;
-                    for (int i = 0; i < 24; i++)
+                    do
                     {
-                        raycastHit = Physics2D.OverlapCircle(transform.GetChild(0).GetChild(0).GetChild(0).position, 0.1f, nodeLayer);
-                        if (raycastHit != null)
-                            i = 9999;
+                        raycastHit = null;
+                        for (int i = 0; loopback < 20 && i < 99; i++)
+                        {
+                            raycastHit = Physics2D.OverlapCircle(transform.GetChild(0).GetChild(0).GetChild(0).position, 0.1f, nodeLayer);
+                            if (raycastHit != null)
+                            {
+                                i = 9999;
+                            }
 
-                        transform.GetChild(0).Translate(Vector2.up * 0.05f);
-                        loopback++;
 
-                        yield return new WaitForSeconds(0.016f);
-                    }
+                            transform.GetChild(0).GetChild(0).localPosition += Vector3.up * 0.05f;
+                            endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                            loopback++;
 
-                    for (int i = 0; i < loopback; i++)
+                            yield return new WaitForSeconds(0.016f);
+                        }
+
+                        if(raycastHit != null)
+                        {
+                            NodeInstance nodeInstance = raycastHit.GetComponentInParent<NodeInstance>();
+                            Node node = nodeInstance.nodes[System.Array.IndexOf(nodeInstance.nodeObjects, raycastHit.gameObject)];
+
+                            
+                            if(endPointNode.connections.Count > 0)
+                            {
+                                node.AddConnectionRecursive(endPointNode.connections[0]);
+                                node.AddConnectionRecursive(endPointNode);
+                                endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
+                            }
+                            else
+                            {
+                                node.AddConnectionRecursive(endPointNode);
+                            }
+                        }
+
+                        for (int i = 0; loopback >= 0; i++)
+                        {
+                            transform.GetChild(0).GetChild(0).localPosition -= Vector3.up * 0.05f;
+                            endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                            loopback--;
+                            yield return new WaitForSeconds(0.016f);
+                        }
+
+                        if (endPointNode.connections.Count > 0)
+                            while (!GInput.GetMouseButtonDown(0) && gameManager.usingTool && gameManager.toolUsing == "nodeConnector")
+                            {
+                                transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
+                                endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                                yield return new WaitForEndOfFrame();
+                            }
+
+                    } while (endPointNode.connections.Count > 0 && gameManager.usingTool && gameManager.toolUsing == "nodeConnector");
+
+                    while(endPointNode.connections.Count > 0)
                     {
-                        transform.GetChild(0).Translate(Vector2.up * -0.05f);
-                        yield return new WaitForSeconds(0.016f);
+                        endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
                     }
 
                     transform.GetChild(0).localPosition = Vector2.zero;

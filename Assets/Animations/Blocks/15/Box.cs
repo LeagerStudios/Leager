@@ -14,6 +14,29 @@ public class Box : MonoBehaviour
             transform.parent.gameObject.AddComponent<TileProperties>().parentTile = System.Array.IndexOf(GameManager.gameManagerReference.tiles, transform.parent.GetComponent<SpriteRenderer>().sprite);
     }
 
+    private void Update()
+    {
+        if (ManagingFunctions.InsideRanges(GameManager.gameManagerReference.mouseCurrentPosition, transform.position - (Vector3.one * 0.5f), transform.position + (Vector3.one * 0.5f)))
+        {
+            if (GameManager.gameManagerReference.InGame && !StackBar.stackBarController.InventoryDeployed)
+                if (targetMenu == null)
+                {
+                    targetMenu = Instantiate(MenuController.menuController.boxMenu, MenuController.menuController.uiMenus).GetComponent<BoxMenu>();
+                    targetMenu.targetBox = this;
+                    targetMenu.gameObject.name = "BoxMenu";
+                    targetMenu.UpdatePos();
+                }
+        }
+        else
+        {
+            if (targetMenu != null)
+            {
+                targetMenu.targetBox = null;
+                targetMenu = null;
+            }
+        }
+    }
+
     public int[][] FetchItems()
     {
         List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
@@ -70,7 +93,7 @@ public class Box : MonoBehaviour
     {
         List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
 
-        if (items.Count <= maxStacks)
+        if (items.Count < maxStacks)
         {
             items.Add(item + ":" + amount);
             if (targetMenu != null) targetMenu.Add(item, amount, false);
@@ -96,25 +119,5 @@ public class Box : MonoBehaviour
             return tile + ":" + tileAmount;
         }
         else return "null";
-    }
-
-    private void OnMouseOver()
-    {
-        if(GameManager.gameManagerReference.InGame && !StackBar.stackBarController.InventoryDeployed)
-        if(targetMenu == null)
-        {
-            targetMenu = Instantiate(MenuController.menuController.boxMenu, MenuController.menuController.uiMenus).GetComponent<BoxMenu>();
-            targetMenu.targetBox = this;
-            targetMenu.gameObject.name = "BoxMenu";
-        }
-    }
-
-    public void OnMouseExit()
-    {
-        if(targetMenu != null)
-        {
-            targetMenu.targetBox = null;
-            targetMenu = null;
-        }
     }
 }

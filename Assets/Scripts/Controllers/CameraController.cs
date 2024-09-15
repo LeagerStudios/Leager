@@ -48,10 +48,20 @@ public class CameraController : MonoBehaviour {
         if (supportsBackgrounds)
         {
             SpriteRenderer[] backgrounds = GetComponentsInChildren<SpriteRenderer>();
+            int i = 0;
 
             foreach(SpriteRenderer background in backgrounds)
             {
                 Color color = background.color;
+
+                if(i > 0)
+                {
+                    background.size = Vector2.one * LightController.lightController.lightDist;
+                }
+                else
+                {
+                    background.size = new Vector2(LightController.lightController.lightDist, 5);
+                }
 
                 if(background.gameObject.name.Contains(currentBackground))
                 {
@@ -64,6 +74,7 @@ public class CameraController : MonoBehaviour {
 
                 background.enabled = color.a != 0f;
                 background.color = color;
+                i++;
             }
         }
     }

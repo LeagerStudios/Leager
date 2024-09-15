@@ -48,6 +48,15 @@ public class Node
         }
     }
 
+    public void RemoveConnectionRecursive(Node node)
+    {
+        if (connections.Contains(node))
+        {
+            connections.Remove(node);
+            node.RemoveConnection(this);
+        }
+    }
+
     public virtual void UpdatePower(float power, NodePath updatedNodes)
     {
         Power += power;
