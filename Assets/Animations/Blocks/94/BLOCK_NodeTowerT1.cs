@@ -17,7 +17,7 @@ public class BLOCK_NodeTowerT1 : MonoBehaviour
     {
         if (GameManager.gameManagerReference.InGame)
         {
-            speed -= Time.deltaTime * Physics2D.gravity.y;
+            speed -= Mathf.Clamp(Time.deltaTime * Physics2D.gravity.y, 0f, 0.1f);
             scale += speed * Time.deltaTime;
             scale = Mathf.Clamp(scale, 0, 300);
 

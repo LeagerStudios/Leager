@@ -13864,6 +13864,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showcaseMode: 0
+  chatDialog: {fileID: 1344647982}
+  chatDialogTxt: {fileID: 536396065}
 --- !u!114 &795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31187,7 +31189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.1745283, b: 0.1745283, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -31196,16 +31198,16 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: c2c30db5348dc92498f08c96b44cd12b, type: 3}
     m_FontSize: 15
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
+    m_BestFit: 1
+    m_MinSize: 2
     m_MaxSize: 15
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 0
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Lecter> Buy leager
+  m_Text: Error
 --- !u!222 &536396066
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -29,10 +29,12 @@ public class Node
         if (connection != this && !connections.Contains(connection) && connections.Count < connectionLimit)
         {
             connections.Add(connection);
+            updatedThis = true;
             if (connection.AddConnection(this)) return true;
             else
             {
                 connections.Remove(connection);
+                updatedThis = false;
                 return false;
             }
         }

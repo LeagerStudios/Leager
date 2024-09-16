@@ -71,9 +71,11 @@ public class PlayerController : MonoBehaviour, IDamager
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
         gameManager = GameManager.gameManagerReference;
         mainCamera = Camera.main.GetComponent<CameraController>();
-        endPointNode = new EndPointNode();
-        endPointNode.position = transform.position;
-        endPointNode.index = new Vector3Int(-1, -transform.GetSiblingIndex(), 9999);
+        endPointNode = new EndPointNode
+        {
+            position = transform.position,
+            index = new Vector3Int(-1, -transform.GetSiblingIndex(), 9999)
+        };
     }
 
     void Update()
@@ -907,6 +909,8 @@ public class PlayerController : MonoBehaviour, IDamager
 
                     Collider2D raycastHit;
                     int loopback = 0;
+                    bool allowedExit = false;
+
                     do
                     {
                         raycastHit = null;
@@ -926,45 +930,77 @@ public class PlayerController : MonoBehaviour, IDamager
                             yield return new WaitForSeconds(0.016f);
                         }
 
-                        if(raycastHit != null)
+                        if (raycastHit != null)
                         {
                             NodeInstance nodeInstance = raycastHit.GetComponentInParent<NodeInstance>();
                             Node node = nodeInstance.nodes[System.Array.IndexOf(nodeInstance.nodeObjects, raycastHit.gameObject)];
+                            Node previousNode = null;
+                            if (endPointNode.connections.Count > 0)
+                                previousNode = endPointNode.connections[0];
 
-                            
-                            if(endPointNode.connections.Count > 0)
-                            {
-                                node.AddConnectionRecursive(endPointNode.connections[0]);
-                                node.AddConnectionRecursive(endPointNode);
-                                endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
-                            }
-                            else
-                            {
-                                node.AddConnectionRecursive(endPointNode);
-                            }
+                            if (previousNode != node)
+                                if (previousNode != null)
+                                {
+                                    if (node.GetType() != NodeManager.self.sourceNode)
+                                    {
+                                        previousNode.RemoveConnectionRecursive(endPointNode);
+                                        previousNode.AddConnectionRecursive(node);
+                                        if (node.GetType() != NodeManager.self.endPointNode)
+                                            endPointNode.AddConnectionRecursive(node);
+                                    }
+                                }
+                                else
+                                {
+                                    if (node.GetType() == NodeManager.self.sourceNode || node.connections.Count > 0)
+                                        node.AddConnectionRecursive(endPointNode);
+                                }
+
                         }
 
-                        for (int i = 0; loopback >= 0; i++)
+                        if(loopback > 10)
                         {
-                            transform.GetChild(0).GetChild(0).localPosition -= Vector3.up * 0.05f;
-                            endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
-                            loopback--;
-                            yield return new WaitForSeconds(0.016f);
+                            for (int i = 0; loopback >= 10; i++)
+                            {
+                                transform.GetChild(0).GetChild(0).localPosition -= Vector3.up * 0.05f;
+                                endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                                loopback--;
+                                yield return new WaitForSeconds(0.016f);
+                            }
+                        }
+                        else if(loopback < 10)
+                        {
+                            for (int i = 0; loopback < 10; i++)
+                            {
+                                transform.GetChild(0).GetChild(0).localPosition += Vector3.up * 0.05f;
+                                endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                                loopback++;
+                                yield return new WaitForSeconds(0.016f);
+                            }
                         }
 
                         if (endPointNode.connections.Count > 0)
-                            while (!GInput.GetMouseButtonDown(0) && gameManager.usingTool && gameManager.toolUsing == "nodeConnector")
+                            while (!GInput.GetMouseButton(0) && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
                             {
-                                transform.GetChild(0).eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
+                                transform.GetChild(0).eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.GetChild(0).eulerAngles.z, ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition), 180f * Time.deltaTime);
                                 endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                                if (Vector2.Distance(endPointNode.connections[0].position, endPointNode.position) > 15) allowedExit = true;
+
                                 yield return new WaitForEndOfFrame();
                             }
 
-                    } while (endPointNode.connections.Count > 0 && gameManager.usingTool && gameManager.toolUsing == "nodeConnector");
+                    } while (endPointNode.connections.Count > 0 && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit);
 
                     while(endPointNode.connections.Count > 0)
                     {
                         endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
+                    }
+
+                    for (int i = 0; loopback >= 0; i++)
+                    {
+                        transform.GetChild(0).GetChild(0).localPosition -= Vector3.up * 0.05f;
+                        endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
+                        loopback--;
+                        yield return new WaitForSeconds(0.016f);
                     }
 
                     transform.GetChild(0).localPosition = Vector2.zero;

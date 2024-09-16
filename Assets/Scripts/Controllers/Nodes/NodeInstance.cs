@@ -60,26 +60,6 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
         }
     }
 
-    public void Update()
-    {
-        if (GInput.GetMouseButtonDown(1))
-        {
-            if (Vector2.Distance(transform.position, GameManager.gameManagerReference.mouseCurrentPosition) < 0.2f)
-            {
-                if (NodeManager.self.nodeSelected == null)
-                {
-                    NodeManager.self.nodeSelected = nodes[0];
-                }
-                else if(NodeManager.self.nodeSelected != nodes[0])
-                {
-                    NodeManager.self.nodeSelected.AddConnectionRecursive(nodes[0]);
-                    NodeManager.self.nodeSelected = nodes[0];
-                }
-            }
-        }
-        
-    }
-
     private void OnDestroy()
     {
         if (NodeManager.self != null)

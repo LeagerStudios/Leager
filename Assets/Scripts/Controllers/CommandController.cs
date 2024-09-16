@@ -15,6 +15,9 @@ public class CommandController : MonoBehaviour {
     int writebarFrame = 0;
     public static CommandController commandController;
 
+    public GameObject chatDialog;
+    public Text chatDialogTxt;
+
 
 	void Start () {
         background = GetComponent<Image>();
@@ -84,6 +87,7 @@ public class CommandController : MonoBehaviour {
             text.enabled = true;
             if (GInput.GetKeyDown(KeyCode.Return))
             {
+                chatDialog.SetActive(false);
                 ProcessCommand(command);
                 Debug.Log(command);
                 commandEnabled = false;
@@ -98,121 +102,129 @@ public class CommandController : MonoBehaviour {
 
     void ProcessCommand(string commandInput)
     {
-        commandInput = commandInput.ToLower();
-        string[] input = commandInput.Split();
-
-        if (input.Length > 0)
+        try
         {
-            if (input[0] == "kill")
+            commandInput = commandInput.ToLower();
+            string[] input = commandInput.Split();
+
+            if (input.Length > 0)
             {
-                if(input.Length == 1)
+                if (input[0] == "kill")
                 {
-                    GameManager.gameManagerReference.InGame = true;
-                    GameManager.gameManagerReference.player.LoseHp(99999,GameManager.gameManagerReference.player.GetComponent<EntityCommonScript>(), true);
-                }
-                else if(input.Length == 2)
-                {
-                    bool isInt = int.TryParse(input[1], out int intValue);
-                    if (isInt)
+                    if (input.Length == 1)
                     {
-                        if (GameManager.gameManagerReference.entitiesContainer.transform.childCount > intValue)
+                        GameManager.gameManagerReference.InGame = true;
+                        GameManager.gameManagerReference.player.LoseHp(99999, GameManager.gameManagerReference.player.GetComponent<EntityCommonScript>(), true);
+                    }
+                    else if (input.Length == 2)
+                    {
+                        bool isInt = int.TryParse(input[1], out int intValue);
+                        if (isInt)
                         {
-                            Destroy(GameManager.gameManagerReference.entitiesContainer.transform.GetChild(intValue).gameObject);
-                            Debug.Log("Killed entity in index " + intValue + ".");
+                            if (GameManager.gameManagerReference.entitiesContainer.transform.childCount > intValue)
+                            {
+                                Destroy(GameManager.gameManagerReference.entitiesContainer.transform.GetChild(intValue).gameObject);
+                                Debug.Log("Killed entity in index " + intValue + ".");
+                            }
+                            else
+                                Debug.Log("No entity founded in index " + intValue + ".");
                         }
                         else
-                            Debug.Log("No entity founded in index " + intValue + ".");
-                    }
-                    else
-                    {
-                        //kill the x player
+                        {
+                            //kill the x player
+                        }
                     }
                 }
-            }
-            else if (input[0] == "spawn")
-            {
-                int loopIdx = 0;
-                string entity = "";
-                Vector2 spawn = new Vector2();
-                foreach (string s in input)
+                else if (input[0] == "spawn")
                 {
-                    if (loopIdx == 1)
+                    int loopIdx = 0;
+                    string entity = "";
+                    Vector2 spawn = new Vector2();
+                    foreach (string s in input)
                     {
-                        entity = s;
-                    }
-                    if (loopIdx == 2)
-                    {
-                        if (s == "#") spawn.x = GameManager.gameManagerReference.player.transform.position.x;
-                        else spawn.x = System.Convert.ToSingle(s);
-                    }
-                    if (loopIdx == 3)
-                    {
-                        if (s == "#") spawn.y = GameManager.gameManagerReference.player.transform.position.y;
-                        else spawn.y = System.Convert.ToSingle(s);
+                        if (loopIdx == 1)
+                        {
+                            entity = s;
+                        }
+                        if (loopIdx == 2)
+                        {
+                            if (s == "#") spawn.x = GameManager.gameManagerReference.player.transform.position.x;
+                            else spawn.x = System.Convert.ToSingle(s);
+                        }
+                        if (loopIdx == 3)
+                        {
+                            if (s == "#") spawn.y = GameManager.gameManagerReference.player.transform.position.y;
+                            else spawn.y = System.Convert.ToSingle(s);
+                        }
+
+                        loopIdx++;
                     }
 
-                    loopIdx++;
-                }
-
-                if (entity != "")
-                {
-                    GameManager.gameManagerReference.SpawnEntity(GameManager.gameManagerReference.StringToEntity(entity), null, spawn);
-                }
-            }
-            else if (input[0] == "give")
-            {
-                try
-                {
-                    if (System.Convert.ToInt32(input[1]) >= GameManager.gameManagerReference.tiles.Length)
+                    if (entity != "")
                     {
-                        throw new System.IndexOutOfRangeException("Item index is out of range!");
+                        GameManager.gameManagerReference.SpawnEntity(GameManager.gameManagerReference.StringToEntity(entity), null, spawn);
                     }
-                    int item = System.Convert.ToInt32(input[1]);
-                    int repeat = System.Convert.ToInt32(input[2]);
-
-                    ManagingFunctions.DropItem(item, GameManager.gameManagerReference.player.transform.position, amount: repeat);
                 }
-                catch (System.Exception exception)
+                else if (input[0] == "give")
                 {
-                    Debug.Log("==INFORMATIVE== " + exception);
-                    Debug.Log(exception.Source);
-                    Debug.Log(exception.Message);
+                    try
+                    {
+                        if (System.Convert.ToInt32(input[1]) >= GameManager.gameManagerReference.tiles.Length)
+                        {
+                            throw new System.IndexOutOfRangeException("Item index is out of range!");
+                        }
+                        int item = System.Convert.ToInt32(input[1]);
+                        int repeat = System.Convert.ToInt32(input[2]);
+
+                        ManagingFunctions.DropItem(item, GameManager.gameManagerReference.player.transform.position, amount: repeat);
+                    }
+                    catch (System.Exception exception)
+                    {
+                        Debug.Log("==INFORMATIVE== " + exception);
+                        Debug.Log(exception.Source);
+                        Debug.Log(exception.Message);
+                    }
+                }
+                else if (input[0] == "goto")
+                {
+                    GameManager.gameManagerReference.player.transform.position = new Vector2(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]));
+                    GameManager.gameManagerReference.UpdateChunksActive();
+                }
+                else if (input[0] == "skin")
+                {
+                    GameManager.gameManagerReference.player.skin = System.Convert.ToInt32(input[1]);
+                }
+                else if (input[0] == "customres")
+                {
+                    Screen.SetResolution(System.Convert.ToInt32(input[1]), System.Convert.ToInt32(input[2]), Screen.fullScreen);
+                }
+                else if (input[0] == "setdaytime")
+                {
+                    GameManager.gameManagerReference.dayTime = System.Convert.ToInt32(input[1]);
+                    LightController.lightController.AddRenderQueue(Camera.main.transform.position);
+                }
+                else if (input[0] == "sun")
+                {
+                    varraSan = true;
+                }
+                else if (input[0] == "showcase")
+                {
+                    GameManager.gameManagerReference.InGame = true;
+                    GameManager.gameManagerReference.player.LoseHp(99999, GameManager.gameManagerReference.player.entityScript, true, 0, true);
+                    MenuController.menuController.UIActive = false;
+                    showcaseMode = true;
+
+                }
+                else
+                {
+                    Debug.Log("unrecognized");
                 }
             }
-            else if(input[0] == "goto")
-            {
-                GameManager.gameManagerReference.player.transform.position = new Vector2(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]));
-                GameManager.gameManagerReference.UpdateChunksActive();
-            }
-            else if (input[0] == "skin")
-            {
-                GameManager.gameManagerReference.player.skin = System.Convert.ToInt32(input[1]);
-            }
-            else if (input[0] == "customres")
-            {
-                Screen.SetResolution(System.Convert.ToInt32(input[1]), System.Convert.ToInt32(input[2]), Screen.fullScreen);
-            }
-            else if (input[0] == "setdaytime")
-            {
-                GameManager.gameManagerReference.dayTime = System.Convert.ToInt32(input[1]);
-                LightController.lightController.AddRenderQueue(Camera.main.transform.position);
-            }
-            else if (input[0] == "sun")
-            {
-                varraSan = true;
-            }
-            else if (input[0] == "showcase")
-            {
-                GameManager.gameManagerReference.InGame = true;
-                GameManager.gameManagerReference.player.LoseHp(99999, GameManager.gameManagerReference.player.entityScript, true, 0, true);
-                MenuController.menuController.UIActive = false;
-                showcaseMode = true;
-
-            }
-            else
-            {
-                Debug.Log("unrecognized");
-            }
+        }
+        catch(System.Exception ex)
+        {
+            chatDialogTxt.text = ex.Message;
+            chatDialog.SetActive(true);
         }
     }
 }
