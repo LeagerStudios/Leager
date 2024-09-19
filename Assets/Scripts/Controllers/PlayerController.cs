@@ -951,7 +951,7 @@ public class PlayerController : MonoBehaviour, IDamager
                                 }
                                 else
                                 {
-                                    if (node.GetType() == NodeManager.self.sourceNode || node.connections.Count > 0)
+                                    if ((node.GetType() == NodeManager.self.sourceNode || node.connections.Count > 0) && node.GetType() != NodeManager.self.endPointNode)
                                         node.AddConnectionRecursive(endPointNode);
                                 }
 
@@ -979,7 +979,7 @@ public class PlayerController : MonoBehaviour, IDamager
                         }
 
                         if (endPointNode.connections.Count > 0)
-                            while (!GInput.GetMouseButton(0) && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
+                            while ((!GInput.GetMouseButton(0) && !gameManager.cancelPlacing) && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
                             {
                                 transform.GetChild(0).eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.GetChild(0).eulerAngles.z, ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition), 180f * Time.deltaTime);
                                 endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;

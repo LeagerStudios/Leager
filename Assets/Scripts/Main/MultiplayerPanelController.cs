@@ -56,7 +56,7 @@ public class MultiplayerPanelController : MonoBehaviour
             updateList = false;
             foreach(string server in hostedWorlds)
             {
-                for(int i = 1; i < hostedPanel.childCount; i++)
+                for(int i = 2; i < hostedPanel.childCount; i++)
                 {
                     Destroy(hostedPanel.GetChild(i).gameObject);
                 }

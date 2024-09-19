@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour {
     void Start()
     {
         actualCameraPos = new Vector2(transform.position.x, transform.position.y);
-        //Screen.SetResolution ((int)Screen.width, (int)Screen.height, true);
+        Screen.SetResolution(Screen.width, Screen.height, Screen.fullScreen);
     }
     void Update()
     {

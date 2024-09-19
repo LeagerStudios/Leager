@@ -25,13 +25,13 @@ TagManager:
   - EnemyDamageBox
   - IgnoreEntitiesCollision
   - Damager
-  - 
+  - DroppedItem
   - 
   - 
   - Ladder
   - Background
   - Node
-  - MouseHover
+  - 
   - 
   - 
   - 
