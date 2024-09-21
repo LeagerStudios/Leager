@@ -219,6 +219,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1456089613954364, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
+      propertyPath: m_Name
+      value: Krotek
+      objectReference: {fileID: 0}
+    - target: {fileID: 1456089613954364, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -253,6 +257,23 @@ PrefabInstance:
     - target: {fileID: 4352301246406216, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
       propertyPath: m_RootOrder
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352301246406216, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352301246406216, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4352301246406216, guid: 32adb58795f0f0f45adb865398121b66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114158773337771558, guid: 32adb58795f0f0f45adb865398121b66,
+        type: 3}
+      propertyPath: sound
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32adb58795f0f0f45adb865398121b66, type: 3}

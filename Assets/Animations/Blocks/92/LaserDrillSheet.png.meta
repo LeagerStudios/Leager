@@ -15,6 +15,7 @@ TextureImporter:
     21300020: LaserDrillSheet_10
     21300022: LaserDrillSheet_11
     21300024: LaserDrillSheet_12
+    21300026: LaserDrillSheet_13
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -77,7 +78,7 @@ TextureImporter:
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
-    compressionQuality: 50
+    compressionQuality: 0
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
@@ -153,8 +154,8 @@ TextureImporter:
         y: 60
         width: 32
         height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -169,12 +170,12 @@ TextureImporter:
       name: LaserDrillSheet_4
       rect:
         serializedVersion: 2
-        x: 145
+        x: 144
         y: 60
         width: 3
         height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -341,6 +342,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8ea3f23ca61e8d2459df428f5e228ff3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_13
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 27
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f67fab9ba5835e4f8529f9a4da310ef
       vertices: []
       indices: 
       edges: []
