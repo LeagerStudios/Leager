@@ -120,15 +120,7 @@ public class EndPointNode : Node
 
     public override void UpdatePower(float power, NodePath updatedNodes)
     {
-        Debug.Log("EndPoint previous power: " + Power);
         Power += power;
-        Debug.Log("EndPoint received power: " + power);
-        Debug.Log("EndPoint current power: " + Power);
-
-        foreach (INodeEndPoint endPoint in endPoints)
-        {
-            endPoint.Update(this);
-        }
 
         updatedThis = true;
         updatedNodes.Add(this); // Ensure it's marked as updated
@@ -140,7 +132,7 @@ public class EndPointNode : Node
     {
         foreach(INodeEndPoint endPoint in endPoints)
         {
-            endPoint.Update(this);
+            endPoint.UpdateEndPoint(this);
         }
     }
 }
@@ -148,7 +140,7 @@ public class EndPointNode : Node
 
 public interface INodeEndPoint
 {
-    void Update(EndPointNode endPoint);
+    void UpdateEndPoint(EndPointNode endPoint);
 }
 
 public class NodePath
