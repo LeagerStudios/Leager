@@ -84,5 +84,14 @@ public class WorkItemController : MonoBehaviour {
         {
             tileObj.transform.GetComponentInChildren<Box>().ToggleItems();
         }
+
+        if (tile == 125)
+        {
+            if(StackBar.stackBarController.currentItem == 30)
+            {
+                tileObj.transform.GetComponentInChildren<EnergyGenerator>().shock = true;
+                StackBar.LoseItem();
+            }
+        }
     }
 }

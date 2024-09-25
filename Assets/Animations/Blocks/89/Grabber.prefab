@@ -102,3 +102,6 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 256
+  explosions:
+  - {fileID: 8300000, guid: 11e84e835b1312a4f91e62468e0ce7ac, type: 3}
+  - {fileID: 8300000, guid: 2e09a781eb2be5b46954ae9cee2c1c5c, type: 3}

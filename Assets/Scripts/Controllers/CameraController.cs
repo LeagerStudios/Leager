@@ -6,24 +6,19 @@ public class CameraController : MonoBehaviour {
 
     [SerializeField] public GameObject focus;
     [SerializeField] float delay = 0f;
+    public bool lerp = false;
     public bool transparentSkybox = false;
     public bool supportsBackgrounds = false;
     public string currentBackground = "";
 
-    Vector2 actualCameraPos = new Vector2();
-    Vector2 nextCameraPos = new Vector2();
-
     void Start()
     {
-        actualCameraPos = new Vector2(transform.position.x, transform.position.y);
         Screen.SetResolution(Screen.width, Screen.height, Screen.fullScreen);
     }
     void Update()
     {
         if (focus != null)
         {
-            nextCameraPos = new Vector2(focus.transform.position.x, focus.transform.position.y);
-
             if (!transparentSkybox)
             {
                 Color color = GameManager.gameManagerReference.daytimeUpdatedSkyboxColor;
@@ -34,8 +29,20 @@ public class CameraController : MonoBehaviour {
             {
                 GetComponent<Camera>().backgroundColor = GameManager.gameManagerReference.daytimeUpdatedSkyboxColor;
             }
-            transform.position = new Vector3(nextCameraPos.x, nextCameraPos.y, -10f);
-            actualCameraPos = transform.position;
+
+            if (!lerp)
+            {
+                transform.position = new Vector3(focus.transform.position.x, focus.transform.position.y, -10f);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, new Vector3(focus.transform.position.x, focus.transform.position.y, -10f), Time.deltaTime * 10);
+
+                if (Vector2.Distance(transform.position, focus.transform.position) < 0.05f)
+                {
+                    lerp = false;
+                }
+            }
         }
         else
         {
@@ -43,6 +50,7 @@ public class CameraController : MonoBehaviour {
 
             focus.GetComponent<PlayerController>().onControl = true;
             MenuController.menuController.UIActive = true;
+            lerp = true;
         }
 
         if (supportsBackgrounds)

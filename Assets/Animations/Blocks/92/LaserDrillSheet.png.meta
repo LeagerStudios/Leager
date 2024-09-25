@@ -16,6 +16,13 @@ TextureImporter:
     21300022: LaserDrillSheet_11
     21300024: LaserDrillSheet_12
     21300026: LaserDrillSheet_13
+    21300028: LaserDrillSheet_14
+    21300030: LaserDrillSheet_15
+    21300032: LaserDrillSheet_16
+    21300034: LaserDrillSheet_17
+    21300036: LaserDrillSheet_18
+    21300038: LaserDrillSheet_19
+    21300040: LaserDrillSheet_20
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -351,7 +358,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 88
-        y: 27
+        y: 43
         width: 10
         height: 5
       alignment: 0
@@ -362,6 +369,146 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0f67fab9ba5835e4f8529f9a4da310ef
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_14
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 37
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f61346bcc52d9c4b81ca4577d096c8e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_15
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 31
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c52e8954cfed7d248bb62f5986ea6fd5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_16
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 25
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bc579d292aa5c94989a12205492b94d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_17
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 19
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 462bc13c27d021940ac4974b566173d6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_18
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 13
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3cf59a0e7257e14d9207615fdb3df3b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_19
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 7
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c949343e4769a5b4eb9f3a084686a946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserDrillSheet_20
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 1
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68119d0ff74da3d4d93ac16ce02adae4
       vertices: []
       indices: 
       edges: []

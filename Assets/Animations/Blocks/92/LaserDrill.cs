@@ -23,6 +23,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
 
     public SpriteRenderer laserRenderer;
     public SpriteRenderer laserEndRenderer;
+    public ParticleSystem particles;
 
 
     void Start()
@@ -41,6 +42,9 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             lifetime -= Time.deltaTime;
             lifetime = Mathf.Clamp(lifetime, 0f, 1.5f);
 
+
+            ParticleSystem.MainModule main = particles.main;
+            main.startColor = Color.white * lifetime;
             laserRenderer.color = Color.white * lifetime;
             laserEndRenderer.color = Color.white * lifetime;
             audioSource.volume = lifetime;
@@ -94,6 +98,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                         if (!StackBar.stackBarController.InventoryDeployed)
                         {
                             focused = true;
+                            GameManager.gameManagerReference.player.mainCamera.lerp = true;
                             GameManager.gameManagerReference.player.mainCamera.focus = gameObject;
                             GameManager.gameManagerReference.player.onControl = false;
                         }
@@ -106,8 +111,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                 if (!audioSource.isPlaying)
                     audioSource.Play();
 
-                laser.gameObject.SetActive(true);
-                drill.eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(laser.position, targetPresence.position) + 90);
+                drill.eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(drill.position, targetPresence.position) + 90);
                 laser.localScale = new Vector3(Mathf.Clamp(Vector2.Distance(laser.position, targetPresence.position) - 0.5f, 0.1f, 10f), 1, 1);
             }
             else
@@ -115,7 +119,6 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                 if (audioSource.isPlaying)
                     audioSource.Stop();
 
-                laser.gameObject.SetActive(false);
             }
         }
 

@@ -97,3 +97,4 @@ MonoBehaviour:
   t: 0
   rotPerSec: 1
   endOnNext: 0
+  fireSound: {fileID: 8300000, guid: 68b18622c4de5f147aec9db5fa2f9750, type: 3}

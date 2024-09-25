@@ -11,6 +11,7 @@ public class ResourceLauncher : MonoBehaviour {
     public bool animationPlayed = false;
     public GameObject playingCore = null;
     [SerializeField] LayerMask blockMask;
+    [SerializeField] AudioClip[] explosions;
 
     public List<string> Items
     {
@@ -50,6 +51,8 @@ public class ResourceLauncher : MonoBehaviour {
                 if (SendRaycast(playingCore, 0.6f, Vector2.up, Vector2.zero, true))
                 {
                     Instantiate(explosion, playingCore.transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
+                    GameManager.gameManagerReference.soundController.PlaySfxSound(explosions[Random.Range(0, explosions.Length)], 1f);
+                    
                     StopAllCoroutines();
                     playingCore.GetComponent<SpriteRenderer>().enabled = false;
                     GameManager.gameManagerReference.TileExplosionAt((int)playingCore.transform.position.x, (int)playingCore.transform.position.y, 5, 10);
@@ -85,6 +88,7 @@ public class ResourceLauncher : MonoBehaviour {
         PlayerController player = GameManager.gameManagerReference.player;
 
         Camera.main.GetComponent<CameraController>().focus = player.gameObject;
+        Camera.main.GetComponent<CameraController>().lerp = true;
         Destroy(playingCore);
         player.onControl = true;
         MenuController.menuController.UIActive = true;
@@ -191,7 +195,7 @@ public class ResourceLauncher : MonoBehaviour {
             }
             else if (coreTile == 100)
             {
-                
+
                 float speed = 10f;
 
                 if (cameraFocus)
@@ -247,8 +251,6 @@ public class ResourceLauncher : MonoBehaviour {
                     yield return new WaitForEndOfFrame();
                 }
             }
-            if (cameraFocus)
-                Camera.main.GetComponent<CameraController>().enabled = false;
 
             Destroy(child);
         }

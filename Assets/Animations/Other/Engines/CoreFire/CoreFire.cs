@@ -9,6 +9,7 @@ public class CoreFire : MonoBehaviour
     public float t;
     public float rotPerSec = 1;
     public bool endOnNext = false;
+    public AudioClip fireSound;
 
     private void Start()
     {
@@ -18,13 +19,17 @@ public class CoreFire : MonoBehaviour
     void Update()
     {
         t += rotPerSec * 360 * Time.deltaTime;
-        if (t > 360)
+        if (t > 180)
         {
-            t -= 360;
+            t -= 180;
 
             if(endOnNext == true)
             {
                 Destroy(gameObject);
+            }
+            else
+            {
+                GameManager.gameManagerReference.soundController.PlaySfxSound(fireSound, 0.25f);
             }
         }
 
