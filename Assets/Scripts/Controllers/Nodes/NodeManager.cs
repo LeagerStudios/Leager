@@ -27,6 +27,32 @@ class NodeManager : MonoBehaviour
     public void Start()
     {
         nodes = new List<Node>();
+        //TODO Load nodes
+
+        //    public List<Node> connections = new List<Node>();
+        //public float Power { get; set; }
+        //public int connectionLimit = 4;
+        //public bool isBattery = false;
+        //public Vector3Int index;
+        //public Vector2 position;
+        //public bool updatedThis = false;
+
+        //source node extra
+        //public float TargetOutputPower { get; set; }
+        //public float OutputPower { get; private set; }
+        //public float OutputPowerDuration { get; set; }
+
+
+    }
+
+    public void Save()
+    {
+
+    }
+
+    public void Load()
+    {
+
     }
 
     public void Update()
