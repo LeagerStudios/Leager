@@ -180,23 +180,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Awake()
     {
         gameManagerReference = this;
 
-        //Setup
-
-
-        skyboxColor = Camera.main.backgroundColor;
-        Time.timeScale = 1.0f;
-        soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
-
         worldName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0];
-        persistentDataPath = Application.persistentDataPath;
-
-        if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("isNetworkLoad")[0] == "true") isNetworkClient = true;
-        if (Server.isOpen) isNetworkHost = true;
-
         int rootPlanetIdx = worldName.IndexOf("/");
         if (rootPlanetIdx >= 0)
         {
@@ -207,6 +195,20 @@ public class GameManager : MonoBehaviour
         {
             worldRootName = worldName;
         }
+
+        persistentDataPath = Application.persistentDataPath;
+    }
+
+    void Start()
+    {
+        skyboxColor = Camera.main.backgroundColor;
+        Time.timeScale = 1.0f;
+        soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
+
+        if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("isNetworkLoad")[0] == "true") isNetworkClient = true;
+        if (Server.isOpen) isNetworkHost = true;
+
+       
 
         if (!isNetworkClient)
         {
@@ -1022,6 +1024,7 @@ public class GameManager : MonoBehaviour
             DataSaver.SaveStats(playerPosition, persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd");
             DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(TechManager.techTree.fullyUnlockedItems.ToArray()), persistentDataPath + @"/worlds/" + worldRootName + @"/tech.lgrsd");
             ManagingFunctions.SaveStackBarAndInventory();
+            NodeManager.self.Save();
         }
 
         isSavingData = false;

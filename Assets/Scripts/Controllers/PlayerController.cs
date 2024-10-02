@@ -74,8 +74,9 @@ public class PlayerController : MonoBehaviour, IDamager
         endPointNode = new EndPointNode
         {
             position = transform.position,
-            index = new Vector3Int(-1, -transform.GetSiblingIndex(), 9999)
+            index = new Vector3Int(-1, -transform.GetSiblingIndex(), 0)
         };
+        endPointNode = (EndPointNode)NodeManager.self.RegisterNode(endPointNode);
     }
 
     void Update()

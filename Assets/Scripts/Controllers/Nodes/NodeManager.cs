@@ -22,11 +22,14 @@ class NodeManager : MonoBehaviour
     private void Awake()
     {
         self = this;
+        nodes = new List<Node>();
+
+        Load();
     }
 
     public void Start()
     {
-        nodes = new List<Node>();
+        
         //TODO Load nodes
 
         //    public List<Node> connections = new List<Node>();
@@ -47,12 +50,127 @@ class NodeManager : MonoBehaviour
 
     public void Save()
     {
+        List<string> nodes = new List<string>();
+      
 
+        foreach(Node nodeData in this.nodes)
+        {
+            List<string> node = new List<string>();
+
+            switch (nodeData)
+            {
+                case SourceNode source:
+                    node.Add("source");
+                    break;
+                case EndPointNode endPoint:
+                    node.Add("endpoint");
+                    break;
+                default:
+                    node.Add("node");
+                    break;
+            }
+
+            List<string> connections = new List<string>();
+            foreach (Node connection in nodeData.connections)
+            {
+                connections.Add(connection.index.x + "/" + connection.index.y + "/" + connection.index.z);
+            }
+            node.Add(string.Join(":", connections));
+            node.Add(nodeData.connectionLimit + "");
+            node.Add(nodeData.isBattery + "");
+            node.Add(nodeData.index.x + "/" + nodeData.index.y + "/" + nodeData.index.z);
+            node.Add(nodeData.position.x + "/" + nodeData.position.y);
+
+            if(nodeData.GetType() == sourceNode)
+            {
+                node.Add(((SourceNode)nodeData).TargetOutputPower + "");
+                node.Add(((SourceNode)nodeData).OutputPowerDuration + "");
+            }
+
+
+            nodes.Add(string.Join(";", node));
+        }
+        
+        DataSaver.SaveStats(nodes.ToArray(), GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/nodes.lgrsd");
     }
 
     public void Load()
     {
+        nodes = new List<Node>();
+        nodesDictionary = new Dictionary<Vector3Int, Node>();
 
+        if (DataSaver.CheckIfFileExists(GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/nodes.lgrsd"))
+        {
+            string[] savedData = DataSaver.LoadStats(GameManager.gameManagerReference.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/nodes.lgrsd").SavedData;
+
+            // First pass: Create nodes without connections
+            foreach (string nodeData in savedData)
+            {
+                string[] nodeDetails = nodeData.Split(';');
+
+                // Identify node type
+                Node newNode;
+                switch (nodeDetails[0])
+                {
+                    case "source":
+                        newNode = new SourceNode();
+                        break;
+                    case "endpoint":
+                        newNode = new EndPointNode();
+                        break;
+                    default:
+                        newNode = new Node();
+                        break;
+                }
+
+                // Load node properties (except connections for now)
+                newNode.connectionLimit = int.Parse(nodeDetails[2]);
+                newNode.isBattery = bool.Parse(nodeDetails[3]);
+
+                // Load index
+                print(nodeDetails[4]);
+                string[] indexCoords = nodeDetails[4].Split('/');
+                newNode.index = new Vector3Int(int.Parse(indexCoords[0]), int.Parse(indexCoords[1]), int.Parse(indexCoords[2]));
+
+                // Load position
+                string[] positionCoords = nodeDetails[5].Split('/');
+                newNode.position = new Vector2(float.Parse(positionCoords[0]), float.Parse(positionCoords[1]));
+
+                // Load source-specific properties if applicable
+                if (newNode is SourceNode sourceNode)
+                {
+                    sourceNode.TargetOutputPower = float.Parse(nodeDetails[6]);
+                    sourceNode.OutputPowerDuration = float.Parse(nodeDetails[7]);
+                }
+
+                nodes.Add(newNode);
+                nodesDictionary.Add(newNode.index, newNode);
+            }
+
+
+            // Second pass: Establish connections
+            for (int i = 0; i < savedData.Length; i++)
+            {
+                string[] nodeDetails = savedData[i].Split(';');
+                Node currentNode = nodes[i];
+
+                // Deserialize connections
+                string[] connectionsData = nodeDetails[1].Split(':');
+                foreach (string connection in connectionsData)
+                {
+                    if (connection != "")
+                    {
+                        string[] coords = connection.Split('/');
+                        Vector3Int index = new Vector3Int(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
+                        // Find the connected node by index
+                        if (nodesDictionary.TryGetValue(index, out Node connectionNode))
+                        {
+                            currentNode.AddConnection(connectionNode);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void Update()
