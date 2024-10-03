@@ -17,6 +17,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
     public AudioSource audioSource;
 
     public float lifetime = 0f;
+    public int selectedTile = 0;
 
     public Sprite[] selected;
     public Sprite[] notSelected;
@@ -71,6 +72,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                     {
                         if (target.y < 5)
                             target += Vector2.up;
+                        selectedTile = GameManager.gameManagerReference.GetTileAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt(target)));
                     }
                     if (GInput.GetKeyDown(KeyCode.A))
                     {
@@ -106,7 +108,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             }
 
 
-            if (target != Vector2.zero && lifetime > 0f)
+            if (target != Vector2.zero && lifetime > 0f && selectedTile > 0)
             {
                 if (!audioSource.isPlaying)
                     audioSource.Play();
@@ -118,7 +120,6 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             {
                 if (audioSource.isPlaying)
                     audioSource.Stop();
-
             }
         }
 

@@ -48,7 +48,7 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
             }
 
             node.position = nodeObjects[i].transform.position;
-            node.index = new Vector3Int((int)transform.position.x, (int)transform.position.y, i);
+            node.index = new Vector3Int((int)ManagingFunctions.ClampX(transform.position.x), (int)transform.position.y, i);
             node = NodeManager.self.RegisterNode(node);
 
             if (node.GetType() == NodeManager.self.endPointNode)
@@ -58,10 +58,12 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
 
             nodes[i] = node;
         }
+        GameManager.OnWorldRounding += RefreshPositions;
     }
 
     private void OnDestroy()
     {
+        GameManager.OnWorldRounding -= RefreshPositions;
         if (NodeManager.self != null)
             for (int i = 0; i < nodes.Length; i++)
             {
@@ -78,6 +80,14 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
         for (int i = 0; i < nodes.Length; i++)
         {
             NodeManager.self.DeleteNode(nodes[i]);
+        }
+    }
+
+    public void RefreshPositions()
+    {
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            nodes[i].position = nodeObjects[i].transform.position;
         }
     }
 }

@@ -116,7 +116,30 @@ public static class ManagingFunctions
 
     public static int CreateIndex(Vector2Int position)
     {
+        int x = position.x;
+        if(x < 0)
+        {
+            x += gameManager.WorldWidth * 16;
+        }
+        else if(x > gameManager.WorldWidth * 16)
+        {
+            x -= gameManager.WorldWidth * 16;
+        }
+
         return position.x * gameManager.WorldHeight + position.y;
+    }
+
+    public static float ClampX(float x)
+    {
+        if (x < 0)
+        {
+            x += gameManager.WorldWidth * 16;
+        }
+        else if (x > gameManager.WorldWidth * 16)
+        {
+            x -= gameManager.WorldWidth * 16;
+        }
+        return x;
     }
 
     public static int FindIndexInArrayOfVector2(Vector2 vectorToFind, Vector2[] list)

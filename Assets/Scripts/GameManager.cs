@@ -30,6 +30,7 @@ public enum Projectiles : int
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManagerReference;
+    public static event System.Action OnWorldRounding;
     [SerializeField] private bool inGame = false;
     [SerializeField] private bool playerFocused = false;
     public int seed = 0;
@@ -183,6 +184,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         gameManagerReference = this;
+        OnWorldRounding = delegate { };
 
         worldName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0];
         int rootPlanetIdx = worldName.IndexOf("/");
@@ -1903,6 +1905,7 @@ public class GameManager : MonoBehaviour
         {
             chunk.GetComponent<ChunkController>().UpdateChunkPos();
         }
+        OnWorldRounding?.Invoke();
     }
 
     public void ChangeBrush(int entryTile, GameObject tile)
@@ -2231,7 +2234,7 @@ public class GameManager : MonoBehaviour
 
     public bool ChunkActive(int x)
     {
-        ChunkController c = chunkContainer.transform.GetChild(x / 16).GetComponent<ChunkController>();
+        ChunkController c = chunkContainer.transform.GetChild((int)ManagingFunctions.ClampX(x) / 16).GetComponent<ChunkController>();
         return c.loaded && !c.loading;
     }
 

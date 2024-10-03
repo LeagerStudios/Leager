@@ -67,6 +67,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         childId = cId;
         tilesToChunk = (manager.WorldHeight * 16) * childId;
         chunkBiome = chunkBiomeParam;
+        //GameManager.OnWorldRounding += UpdateChunkPos;
     }
 
 

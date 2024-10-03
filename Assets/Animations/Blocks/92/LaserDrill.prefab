@@ -5219,6 +5219,7 @@ MonoBehaviour:
   focused: 0
   audioSource: {fileID: 614681995345758224}
   lifetime: 0
+  selectedTile: 0
   selected:
   - {fileID: 21300016, guid: 00618bc5dc6cbda4194b9ddcfbdaa6a6, type: 3}
   - {fileID: 21300010, guid: 00618bc5dc6cbda4194b9ddcfbdaa6a6, type: 3}
