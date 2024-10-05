@@ -131,13 +131,20 @@ public static class ManagingFunctions
 
     public static float ClampX(float x)
     {
-        if (x < 0)
+        bool endClamp = false;
+        while (endClamp)
         {
-            x += gameManager.WorldWidth * 16;
-        }
-        else if (x > gameManager.WorldWidth * 16)
-        {
-            x -= gameManager.WorldWidth * 16;
+            endClamp = false;
+            if (x < 0)
+            {
+                x += gameManager.WorldWidth * 16;
+                endClamp = true;
+            }
+            else if (x > gameManager.WorldWidth * 16)
+            {
+                x -= gameManager.WorldWidth * 16;
+                endClamp = true;
+            }
         }
         return x;
     }

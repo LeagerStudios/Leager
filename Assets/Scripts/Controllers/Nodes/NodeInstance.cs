@@ -83,7 +83,7 @@ public class NodeInstance : MonoBehaviour, ITilePropertiesAttach
         }
     }
 
-    public void RefreshPositions()
+    public void RefreshPositions(int a)
     {
         for (int i = 0; i < nodes.Length; i++)
         {

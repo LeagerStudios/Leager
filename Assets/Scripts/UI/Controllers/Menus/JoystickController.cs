@@ -84,6 +84,7 @@ public class JoystickController : MonoBehaviour, IDragHandler, IPointerDownHandl
 
     public void OnPointerDown(PointerEventData eventData)
     {
+
         inputVector = Vector2.zero;
         dragging = true;
     }

@@ -73,6 +73,15 @@ public class DroppedItemController : MonoBehaviour, IDamager
             }
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnWorldRounding -= UpdatePosition;
+    }
+
+    private void Start()
+    {
+        GameManager.OnWorldRounding += UpdatePosition;
+    }
 
     private void Update()
     {
@@ -143,5 +152,11 @@ public class DroppedItemController : MonoBehaviour, IDamager
         {
             GetComponent<Rigidbody2D>().simulated = false;
         }
+    }
+
+    public void UpdatePosition(int i)
+    {
+        print("a"+i);
+        transform.position += new Vector3(i * GameManager.gameManagerReference.WorldWidth * 16, 0);
     }
 }

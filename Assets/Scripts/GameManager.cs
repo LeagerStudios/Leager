@@ -30,7 +30,7 @@ public enum Projectiles : int
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManagerReference;
-    public static event System.Action OnWorldRounding;
+    public static event System.Action<int> OnWorldRounding;
     [SerializeField] private bool inGame = false;
     [SerializeField] private bool playerFocused = false;
     public int seed = 0;
@@ -1896,16 +1896,16 @@ public class GameManager : MonoBehaviour
         chunksLimits.GetChild(1).GetComponent<BoxCollider2D>().size = new Vector2(1, WorldHeight + 4);
 
         LoadedChunks = gameChunksLoaded;
-        UpdateChunksRelPos();
+        UpdateChunksRelPos(0);
     }
 
-    public void UpdateChunksRelPos()
+    public void UpdateChunksRelPos(int movement)
     {
         foreach (GameObject chunk in LoadedChunks)
         {
             chunk.GetComponent<ChunkController>().UpdateChunkPos();
         }
-        OnWorldRounding?.Invoke();
+        OnWorldRounding?.Invoke(movement);
     }
 
     public void ChangeBrush(int entryTile, GameObject tile)

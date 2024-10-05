@@ -115,21 +115,21 @@ public class EntityCommonScript : MonoBehaviour
 
         if (transform.position.x < -1)
         {
-            transform.position = transform.position + new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
             if (EntityType == "lecter")
             {
+                transform.position = transform.position + new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
+                GameManager.gameManagerReference.UpdateChunksRelPos(1);
                 LightController.lightController.AddRenderQueue(transform.position);
-                GameManager.gameManagerReference.UpdateChunksRelPos();
             }
         }
 
         if (transform.position.x > GameManager.gameManagerReference.WorldWidth * 16)
         {
-            transform.position = transform.position - new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
             if (EntityType == "lecter")
             {
+                transform.position = transform.position - new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
+                GameManager.gameManagerReference.UpdateChunksRelPos(-1);
                 LightController.lightController.AddRenderQueue(transform.position);
-                GameManager.gameManagerReference.UpdateChunksRelPos();
             }
         }
     }
