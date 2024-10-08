@@ -119,7 +119,6 @@ public class EntityCommonScript : MonoBehaviour
             {
                 transform.position = transform.position + new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
                 GameManager.gameManagerReference.UpdateChunksRelPos(1);
-                LightController.lightController.AddRenderQueue(transform.position);
             }
         }
 
@@ -129,7 +128,6 @@ public class EntityCommonScript : MonoBehaviour
             {
                 transform.position = transform.position - new Vector3(GameManager.gameManagerReference.WorldWidth * 16, 0);
                 GameManager.gameManagerReference.UpdateChunksRelPos(-1);
-                LightController.lightController.AddRenderQueue(transform.position);
             }
         }
     }

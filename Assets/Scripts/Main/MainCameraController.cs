@@ -13,6 +13,8 @@ public class MainCameraController : MonoBehaviour {
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject backgroundTrees;
     [SerializeField] GameObject backgroundMountains;
+    [SerializeField] Transform stars;
+    [SerializeField] SpriteRenderer[] landscapes;
 
     void Start () {
 		
@@ -106,8 +108,14 @@ public class MainCameraController : MonoBehaviour {
         float time = Time.time;
 
         value = dayNightCycle.Evaluate(time % 120 / 120);
+        stars.eulerAngles = Vector3.forward * ((time % 120 / 120) * -180 - 45f);
 
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
+
+        foreach(SpriteRenderer renderer in landscapes)
+        {
+            renderer.color = new Color(dayLuminosity * 3, dayLuminosity * 3, dayLuminosity * 3);
+        }
 
         GetComponent<Camera>().backgroundColor = skyboxColor * dayLuminosity;
     }

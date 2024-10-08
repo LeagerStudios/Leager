@@ -107,7 +107,7 @@ public class DroppedItemController : MonoBehaviour, IDamager
             }
 
 
-            if (GameManager.gameManagerReference.ChunkActive(Mathf.RoundToInt(transform.position.x)))
+            if (GameManager.gameManagerReference.ChunkActive(Mathf.RoundToInt(ManagingFunctions.ClampX(transform.position.x))))
             {
                 GetComponent<Rigidbody2D>().simulated = true;
             }
@@ -156,7 +156,6 @@ public class DroppedItemController : MonoBehaviour, IDamager
 
     public void UpdatePosition(int i)
     {
-        print("a"+i);
         transform.position += new Vector3(i * GameManager.gameManagerReference.WorldWidth * 16, 0);
     }
 }

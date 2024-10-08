@@ -347,13 +347,14 @@ public class GameManager : MonoBehaviour
         }
 
         player.Respawn(respawnPosition.x, respawnPosition.y);
-        GameObject.Find("IlluminationCape").GetComponent<LightControllerCurrent>().AddRenderQueue(player.transform.position);
+
         inGame = true;
         playerFocused = true;
         StartCoroutine(CheckChunks());
         Transition.transform.GetChild(0).GetChild(0).GetComponent<UnityEngine.UI.Text>().text = "Done!";
         StartCoroutine(ManageTransition("CanStart", true, 1f));
         Invoke("UpdateChunksActive", 0.1f);
+        GameObject.Find("IlluminationCape").GetComponent<LightControllerCurrent>().AddRenderQueue(player.transform.position);
 
         if (!isNetworkClient)
             LoadEntities();
