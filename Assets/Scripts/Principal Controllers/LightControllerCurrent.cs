@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -90,10 +89,12 @@ public class LightControllerCurrent : MonoBehaviour
             renderLights.Add(temp1[i], temp2[i]);
         }
 
+        EcoTexture lastTexture = new EcoTexture(lightEcoTexture);
         lightEcoTexture = new EcoTexture(lightDist, lightDist);
         lightEcoTexture.Alpha1();
 
         int index = 0;
+        bool didLight = false;
 
         foreach (KeyValuePair<Vector2, float> renderLight in renderLights)
         {
@@ -116,6 +117,7 @@ public class LightControllerCurrent : MonoBehaviour
                                         {
                                             lightEcoTexture.SetPixel((int)rendLight.x, (int)rendLight.y, 0, 0, 0, 1f - GameManager.gameManagerReference.dayLuminosity);
                                             didPoint = true;
+                                            didLight = true;
                                         }
 
                 }
@@ -148,6 +150,7 @@ public class LightControllerCurrent : MonoBehaviour
                             {
                                 if (gettedColor.a > alphaIntensity)
                                 {
+                                    didLight = true;
                                     if (dist > 1.5f)
                                     {
                                         Color color = Color.black;
@@ -164,6 +167,10 @@ public class LightControllerCurrent : MonoBehaviour
                 index++;
             }
         }
+
+        if (!didLight)
+            lightEcoTexture = lastTexture;
+
         renderized = true;
         renderizingLight = false;
     }
@@ -281,10 +288,10 @@ public class LightControllerCurrent : MonoBehaviour
     }
 }
 
-public class EcoTexture
+public struct EcoTexture
 {
-    int width = 0;
-    int height = 0;
+    int width;
+    int height;
     float[] r;
     float[] g;
     float[] b;
@@ -298,6 +305,16 @@ public class EcoTexture
         g = new float[width * height];
         b = new float[width * height];
         a = new float[width * height];
+    }
+
+    public EcoTexture(EcoTexture instance)
+    {
+        width = instance.width;
+        height = instance.height;
+        r = (float[])instance.r.Clone();
+        g = (float[])instance.g.Clone();
+        b = (float[])instance.b.Clone();
+        a = (float[])instance.a.Clone();
     }
 
     public void SetPixel(int x, int y, float pr, float pg, float pb, float pa)
