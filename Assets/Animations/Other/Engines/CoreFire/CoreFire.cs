@@ -23,13 +23,14 @@ public class CoreFire : MonoBehaviour
         {
             t -= 180;
 
-            if(endOnNext == true)
+            if (endOnNext == true)
             {
                 Destroy(gameObject);
             }
             else
             {
-                GameManager.gameManagerReference.soundController.PlaySfxSound(fireSound, 0.25f);
+                if (fireSound != null)
+                    GameManager.gameManagerReference.soundController.PlaySfxSound(fireSound, 0.25f);
             }
         }
 
