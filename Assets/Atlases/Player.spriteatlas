@@ -47,7 +47,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 6274b12237ea1c54a9673f8ed0a20895, type: 3}
     - {fileID: 2800000, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
     - {fileID: 2800000, guid: 903f85206dea52946a7eecccad256d35, type: 3}
-    totalSpriteSurfaceArea: 283793
+    totalSpriteSurfaceArea: 188113
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -77,30 +77,27 @@ SpriteAtlas:
   - {fileID: 21300014, guid: e4f39d92f02c0874fbd986417c9bae33, type: 3}
   - {fileID: 21300022, guid: e4f39d92f02c0874fbd986417c9bae33, type: 3}
   - {fileID: 21300020, guid: e4f39d92f02c0874fbd986417c9bae33, type: 3}
-  - {fileID: 21300016, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300018, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300000, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300002, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300004, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300006, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300008, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300010, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300012, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300014, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300022, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300020, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
-  - {fileID: 21300022, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
+  - {fileID: 21300026, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300024, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300030, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300028, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300032, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300004, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300006, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300000, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300002, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300012, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300014, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300008, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300010, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300016, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300018, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300000, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300020, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300002, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300004, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300006, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300008, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300010, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300012, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300014, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300016, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
-  - {fileID: 21300018, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300018, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
   - {fileID: 21300016, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
   - {fileID: 21300010, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
@@ -140,30 +137,27 @@ SpriteAtlas:
   - LecterAnim_7
   - LecterAnim_11
   - LecterAnim_10
-  - LecterAnim_8
-  - LecterAnim_9
-  - LecterAnim_0
-  - LecterAnim_1
-  - LecterAnim_2
-  - LecterAnim_3
-  - LecterAnim_4
-  - LecterAnim_5
-  - LecterAnim_6
-  - LecterAnim_7
-  - LecterAnim_11
-  - LecterAnim_10
-  - ArmorPieces_11
+  - LecterSheet_11
+  - LecterSheet_10
+  - LecterSheet_13
+  - LecterSheet_12
+  - LecterSheet_15
+  - LecterSheet_14
+  - LecterSheet_16
+  - LecterSheet_2
+  - LecterSheet_3
+  - LecterSheet_0
+  - LecterSheet_1
+  - LecterSheet_6
+  - LecterSheet_7
+  - LecterSheet_4
+  - LecterSheet_5
+  - LecterSheet_8
+  - LecterSheet_9
   - ArmorPieces_0
-  - ArmorPieces_10
   - ArmorPieces_1
   - ArmorPieces_2
   - ArmorPieces_3
-  - ArmorPieces_4
-  - ArmorPieces_5
-  - ArmorPieces_6
-  - ArmorPieces_7
-  - ArmorPieces_8
-  - ArmorPieces_9
   - PumpkinLecter_9
   - PumpkinLecter_8
   - PumpkinLecter_5

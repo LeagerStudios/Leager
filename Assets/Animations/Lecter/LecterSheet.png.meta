@@ -2,18 +2,23 @@ fileFormatVersion: 2
 guid: 23e782370ffebf1489f75ff283c714cb
 TextureImporter:
   fileIDToRecycleName:
-    21300000: LecterAnim_0
-    21300002: LecterAnim_1
-    21300004: LecterAnim_2
-    21300006: LecterAnim_3
-    21300008: LecterAnim_4
-    21300010: LecterAnim_5
-    21300012: LecterAnim_6
-    21300014: LecterAnim_7
-    21300016: LecterAnim_8
-    21300018: LecterAnim_9
-    21300020: LecterAnim_10
-    21300022: LecterAnim_11
+    21300000: LecterSheet_0
+    21300002: LecterSheet_1
+    21300004: LecterSheet_2
+    21300006: LecterSheet_3
+    21300008: LecterSheet_4
+    21300010: LecterSheet_5
+    21300012: LecterSheet_6
+    21300014: LecterSheet_7
+    21300016: LecterSheet_8
+    21300018: LecterSheet_9
+    21300020: LecterSheet_10
+    21300022: LecterSheet_11
+    21300024: LecterSheet_12
+    21300026: LecterSheet_13
+    21300028: LecterSheet_14
+    21300030: LecterSheet_15
+    21300032: LecterSheet_16
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -57,7 +62,7 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 80
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,29 +77,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 8192
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Standalone
-    maxTextureSize: 8192
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Android
-    maxTextureSize: 8192
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -107,113 +90,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: LecterAnim_0
+      name: LecterSheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 113
-        width: 56
-        height: 108
-      alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b886fa362f995154aaf7c99b6afc2bd3
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LecterAnim_1
-      rect:
-        serializedVersion: 2
-        x: 62
-        y: 113
-        width: 56
-        height: 108
-      alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a6124a4d968e63349863e1a48f8aba5e
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LecterAnim_2
-      rect:
-        serializedVersion: 2
-        x: 121
-        y: 113
-        width: 56
-        height: 108
-      alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 420e068342edf5947a8746e6dc3e7fac
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LecterAnim_3
-      rect:
-        serializedVersion: 2
-        x: 180
-        y: 113
-        width: 56
-        height: 108
-      alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e28a5399db4dc0f4e8c9bae730c66510
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LecterAnim_4
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 56
-        height: 108
-      alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 03c885af6377a7c4d94d4cad856929d6
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LecterAnim_5
-      rect:
-        serializedVersion: 2
-        x: 56
-        y: 0
-        width: 60
-        height: 108
+        x: 2
+        y: 144
+        width: 29
+        height: 60
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,127 +104,327 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb3ba7b7254957e4e8197ddbe38f3a7c
+      spriteID: 314f4366e5107174c90e96b4b21e7b7e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LecterAnim_6
+      name: LecterSheet_1
       rect:
         serializedVersion: 2
-        x: 121
+        x: 42
+        y: 144
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c7b185314d888d4b9f8eec09fa24118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 144
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c785943125d7ecf4f82b7369dc4af969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 144
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25e2e84e027f86f4bb2fc3d7c2f63189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_4
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 76
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b931d74cb814d414db9b512d103eb3a0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_5
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 76
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d984dd346348cb4cb9732a30d73cb8c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_6
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 76
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2fd2787a260e9348aa04b445ec41c02
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_7
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 76
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8da109b7e71ba946bfeba15fad2e51f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_8
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
-        width: 56
-        height: 108
+        width: 37
+        height: 64
       alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
+      pivot: {x: 0.44594595, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: afd76ea6486d80a4bab60dda3809bbb5
+      spriteID: 7b9ae2b9301d2044283918d45e6bf11e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LecterAnim_7
+      name: LecterSheet_9
       rect:
         serializedVersion: 2
-        x: 180
-        y: 0
-        width: 56
-        height: 108
+        x: 42
+        y: 4
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fa572c10c1a47a4ebbe65f653b34a16
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_10
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 4
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89ea54dffbd26eb4c9130afc743e8288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_11
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 4
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab2b4387d5a04aa43bef1c6763e890da
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_12
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 215
+        width: 6
+        height: 17
       alignment: 9
-      pivot: {x: 0.39285713, y: 0.5}
+      pivot: {x: 1, y: 0.7647059}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c8b0438959a9eac4ba8ead63297c3c20
+      spriteID: 7e0b2d7c6ee612d4cb5834ecaffaf1ad
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LecterAnim_8
+      name: LecterSheet_13
       rect:
         serializedVersion: 2
-        x: 14
-        y: 237
-        width: 18
-        height: 36
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+        x: 18
+        y: 211
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8919fa6c98cdc6546aa10cf384a2bd1a
+      spriteID: f8d31b074fa120549bdac57e04fa2740
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LecterAnim_9
+      name: LecterSheet_14
       rect:
         serializedVersion: 2
-        x: 69
-        y: 237
-        width: 27
-        height: 36
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+        x: 36
+        y: 214
+        width: 6
+        height: 18
+      alignment: 9
+      pivot: {x: 1, y: 0.22222222}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a187ed3b333ba449a415cb749652000
+      spriteID: f8365d1dc7694c34184e6b806fb85feb
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LecterAnim_10
+      name: LecterSheet_15
       rect:
         serializedVersion: 2
-        x: 135
-        y: 237
-        width: 18
-        height: 36
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+        x: 54
+        y: 214
+        width: 6
+        height: 18
+      alignment: 9
+      pivot: {x: 0, y: 0.22222222}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b96f4028cd26e946b959931339d84bf
+      spriteID: 5eae02b072a7afb44ad028c3443c7de9
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LecterAnim_11
+      name: LecterSheet_16
       rect:
         serializedVersion: 2
-        x: 190
-        y: 237
-        width: 27
-        height: 36
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+        x: 72
+        y: 215
+        width: 6
+        height: 17
+      alignment: 9
+      pivot: {x: 0, y: 0.7647059}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6599fd44e03434045a67c58a7aae3751
+      spriteID: 777243b6ecc4e054598c10265d98dd31
       vertices: []
       indices: 
       edges: []
@@ -349,7 +432,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b6470da90e1c47c4ca6b9f9728c2fc24
+    spriteID: 73502980f9309984c8d7a35505010e6d
     vertices: []
     indices: 
     edges: []

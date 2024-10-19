@@ -182,12 +182,8 @@ public class PlayerController : MonoBehaviour, IDamager
         animations.SetBool("killed", false);
         GetComponent<SpriteRenderer>().enabled = true;
         entityScript = GetComponent<EntityCommonScript>();
-        for (int i = 0; i < 3; i++)
-        {
-            transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().enabled = true;
-        }
-        transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
-        transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = true;
+        transform.GetChild(1).localScale = new Vector3(0, 1, 1);
+        transform.GetChild(2).localScale = new Vector3(0, 1, 1);
         rb2D.bodyType = RigidbodyType2D.Dynamic;
         entityScript.entityStates = new List<EntityState>();
         transform.position = new Vector2(x, y);
@@ -207,7 +203,7 @@ public class PlayerController : MonoBehaviour, IDamager
         //0.5 (1.05 / 2.1f)
         //1.5
 
-        float raycastDistance = 0.7f;
+        float raycastDistance = 0.98f;
         bool Grounded = false;
 
         float offset = Mathf.Lerp(0.26f, 0.8f, offsetIDX);

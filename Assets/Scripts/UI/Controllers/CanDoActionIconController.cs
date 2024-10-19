@@ -87,4 +87,5 @@ public class CanDoActionIconController : MonoBehaviour
         }
         rectTransform.localScale = origScale;
     }
+
 }
