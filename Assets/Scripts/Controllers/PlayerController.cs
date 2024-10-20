@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
                 }
 
+                animations.SetFloat("speedx", Mathf.Abs(rb2D.velocity.x));
                 accesories.gameObject.SetActive(alive);
                 accesories.localScale = new Vector3(GetComponent<SpriteRenderer>().flipX ? -1f : 1f, 1f, 1f);
             }
@@ -206,7 +207,7 @@ public class PlayerController : MonoBehaviour, IDamager
         float raycastDistance = 0.98f;
         bool Grounded = false;
 
-        float offset = Mathf.Lerp(0.26f, 0.8f, offsetIDX);
+        float offset = Mathf.Lerp(0.324f, 1.1f, offsetIDX);
 
         Vector2 pos = new Vector2(transform.position.x, transform.position.y);
 
@@ -351,7 +352,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     transform.eulerAngles = Vector3.forward * -90;
             }
 
-            if (!flyMode && GInput.GetKey(KeyCode.W) && FlyTime < 300)
+            if (!flyMode && GInput.GetKey(KeyCode.W) && FlyTime < 300 && gameManager.addedFrameThisFrame)
             {
                 rb2D.AddForce(new Vector2(0, 40));
                 accesories.Find("123").GetChild(0).gameObject.SetActive(true);
@@ -360,8 +361,7 @@ public class PlayerController : MonoBehaviour, IDamager
                 {
                     gameManager.soundController.PlaySfxSound(jetpack);
                 }
-                if (gameManager.addedFrameThisFrame)
-                    FlyTime++;
+                FlyTime++;
             }
             else
             {
@@ -414,7 +414,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
             if (gameManager.equipedArmor[4] == 124)
             {
-                if (GInput.GetKey(KeyCode.W) && FlyTime < 300)
+                if (GInput.GetKey(KeyCode.W) && FlyTime < 300 && gameManager.addedFrameThisFrame)
                 {
                     rb2D.AddForce(new Vector2(0, 40));
                     accesories.Find("124").GetChild(0).gameObject.SetActive(true);
@@ -423,8 +423,7 @@ public class PlayerController : MonoBehaviour, IDamager
                     {
                         gameManager.soundController.PlaySfxSound(jetpack);
                     }
-                    if (gameManager.addedFrameThisFrame)
-                        FlyTime++;
+                    FlyTime++;
                 }
                 else
                 {

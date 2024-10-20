@@ -63,6 +63,7 @@ MonoBehaviour:
   currentX: 0
   entitiesSpawnTime: 0
   updateChunk: 0
+  rendering: 1
   BackgroundTile: {fileID: 1574955019418586, guid: 4860f6c509f0d3448930fb73415c7074,
     type: 3}
   grassObject: {fileID: 1349882380421944, guid: 0237245838412a8438afe9831b6fdd0e,

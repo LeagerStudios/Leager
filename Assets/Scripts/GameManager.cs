@@ -152,6 +152,8 @@ public class GameManager : MonoBehaviour
     public ArmorBarController armorBarController;
     public GameObject damageTextPrefab;
 
+    public Transform celestialBodies;
+
     public bool InGame
     {
         get { return inGame; }
@@ -381,22 +383,22 @@ public class GameManager : MonoBehaviour
 
             frameTimerAdder += Time.deltaTime;
 
-            if (frameTimerAdder > 0.016f)
+            if (frameTimerAdder >= 0.016665f)//aprox 1 frame duration on 60FPS
             {
-                while (frameTimerAdder >= 0.016f)
+                while (frameTimerAdder >= 0.016665f)
                 {
-                    frameTimerAdder -= 0.016f;
+                    frameTimerAdder -= 0.016665f;
                 }
                 addedFrameThisFrame = true;
                 frameTimer++;
             }
 
-            dayFloat += Time.deltaTime * 60;
+            dayFloat += Time.deltaTime;
 
-            while (dayFloat >= 1)
+            while (dayFloat >= 0.016665f)
             {
                 dayTime++;
-                dayFloat--;
+                dayFloat -= 0.016665f;
             }
 
             if (frameTimer > 2000000000)
@@ -898,10 +900,13 @@ public class GameManager : MonoBehaviour
     {
         float value = dayNightCycle.Evaluate((float)dayTime / fullDay);
 
+        celestialBodies.eulerAngles = Vector3.forward * (((float)dayTime / fullDay) * -180 - 45f);
+
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
 
         if (raining)
             dayLuminosity = Mathf.Clamp(value, 0.1f, 0.25f);
+
 
         daytimeUpdatedSkyboxColor = skyboxColor * dayLuminosity;
     }

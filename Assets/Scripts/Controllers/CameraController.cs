@@ -60,29 +60,32 @@ public class CameraController : MonoBehaviour {
 
             foreach(SpriteRenderer background in backgrounds)
             {
-                Color color = background.color;
+                if (background.gameObject.name.Contains("#"))
+                {
+                    Color color = background.color;
 
-                if(i > 0)
-                {
-                    background.size = Vector2.one * LightController.lightController.lightDist;
-                }
-                else
-                {
-                    background.size = new Vector2(LightController.lightController.lightDist, 5);
-                }
+                    if (i > 0)
+                    {
+                        background.size = Vector2.one * LightController.lightController.lightDist;
+                    }
+                    else
+                    {
+                        background.size = new Vector2(LightController.lightController.lightDist, 5);
+                    }
 
-                if(background.gameObject.name.Contains(currentBackground))
-                {
-                    color.a = Mathf.Clamp01(color.a + Time.deltaTime);
-                }
-                else
-                {
-                    color.a = Mathf.Clamp01(color.a - Time.deltaTime);
-                }
+                    if (background.gameObject.name.Contains(currentBackground))
+                    {
+                        color.a = Mathf.Clamp01(color.a + Time.deltaTime);
+                    }
+                    else
+                    {
+                        color.a = Mathf.Clamp01(color.a - Time.deltaTime);
+                    }
 
-                background.enabled = color.a != 0f;
-                background.color = color;
-                i++;
+                    background.enabled = color.a != 0f;
+                    background.color = color;
+                    i++;
+                }
             }
         }
     }
