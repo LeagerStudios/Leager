@@ -47,7 +47,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 6274b12237ea1c54a9673f8ed0a20895, type: 3}
     - {fileID: 2800000, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
     - {fileID: 2800000, guid: 903f85206dea52946a7eecccad256d35, type: 3}
-    totalSpriteSurfaceArea: 186679
+    totalSpriteSurfaceArea: 189415
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -77,12 +77,14 @@ SpriteAtlas:
   - {fileID: 21300014, guid: e4f39d92f02c0874fbd986417c9bae33, type: 3}
   - {fileID: 21300022, guid: e4f39d92f02c0874fbd986417c9bae33, type: 3}
   - {fileID: 21300020, guid: e4f39d92f02c0874fbd986417c9bae33, type: 3}
+  - {fileID: 21300036, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300022, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300020, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300026, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300024, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300030, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300028, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
+  - {fileID: 21300034, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300032, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300004, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
   - {fileID: 21300006, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
@@ -137,12 +139,14 @@ SpriteAtlas:
   - LecterAnim_7
   - LecterAnim_11
   - LecterAnim_10
+  - LecterSheet_18
   - LecterSheet_11
   - LecterSheet_10
   - LecterSheet_13
   - LecterSheet_12
   - LecterSheet_15
   - LecterSheet_14
+  - LecterSheet_17
   - LecterSheet_16
   - LecterSheet_2
   - LecterSheet_3

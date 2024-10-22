@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 if (alive && gameManager.InGame)
                 {
-                    transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
+                    transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
                     if (onControl)
                         PlayerControl();
                     LecterAI();
@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour, IDamager
         }
         else
         {
-            transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
+            transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
         }
     }
 
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour, IDamager
             try
             {
                 GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, GetComponent<SpriteRenderer>().sprite)];
-                transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, transform.GetChild(2).GetComponent<SpriteRenderer>().sprite)];
+                //transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = gameManager.playerSkins[skin].skin[System.Array.IndexOf(gameManager.playerSkins[0].skin, transform.GetChild(2).GetComponent<SpriteRenderer>().sprite)];
             }
             catch
             {
@@ -601,7 +601,7 @@ public class PlayerController : MonoBehaviour, IDamager
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[1]];
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
 
-        transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
+        transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
     }
 
     void LecterAI()
@@ -740,7 +740,7 @@ public class PlayerController : MonoBehaviour, IDamager
             transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
         }
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        transform.GetChild(2).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(2).localScale = new Vector3(0, 1, 1);
         transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = false;
 
         rb2D.bodyType = RigidbodyType2D.Static;

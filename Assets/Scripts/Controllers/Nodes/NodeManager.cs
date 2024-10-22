@@ -128,7 +128,6 @@ class NodeManager : MonoBehaviour
                 newNode.isBattery = bool.Parse(nodeDetails[3]);
 
                 // Load index
-                print(nodeDetails[4]);
                 string[] indexCoords = nodeDetails[4].Split('/');
                 newNode.index = new Vector3Int(int.Parse(indexCoords[0]), int.Parse(indexCoords[1]), int.Parse(indexCoords[2]));
 

@@ -19,6 +19,8 @@ TextureImporter:
     21300028: LecterSheet_14
     21300030: LecterSheet_15
     21300032: LecterSheet_16
+    21300034: LecterSheet_17
+    21300036: LecterSheet_18
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -116,9 +118,9 @@ TextureImporter:
         x: 42
         y: 144
         width: 29
-        height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -136,9 +138,9 @@ TextureImporter:
         x: 80
         y: 144
         width: 29
-        height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -196,9 +198,9 @@ TextureImporter:
         x: 42
         y: 76
         width: 29
-        height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -216,9 +218,9 @@ TextureImporter:
         x: 80
         y: 76
         width: 29
-        height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48387095}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -258,7 +260,7 @@ TextureImporter:
         width: 37
         height: 64
       alignment: 9
-      pivot: {x: 0.44594595, y: 0.5}
+      pivot: {x: 0.44594595, y: 0.53125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -425,6 +427,46 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 777243b6ecc4e054598c10265d98dd31
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_17
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 215
+        width: 8
+        height: 17
+      alignment: 9
+      pivot: {x: 0.75, y: 0.7647059}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31d37175526be024f95fe5cb4fde3b87
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LecterSheet_18
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 37
+        height: 64
+      alignment: 9
+      pivot: {x: 0.44594595, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80299b438e3df764792ca1a533246241
       vertices: []
       indices: 
       edges: []

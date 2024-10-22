@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour {
     public bool transparentSkybox = false;
     public bool supportsBackgrounds = false;
     public string currentBackground = "";
+    public Transform mainStuff;
 
     void Start()
     {
