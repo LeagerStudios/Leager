@@ -245,6 +245,17 @@ public class PlayerController : MonoBehaviour, IDamager
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
 
+        if (rb2D.velocity.y > 0.01f && rb2D.velocity.y < 1f && Grounded && !GInput.GetKeyDown(KeyCode.W))
+        {
+            float altitude = (transform.position.y - 0.93f) % 1 - 0.5f;
+
+            if (altitude > 0f && altitude < 0.15f)
+            {
+                rb2D.velocity = Vector2.right * rb2D.velocity.x;
+                transform.position = new Vector2(transform.position.x, transform.position.y - altitude);
+            }
+        }
+
         animations.SetBool("walking", false);
 
         if (FlyTime != 0)
@@ -457,7 +468,7 @@ public class PlayerController : MonoBehaviour, IDamager
             animations.SetBool("falling", false);
             animations.SetBool("jumping", true);
         }
-        else if (rb2D.velocity.y < 0.1f && rb2D.velocity.y > -0.1f)
+        else if (Grounded)
         {
             animations.SetBool("falling", false);
             animations.SetBool("jumping", false);
@@ -592,15 +603,13 @@ public class PlayerController : MonoBehaviour, IDamager
             drownTime += Time.deltaTime;
         }
 
-        for (int i = 0; i < 3; i++)
-        {
-            transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[i]];
-            transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
-        }
-
+        transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[0]];
+        transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[1]];
         transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[1]];
-        transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().flipX = GetComponent<SpriteRenderer>().flipX;
+        transform.GetChild(1).GetChild(2).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[2]];
+        transform.GetChild(1).GetChild(3).GetComponent<SpriteRenderer>().color = gameManager.rawColor[gameManager.equipedArmor[2]];
 
+        transform.GetChild(1).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
         transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
     }
 

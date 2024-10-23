@@ -47,7 +47,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 6274b12237ea1c54a9673f8ed0a20895, type: 3}
     - {fileID: 2800000, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
     - {fileID: 2800000, guid: 903f85206dea52946a7eecccad256d35, type: 3}
-    totalSpriteSurfaceArea: 189415
+    totalSpriteSurfaceArea: 190229
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -100,6 +100,8 @@ SpriteAtlas:
   - {fileID: 21300002, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300004, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300006, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
+  - {fileID: 21300008, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
+  - {fileID: 21300010, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   - {fileID: 21300018, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
   - {fileID: 21300016, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
   - {fileID: 21300010, guid: 42b0374b08eb47d448281f0260d6b66f, type: 3}
@@ -162,6 +164,8 @@ SpriteAtlas:
   - ArmorPieces_1
   - ArmorPieces_2
   - ArmorPieces_3
+  - ArmorPieces_4
+  - ArmorPieces_5
   - PumpkinLecter_9
   - PumpkinLecter_8
   - PumpkinLecter_5

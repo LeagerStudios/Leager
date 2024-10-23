@@ -6,6 +6,8 @@ TextureImporter:
     21300002: ArmorPieces_1
     21300004: ArmorPieces_2
     21300006: ArmorPieces_3
+    21300008: ArmorPieces_4
+    21300010: ArmorPieces_5
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -152,6 +154,46 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: d0f5b87139fdf6f4f90f923b534a5755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmorPieces_4
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 29
+        width: 16
+        height: 22
+      alignment: 9
+      pivot: {x: 0.78125, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 994aba1d98f69db43b2bf8a5727ee464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmorPieces_5
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 29
+        width: 21
+        height: 22
+      alignment: 9
+      pivot: {x: 0.21428572, y: 0.59090906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c20b71525e24ce445b7294d9b834e220
       vertices: []
       indices: 
       edges: []

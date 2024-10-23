@@ -36,14 +36,21 @@ AnimationClip:
     - time: 0
       value: {fileID: 0}
     attribute: m_Sprite
-    path: Hands/Left/Punch
+    path: Hands/Right/Punch
     classID: 212
     script: {fileID: 0}
   - curve:
     - time: 0
-      value: {fileID: 0}
+      value: {fileID: 21300010, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
     attribute: m_Sprite
-    path: Hands/Right/Punch
+    path: Armor/RightBoot
+    classID: 212
+    script: {fileID: 0}
+  - curve:
+    - time: 0
+      value: {fileID: 21300008, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
+    attribute: m_Sprite
+    path: Armor/LeftBoot
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 60
@@ -68,14 +75,21 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     - serializedVersion: 2
-      path: 3297157116
+      path: 1103378688
       attribute: 0
       script: {fileID: 0}
       typeID: 212
       customType: 23
       isPPtrCurve: 1
     - serializedVersion: 2
-      path: 1103378688
+      path: 1454152569
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+    - serializedVersion: 2
+      path: 3210244366
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -85,7 +99,8 @@ AnimationClip:
     - {fileID: 21300036, guid: 23e782370ffebf1489f75ff283c714cb, type: 3}
     - {fileID: 0}
     - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 21300010, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
+    - {fileID: 21300008, guid: e24fd237b9a8a1845875cf3523ecbb15, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

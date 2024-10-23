@@ -131,22 +131,7 @@ public static class ManagingFunctions
 
     public static float ClampX(float x)
     {
-        bool endClamp = false;
-        while (endClamp)
-        {
-            endClamp = false;
-            if (x < 0)
-            {
-                x += gameManager.WorldWidth * 16;
-                endClamp = true;
-            }
-            else if (x > gameManager.WorldWidth * 16)
-            {
-                x -= gameManager.WorldWidth * 16;
-                endClamp = true;
-            }
-        }
-        return x;
+        return x % (gameManager.WorldWidth * 16);
     }
 
     public static int FindIndexInArrayOfVector2(Vector2 vectorToFind, Vector2[] list)
