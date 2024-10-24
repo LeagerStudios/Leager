@@ -1192,6 +1192,33 @@ public class ChunkController : MonoBehaviour, ITimerCall
     {
         if (manager.InGame && loaded && !loading)
         {
+            if (rendering)
+            {
+                if(Mathf.Abs(GameManager.gameManagerReference.player.transform.position.x - transform.position.x) > LightController.lightController.lightDist)
+                {
+                    SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+
+                    foreach(SpriteRenderer spriteRenderer in spriteRenderers)
+                    {
+                        spriteRenderer.enabled = false;
+                    }
+                    rendering = false;
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(GameManager.gameManagerReference.player.transform.position.x - transform.position.x) < LightController.lightController.lightDist)
+                {
+                    SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+
+                    foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+                    {
+                        spriteRenderer.enabled = true;
+                    }
+                    rendering = true;
+                }
+            }
+
             if (updateChunk)
             {
                 UpdateChunk();

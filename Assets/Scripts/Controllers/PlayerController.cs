@@ -252,7 +252,7 @@ public class PlayerController : MonoBehaviour, IDamager
             if (altitude > 0f && altitude < 0.15f)
             {
                 rb2D.velocity = Vector2.right * rb2D.velocity.x;
-                transform.position = new Vector2(transform.position.x, transform.position.y - altitude);
+                transform.position = new Vector2(transform.position.x, transform.position.y - altitude + 0.01f);
             }
         }
 
@@ -463,7 +463,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
 
 
-        if ((rb2D.velocity.y > 0.1f && GInput.GetKey(KeyCode.W)) || rb2D.velocity.y > 2f)
+        if ((rb2D.velocity.y > 0.1f && GInput.GetKey(KeyCode.W)))
         {
             animations.SetBool("falling", false);
             animations.SetBool("jumping", true);
@@ -854,26 +854,20 @@ public class PlayerController : MonoBehaviour, IDamager
                     }
                     yield return new WaitForSeconds(0.016f);
                 }
+
+                if (swordParticle != null)
+                    swordParticle.Despawn();
+
                 if (gameManager.tileSize[StackBar.stackBarController.currentItem].z > 0.25f)
                 {
                     yield return new WaitForSeconds(0.1f);
 
-                    if (swordParticle == null)
-                        swordParticle = (PROJECTILE_SwordParticle)PROJECTILE_SwordParticle.StaticSpawn(gameManager.mouseCurrentPosition, gameManager.armUsingDamageDeal, GetComponent<EntityCommonScript>());
-
                     for (int i = 0; i < 20; i++)
                     {
                         transform.GetChild(0).eulerAngles = new Vector3(0, 0, transform.GetChild(0).eulerAngles.z - armRotation * 0.5f);
-                        if (swordParticle != null)
-                        {
-                            swordParticle.transform.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
-                        }
                         yield return new WaitForSeconds(0.016f);
                     }
                 }
-
-                if (swordParticle != null)
-                    swordParticle.Despawn();
             }
 
             if (armType == "bow")

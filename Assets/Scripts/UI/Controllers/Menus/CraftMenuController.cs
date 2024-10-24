@@ -5,22 +5,26 @@ using UnityEngine.UI;
 
 public class CraftMenuController : MonoBehaviour, IDraggable
 {
-    RectTransform rectTransform;
-    RectTransform canvasRect;
-    RectTransform viewport;
+    [SerializeField] RectTransform rectTransform;
+    [SerializeField] RectTransform canvasRect;
+    [SerializeField] RectTransform viewport;
     int tileSelected = 0;
     int tileSelectedAmount = 0;
     Transform follower;
     GameObject UiMenu;
     Dropdown dropdown;
     bool canCraft = false;
-    bool canDrag = false;
+    private bool canDrag = false;
     public bool CanDrag { get => canDrag; }
 
     List<int> currentTiles = new List<int>();
     List<int> currentTileAmounts = new List<int>();
     List<int> avaliableTiles = new List<int>();
     List<string> availableRecipes = new List<string>();
+
+    [Header("CraftsPath")]
+    public string path;
+    public int block;
 
     public void InvokeMenu(Transform followTo)
     {
@@ -29,8 +33,8 @@ public class CraftMenuController : MonoBehaviour, IDraggable
         canvasRect = GameObject.Find("Canvas").GetComponent<RectTransform>();
         follower = followTo;
         List<Sprite> options = new List<Sprite>();
-        string[] text = DataSaver.ReadTxt(Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt");
-        int LIT = DataSaver.LinesInTxt(Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt");
+        string[] text = DataSaver.ReadTxt(Application.persistentDataPath + @"/packages/LeagerStudios/" + path + ".txt");
+        int LIT = text.Length;
 
         for (int i = 0; i < LIT; i++)
         {
@@ -76,7 +80,7 @@ public class CraftMenuController : MonoBehaviour, IDraggable
         rectTransform.anchoredPosition = FollowerScreenPosition;
         Debug.DrawRay(follower.position, Vector3.up, Color.black);
 
-        if (follower.GetComponent<SpriteRenderer>().sprite != GameManager.gameManagerReference.tiles[16])
+        if (follower.GetComponent<SpriteRenderer>().sprite != GameManager.gameManagerReference.tiles[block])
         {
             Close();
         }

@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject lecterSprite;
     [SerializeField] public GameObject emptySprite;
     [SerializeField] GameObject emptyChunk;
-    [SerializeField] GameObject falseChunk;
     [SerializeField] public GameObject chunkContainer;
     [SerializeField] public GameObject entitiesContainer;
     [SerializeField] GameObject Transition;

@@ -89,7 +89,7 @@ public class ENTITY_Sheep : EntityBase, IDamager
                 g.GetComponent<ParticleController>().Spawn();
             }
             int drops = Random.Range(1, 3);
-            ManagingFunctions.DropItem(65, transform.position, amount: drops);
+            ManagingFunctions.DropItem(129, transform.position, amount: drops);
         }
         Destroy(gameObject);
     }

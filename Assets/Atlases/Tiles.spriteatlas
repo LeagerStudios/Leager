@@ -60,7 +60,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 4e52d5927b3ca444eb1a71bf54ad8acf, type: 3}
     - {fileID: 2800000, guid: 55558c33324874349b835aa850395c27, type: 3}
     - {fileID: 2800000, guid: 0cfbed4eb60cb5c4faa0f530dbc2329c, type: 3}
-    totalSpriteSurfaceArea: 201939
+    totalSpriteSurfaceArea: 202963
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -161,6 +161,7 @@ SpriteAtlas:
   - {fileID: 21300248, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 21300254, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 21300252, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
+  - {fileID: 21300258, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 21300256, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 21300218, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 21300216, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
@@ -346,6 +347,7 @@ SpriteAtlas:
   - AllTiles_124
   - AllTiles_127
   - AllTiles_126
+  - AllTiles_129
   - AllTiles_128
   - AllTiles_109
   - AllTiles_108

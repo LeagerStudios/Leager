@@ -71,11 +71,11 @@ public class TechManager : MonoBehaviour, IDragHandler
 
     public void Update()
     {
-        if (GInput.GetKeyDown(KeyCode.Tab) && (deployed || (!deployed && GameManager.gameManagerReference.InGame)))
-        {
-            deployed = !deployed;
-            GameManager.gameManagerReference.InGame = !deployed;
-        }
+        //if (GInput.GetKeyDown(KeyCode.Tab) && (deployed || (!deployed && GameManager.gameManagerReference.InGame)))
+        //{
+        //    deployed = !deployed;
+        //    GameManager.gameManagerReference.InGame = !deployed;
+        //}
             
 
         GetComponent<Image>().enabled = deployed;

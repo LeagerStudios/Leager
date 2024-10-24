@@ -7,10 +7,10 @@ public class WorkItemController : MonoBehaviour {
     [SerializeField] public LayerMask tilesMasks;
     [SerializeField] public LayerMask entitiesMasks;
     [SerializeField] GameObject CraftMenu;
+    [SerializeField] GameObject AdvTechCraftMenu;
     [SerializeField] public Sprite[] spritesRenders;
     [SerializeField] public bool[] canInteract;
     GameObject workIcon;
-    public BoxCollider2D collider2d;
 
     void Start ()
     {
@@ -91,6 +91,16 @@ public class WorkItemController : MonoBehaviour {
             {
                 tileObj.transform.GetComponentInChildren<EnergyGenerator>().shock = true;
                 StackBar.LoseItem();
+            }
+        }
+
+        if (tile == 130)
+        {
+            if (MenuController.menuController.uiMenus.Find("AdvTechCraftMenu") == null /*&& TechManager.techTree.fullyUnlockedItems.Count > 0*/)
+            {
+                GameObject a = Instantiate(AdvTechCraftMenu, MenuController.menuController.uiMenus);
+                a.name = "AdvTechCraftMenu";
+                a.GetComponent<CraftMenuController>().InvokeMenu(tileObj.transform);
             }
         }
     }

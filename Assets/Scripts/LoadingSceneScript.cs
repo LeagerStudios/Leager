@@ -22,6 +22,7 @@ public class LoadingSceneScript : MonoBehaviour
         if (reloadDefault == true)
         {
             craftingT1DefaultConfig = DataSaver.ReadTxt(Application.dataPath + @"/packages/LeagerStudios/crafts.txt");
+            craftingT2DefaultConfig = DataSaver.ReadTxt(Application.dataPath + @"/packages/LeagerStudios/craftsAdvTech.txt");
 
             reloadDefault = false;
         }
@@ -50,11 +51,16 @@ public class LoadingSceneScript : MonoBehaviour
         {
             DataSaver.CreateTxt(Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt", new string[] { });
         }
+        if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/packages/LeagerStudios/craftsAdvTech.txt"))
+        {
+            DataSaver.CreateTxt(Application.persistentDataPath + @"/packages/LeagerStudios/craftsAdvTech.txt", new string[] { });
+        }
 
         {
             if (Application.isEditor)
             {
                 DataSaver.CopyPasteTxt(Application.dataPath + @"/packages/LeagerStudios/crafts.txt", Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt");
+                DataSaver.CopyPasteTxt(Application.dataPath + @"/packages/LeagerStudios/craftsAdvTech.txt", Application.persistentDataPath + @"/packages/LeagerStudios/craftsAdvTech.txt");
             }
             else if ((Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer) && !Debug.isDebugBuild)
             {
@@ -81,12 +87,23 @@ public class LoadingSceneScript : MonoBehaviour
                     return;
                 }
 
+                if (DataSaver.CheckIfFileExists(Application.dataPath + @"/packages/LeagerStudios/craftsAdvTech.txt"))
+                {
+                    DataSaver.CopyPasteTxt(Application.dataPath + @"/packages/LeagerStudios/craftsAdvTech.txt", Application.persistentDataPath + @"/packages/LeagerStudios/craftsAdvTech.txt");
+                }
+                else
+                {
+                    loadingTxt.GetComponent<Text>().text = Application.dataPath + @"/packages/LeagerStudios/craftsAdvTech.txt is missing...";
+                    StartCoroutine(Freeze());
+                    return;
+                }
 
             }
             else
             {
 
                 DataSaver.ModifyTxt(Application.persistentDataPath + @"/packages/LeagerStudios/crafts.txt", craftingT1DefaultConfig);
+                DataSaver.ModifyTxt(Application.persistentDataPath + @"/packages/LeagerStudios/craftsAdvTech.txt", craftingT2DefaultConfig);
             }
             StartCoroutine(TasksBeforeStart(DataSaver.version));
         }
