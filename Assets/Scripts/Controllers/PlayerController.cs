@@ -183,8 +183,8 @@ public class PlayerController : MonoBehaviour, IDamager
         animations.SetBool("killed", false);
         GetComponent<SpriteRenderer>().enabled = true;
         entityScript = GetComponent<EntityCommonScript>();
-        transform.GetChild(1).localScale = new Vector3(0, 1, 1);
-        transform.GetChild(2).localScale = new Vector3(0, 1, 1);
+        transform.GetChild(1).localScale = new Vector3(1, 1, 1);
+        transform.GetChild(2).localScale = new Vector3(1, 1, 1);
         rb2D.bodyType = RigidbodyType2D.Dynamic;
         entityScript.entityStates = new List<EntityState>();
         transform.position = new Vector2(x, y);
@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour, IDamager
         Camera.main.GetComponent<CameraController>().focus = gameObject;
         rb2D.freezeRotation = true;
         transform.eulerAngles = Vector3.zero;
-        spawned = true;//confirmación final
+        spawned = true;
     }
 
     void PlayerControl()
@@ -744,11 +744,7 @@ public class PlayerController : MonoBehaviour, IDamager
         Time.timeScale = 1f;
         killing = false;
         GetComponent<SpriteRenderer>().enabled = false;
-        for (int i = 0; i < 3; i++)
-        {
-            transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
-        }
-        transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(1).localScale = new Vector3(0, 1, 1);
         transform.GetChild(2).localScale = new Vector3(0, 1, 1);
         transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = false;
 

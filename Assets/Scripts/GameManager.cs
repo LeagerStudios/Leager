@@ -669,10 +669,10 @@ public class GameManager : MonoBehaviour
         return returnVal;
     }
 
-    public void DisplayDamage(int dmg, Vector2 position)
-    {
-        Instantiate(damageTextPrefab, position, Quaternion.identity).GetComponent<DamageText>().StartCall(dmg);
-    }
+    //public void DisplayDamage(int dmg, Vector2 position)
+    //{
+    //    Instantiate(damageTextPrefab, position, Quaternion.identity).GetComponent<DamageText>().StartCall(dmg);
+    //}
 
     public int GetCapacityOfCore(int core)
     {

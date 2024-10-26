@@ -64,14 +64,10 @@ public class PROJECTILE_Arrow : ProjectileBase
 
             if (collision.gameObject.GetComponent<DamagersCollision>() != null)
             {
-                if (collision.gameObject.GetComponent<DamagersCollision>().entity.EntityFamily == procedence.EntityFamily)
-                {
-
-                }
-                else
+                if (collision.gameObject.GetComponent<DamagersCollision>().entity.EntityFamily != procedence.EntityFamily)
                 {
                     collision.gameObject.GetComponent<DamagersCollision>().Hit(damage, procedence);
-                    GameManager.gameManagerReference.DisplayDamage(damage, transform.position + Vector3.up);
+
                     Despawn();
                     flying = false;
                 }

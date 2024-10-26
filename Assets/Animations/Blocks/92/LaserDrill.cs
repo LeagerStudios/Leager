@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LaserDrill : MonoBehaviour, INodeEndPoint
 {
+    public Transform support;
     public Transform drill;
     public Transform laser;
     public Transform targetPresence;
@@ -26,10 +27,15 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
     public SpriteRenderer laserEndRenderer;
     public ParticleSystem particles;
 
+    public List<int> mineable = new List<int>(new int[] { 8, 9, 10, 11, 12 });
 
     void Start()
     {
         nodeInstance = GetComponent<NodeInstance>();
+        if(GameManager.gameManagerReference.GetTileAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt((Vector2)transform.position - Vector2.up))) == 125)
+        {
+            support.localPosition = new Vector2(0.22f, 0);
+        }
     }
 
     void Update()
@@ -39,7 +45,19 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             laserEnd.localScale = new Vector3(1f / laser.localScale.x, 1f, 1f);
 
             if (tileProperties == null)
+            {
                 tileProperties = GetComponentInParent<TileProperties>();
+
+                if (tileProperties.info.Count > 0)
+                {
+                    int[] data = ManagingFunctions.ConvertStringToIntArray(tileProperties.info[0].Split(':'));
+
+                    target = new Vector2(data[0], data[1]);
+                    targetPresence.localPosition = target;
+                    drill.eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(drill.position, targetPresence.position) + 90);
+                }
+            }
+                
             lifetime -= Time.deltaTime;
             lifetime = Mathf.Clamp(lifetime, 0f, 1.5f);
 
@@ -55,6 +73,9 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             if (focused)
             {
                 targetPresence.gameObject.SetActive(true);
+                tileProperties.info = new List<string>();
+                tileProperties.info.Add(target.x + ":" + target.y);
+                tileProperties.CommitToChunk();
 
                 if (StackBar.stackBarController.InventoryDeployed || !GameManager.gameManagerReference.InGame || Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) > 5)
                 {
@@ -72,7 +93,6 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                     {
                         if (target.y < 5)
                             target += Vector2.up;
-                        selectedTile = GameManager.gameManagerReference.GetTileAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt(target)));
                     }
                     if (GInput.GetKeyDown(KeyCode.A))
                     {
@@ -99,16 +119,41 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                     {
                         if (!StackBar.stackBarController.InventoryDeployed)
                         {
-                            focused = true;
-                            GameManager.gameManagerReference.player.mainCamera.lerp = true;
-                            GameManager.gameManagerReference.player.mainCamera.focus = gameObject;
-                            GameManager.gameManagerReference.player.onControl = false;
+                            if (tileProperties.storedItems.Count > 0)
+                            {
+
+                            }
+                            else
+                            {
+                                focused = true;
+                                GameManager.gameManagerReference.player.mainCamera.lerp = true;
+                                GameManager.gameManagerReference.player.mainCamera.focus = gameObject;
+                                GameManager.gameManagerReference.player.onControl = false;
+                            }
                         }
                     }
             }
 
+            selectedTile = GameManager.gameManagerReference.GetTileAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt(target + (Vector2)transform.position)));
+            bool canMine = mineable.Contains(selectedTile);
 
-            if (target != Vector2.zero && lifetime > 0f && selectedTile > 0)
+            if (focused)
+                if (canMine)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        targetPresence.GetChild(i).GetComponent<SpriteRenderer>().sprite = selected[i];
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        targetPresence.GetChild(i).GetComponent<SpriteRenderer>().sprite = notSelected[i];
+                    }
+                }
+
+            if (target != Vector2.zero && lifetime > 0f && canMine && !focused)
             {
                 if (!audioSource.isPlaying)
                     audioSource.Play();

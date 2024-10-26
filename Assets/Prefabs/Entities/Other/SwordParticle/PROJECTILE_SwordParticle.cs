@@ -42,16 +42,19 @@ public class PROJECTILE_SwordParticle : ProjectileBase {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        DamagersCollision damager = collision.gameObject.GetComponent<DamagersCollision>();
-
-        if (damager != null)
+        if (damage > 0)
         {
-            if (damager.entity != procedence)
+            DamagersCollision damager = collision.gameObject.GetComponent<DamagersCollision>();
+
+            if (damager != null)
             {
-                collision.gameObject.GetComponent<DamagersCollision>().Hit(damage, procedence);
-                GameManager.gameManagerReference.DisplayDamage(damage, transform.position + Vector3.up);
-                damage = 0;
-                Despawn();
+                if (damager.entity != procedence)
+                {
+                    collision.gameObject.GetComponent<DamagersCollision>().Hit(damage, procedence);
+
+                    damage = 0;
+                    Despawn();
+                }
             }
         }
     }

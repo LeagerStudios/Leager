@@ -38,7 +38,6 @@ public class DestroyerBomb : MonoBehaviour
                         if (entity.gameObject.GetComponent<IDamager>() != null)
                         {
                             entity.gameObject.GetComponent<IDamager>().Hit(36, destroyer, true, 1.5f, true);
-                            GameManager.gameManagerReference.DisplayDamage(36, transform.position + Vector3.up);
                         }
                     }
             }

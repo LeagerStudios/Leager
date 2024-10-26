@@ -49,12 +49,13 @@ public class LightControllerCurrent : MonoBehaviour
 
     void Update()
     {
+        previousPosition = transform.position;
         if (!renderizingLight && !renderized)
         {
             Vector2 globalPosition = Vector2Int.RoundToInt(Camera.main.transform.position);
-            transform.position = globalPosition - Vector2.one * 0.5f;
+            transform.position = globalPosition + new Vector2(0.5f, 0.5f);
 
-            if (transform.position != previousPosition)
+            if (transform.position != previousPosition || GameManager.gameManagerReference.frameTimer % 30 == 0)
             {
                 AddRenderQueue(globalPosition);
                 transform.position = previousPosition;
@@ -70,10 +71,9 @@ public class LightControllerCurrent : MonoBehaviour
         else if (renderized)
         {
             transform.position = renderizedTexturePosition;
+            previousPosition = transform.position;
             RenderizeTexture();
         }
-
-        previousPosition = transform.position;
     }
 
     public void AddRenderQueue(Vector2 renderPosition)
