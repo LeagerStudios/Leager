@@ -8,6 +8,7 @@ public class CraftMenuController : MonoBehaviour, IDraggable
     [SerializeField] RectTransform rectTransform;
     [SerializeField] RectTransform canvasRect;
     [SerializeField] RectTransform viewport;
+    [SerializeField] Text itemMultiplier;
     int tileSelected = 0;
     int tileSelectedAmount = 0;
     Transform follower;
@@ -102,7 +103,7 @@ public class CraftMenuController : MonoBehaviour, IDraggable
             transform.GetChild(1).GetChild(2).GetComponent<Button>().interactable = canCraft;
         }
 
-        if (GInput.GetKeyDown(KeyCode.E)) Close();
+        if (StackBar.stackBarController.InventoryDeployed) Close();
 
     }
 
@@ -154,6 +155,15 @@ public class CraftMenuController : MonoBehaviour, IDraggable
 
             tileSelectedAmount = System.Convert.ToInt32(new string(tileAmm.ToArray()));
             tileSelected = System.Convert.ToInt32(new string(tile.ToArray()));
+            if(tileSelectedAmount > 1)
+            {
+                itemMultiplier.text = "×" + tileSelectedAmount;
+            }
+            else
+            {
+                itemMultiplier.text = "";
+            }
+            
         }
 
 

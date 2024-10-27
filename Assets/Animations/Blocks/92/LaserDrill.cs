@@ -19,6 +19,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
 
     public float lifetime = 0f;
     public int selectedTile = 0;
+    public float miningProgress;
 
     public Sprite[] selected;
     public Sprite[] notSelected;
@@ -27,7 +28,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
     public SpriteRenderer laserEndRenderer;
     public ParticleSystem particles;
 
-    public List<int> mineable = new List<int>(new int[] { 8, 9, 10, 11, 12 });
+    public List<int> mineable = new List<int>(new int[] { 11, 10, 9, 8, 12 });
 
     void Start()
     {
@@ -57,16 +58,6 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                     drill.eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(drill.position, targetPresence.position) + 90);
                 }
             }
-                
-            lifetime -= Time.deltaTime;
-            lifetime = Mathf.Clamp(lifetime, 0f, 1.5f);
-
-
-            ParticleSystem.MainModule main = particles.main;
-            main.startColor = Color.white * lifetime;
-            laserRenderer.color = Color.white * lifetime;
-            laserEndRenderer.color = Color.white * lifetime;
-            audioSource.volume = lifetime;
 
             targetPresence.localPosition = target;
 
@@ -81,15 +72,17 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                 {
                     focused = false;
                     GameManager.gameManagerReference.player.mainCamera.focus = null;
+                    miningProgress = 0f;
                 }
                 else if (GInput.GetKeyDown(KeyCode.Return) || (GInput.leagerInput.platform == "Mobile" && GInput.GetMouseButtonDown(0) && !GameManager.gameManagerReference.cancelPlacing))
                 {
                     focused = false;
                     GameManager.gameManagerReference.player.mainCamera.focus = null;
+                    miningProgress = 0f;
                 }
                 else
                 {
-                    if (GInput.GetKeyDown(KeyCode.W))
+                    if ((GInput.leagerInput.platform != "Mobile" && GInput.GetKeyDown(KeyCode.W)) || (GInput.leagerInput.platform == "Mobile" && GInput.GetKeyDown(KeyCode.Space)))
                     {
                         if (target.y < 5)
                             target += Vector2.up;
@@ -121,7 +114,26 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                         {
                             if (tileProperties.storedItems.Count > 0)
                             {
+                                string item = tileProperties.storedItems[0];
+                                tileProperties.storedItems.RemoveAt(0);
 
+                                int[] data = ManagingFunctions.ConvertStringToIntArray(item.Split(':'));
+                                int amount = data[1];
+
+                                for(int i = 0; i < data[1]; i++)
+                                {
+                                    if (!StackBar.AddItemInv(data[0]))
+                                    {
+                                        break;
+                                    }
+                                    amount--;
+                                }
+
+                                if(amount > 0)
+                                {
+                                    GameManager.gameManagerReference.player.PlayerRelativeDrop(data[0], amount);
+                                }
+                                    
                             }
                             else
                             {
@@ -136,6 +148,9 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
 
             selectedTile = GameManager.gameManagerReference.GetTileAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt(target + (Vector2)transform.position)));
             bool canMine = mineable.Contains(selectedTile);
+
+            lifetime -= Time.deltaTime;
+            lifetime = Mathf.Clamp(lifetime, 0f, 1.5f);
 
             if (focused)
                 if (canMine)
@@ -155,17 +170,65 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
 
             if (target != Vector2.zero && lifetime > 0f && canMine && !focused)
             {
+                float targetProgress = Mathf.Pow(mineable.IndexOf(selectedTile) + 2, 2);
+
+                miningProgress += Time.deltaTime;
+
                 if (!audioSource.isPlaying)
                     audioSource.Play();
 
                 drill.eulerAngles = Vector3.forward * (ManagingFunctions.PointToPivotUp(drill.position, targetPresence.position) + 90);
                 laser.localScale = new Vector3(Mathf.Clamp(Vector2.Distance(laser.position, targetPresence.position) - 0.5f, 0.1f, 10f), 1, 1);
+
+                if(miningProgress > targetProgress)
+                {
+                    miningProgress = 0;
+
+                    if(selectedTile == 11 && GameManager.gameManagerReference.GetTileAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt((Vector2)transform.position - Vector2.up))) == 125)
+                    {
+                        GameManager.gameManagerReference.GetTileObjectAt(ManagingFunctions.CreateIndex(Vector2Int.FloorToInt((Vector2)transform.position - Vector2.up))).transform.GetComponentInChildren<EnergyGenerator>().shock = true;
+                    }
+                    else
+                    {
+                        int endingTile = GameManager.gameManagerReference.SwitchTroughBlockBroke(selectedTile, Vector2Int.RoundToInt(targetPresence.position), false);
+
+                        if (tileProperties.storedItems.Count > 0)
+                        {
+                            int[] data = ManagingFunctions.ConvertStringToIntArray(tileProperties.storedItems[tileProperties.storedItems.Count - 1].Split(':'));
+                            
+                            if (data[0] != endingTile || data[1] > GameManager.gameManagerReference.stackLimit[data[0]])
+                            {
+                                tileProperties.storedItems.Add(endingTile + ":" + 1);
+                            }
+                            else
+                            {
+                                tileProperties.storedItems.RemoveAt(tileProperties.storedItems.Count - 1);
+                                tileProperties.storedItems.Add(data[0] + ":" + (data[1] + 1));
+                            }
+                        }
+                        else
+                        {
+                            tileProperties.storedItems.Add(endingTile + ":" + 1);
+                        }
+
+                        tileProperties.CommitToChunk();
+                    }
+                }
+
+                HealthBarManager.self.UpdateHealthBar(transform, miningProgress, targetProgress, Vector2.up * 0.5f);
             }
             else
             {
                 if (audioSource.isPlaying)
                     audioSource.Stop();
+                lifetime = 0f;
             }
+
+            ParticleSystem.MainModule main = particles.main;
+            main.startColor = new Color(1, 1, 1, lifetime);
+            laserRenderer.color = Color.white * lifetime;
+            laserEndRenderer.color = Color.white * lifetime;
+            audioSource.volume = lifetime;
         }
 
     }

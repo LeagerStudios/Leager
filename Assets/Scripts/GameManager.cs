@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour
     public AudioSource ostSource;
     public AudioSource breakSoundSource;
     public float breakSoundCooldown = 0f;
+    public AudioLowPassFilter audioPassFilter;
 
     public ArmorBarController armorBarController;
     public GameObject damageTextPrefab;
@@ -370,6 +371,8 @@ public class GameManager : MonoBehaviour
 
         if (inGame)
         {
+            audioPassFilter.enabled = false;
+
             if (ostCooldown > 0f)
             {
                 ostCooldown -= Time.deltaTime;
@@ -574,9 +577,16 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            audioPassFilter.enabled = true;
+        }
 
         savingText.SetActive(isSavingData);
         mouseLastPosition = mouseCurrentPosition;
+
+        ostSource.volume += Time.deltaTime;
+
         UpdateEntitiesRB2D(InGame);
 
 
@@ -998,7 +1008,15 @@ public class GameManager : MonoBehaviour
                 dropsSaves.Add(string.Join(";", toEncrypt.ToArray()));
             }
 
-            string[] playerPosition = new string[] { player.transform.position.x + ";" + player.transform.position.y };
+            string[] playerPosition;
+            if (player.alive)
+                playerPosition = new string[] { player.transform.position.x + ";" + player.transform.position.y };
+            else
+            {
+                Vector2 respawnPos = RespawnPosition();
+                playerPosition = new string[] { respawnPos.x + ";" + respawnPos.y };
+            }
+                
 
             if (alternateThread)
             {
@@ -2058,7 +2076,7 @@ public class GameManager : MonoBehaviour
         lastTileBrush = tile;
     }
 
-    public int SwitchTroughBlockBroke(int entryTile, Vector2Int tileEntryPos)
+    public int SwitchTroughBlockBroke(int entryTile, Vector2Int tileEntryPos, bool extraDrop = true)
     {
         int returnItem = entryTile;
         Vector2 tilePos = tileEntryPos;
@@ -2071,28 +2089,33 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 returnItem = 7;
-                if (Random.Range(0, 5) == 0)
+                if (Random.Range(0, 5) == 0 && extraDrop)
                     ManagingFunctions.DropItem(3, tilePos);
                 break;
             case 8:
                 returnItem = 31;
+                if(extraDrop)
                 ManagingFunctions.DropItem(6, tilePos);
                 break;
             case 9:
                 returnItem = 33;
-                ManagingFunctions.DropItem(6, tilePos);
+                if (extraDrop)
+                    ManagingFunctions.DropItem(6, tilePos);
                 break;
             case 10:
                 returnItem = 32;
-                ManagingFunctions.DropItem(6, tilePos);
+                if (extraDrop)
+                    ManagingFunctions.DropItem(6, tilePos);
                 break;
             case 11:
                 returnItem = 30;
-                ManagingFunctions.DropItem(6, tilePos);
+                if (extraDrop)
+                    ManagingFunctions.DropItem(6, tilePos);
                 break;
             case 12:
                 returnItem = 34;
-                ManagingFunctions.DropItem(6, tilePos);
+                if (extraDrop)
+                    ManagingFunctions.DropItem(6, tilePos);
                 break;
             case 55:
                 if (Random.Range(0, 99) == 0) returnItem = 51;
@@ -2108,7 +2131,7 @@ public class GameManager : MonoBehaviour
                 returnItem = 0;
                 break;
             case 98:
-                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15)
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15 && extraDrop)
                 {
                     SetTileAt((tileEntryPos.x + 1) * WorldHeight + tileEntryPos.y, 0);
                     returnItem = 100;
@@ -2119,7 +2142,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case 99:
-                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 0)
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 0 && extraDrop)
                 {
                     SetTileAt((tileEntryPos.x - 1) * WorldHeight + tileEntryPos.y, 0);
                     returnItem = 100;
@@ -2136,7 +2159,7 @@ public class GameManager : MonoBehaviour
                 returnItem = 0;
                 break;
             case 114:
-                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15)
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 15 && extraDrop)
                 {
                     SetTileAt((tileEntryPos.x + 1) * WorldHeight + tileEntryPos.y, 0);
                     returnItem = 116;
@@ -2147,7 +2170,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case 115:
-                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 0)
+                if (ManagingFunctions.EntireDivision(tileEntryPos.x, 16).rest == 0 && extraDrop)
                 {
                     SetTileAt((tileEntryPos.x - 1) * WorldHeight + tileEntryPos.y, 0);
                     returnItem = 116;

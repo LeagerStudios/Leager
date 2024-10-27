@@ -294,7 +294,10 @@ public static class StackBar
     {
         if (InventoryBar.Search(item, 1) != -1)
         {
-            return InventoryBar.AddItem(item);
+            if (InventoryBar.AddItem(item))
+                return true;
+            else
+                return AddItem(item);
         }
         else if(AddItem(item))
         {

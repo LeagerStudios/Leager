@@ -6,6 +6,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
 {
     public Rigidbody2D rb2d;
     public AudioClip shoot;
+    public AudioSource ost;
     [SerializeField] GameObject segment;
     [SerializeField] GameObject tail;
     [SerializeField] GameObject scrap;
@@ -58,6 +59,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
     {
         if (GameManager.gameManagerReference.InGame && IsIaActive) AiFrame();
         else if (GameManager.gameManagerReference.InGame && DescentIa) DescentIaFrame();
+        GameManager.gameManagerReference.ostSource.volume -= Time.deltaTime * 2;
     }
 
     public static EntityBase StaticSpawn(string[] args, Vector2 spawnPos)
@@ -203,6 +205,7 @@ public class ENTITY_TheDestroyer : EntityBase, IDamager
         velocity.y = descentVelocity;
         velocity.x = velocity.x - Mathf.Clamp(velocity.x, -0.3f * Time.deltaTime, 0.3f * Time.deltaTime);
         descentVelocity -= 5 * Time.deltaTime;
+        ost.volume -= Time.deltaTime / 2;
 
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, velocity, 0.1f);
         transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.1f));

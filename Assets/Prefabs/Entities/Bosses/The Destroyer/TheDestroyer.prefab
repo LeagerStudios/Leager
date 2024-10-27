@@ -383,6 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2d: {fileID: 50213022238250784}
   shoot: {fileID: 8300000, guid: 8c1e1a3e06960d14d83195897bc99a6e, type: 3}
+  ost: {fileID: 82637329737651422}
   segment: {fileID: 1165666710370310, guid: 8e008115951804947b0901460b9c7b84, type: 3}
   tail: {fileID: 1893862666633648, guid: acc9ae21a3879ee47abf4991763f9094, type: 3}
   scrap: {fileID: 4354537343229072245, guid: 25f9d236f9a961045a9b5effeb1a390b, type: 3}

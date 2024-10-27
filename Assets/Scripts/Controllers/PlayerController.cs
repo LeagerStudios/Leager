@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] public DeathScreenController deathScreenController;
     Animator animations;
     Rigidbody2D rb2D;
+    public Vector2 lastVelocity;
     public EntityCommonScript entityScript;
     public CameraController mainCamera;
     MainSoundController soundController;
@@ -77,6 +78,10 @@ public class PlayerController : MonoBehaviour, IDamager
             index = new Vector3Int(-1, -transform.GetSiblingIndex(), 0)
         };
         endPointNode = (EndPointNode)NodeManager.self.RegisterNode(endPointNode);
+        while (endPointNode.connections.Count > 0)
+        {
+            endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
+        }
     }
 
     void Update()
@@ -156,6 +161,8 @@ public class PlayerController : MonoBehaviour, IDamager
 
             }
         }
+
+        lastVelocity = rb2D.velocity;
     }
 
     public void Hit(int damage, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
@@ -192,6 +199,14 @@ public class PlayerController : MonoBehaviour, IDamager
         Camera.main.GetComponent<CameraController>().focus = gameObject;
         rb2D.freezeRotation = true;
         transform.eulerAngles = Vector3.zero;
+        lastVelocity = Vector2.zero;
+
+        if (endPointNode != null)
+            while (endPointNode.connections.Count > 0)
+            {
+                endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
+            }
+
         spawned = true;
     }
 
@@ -723,6 +738,17 @@ public class PlayerController : MonoBehaviour, IDamager
         }
     }
 
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        ContactPoint2D contact = collision.GetContact(0);
+        Vector2 contactPoint = contact.point;
+
+        if(Mathf.Abs(contactPoint.y - (transform.position.y + collision.otherCollider.bounds.size.y / 2)) < 0.1f)
+        {
+            rb2D.velocity = new Vector2(lastVelocity.x, rb2D.velocity.y);
+        }
+    }
+
     IEnumerator Kill(EntityCommonScript procedence)
     {
         gameManager.soundController.PlaySfxSound(deathSound);
@@ -973,10 +999,13 @@ public class PlayerController : MonoBehaviour, IDamager
                             }
                         }
 
+                        float direction = ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
+
                         if (endPointNode.connections.Count > 0)
-                            while ((!GInput.GetMouseButton(0) && !gameManager.cancelPlacing) && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
+                            while (!(GInput.GetMouseButton(0) && Mathf.DeltaAngle(direction, transform.GetChild(0).eulerAngles.z) < 0.01f) && !gameManager.cancelPlacing && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
                             {
-                                transform.GetChild(0).eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.GetChild(0).eulerAngles.z, ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition), 180f * Time.deltaTime);
+                                direction = ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
+                                transform.GetChild(0).eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.GetChild(0).eulerAngles.z, direction, 180f * Time.deltaTime);
                                 endPointNode.position = transform.GetChild(0).GetChild(0).GetChild(0).position;
                                 if (Vector2.Distance(endPointNode.connections[0].position, endPointNode.position) > 15) allowedExit = true;
 

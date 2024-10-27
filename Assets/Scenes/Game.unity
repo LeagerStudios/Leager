@@ -4214,6 +4214,7 @@ GameObject:
   - component: {fileID: 309}
   - component: {fileID: 299}
   - component: {fileID: 1043}
+  - component: {fileID: 527}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -8291,6 +8292,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 251}
   m_CullTransparentMesh: 0
+--- !u!169 &527
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.017272728
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!222 &529
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15630,6 +15656,7 @@ MonoBehaviour:
   ostSource: {fileID: 1346220336}
   breakSoundSource: {fileID: 2093779108}
   breakSoundCooldown: 0
+  audioPassFilter: {fileID: 527}
   armorBarController: {fileID: 1887665160}
   damageTextPrefab: {fileID: 6737338835871540675, guid: dc518be5b77e94c5bbe9ef8138f6ab2f,
     type: 3}
@@ -22858,7 +22885,7 @@ MonoBehaviour:
   - {fileID: 21300004, guid: f0d1c85f06ddba94c9972767c43fb2ca, type: 3}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300182, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -22897,7 +22924,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 21300258, guid: c3425cfd2f16cf64687196d88c09b5e6, type: 3}
-  canInteract: 0000000000000000000000000000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000010100000000000000000000000101000000000000000000010000000001
+  canInteract: 0000000000000000000000000000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000010000000000000000010100000000000000000000000101000000000000000000010000000001
 --- !u!114 &1062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23276,6 +23303,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4194304
   deathScreenController: {fileID: 777}
+  lastVelocity: {x: 0, y: 0}
   entityScript: {fileID: 0}
   mainCamera: {fileID: 0}
   damagedCooldown: 1

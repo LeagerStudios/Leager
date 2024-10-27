@@ -143,23 +143,19 @@ public class LoadingSceneScript : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         string[] randomMessage = {
-            "The Loading Time is Long, Isn't It?",
+            "The Loading Time isn't Long, is It?",
             "Loading, loading, loading...",
             "Waiting for the Loadingbar to Reach the End",
             "Writing stupid Phrases",
             "Undoing Stuff",
             "We are on " + Application.version + ", Right?",
-            "You Don't Know How to Play? Read the Instructions.",
             ":)",
-            "JifteDev is Life",
             "Go to Eat a Waffle While this Loads",
             "Creating the Creator",
-            "Waiting for a Good Idea",
-            "Go to The Sur and Craft a Core",
+            "Go to The South and Craft a Core",
             "Get Ready to Play",
             "Programming Useless Mechanics",
             "Programming Useful Mechanics Nobody will Use",
-            "Miler is slow",
             "[something has to be put in here]",
             "12 + 1, Everything matches.",
             "Enemies are not your allies",
@@ -168,22 +164,18 @@ public class LoadingSceneScript : MonoBehaviour
             "Exploring the entire world",
             "añañañaño",
             "Changing from LoadScene.unity to MainMenu.unity",
-            "Nobody talks about how good waffles are",
-            "Razor is taking a Rocket to Space",
             "Nodes... AHHHHH",
             "WOW! LOOK! Is that a fortress? Oh... no, its not.",
             ":(",
-            "miler sucks",
             "Just wait...",
             "DROP! WAW WAWAWAWAWAWA",
             "Some load messages are just... Load messages, I guess.",
             "LoadingSceneScript.cs is not scripting",
-            "Work? Nah. Jetpack video.",
             "Hey! If the game runs slow, isn't my fault ok?",
-            "You should try a DavidDEV game... wait... he doesn't have one...",
-            "Testing gamer skillz",
+            "You should try a DavidDEV game... wait... he doesn't have any...",
+            "Testing gamer skills",
             "These will be the best graphics you'll ever see",
-            "Fun Fact: There aren't Fun Facts"
+            "Fun Fact: There aren't Easter Eggs"
         };
 
 
@@ -217,7 +209,7 @@ public class LoadingSceneScript : MonoBehaviour
         loadingBarBg.GetComponent<Image>().color = color;
 
         float speed = 0;
-        while (load.anchoredPosition.y > -25)
+        while (load.anchoredPosition.y > -50)
         {
             speed -= 2 * Time.deltaTime;
             load.anchoredPosition = load.anchoredPosition + Vector2.up * speed;

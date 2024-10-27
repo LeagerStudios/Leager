@@ -222,7 +222,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         {
                             Destroy(TileObject[e].GetComponent<BlockAnimationController>());
                             TileGrid[e] = 0;
-                            ManagingFunctions.DropItem(4, TileObject[e].transform.position);
+                            if (!manager.isNetworkClient)
+                                ManagingFunctions.DropItem(4, TileObject[e].transform.position);
                             Destroy(TileObject[e].GetComponent<Timer>());
                         }
                         break;
@@ -236,8 +237,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         {
                             TileGrid[e] = 0;
                             if (StackBar.stackBarController.currentItem == 70)
-                                StackBar.AddItemInv(70);
-                            else
+                                StackBar.AddItem(70);
+                            else if (!manager.isNetworkClient)
                                 ManagingFunctions.DropItem(70, TileObject[e].transform.position);
 
                         }
@@ -268,14 +269,14 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             {
                                 TileGrid[e] = 0;
                                 if (StackBar.stackBarController.currentItem == 88)
-                                    StackBar.AddItemInv(88);
-                                else
+                                    StackBar.AddItem(88);
+                                else if(!manager.isNetworkClient)
                                     ManagingFunctions.DropItem(88, TileObject[e].transform.position);
                             }
                         else
                         {
                             TileGrid[e] = 0;
-                            StackBar.AddItemInv(88);
+                            StackBar.AddItem(88);
                         }
                         break;
 
@@ -480,7 +481,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
 
                         if (TileGrid[e + 1] != 87)
                         {
-                            ManagingFunctions.DropItem(85, gameTile.transform.position);
+                            if (!manager.isNetworkClient)
+                                ManagingFunctions.DropItem(85, gameTile.transform.position);
                             TileGrid[e] = 0;
                         }
                         else
@@ -509,14 +511,15 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 catch
                 {
                     TileGrid[e] = 0;
-                    StackBar.AddItemInv(85);
+                    StackBar.AddItem(85);
                 }
                 break;
 
             case 86:
                 if (TileGrid[e + 1] != 87)
                 {
-                    ManagingFunctions.DropItem(85, gameTile.transform.position);
+                    if (!manager.isNetworkClient)
+                        ManagingFunctions.DropItem(85, gameTile.transform.position);
                     TileGrid[e] = 0;
 
                     RevaluateLifeChoicesForTile(gameTile, 0, e);
@@ -543,6 +546,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             case 87:
                     if (TileGrid[e - 1] != 86)
                     {
+                    if (!manager.isNetworkClient)
                         ManagingFunctions.DropItem(85, gameTile.transform.position - Vector3.up);
                         TileGrid[e] = 0;
                     }
@@ -578,6 +582,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             case 98:
                     if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 99)
                     {
+                    if (!manager.isNetworkClient)
                         ManagingFunctions.DropItem(100, gameTile.transform.position + Vector3.right * 0.5f);
                         TileGrid[e] = 0;
                     }
@@ -586,6 +591,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             case 99:
                     if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 98)
                     {
+                        if (!manager.isNetworkClient)
                         ManagingFunctions.DropItem(100, gameTile.transform.position + Vector3.left * 0.5f);
                         TileGrid[e] = 0;
                     }
@@ -607,7 +613,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     catch
                     {
                         TileGrid[e] = 0;
-                        StackBar.AddItemInv(100);
+                        StackBar.AddItem(100);
                     }
                 break;
 
@@ -679,7 +685,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
             case 114:
                 if (manager.GetTileAt(tilesToChunk + e + manager.WorldHeight) != 115)
                 {
-                    ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.right * 0.5f);
+                    if (!manager.isNetworkClient)
+                        ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.right * 0.5f);
                     TileGrid[e] = 0;
                 }
                 break;
@@ -687,7 +694,8 @@ public class ChunkController : MonoBehaviour, ITimerCall
             case 115:
                 if (manager.GetTileAt(tilesToChunk + e - manager.WorldHeight) != 114)
                 {
-                    ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.left * 0.5f);
+                    if (!manager.isNetworkClient)
+                        ManagingFunctions.DropItem(116, gameTile.transform.position + Vector3.left * 0.5f);
                     TileGrid[e] = 0;
                     if (e > manager.WorldHeight - 1)
                     {
@@ -718,7 +726,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                 catch
                 {
                     TileGrid[e] = 0;
-                    StackBar.AddItemInv(116);
+                    StackBar.AddItem(116);
                 }
                 break;
 
