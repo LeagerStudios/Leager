@@ -17087,7 +17087,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Please, write only with letter and numbers!
+  m_Text: Use only alphanumeric characters!
 --- !u!222 &2028479625
 CanvasRenderer:
   m_ObjectHideFlags: 0
