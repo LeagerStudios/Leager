@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour, IDamager
             }
 
             float y = transform.position.y;
-            if (entityScript.entityStates.Contains(EntityState.Drowning))
+            if (entityScript.entityStates.Contains(EntityState.Drowning) && !entityScript.entityStates.Contains(EntityState.Burning))
             {
                 mainCamera.currentBackground = "Water";
             }
@@ -478,7 +478,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
 
 
-        if ((rb2D.velocity.y > 0.1f && GInput.GetKey(KeyCode.W)))
+        if (rb2D.velocity.y > 0.5f)
         {
             animations.SetBool("falling", false);
             animations.SetBool("jumping", true);
