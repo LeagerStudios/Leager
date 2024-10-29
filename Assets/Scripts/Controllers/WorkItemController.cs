@@ -47,7 +47,7 @@ public class WorkItemController : MonoBehaviour {
                         Vector4 tileSize = GameManager.gameManagerReference.tileSize[StackBar.stackBarController.currentItem];
                         Vector3 offset = new Vector3(0.5f * (tileSize.x - 1) - tileSize.z, 0.5f * (tileSize.y - 1) - tileSize.w);
 
-                        if (!GameManager.gameManagerReference.building || !Physics2D.OverlapBox(tile.transform.position + offset, tileSize, 0, entitiesMasks))
+                        if (!GameManager.gameManagerReference.building || (!Physics2D.OverlapBox(tile.transform.position + offset, tileSize, 0, entitiesMasks) || GameManager.gameManagerReference.TileCollisionType[StackBar.stackBarController.currentItem] != 1))
                             tile.transform.parent.GetComponent<ChunkController>().ClickedTile(tile);
                     }
                 }
