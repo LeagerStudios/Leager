@@ -109,6 +109,7 @@ public class PlayerController : MonoBehaviour, IDamager
                 if (!alive && !killing && gameManager.InGame && !CommandController.commandController.showcaseMode)
                 {
                     mainCamera.transform.eulerAngles += Vector3.forward * Time.deltaTime;
+                    mainCamera.lerp = true;
                     mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
                 }
 
