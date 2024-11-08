@@ -5301,6 +5301,7 @@ MonoBehaviour:
   audioSource: {fileID: 614681995345758224}
   lifetime: 0
   selectedTile: 0
+  miningProgress: 0
   selected:
   - {fileID: 21300016, guid: 00618bc5dc6cbda4194b9ddcfbdaa6a6, type: 3}
   - {fileID: 21300010, guid: 00618bc5dc6cbda4194b9ddcfbdaa6a6, type: 3}
@@ -5314,6 +5315,7 @@ MonoBehaviour:
   laserRenderer: {fileID: 2741816400080374816}
   laserEndRenderer: {fileID: 8373558531218644884}
   particles: {fileID: 3029920010181607028}
+  mineable: 0b0000000a00000009000000080000000c000000
 --- !u!1 &6174695624366076435
 GameObject:
   m_ObjectHideFlags: 0

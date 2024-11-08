@@ -568,11 +568,11 @@ public class PlayerController : MonoBehaviour, IDamager
             }
         }
 
-        if(!gameManager.cancelPlacing)
-        if (GInput.GetMouseButtonDown(0))
-            if (gameManager.usingTool)
-                if (gameManager.toolUsing == "nodeConnector")
-                    UseToolAnim();
+        if (!gameManager.cancelPlacing)
+            if (GInput.GetMouseButtonDown(0))
+                if (gameManager.usingTool)
+                    if (gameManager.toolUsing == "nodeConnector")
+                        UseToolAnim();
 
         if (rb2D.velocity.y < 0)
         {
@@ -744,7 +744,7 @@ public class PlayerController : MonoBehaviour, IDamager
         ContactPoint2D contact = collision.GetContact(0);
         Vector2 contactPoint = contact.point;
 
-        if(Mathf.Abs(contactPoint.y - (transform.position.y + collision.otherCollider.bounds.size.y / 2)) < 0.1f)
+        if (Mathf.Abs(contactPoint.y - (transform.position.y + collision.otherCollider.bounds.size.y / 2)) < 0.1f)
         {
             rb2D.velocity = new Vector2(lastVelocity.x, rb2D.velocity.y);
         }
@@ -979,7 +979,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
                         }
 
-                        if(loopback > 10)
+                        if (loopback > 10)
                         {
                             for (int i = 0; loopback >= 10; i++)
                             {
@@ -989,7 +989,7 @@ public class PlayerController : MonoBehaviour, IDamager
                                 yield return new WaitForSeconds(0.016f);
                             }
                         }
-                        else if(loopback < 10)
+                        else if (loopback < 10)
                         {
                             for (int i = 0; loopback < 10; i++)
                             {
@@ -1015,7 +1015,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
                     } while (endPointNode.connections.Count > 0 && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit);
 
-                    while(endPointNode.connections.Count > 0)
+                    while (endPointNode.connections.Count > 0)
                     {
                         endPointNode.connections[0].RemoveConnectionRecursive(endPointNode);
                     }
