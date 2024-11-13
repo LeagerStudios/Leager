@@ -8,7 +8,7 @@ public class TutorialController : MonoBehaviour
 
     void Start()
     {
-        
+        StartCoroutine(Tutorial());
     }
 
     void Update()
@@ -16,8 +16,87 @@ public class TutorialController : MonoBehaviour
         
     }
 
+    public IEnumerator Tutorial()
+    {
+        SetState(0);
+
+        while (!GInput.GetKey(KeyCode.A))
+        {
+            yield return new WaitForEndOfFrame();
+            StackBar.stackBarController.InventoryDeployed = false;
+        }
+
+        while (!GInput.GetKey(KeyCode.D))
+        {
+            yield return new WaitForEndOfFrame();
+            StackBar.stackBarController.InventoryDeployed = false;
+        }
+
+        while (!GInput.GetKey(KeyCode.W))
+        {
+            yield return new WaitForEndOfFrame();
+            StackBar.stackBarController.InventoryDeployed = false;
+        }
+
+        SetState(1);
+
+        while (!StackBar.stackBarController.InventoryDeployed)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        while (StackBar.stackBarController.InventoryDeployed)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        StackBar.stackBarController.idx = Random.Range(3, 9);
+        StackBar.stackBarController.UpdateStacks();
+
+        SetState(2);
+
+        bool canExit = false;
+        while(!canExit)
+        {
+            if(StackBar.stackBarController.currentItem == 24)
+            {
+                if (GameManager.gameManagerReference.usingTool)
+                {
+                    if (TechManager.techTree.unlockedItems.Contains(53))
+                    {
+                        canExit = true;
+                    }
+                    else
+                    {
+                        SetState(4);
+                    }
+                }
+                else
+                {
+                    SetState(3);
+                }
+            }
+            else
+            {
+                SetState(2);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        SetState(5);
+
+    }
+
+
     public void SetState(int i)
     {
         state = i;
+
+        for (int e = 0; e < transform.Find(GInput.leagerInput.platform).childCount; e++)
+        {
+            print("abs" + e);
+            transform.Find(GInput.leagerInput.platform).GetChild(e).gameObject.SetActive(e == state);
+        }
     }
 }

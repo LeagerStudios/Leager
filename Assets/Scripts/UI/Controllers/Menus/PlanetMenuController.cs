@@ -21,7 +21,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
-    public List<string> lorePlanets = new List<string> { "Korenz", "Dua", "Intersection, Fortress" };
+    public List<string> lorePlanets = new List<string> { "Korenz", "Dua", "Intersection, Nheo, Lurp, Krylo" };
     public Color[] lorePlanetsColor; 
     public List<string> Items
     {
@@ -54,7 +54,6 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("25FF00FF"), 120));
             planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 250));
             planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 340));
-            //planets.Add(new PlanetData("Fortress", ManagingFunctions.HexToColor("#7A7F80"), 15));
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
         else
