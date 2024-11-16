@@ -95,7 +95,6 @@ public class TutorialController : MonoBehaviour
 
         for (int e = 0; e < transform.Find(GInput.leagerInput.platform).childCount; e++)
         {
-            print("abs" + e);
             transform.Find(GInput.leagerInput.platform).GetChild(e).gameObject.SetActive(e == state);
         }
     }

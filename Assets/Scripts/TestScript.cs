@@ -4,77 +4,71 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
-    public Color baseColor = new Color(0.69f, 0.69f, 0.69f); // #b1b1b1 in RGB
-    public Color oreColor = Color.red; // Secondary color for the ore
-    public int textureSize = 16; // 16x16 texture
-    public int oreCircles = 3; // Number of ore circles
-    public int circleRadius = 2; // Radius of each ore circle
-
-    public Texture2D texture;
     public SpriteRenderer spriteRenderer;
-
-    public enum OrePattern
-    {
-        Random,
-        Diagonal
-        // Add more patterns here if needed
-    }
+    public SpriteRenderer spriteRenderer2;
+    public SpriteRenderer spriteRenderer3;
+    public SpriteRenderer spriteRenderer4;
+    public float time = 0;
+    public float apo = 2;
+    public float per = 2;
+    public float rot = 0;
+    public float apo2 = 2;
+    public float per2 = 2;
+    public float rot2 = 0;
+    public float apo3 = 2;
+    public float per3 = 2;
+    public float rot3 = 0;
+    public float apo4 = 2;
+    public float per4 = 2;
+    public float rot4 = 0;
 
     private void Update()
     {
-        GenerateTexture();
+        spriteRenderer.transform.localPosition = FindPoint(apo, per, rot);
+        spriteRenderer2.transform.localPosition = FindPoint(apo2, per2, rot2);
+        spriteRenderer3.transform.localPosition = FindPoint(apo3, per3, rot3);
+        spriteRenderer4.transform.localPosition = FindPoint(apo4, per4, rot4);
+        spriteRenderer.GetComponent<TrailRenderer>().time = apo * per;
+        spriteRenderer2.GetComponent<TrailRenderer>().time = apo2 * per2;
+        spriteRenderer3.GetComponent<TrailRenderer>().time = apo3 * per3;
+        spriteRenderer4.GetComponent<TrailRenderer>().time = apo4 * per4;
+        if (time > 0.1f)
+        {
+            spriteRenderer.GetComponent<TrailRenderer>().emitting = true;
+            spriteRenderer2.GetComponent<TrailRenderer>().emitting = true;
+            spriteRenderer3.GetComponent<TrailRenderer>().emitting = true;
+            spriteRenderer4.GetComponent<TrailRenderer>().emitting = true;
+        }
+       
+        time += Time.deltaTime;
     }
 
-    public void GenerateTexture()
+    public Vector2 FindPoint(float apo, float per, float rot)
     {
-        texture = new Texture2D(textureSize, textureSize);
-        Color[] pixels = new Color[textureSize * textureSize];
-
-        // Set all pixels to the base color
-        for (int i = 0; i < pixels.Length; i++)
+        Vector2 point = new Vector2();
+        float timePerRev = apo * per;
+        float rotVal = time % timePerRev;
+        rotVal *= 2;
+        rotVal /= timePerRev;
+        bool inverse = false;
+        if (rotVal > 1)
         {
-            pixels[i] = baseColor;
+            rotVal = 0 - (rotVal - 2);
+            inverse = true;
         }
 
-        // Apply ore color based on the selected pattern
-        ApplyCirclePattern(pixels);
+        float orbit = per + apo;
 
-        texture.filterMode = FilterMode.Point;
-        texture.SetPixels(pixels);
-        texture.Apply();
+        float halfOrbit = Mathf.Lerp(apo, per, 0.8f);
 
-        // Create a Sprite from the texture and assign it to the SpriteRenderer
-        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, textureSize, textureSize), new Vector2(0.5f, 0.5f), 8);
-        spriteRenderer.sprite = sprite;
-    }
 
-    public void ApplyCirclePattern(Color[] pixels)
-    {
-        System.Random random = new System.Random();
-
-        for (int i = 0; i < oreCircles; i++)
+        point = new Vector2(Mathf.Sin(rotVal * Mathf.PI) * halfOrbit * (inverse ? 1 : -1), Mathf.Cos(rotVal * Mathf.PI) * (orbit / 2));
+        point += Vector2.up * ((apo - per) / 2);
+        if(rot != 0)
         {
-            // Randomize the center position of each circle
-            int centerX = random.Next(circleRadius, textureSize - circleRadius);
-            int centerY = random.Next(circleRadius, textureSize - circleRadius);
-
-            // Draw a circular ore cluster around the center
-            for (int y = -circleRadius; y <= circleRadius; y++)
-            {
-                for (int x = -circleRadius; x <= circleRadius; x++)
-                {
-                    if (x * x + y * y <= circleRadius * circleRadius) // Check if within the circle
-                    {
-                        int pixelX = centerX + x;
-                        int pixelY = centerY + y;
-
-                        if (pixelX >= 0 && pixelX < textureSize && pixelY >= 0 && pixelY < textureSize)
-                        {
-                            pixels[pixelY * textureSize + pixelX] = oreColor;
-                        }
-                    }
-                }
-            }
+            point = Quaternion.AngleAxis(rot, Vector3.forward) * point;
         }
+
+        return point;
     }
 }

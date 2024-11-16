@@ -262,6 +262,23 @@ public static class ManagingFunctions
         return randomString.ToString();
     }
 
+
+    public static string GetRandomStringUpperUnvowel(int length)
+    {
+        string stringSpace = "BCDFGHJKLMNPQRSTVWXYZ";
+        int stringLength = stringSpace.Length;
+        StringBuilder randomString = new StringBuilder();
+
+        System.Random random = new System.Random();
+        for (int i = 0; i < length; i++)
+        {
+            int randomIndex = random.Next(0, stringLength);
+            randomString.Append(stringSpace[randomIndex]);
+        }
+
+        return randomString.ToString();
+    }
+
     public static string GetRandomStringNumbers(int length)
     {
         string stringSpace = "0123456789";
