@@ -117,6 +117,8 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         else
             isExplored = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/" + planets[idx].planetName);
 
+        if(planets[planetFocused] != null)
+
         RectTransform planetDataRectTransform = planetPanelPropertiesRectTransform.GetChild(0).GetComponent<RectTransform>();
 
         planetDataRectTransform.GetChild(0).GetComponent<Image>().color = planets[idx].planetColor.Color;
@@ -180,14 +182,13 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
     public void SpawnPlanet()
     {
-        int letters = /*Random.Range(2, 5)*/2;
+        int letters = Random.Range(2, 5);
         int numbers = 6 - letters;
         string planetName = "null-22";
-        while(planetName[0] != 'M' || planetName[1] != 'B')
-            planetName = ManagingFunctions.GetRandomStringUpper(letters) + "-" + ManagingFunctions.GetRandomStringNumbers(numbers);
+        planetName = ManagingFunctions.GetRandomStringUpper(letters) + "-" + ManagingFunctions.GetRandomStringNumbers(numbers);
 
         bool canSpawn = true;
-        for(int i = 0; i < planets.Count; i++)
+        for (int i = 0; i < planets.Count; i++)
         {
             if (planets[i].planetName == planetName)
             {
@@ -204,7 +205,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             newPlanet.GetChild(0).GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
             int size = Random.Range(20, 250);
 
-            PlanetData planetData = new PlanetData(planetName, Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0.7f,1f), Random.Range(0.8f,1f)), size, Random.Range(3f, 6f), Random.Range(1f, 3f));
+            PlanetData planetData = new PlanetData(planetName, Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0.7f, 1f), Random.Range(0.8f, 1f)), size, Random.Range(3f, 6f), Random.Range(1f, 3f));
             planetData.ApplyToButton(newPlanet);
             planets.Add(planetData);
 
@@ -238,23 +239,23 @@ public class PlanetData
         {
             wordSize = "Planetary Fortress";
         }
-        else if (sizeInChunks < 50)
+        else if (sizeInChunks < 150)
         {
             wordSize = "Small";
         }
-        else if (sizeInChunks < 75)
+        else if (sizeInChunks < 275)
         {
             wordSize = "Medium";
         }
-        else if (sizeInChunks < 120)
+        else if (sizeInChunks < 320)
         {
             wordSize = "Big";
         }
-        else if (sizeInChunks < 190)
+        else if (sizeInChunks < 490)
         {
             wordSize = "Very Big";
         }
-        else if (sizeInChunks < 220)
+        else if (sizeInChunks < 520)
         {
             wordSize = "Massive";
         }
