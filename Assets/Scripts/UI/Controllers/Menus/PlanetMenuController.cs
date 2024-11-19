@@ -37,6 +37,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
     public bool planetSelectionFocused = true;
     public int planetFocused = -1;
+    public float zoom = 100f;
 
     public bool CanDrag { get => planetSelectionFocused; }
 
@@ -51,13 +52,13 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
         {
-            planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 25000, 0, 0) { canGo = false });
-            planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 5f, 4.5f, -90f) { parent = planets[0] });
-            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 1, 1) { parent = planets[1] });
-            planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 250, 2, 2) { parent = planets[1] });
-            planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 1, 1) { parent = planets[0] });
-            planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 4, 1.5f, -90f) { parent = planets[0] });
-            planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 19, 7, 90f) { parent = planets[0] });
+            planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 700, 0, 0) { canGo = false });
+            planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 100f, 90f, -90f) { parent = planets[0] });
+            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 10f, 10f) { parent = planets[1] });
+            planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 250, 20f, 15f) { parent = planets[1] });
+            planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f) { parent = planets[0] });
+            planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f) { parent = planets[0] });
+            planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 380f, 120f, 76f) { parent = planets[0] });
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
         else
@@ -80,6 +81,12 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     {
         if (GInput.GetKeyDown(KeyCode.Escape) || targetResourceLauncher == null)
         {
+            planetFocused = -1;
+            targetResourceLauncher = null;
+            planetSelectionFocused = true;
+            planetPanelPropertiesRectTransform.gameObject.SetActive(false);
+            planetPanelRectTransform.gameObject.SetActive(false);
+
             GameManager.gameManagerReference.InGame = true;
             transform.gameObject.SetActive(false);
             return;
@@ -88,18 +95,40 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         Drag();
 
         planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
+
+        if (planetSelectionFocused)
+        {
+
+            RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
+            zoom += Input.mouseScrollDelta.y * 5;
+            viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * Mathf.Clamp(zoom, 25, 100), Time.deltaTime * 10);
+
+            foreach (PlanetData planet in planets)
+            {
+                Vector2 point = planet.FindPoint(Time.time);
+                RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
+
+                planetObject.sizeDelta = (viewport.sizeDelta / 2) * (planet.chunkSize / 50);
+                if(planet.parent != null)
+                {
+                    planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + viewport.GetChild(planets.IndexOf(planet.parent)).GetComponent<RectTransform>().anchoredPosition;
+                }
+                else
+                {
+                    planetObject.anchoredPosition = (point * viewport.sizeDelta.x);
+                }
+
+                if(planet.planetName == GameManager.gameManagerReference.currentPlanetName)
+                {
+                    viewport.anchoredPosition = (-planetObject.anchoredPosition);
+                }
+            }
+        }
     }
 
     public void Drag()
     {
-        if (planetPanelViewportRectTransform.childCount < 9)
-        {
-            planetPanelViewportRectTransform.anchoredPosition = Vector2.zero;
-        }
-        else
-        {
-            planetPanelViewportRectTransform.anchoredPosition = new Vector2(0, Mathf.Clamp(planetPanelViewportRectTransform.anchoredPosition.y, 0, (planetPanelViewportRectTransform.childCount - 8) * 100 + 5));
-        }
+        
     }
 
     public void FocusPlanet(int idx)
@@ -116,8 +145,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         }
         else
             isExplored = DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/" + planets[idx].planetName);
-
-        if(planets[planetFocused] != null)
+        
 
         RectTransform planetDataRectTransform = planetPanelPropertiesRectTransform.GetChild(0).GetComponent<RectTransform>();
 
@@ -290,30 +318,37 @@ public class PlanetData
 
     public Vector2 FindPoint(float time)
     {
-        Vector2 point = new Vector2();
-        float timePerRevolution = apoapsis * periapsis;
-        float rotVal = time % timePerRevolution;
-        rotVal *= 2;
-        rotVal /= timePerRevolution;
-        bool inverse = false;
-        if (rotVal > 1)
+        if (apoapsis == 0 && periapsis == 0)
         {
-            rotVal = 0 - (rotVal - 2);
-            inverse = true;
+            return Vector2.zero;
         }
-
-        float orbit = periapsis + apoapsis;
-
-        float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
-
-
-        point = new Vector2(Mathf.Sin(rotVal * Mathf.PI) * halfOrbit * (inverse ? 1 : -1), Mathf.Cos(rotVal * Mathf.PI) * (orbit / 2));
-        point += Vector2.up * ((apoapsis - periapsis) / 2);
-        if (rotation != 0)
+        else
         {
-            point = Quaternion.AngleAxis(rotation, Vector3.forward) * point;
-        }
+            Vector2 point = new Vector2();
+            float timePerRevolution = apoapsis * periapsis;
+            float rotVal = time % timePerRevolution;
+            rotVal *= 2;
+            rotVal /= timePerRevolution;
+            bool inverse = false;
+            if (rotVal > 1)
+            {
+                rotVal = 0 - (rotVal - 2);
+                inverse = true;
+            }
 
-        return point;
+            float orbit = periapsis + apoapsis;
+
+            float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
+
+
+            point = new Vector2(Mathf.Sin(rotVal * Mathf.PI) * halfOrbit * (inverse ? 1 : -1), Mathf.Cos(rotVal * Mathf.PI) * (orbit / 2));
+            point += Vector2.up * ((apoapsis - periapsis) / 2);
+            if (rotation != 0)
+            {
+                point = Quaternion.AngleAxis(rotation, Vector3.forward) * point;
+            }
+
+            return point;
+        }
     }
 }

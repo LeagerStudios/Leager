@@ -8,6 +8,7 @@ public class DraggableController : MonoBehaviour, IDragHandler
     public GameObject target;
     IDraggable iTarget;
     Vector2 speed;
+    public bool inertia = true;
 
     void OnValidate()
     {
@@ -36,7 +37,7 @@ public class DraggableController : MonoBehaviour, IDragHandler
     {
         if(iTarget != null)
         {
-            if (iTarget.CanDrag)
+            if (iTarget.CanDrag && inertia)
             {
                 if (speed.magnitude > 0.01f)
                 {
@@ -54,6 +55,7 @@ public class DraggableController : MonoBehaviour, IDragHandler
 
     public void OnDrag(PointerEventData data)
     {
+        Debug.Log("ESQUISOS");
         speed = data.delta / MenuController.menuController.canvas.scaleFactor;
         GetComponent<RectTransform>().anchoredPosition += speed;
         iTarget.Drag();
