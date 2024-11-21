@@ -201,6 +201,7 @@ public class PlayerController : MonoBehaviour, IDamager
         rb2D.freezeRotation = true;
         transform.eulerAngles = Vector3.zero;
         lastVelocity = Vector2.zero;
+        drownTime = 6f;
 
         if (endPointNode != null)
             while (endPointNode.connections.Count > 0)

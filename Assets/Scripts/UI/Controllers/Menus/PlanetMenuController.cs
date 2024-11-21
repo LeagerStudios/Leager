@@ -101,14 +101,15 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
             RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
             zoom += Input.mouseScrollDelta.y * 5;
-            viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * Mathf.Clamp(zoom, 25, 100), Time.deltaTime * 10);
+            zoom = Mathf.Clamp(zoom, 10, 100);
+            viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
 
             foreach (PlanetData planet in planets)
             {
                 Vector2 point = planet.FindPoint(Time.time);
                 RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
 
-                planetObject.sizeDelta = (viewport.sizeDelta / 2) * (planet.chunkSize / 50);
+                planetObject.sizeDelta = viewport.sizeDelta * (planet.chunkSize / 120);
                 if(planet.parent != null)
                 {
                     planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + viewport.GetChild(planets.IndexOf(planet.parent)).GetComponent<RectTransform>().anchoredPosition;
