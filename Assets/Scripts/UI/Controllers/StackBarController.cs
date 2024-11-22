@@ -87,14 +87,19 @@ public class StackBarController : MonoBehaviour {
         {
             itemText.text = gameManager.tileName[StackBarGrid[idx]];
         }
+    }
 
-        //UpdateStacks();
+    public void ChangeStack(int stack)
+    {
+        if (!InventoryDeployed && gameManager.InGame)
+        {
+            StackBar.ChangeStackBarIdx(stack);
+            gameManager.cancelPlacing = true;
+        }
     }
 
     public void UpdateStacks()
     {
-        
-
         for(int i = 1;i < transform.childCount; i++)
         {
             GameObject selectedStack = rectTransform.GetChild(i).gameObject;

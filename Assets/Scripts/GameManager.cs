@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
         if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("isNetworkLoad")[0] == "true") isNetworkClient = true;
         if (Server.isOpen) isNetworkHost = true;
 
-       
+
 
         if (!isNetworkClient)
         {
@@ -236,9 +236,14 @@ public class GameManager : MonoBehaviour
                 currentPlanetName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetName")[0];
                 isLorePlanet = false;
 
-                int random = Random.Range(0, 999999999);
-                Random.InitState(random);
-                seed = random;
+                string addSeed = "";
+
+                foreach (char c in currentPlanetName)
+                {
+                    addSeed += (int)c;
+                }
+
+                seed -= System.Convert.ToInt32(addSeed);
             }
             else if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "existingPlanet")
             {
@@ -247,6 +252,7 @@ public class GameManager : MonoBehaviour
                     currentHexPlanetColor = DataSaver.LoadStats(persistentDataPath + @"/worlds/" + worldName + @"/planetColor.lgrsd").SavedData[0];
                 else
                     currentHexPlanetColor = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetColor")[0];
+
                 isLorePlanet = false;
 
                 try
@@ -290,13 +296,20 @@ public class GameManager : MonoBehaviour
                 DataSaver.SaveStats(new string[] { 2000 + "" }, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd");
             }
 
-            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd"))
-            {
-                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd").SavedData)[0];
-            }
+            if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] != "newWorld")
+                if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd"))
+                {
+                    print("kuak1");
+                    gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd").SavedData)[0];
+                }
+                else
+                {
+                    print("kuak2");
+                    DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd");
+                }
             else
             {
-                DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd");
+                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldDifficulty"))[0];
             }
         }
         else
@@ -1096,7 +1109,7 @@ public class GameManager : MonoBehaviour
     {
         WorldWidth = ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldSize"))[0];
         WorldHeight = ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldSize"))[1];
-        gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldDifficulty"))[0];
+
         DataSaver.SaveStats(new string[] { (int)gameDifficulty + "" }, Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd");
 
         int[] buildedMapGrid = new int[(WorldWidth * 16) * WorldHeight];
