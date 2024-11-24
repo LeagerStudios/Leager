@@ -37,9 +37,19 @@ public class MobileControls : MonoBehaviour {
 
     void SetOverlay(string overlay)
     {
-        foreach(Transform child in childs)
+        foreach (Transform child in childs)
         {
             child.gameObject.SetActive(child.gameObject.name == overlay);
         }
+    }
+
+    public void Hold(string key)
+    {
+        GInput.PressKey((KeyCode)System.Enum.Parse(typeof(KeyCode), key));
+    }
+
+    public void Release(string key)
+    {
+        GInput.ReleaseKey((KeyCode)System.Enum.Parse(typeof(KeyCode), key));
     }
 }
