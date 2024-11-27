@@ -80,36 +80,33 @@ public class InventoryArrowController : MonoBehaviour
         {
             GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = true;
 
-            if (!gameManager.cancelPlacing)
+            // Get the position of the mouse cursor in screen space
+            Vector3 mousePosition = GInput.MousePosition;
+
+            // Convert the screen space position to canvas space
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform.parent as RectTransform, mousePosition, null, out Vector2 localPoint);
+
+            Vector2 originalPosition = rectTransform.localPosition;
+            // Set the position of the UI element to the converted canvas space position
+            rectTransform.localPosition = localPoint;
+            Vector2 rawPosition = rectTransform.anchoredPosition - offsetConstant + centerConstant;
+            rawPosition = Vector2Int.FloorToInt(rawPosition / 40) * 40;
+            rectTransform.localPosition = originalPosition;
+
+            Vector2Int indexPosition = Vector2Int.FloorToInt(rawPosition / 40);
+            bool insideLimits = indexPosition.x >= 0 && indexPosition.x < 9 && indexPosition.y <= 0 && indexPosition.y > -5;
+
+            int index = -1;
+            if (insideLimits) index = indexPosition.y * -9 + indexPosition.x;
+
+            idxPos = index;
+
+            if (insideLimits)
+                rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, rawPosition + offsetConstant, Time.deltaTime * 30);
+            else
             {
-                // Get the position of the mouse cursor in screen space
-                Vector3 mousePosition = Input.mousePosition;
-
-                // Convert the screen space position to canvas space
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform.parent as RectTransform, mousePosition, null, out Vector2 localPoint);
-
-                Vector2 originalPosition = rectTransform.localPosition;
-                // Set the position of the UI element to the converted canvas space position
-                rectTransform.localPosition = localPoint;
-                Vector2 rawPosition = rectTransform.anchoredPosition - offsetConstant + centerConstant;
-                rawPosition = Vector2Int.FloorToInt(rawPosition / 40) * 40;
-                rectTransform.localPosition = originalPosition;
-
-                Vector2Int indexPosition = Vector2Int.FloorToInt(rawPosition / 40);
-                bool insideLimits = indexPosition.x >= 0 && indexPosition.x < 9 && indexPosition.y <= 0 && indexPosition.y > -5;
-
-                int index = -1;
-                if (insideLimits) index = indexPosition.y * -9 + indexPosition.x;
-
-                idxPos = index;
-
-                if (insideLimits)
-                    rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, rawPosition + offsetConstant, Time.deltaTime * 30);
-                else
-                {
-                    rectTransform.anchoredPosition = localPoint;
-                    GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = tilePorting != -1;
-                }
+                rectTransform.anchoredPosition = localPoint;
+                GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = tilePorting != -1;
             }
         }
         else if (tilePorting != -1)
@@ -255,7 +252,7 @@ public class InventoryArrowController : MonoBehaviour
         }
         else if (tilePorting != -1)
         {
-            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(GInput.MousePosition);
             //if (gameManager.tileType[tilePorting] == "equip" && Vector2.Distance(mouseWorldPos, gameManager.player.transform.position) < 0.76f)
             //{
             //    tilePorting = gameManager.EquipItem(tilePorting, gameManager.tileMainProperty[tilePorting]);

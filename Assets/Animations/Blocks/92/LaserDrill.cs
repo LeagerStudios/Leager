@@ -64,8 +64,10 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             if (focused)
             {
                 targetPresence.gameObject.SetActive(true);
-                tileProperties.info = new List<string>();
-                tileProperties.info.Add(target.x + ":" + target.y);
+                tileProperties.info = new List<string>
+                {
+                    target.x + ":" + target.y
+                };
                 tileProperties.CommitToChunk();
 
                 if (StackBar.stackBarController.InventoryDeployed || !GameManager.gameManagerReference.InGame || Vector2.Distance(transform.position, GameManager.gameManagerReference.player.transform.position) > 5)
@@ -74,7 +76,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                     GameManager.gameManagerReference.player.mainCamera.focus = null;
                     miningProgress = 0f;
                 }
-                else if (GInput.GetKeyDown(KeyCode.Return) || (GInput.leagerInput.platform == "Mobile" && GInput.GetMouseButtonDown(0) && !GameManager.gameManagerReference.cancelPlacing))
+                else if (GInput.GetKeyDown(KeyCode.Return) || (GInput.leagerInput.platform == "Mobile" && GInput.GetMouseButtonDown(0) && !GInput.CancelPlacing))
                 {
                     focused = false;
                     GameManager.gameManagerReference.player.mainCamera.focus = null;
@@ -107,7 +109,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
             else
             {
                 targetPresence.gameObject.SetActive(false);
-                if (GInput.GetMouseButtonDown(1) || (GInput.leagerInput.platform == "Mobile" && GInput.GetMouseButtonDown(0) && !GameManager.gameManagerReference.cancelPlacing))
+                if (GInput.GetMouseButtonDown(1) || (GInput.leagerInput.platform == "Mobile" && GInput.GetMouseButtonDown(0) && !GInput.CancelPlacing))
                     if (GameManager.gameManagerReference.player.onControl && ManagingFunctions.InsideRanges(GameManager.gameManagerReference.mouseCurrentPosition, transform.position - (Vector3.one * 0.5f), transform.position + (Vector3.one * 0.5f)))
                     {
                         if (!StackBar.stackBarController.InventoryDeployed)

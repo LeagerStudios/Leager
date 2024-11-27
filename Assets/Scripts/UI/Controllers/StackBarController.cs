@@ -94,7 +94,6 @@ public class StackBarController : MonoBehaviour {
         if (!InventoryDeployed && gameManager.InGame)
         {
             StackBar.ChangeStackBarIdx(stack);
-            gameManager.cancelPlacing = true;
         }
     }
 

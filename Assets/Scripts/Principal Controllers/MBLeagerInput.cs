@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public static class GInput
 {
@@ -10,6 +11,67 @@ public static class GInput
     public static List<KeyCode> keys = new List<KeyCode>();
     public static List<int> mousesDown = new List<int>();
     public static List<int> mouses = new List<int>();
+    private static Vector2 lastMousePos;
+    public static Vector2 MousePosition
+    {
+        get
+        {
+            if (Input.touchSupported)
+            {
+                if(Input.touches.Length > 0)
+                {
+                    foreach(Touch touch in Input.touches)
+                    {
+                        if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                        {
+                            lastMousePos = touch.position;
+                            return lastMousePos;
+                        }
+                    }
+
+                    return lastMousePos;
+                }
+                else
+                {
+                    return lastMousePos;
+                }
+            }
+            else
+            {
+                return Input.mousePosition;
+            }
+        }
+    }
+
+    public static bool CancelPlacing
+    {
+        get
+        {
+            if (Input.touchSupported)
+            {
+                if (Input.touches.Length > 0)
+                {
+                    foreach (Touch touch in Input.touches)
+                    {
+                        if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return EventSystem.current.IsPointerOverGameObject();
+            }
+        }
+    }
 
     public static bool GetKey(KeyCode key)
     {
@@ -61,10 +123,7 @@ public static class GInput
 
     public static void Update()
     {
-        if(GameManager.gameManagerReference != null)
-        {
-            GameManager.gameManagerReference.cancelPlacing = keys.Count != 0 || mouses.Count != 0;
-        }
+        
     }
 }
 

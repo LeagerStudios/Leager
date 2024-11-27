@@ -16,7 +16,7 @@ public class BuildingCursorController : MonoBehaviour {
     {
         if (gameManager.InGame)
         {
-            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = Camera.main.ScreenToWorldPoint(GInput.MousePosition);
             transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), -1);
 
             for (int i = 1; i < transform.childCount; i++)
@@ -39,7 +39,7 @@ public class BuildingCursorController : MonoBehaviour {
                     GetComponent<SpriteRenderer>().sprite = gameManager.tileBuildPrev[gameManager.chosenBrush];
                 }
             }
-            else if (gameManager.usingTool && gameManager.tileBreaking != -1 && !gameManager.cancelPlacing)
+            else if (gameManager.usingTool && gameManager.tileBreaking != -1 && !GInput.CancelPlacing)
             {
                 GetComponent<SpriteRenderer>().enabled = true;
                 Color newColor = GetComponent<SpriteRenderer>().color;

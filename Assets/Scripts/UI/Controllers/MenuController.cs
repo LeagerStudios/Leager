@@ -57,6 +57,7 @@ public class MenuController : MonoBehaviour {
         {
             GameManager.gameManagerReference = null;
             SceneManager.LoadScene("MainMenu");
+            return;
         }
 
         menuController = this;

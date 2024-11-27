@@ -31,15 +31,6 @@ public class WorldPanelController : MonoBehaviour {
 
     void Start() {
         worldPanelController = this;
-        if (!GameObject.Find("SaveObject"))
-        {
-            GameObject saveObject = Instantiate(new GameObject("NewObject"));
-            saveObject.name = "SaveObject";
-            DontDestroyOnLoad(saveObject);
-            GameObject.Find("SaveObject").AddComponent<ComponetSaver>();
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>();
-        }
-
 
         GameObject.Find("MenuManager").GetComponent<PushPlay>().CreateMainSaves();
         saveObject = GameObject.Find("SaveObject").GetComponent<ComponetSaver>();

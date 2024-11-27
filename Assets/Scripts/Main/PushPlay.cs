@@ -19,14 +19,8 @@ public class PushPlay : MonoBehaviour
     [SerializeField] AudioSource menuThemeAudio;
     bool gettingData = false;
 
-
-    void Start()
+    private void Awake()
     {
-        GameManager.gameManagerReference = null;
-        System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-
-        transition.SetActive(true);
-        main = this;
         if (!GameObject.Find("SaveObject"))
         {
             GameObject saveObject = Instantiate(new GameObject("NewObject"));
@@ -35,6 +29,16 @@ public class PushPlay : MonoBehaviour
             GameObject.Find("SaveObject").AddComponent<ComponetSaver>();
             GameObject.Find("SaveObject").GetComponent<ComponetSaver>();
         }
+    }
+
+    void Start()
+    {
+        GameManager.gameManagerReference = null;
+        System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
+        transition.SetActive(true);
+        main = this;
+       
 
         Debug.Log("Leager version: " + Application.version);
 

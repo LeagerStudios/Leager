@@ -34,7 +34,7 @@ public class WorkItemController : MonoBehaviour {
                     if (canInteract[tileSelected] == true)
                     {
                         workIcon.GetComponent<SpriteRenderer>().sprite = spritesRenders[tileSelected];
-                        if (GInput.GetMouseButtonDown(1) || (GInput.leagerInput.platform == "Mobile" && !GameManager.gameManagerReference.cancelPlacing && GInput.GetMouseButtonDown(0)))
+                        if (GInput.GetMouseButtonDown(1) || (GInput.leagerInput.platform == "Mobile" && !GInput.CancelPlacing && GInput.GetMouseButtonDown(0)))
                         {
                             DisplayForTile(tileSelected, tile);
                         }

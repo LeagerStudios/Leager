@@ -510,7 +510,7 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (GInput.GetMouseButtonDown(0) && gameManager.usingArm && armCooldown <= 0f && transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite == gameManager.tiles[0])
         {
-            if (!gameManager.cancelPlacing)
+            if (!GInput.CancelPlacing)
             {
                 StartCoroutine(ArmAnimation(gameManager.armUsing));
                 armCooldown = gameManager.tileSize[StackBar.stackBarController.currentItem].z;
@@ -569,7 +569,7 @@ public class PlayerController : MonoBehaviour, IDamager
             }
         }
 
-        if (!gameManager.cancelPlacing)
+        if (!GInput.CancelPlacing)
             if (GInput.GetMouseButtonDown(0))
                 if (gameManager.usingTool)
                     if (gameManager.toolUsing == "nodeConnector")
@@ -1004,7 +1004,7 @@ public class PlayerController : MonoBehaviour, IDamager
                         float direction = ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
 
                         if (endPointNode.connections.Count > 0)
-                            while (!(GInput.GetMouseButton(0) && Mathf.DeltaAngle(direction, transform.GetChild(0).eulerAngles.z) < 0.01f) && !gameManager.cancelPlacing && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
+                            while (!(GInput.GetMouseButton(0) && Mathf.DeltaAngle(direction, transform.GetChild(0).eulerAngles.z) < 0.01f) && !GInput.CancelPlacing && gameManager.usingTool && gameManager.toolUsing == "nodeConnector" && !allowedExit)
                             {
                                 direction = ManagingFunctions.PointToPivotUp(transform.position, gameManager.mouseCurrentPosition);
                                 transform.GetChild(0).eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.GetChild(0).eulerAngles.z, direction, 180f * Time.deltaTime);

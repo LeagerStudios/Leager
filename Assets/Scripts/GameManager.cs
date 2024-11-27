@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
     public int armUsingDamageDeal = 0;
     public string equipType = "";
     public Vector3 mouseCurrentPosition;
-    public Vector3 mouseLastPosition;
+
     public Vector3 mouseDelta;
     public int NumberOfTilesInChunk;
 
@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
     GameObject lastTileBrush;
     public int breakingTime = -1;
     public int tileBreaking = -1;
-    public bool cancelPlacing = false; //Mobile
 
     //The map container
     public int[] allMapGrid;
@@ -378,8 +377,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        mouseCurrentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseDelta = mouseCurrentPosition - mouseLastPosition;
+        mouseCurrentPosition = Camera.main.ScreenToWorldPoint(GInput.MousePosition);
         addedFrameThisFrame = false;
 
         if (inGame)
@@ -596,7 +594,7 @@ public class GameManager : MonoBehaviour
         }
 
         savingText.SetActive(isSavingData);
-        mouseLastPosition = mouseCurrentPosition;
+
 
         ostSource.volume += Time.deltaTime;
 
@@ -1946,7 +1944,7 @@ public class GameManager : MonoBehaviour
 
     public void ChangeBrush(int entryTile, GameObject tile)
     {
-        if (building && !cancelPlacing)
+        if (building && !GInput.CancelPlacing)
         {
             int idx = System.Array.IndexOf(tile.transform.parent.GetComponent<ChunkController>().TileObject, tile);
 
@@ -1994,7 +1992,7 @@ public class GameManager : MonoBehaviour
             brush = entryTile;
         }
 
-        if (usingTool && !cancelPlacing)
+        if (usingTool && !GInput.CancelPlacing)
         {
             tileBreaking = entryTile;
 

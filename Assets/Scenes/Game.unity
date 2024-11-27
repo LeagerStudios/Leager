@@ -15557,13 +15557,11 @@ MonoBehaviour:
   armUsingDamageDeal: 0
   equipType: 
   mouseCurrentPosition: {x: 0, y: 0, z: 0}
-  mouseLastPosition: {x: 0, y: 0, z: 0}
   mouseDelta: {x: 0, y: 0, z: 0}
   NumberOfTilesInChunk: 0
   equipedArmor: 000000000000000000000000000000000000000000000000
   breakingTime: -1
   tileBreaking: -1
-  cancelPlacing: 0
   allMapGrid: 
   allBackgroundGrid: 
   allMapProp: []
@@ -19444,7 +19442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -21801,7 +21799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
