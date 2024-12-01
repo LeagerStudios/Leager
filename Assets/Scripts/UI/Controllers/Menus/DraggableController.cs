@@ -55,7 +55,6 @@ public class DraggableController : MonoBehaviour, IDragHandler
 
     public void OnDrag(PointerEventData data)
     {
-        Debug.Log("ESQUISOS");
         speed = data.delta / MenuController.menuController.canvas.scaleFactor;
         GetComponent<RectTransform>().anchoredPosition += speed;
         iTarget.Drag();

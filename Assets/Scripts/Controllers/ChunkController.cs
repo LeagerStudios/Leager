@@ -102,31 +102,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
         transform.position = new Vector2(nearestPos, 0);
     }
 
-    //public void UpdateWalls()
-    //{
-    //    int sibling = transform.GetSiblingIndex();
-    //    int sPlus = sibling + 1;
-    //    int sMinus = sibling - 1;
-
-    //    if (sMinus < 0)
-    //    {
-    //        sMinus += manager.WorldWidth;
-    //    }
-    //    if (sPlus >= manager.WorldWidth)
-    //    {
-    //        sPlus -= manager.WorldWidth;
-    //    }
-
-    //    if (!transform.parent.GetChild(sMinus).GetComponent<ChunkController>().loaded)
-    //    {
-    //        manager.chunksLimits.GetChild(0).position = new Vector2(transform.position.x, manager.WorldHeight / 2);
-    //    }
-    //    if (!transform.parent.GetChild(sPlus).GetComponent<ChunkController>().loaded)
-    //    {
-    //        manager.chunksLimits.GetChild(1).position = new Vector2(transform.position.x + 16, manager.WorldHeight / 2);
-    //    }
-    //}
-
     public void UpdateChunk()
     {
         if (loaded && !loading)
@@ -319,8 +294,6 @@ public class ChunkController : MonoBehaviour, ITimerCall
                     LightMap[idx] = GetLightForTile(idx, isStillSunny);
                 }
             }
-
-            //UpdateWalls();
         }
     }
 

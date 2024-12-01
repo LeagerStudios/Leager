@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviour, IDamager
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
 
-        if (rb2D.velocity.y > 0.01f && rb2D.velocity.y < 1f && Grounded && !GInput.GetKeyDown(KeyCode.W))
+        if (rb2D.velocity.y > 0.01f && rb2D.velocity.y < 1f && Grounded && (!GInput.GetKeyDown(KeyCode.W) && !GInput.GetKeyDown(KeyCode.Space)))
         {
             float altitude = (transform.position.y - 0.93f) % 1 - 0.5f;
 

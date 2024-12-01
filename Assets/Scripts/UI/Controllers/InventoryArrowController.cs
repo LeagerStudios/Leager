@@ -81,7 +81,7 @@ public class InventoryArrowController : MonoBehaviour
             GetComponent<RectTransform>().GetChild(0).GetComponent<Image>().enabled = true;
 
             // Get the position of the mouse cursor in screen space
-            Vector3 mousePosition = GInput.MousePosition;
+            Vector3 mousePosition = Input.mousePosition;
 
             // Convert the screen space position to canvas space
             RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform.parent as RectTransform, mousePosition, null, out Vector2 localPoint);
