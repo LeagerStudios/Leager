@@ -6,12 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class LoadingSceneTitle : MonoBehaviour
 {
-
-    [SerializeField] Canvas canvas;
-
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(transform.parent.gameObject);
         SceneManager.sceneLoaded += OnSceneLoad;
     }
 
@@ -19,14 +16,19 @@ public class LoadingSceneTitle : MonoBehaviour
     {
         if (scene.name == "MainMenu")
         {
-            transform.parent = canvas.transform;
-            transform.SetAsLastSibling();
             SceneManager.sceneLoaded -= OnSceneLoad;
+            Destroy(transform.parent.GetChild(0).gameObject);
+            Invoke("Boom", 1.5f);
         }
         else if (scene.name != "LoadScreen")
         {
             SceneManager.sceneLoaded -= OnSceneLoad;
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
+    }
+
+    void Boom()
+    {
+        Destroy(transform.parent.gameObject);
     }
 }
