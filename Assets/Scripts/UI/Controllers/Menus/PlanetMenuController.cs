@@ -101,7 +101,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
             RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
             zoom += Input.mouseScrollDelta.y * 5;
-            zoom = Mathf.Clamp(zoom, 10, 100);
+            zoom = Mathf.Clamp(zoom, 4, 100);
             viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
 
             foreach (PlanetData planet in planets)

@@ -235,14 +235,7 @@ public class GameManager : MonoBehaviour
                 currentPlanetName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetName")[0];
                 isLorePlanet = false;
 
-                string addSeed = "";
-
-                foreach (char c in currentPlanetName)
-                {
-                    addSeed += (int)c;
-                }
-
-                seed -= System.Convert.ToInt32(addSeed);
+                seed -= *100;
             }
             else if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "existingPlanet")
             {
@@ -298,12 +291,10 @@ public class GameManager : MonoBehaviour
             if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] != "newWorld")
                 if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd"))
                 {
-                    print("kuak1");
                     gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd").SavedData)[0];
                 }
                 else
                 {
-                    print("kuak2");
                     DataSaver.SaveStats(new string[] { "1" }, Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd");
                 }
             else
