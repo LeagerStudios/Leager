@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
                 }
                 catch
                 {
-                    int random = Random.Range(0, 999999999);
+                    int random = Random.Range(-99999999, 999999999);
                     Random.InitState(random);
                     seed = random;
                 }
@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
                 currentPlanetName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetName")[0];
                 isLorePlanet = false;
 
-                seed -= *100;
+                seed = Random.Range(-99999999, 999999999);
             }
             else if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "existingPlanet")
             {
