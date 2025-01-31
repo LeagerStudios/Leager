@@ -46,7 +46,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         planetMenu = this;
     }
 
-    void Start ()
+    void Start()
     {
         rectTransform = GetComponent<RectTransform>();
 
@@ -68,12 +68,13 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         foreach (PlanetData planet in planets)
         {
-                RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
-                newPlanet.anchoredPosition = new Vector2(0f, -25f - (newPlanet.GetSiblingIndex() * 50f));
-                int idx = planets.IndexOf(planet);
-                newPlanet.GetChild(0).GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
+            RectTransform newPlanet = Instantiate(planetPrefab, planetPanelRectTransform.GetChild(0)).GetComponent<RectTransform>();
+            newPlanet.anchoredPosition = new Vector2(0f, -25f - (newPlanet.GetSiblingIndex() * 50f));
+            int idx = planets.IndexOf(planet);
+            newPlanet.GetChild(1).GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
 
-                planet.ApplyToButton(newPlanet);
+            planet.CalculateOrbitRender(75);
+            planet.ApplyToButton(newPlanet);
         }
     }
 
@@ -98,7 +99,6 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         if (planetSelectionFocused)
         {
-
             RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
             zoom += Input.mouseScrollDelta.y * 5;
             zoom = Mathf.Clamp(zoom, 4, 100);
@@ -108,18 +108,34 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             {
                 Vector2 point = planet.FindPoint(Time.time);
                 RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
+                UILineRenderer orbit = viewport.GetChild(planets.IndexOf(planet)).GetChild(0).GetComponent<UILineRenderer>();
+                orbit.points = (Vector2[])planet.puntos_de_orbita_dos_puntos_D.Clone();
+                orbit.color = Color.white * (100 - viewport.sizeDelta.x) / 100;
+                orbit.thickness = viewport.sizeDelta.x / 4;
 
                 planetObject.sizeDelta = viewport.sizeDelta * (planet.chunkSize / 120);
                 if(planet.parent != null)
                 {
-                    planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + viewport.GetChild(planets.IndexOf(planet.parent)).GetComponent<RectTransform>().anchoredPosition;
+                    Vector2 parentPosition = viewport.GetChild(planets.IndexOf(planet.parent)).GetComponent<RectTransform>().anchoredPosition;
+
+                    planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + parentPosition;
+
+                    for (int i = 0; i < orbit.points.Length; i++)
+                    {
+                        orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - (planetObject.anchoredPosition - parentPosition);
+                    }
                 }
                 else
                 {
-                    planetObject.anchoredPosition = (point * viewport.sizeDelta.x);
+                    for (int i = 0; i < orbit.points.Length; i++)
+                    {
+                        orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - planetObject.anchoredPosition;
+                    }
                 }
 
-                if(planet.planetName == GameManager.gameManagerReference.currentPlanetName)
+                orbit.SetAllDirty();
+
+                if (planet.planetName == GameManager.gameManagerReference.currentPlanetName)
                 {
                     viewport.anchoredPosition = (-planetObject.anchoredPosition);
                 }
@@ -257,6 +273,7 @@ public class PlanetData
     public float rotation = 0;
     public bool canGo = true;
     public PlanetData parent;
+    [System.NonSerialized()] public Vector2[] puntos_de_orbita_dos_puntos_D;
 
     public PlanetData(string name, Color color, int sizeInChunks, float apo, float per, float rot = 0)
     {
@@ -303,18 +320,46 @@ public class PlanetData
         return ColorUtility.ToHtmlStringRGB(planetColor.Color);
     }
 
+    public void CalculateOrbitRender(int points)
+    {
+        float timePerRevolution = apoapsis * periapsis;
+
+
+        if (timePerRevolution > 0)
+        {
+            List<Vector2> pointList = new List<Vector2>();
+
+            for (int i = 0; i < points; i++)
+            {
+                float time = (timePerRevolution / points) * i;
+                pointList.Add(FindPoint(time));
+            }
+            pointList.Add(FindPoint(0));
+            pointList.Add(FindPoint(timePerRevolution / points));
+
+            puntos_de_orbita_dos_puntos_D = pointList.ToArray();
+        }
+        else
+        {
+            puntos_de_orbita_dos_puntos_D = new Vector2[0];
+        }
+       
+    }
+
     public void ApplyToButton(RectTransform rectTransform)
     {
         Color.RGBToHSV(planetColor.Color, out float h, out float s, out float v);
-        rectTransform.GetChild(0).GetComponent<Image>().color = planetColor.Color;
-        rectTransform.GetChild(0).GetComponent<Button>().interactable = canGo;
+        rectTransform.GetChild(1).GetComponent<Image>().color = planetColor.Color;
+        rectTransform.GetChild(1).GetComponent<Button>().interactable = canGo;
 
-        rectTransform.GetChild(0).GetChild(0).GetComponent<Text>().text = planetName;
+        rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().text = planetName;
 
         if (v > 0.4f)
-            rectTransform.GetChild(0).GetChild(0).GetComponent<Text>().color = planetColor.Color;
+            rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().color = planetColor.Color;
         else
-            rectTransform.GetChild(0).GetChild(0).GetComponent<Text>().color = Color.white;
+            rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().color = Color.white;
+
+
     }
 
     public Vector2 FindPoint(float time)
