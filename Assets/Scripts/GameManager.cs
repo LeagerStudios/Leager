@@ -370,9 +370,12 @@ public class GameManager : MonoBehaviour
     {
         mouseCurrentPosition = Camera.main.ScreenToWorldPoint(GInput.MousePosition);
         addedFrameThisFrame = false;
+        PlanetMenuController.planetMenu.Simulate();
 
         if (inGame)
         {
+   
+
             audioPassFilter.enabled = false;
 
             if (ostCooldown > 0f)
@@ -909,9 +912,17 @@ public class GameManager : MonoBehaviour
 
     private void SetSkybox()
     {
-        float value = dayNightCycle.Evaluate((float)dayTime / fullDay);
+        float angle = ManagingFunctions.PointToPivotUp(PlanetMenuController.planetMenu.planets[0].physicalPlanet.anchoredPosition, PlanetMenuController.currentPlanet.physicalPlanet.anchoredPosition);
+        angle += PlanetMenuController.currentPlanet.physicalPlanet.GetChild(1).GetChild(1).eulerAngles.z;
 
-        celestialBodies.eulerAngles = Vector3.forward * (((float)dayTime / fullDay) * -180 - 45f);
+        angle %= 360;
+        if (angle < 0) angle += 360; 
+        print(angle);
+        angle = angle / 360;
+
+        float value = dayNightCycle.Evaluate(angle);
+
+        celestialBodies.eulerAngles = Vector3.forward * (angle * -180 - 45f);
 
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
 

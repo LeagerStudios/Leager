@@ -6,6 +6,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 {
 
     public ResourceLauncher targetResourceLauncher;
+    public static PlanetData currentPlanet;
     public static PlanetMenuController planetMenu;
 
     RectTransform rectTransform;
@@ -52,13 +53,13 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
         {
-            planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 700, 0, 0) { canGo = false });
-            planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 100f, 90f, -90f) { parent = planets[0] });
-            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 10f, 10f) { parent = planets[1] });
-            planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 250, 20f, 15f) { parent = planets[1] });
-            planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f) { parent = planets[0] });
-            planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f) { parent = planets[0] });
-            planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 380f, 120f, 76f) { parent = planets[0] });
+            planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 700, 0, 0, 0, 0) { canGo = false });
+            planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 100f, 90f, -90f, -4f) { parent = planets[0] });
+            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 10f, 10f, 0, -50f) { parent = planets[1] });
+            planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 250, 20f, 15f, 0, -80f) { parent = planets[1] });
+            planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f, 0, 96f) { parent = planets[0] });
+            planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f, 3f) { parent = planets[0] });
+            planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 380f, 120f, 76f, -24f) { parent = planets[0] });
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
         else
@@ -75,6 +76,11 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
             planet.CalculateOrbitRender(75);
             planet.ApplyToButton(newPlanet);
+
+            if(planet.planetName == GameManager.gameManagerReference.currentPlanetName)
+            {
+                currentPlanet = planet;
+            }
         }
     }
 
@@ -96,49 +102,53 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         Drag();
 
         planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
+    }
 
-        if (planetSelectionFocused)
+    public void Simulate()
+    {
+        RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
+        zoom += Input.mouseScrollDelta.y * 5;
+        zoom = Mathf.Clamp(zoom, 4, 100);
+        viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
+
+        foreach (PlanetData planet in planets)
         {
-            RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
-            zoom += Input.mouseScrollDelta.y * 5;
-            zoom = Mathf.Clamp(zoom, 4, 100);
-            viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
+            Vector2 point = planet.FindPoint(Time.time);
+            RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
+            UILineRenderer orbit = viewport.GetChild(planets.IndexOf(planet)).GetChild(0).GetComponent<UILineRenderer>();
+            orbit.points = (Vector2[])planet.puntos_de_orbita_dos_puntos_D.Clone();
+            orbit.color = Color.white * (100 - viewport.sizeDelta.x) / 100;
+            orbit.thickness = viewport.sizeDelta.x / 4;
 
-            foreach (PlanetData planet in planets)
+            planetObject.sizeDelta = viewport.sizeDelta * (planet.chunkSize / 120f);
+
+            if (planet.revolutionTime != 0)
+                planetObject.GetChild(1).GetChild(1).GetComponent<RectTransform>().eulerAngles = Vector3.forward * -(Time.time % planet.revolutionTime / planet.revolutionTime * 360);
+
+            if (planet.parent != null)
             {
-                Vector2 point = planet.FindPoint(Time.time);
-                RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
-                UILineRenderer orbit = viewport.GetChild(planets.IndexOf(planet)).GetChild(0).GetComponent<UILineRenderer>();
-                orbit.points = (Vector2[])planet.puntos_de_orbita_dos_puntos_D.Clone();
-                orbit.color = Color.white * (100 - viewport.sizeDelta.x) / 100;
-                orbit.thickness = viewport.sizeDelta.x / 4;
+                Vector2 parentPosition = viewport.GetChild(planets.IndexOf(planet.parent)).GetComponent<RectTransform>().anchoredPosition;
 
-                planetObject.sizeDelta = viewport.sizeDelta * (planet.chunkSize / 120);
-                if(planet.parent != null)
+                planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + parentPosition;
+
+                for (int i = 0; i < orbit.points.Length; i++)
                 {
-                    Vector2 parentPosition = viewport.GetChild(planets.IndexOf(planet.parent)).GetComponent<RectTransform>().anchoredPosition;
-
-                    planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + parentPosition;
-
-                    for (int i = 0; i < orbit.points.Length; i++)
-                    {
-                        orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - (planetObject.anchoredPosition - parentPosition);
-                    }
+                    orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - (planetObject.anchoredPosition - parentPosition);
                 }
-                else
+            }
+            else
+            {
+                for (int i = 0; i < orbit.points.Length; i++)
                 {
-                    for (int i = 0; i < orbit.points.Length; i++)
-                    {
-                        orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - planetObject.anchoredPosition;
-                    }
+                    orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - planetObject.anchoredPosition;
                 }
+            }
 
-                orbit.SetAllDirty();
+            orbit.SetAllDirty();
 
-                if (planet.planetName == GameManager.gameManagerReference.currentPlanetName)
-                {
-                    viewport.anchoredPosition = (-planetObject.anchoredPosition);
-                }
+            if (planet.planetName == GameManager.gameManagerReference.currentPlanetName)
+            {
+                viewport.anchoredPosition = (-planetObject.anchoredPosition);
             }
         }
     }
@@ -171,7 +181,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         Color.RGBToHSV(planets[idx].planetColor.Color, out float h, out float s, out float v);
         if(v > 0.5f)
-        planetDataRectTransform.GetChild(1).GetComponent<Text>().color = planets[idx].planetColor.Color;
+            planetDataRectTransform.GetChild(1).GetComponent<Text>().color = planets[idx].planetColor.Color;
         else
             planetDataRectTransform.GetChild(1).GetComponent<Text>().color = Color.white;
 
@@ -271,11 +281,13 @@ public class PlanetData
     public float apoapsis = Random.Range(3f, 6f);
     public float periapsis = Random.Range(1f, 3f);
     public float rotation = 0;
+    public float revolutionTime = 4f;
     public bool canGo = true;
     public PlanetData parent;
+    [System.NonSerialized()] public RectTransform physicalPlanet;
     [System.NonSerialized()] public Vector2[] puntos_de_orbita_dos_puntos_D;
 
-    public PlanetData(string name, Color color, int sizeInChunks, float apo, float per, float rot = 0)
+    public PlanetData(string name, Color color, int sizeInChunks, float apo, float per, float rot = 0, float rev = 4f)
     {
         planetName = name;
         planetColor.AssignColor(color);
@@ -313,6 +325,7 @@ public class PlanetData
         apoapsis = apo;
         periapsis = per;
         rotation = rot;
+        revolutionTime = rev;
     }
 
     public string ColorToHex()
@@ -348,8 +361,9 @@ public class PlanetData
 
     public void ApplyToButton(RectTransform rectTransform)
     {
+        physicalPlanet = rectTransform;
         Color.RGBToHSV(planetColor.Color, out float h, out float s, out float v);
-        rectTransform.GetChild(1).GetComponent<Image>().color = planetColor.Color;
+        rectTransform.GetChild(1).GetChild(1).GetComponent<Image>().color = planetColor.Color;
         rectTransform.GetChild(1).GetComponent<Button>().interactable = canGo;
 
         rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().text = planetName;
