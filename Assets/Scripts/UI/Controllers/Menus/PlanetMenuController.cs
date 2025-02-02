@@ -104,7 +104,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
     }
 
-    public void Simulate()
+    public void Simulate(bool drawOrbits)
     {
         RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
         zoom += Input.mouseScrollDelta.y * 5;
@@ -113,17 +113,20 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         foreach (PlanetData planet in planets)
         {
-            Vector2 point = planet.FindPoint(Time.time);
+            Vector2 point = planet.FindPoint(GameManager.gameManagerReference.internationalTime);
             RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
             UILineRenderer orbit = viewport.GetChild(planets.IndexOf(planet)).GetChild(0).GetComponent<UILineRenderer>();
-            orbit.points = (Vector2[])planet.puntos_de_orbita_dos_puntos_D.Clone();
-            orbit.color = Color.white * (100 - viewport.sizeDelta.x) / 100;
-            orbit.thickness = viewport.sizeDelta.x / 4;
+            if (drawOrbits)
+            {
+                orbit.points = (Vector2[])planet.puntos_de_orbita_dos_puntos_D.Clone();
+                orbit.color = Color.white * (100 - viewport.sizeDelta.x) / 100;
+                orbit.thickness = viewport.sizeDelta.x / 4;
+            }
 
             planetObject.sizeDelta = viewport.sizeDelta * (planet.chunkSize / 120f);
 
             if (planet.revolutionTime != 0)
-                planetObject.GetChild(1).GetChild(1).GetComponent<RectTransform>().eulerAngles = Vector3.forward * -(Time.time % planet.revolutionTime / planet.revolutionTime * 360);
+                planetObject.GetChild(1).GetChild(1).GetComponent<RectTransform>().eulerAngles = Vector3.forward * -(GameManager.gameManagerReference.internationalTime % planet.revolutionTime / planet.revolutionTime * 360);
 
             if (planet.parent != null)
             {
@@ -131,6 +134,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
                 planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + parentPosition;
 
+                if(drawOrbits)
                 for (int i = 0; i < orbit.points.Length; i++)
                 {
                     orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - (planetObject.anchoredPosition - parentPosition);
@@ -138,6 +142,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             }
             else
             {
+                if(drawOrbits)
                 for (int i = 0; i < orbit.points.Length; i++)
                 {
                     orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - planetObject.anchoredPosition;
@@ -149,6 +154,17 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             if (planet.planetName == GameManager.gameManagerReference.currentPlanetName)
             {
                 viewport.anchoredPosition = (-planetObject.anchoredPosition);
+
+                if (targetResourceLauncher != null)
+                {
+                    planetObject.GetChild(1).GetChild(1).GetChild(0).gameObject.SetActive(true);
+                    planetObject.GetChild(1).GetChild(1).GetChild(0).localEulerAngles = Vector3.forward * (targetResourceLauncher.transform.position.x / (GameManager.gameManagerReference.WorldWidth * 16) * 360 - 90);
+                    planetObject.GetChild(1).GetChild(1).GetChild(0).GetChild(0).GetComponent<RectTransform>().sizeDelta = viewport.sizeDelta * (planet.chunkSize / 840f);
+                }
+            }
+            else
+            {
+                planetObject.GetChild(1).GetChild(1).GetChild(0).gameObject.SetActive(false);
             }
         }
     }

@@ -120,9 +120,7 @@ public class GameManager : MonoBehaviour
     public Color skyboxColor;
     public Color daytimeUpdatedSkyboxColor;
     public AnimationCurve dayNightCycle;
-    public float dayFloat = 0;
-    public int dayTime = 2000;
-    public const int fullDay = 54000;
+    public float internationalTime = 0f;
     public float dayLuminosity = 1;
     public string worldName = "null";
     public string worldRootName = "null";
@@ -279,13 +277,13 @@ public class GameManager : MonoBehaviour
                 DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/equips.lgrsd");
             }
 
-            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd"))
+            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/time.lgrsd"))
             {
-                dayTime = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd").SavedData)[0];
+                internationalTime = System.Convert.ToSingle(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/time.lgrsd").SavedData[0]);
             }
             else
             {
-                DataSaver.SaveStats(new string[] { 2000 + "" }, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/daytime.lgrsd");
+                DataSaver.SaveStats(new string[] { 0 + "" }, Application.persistentDataPath + @"/worlds/" + worldRootName + @"/time.lgrsd");
             }
 
             if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] != "newWorld")
@@ -370,12 +368,22 @@ public class GameManager : MonoBehaviour
     {
         mouseCurrentPosition = Camera.main.ScreenToWorldPoint(GInput.MousePosition);
         addedFrameThisFrame = false;
-        PlanetMenuController.planetMenu.Simulate();
+        
+        if(inGame || PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
+        {
+            PlanetMenuController.planetMenu.Simulate(PlanetMenuController.planetMenu.gameObject.activeInHierarchy);
+
+            internationalTime += Time.deltaTime / 255f;
+
+            if (frameTimer > 2000000000)
+            {
+                frameTimer = 0;
+            }
+            SetSkybox();
+        }
 
         if (inGame)
         {
-   
-
             audioPassFilter.enabled = false;
 
             if (ostCooldown > 0f)
@@ -399,24 +407,6 @@ public class GameManager : MonoBehaviour
                 addedFrameThisFrame = true;
                 frameTimer++;
             }
-
-            dayFloat += Time.deltaTime;
-
-            while (dayFloat >= 0.016665f)
-            {
-                dayTime++;
-                dayFloat -= 0.016665f;
-            }
-
-            if (frameTimer > 2000000000)
-            {
-                frameTimer = 0;
-            }
-            if (dayTime >= fullDay)
-            {
-                dayTime = dayTime - fullDay;
-            }
-            SetSkybox();
 
 
 
@@ -914,10 +904,10 @@ public class GameManager : MonoBehaviour
     {
         float angle = ManagingFunctions.PointToPivotUp(PlanetMenuController.planetMenu.planets[0].physicalPlanet.anchoredPosition, PlanetMenuController.currentPlanet.physicalPlanet.anchoredPosition);
         angle += PlanetMenuController.currentPlanet.physicalPlanet.GetChild(1).GetChild(1).eulerAngles.z;
+        angle += player.mainCamera.transform.position.x / (WorldWidth * 16) * 360;
 
         angle %= 360;
         if (angle < 0) angle += 360; 
-        print(angle);
         angle = angle / 360;
 
         float value = dayNightCycle.Evaluate(angle);
@@ -1054,7 +1044,7 @@ public class GameManager : MonoBehaviour
             DataSaver.SaveStats(allMapProp, persistentDataPath + @"/worlds/" + worldName + @"/mapprop.lgrsd");
             DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), persistentDataPath + @"/worlds/" + worldName + @"/equips.lgrsd");
             DataSaver.SaveStats(new string[] { currentHexPlanetColor }, persistentDataPath + @"/worlds/" + worldName + @"/planetColor.lgrsd");
-            DataSaver.SaveStats(new string[] { dayTime + "" }, persistentDataPath + @"/worlds/" + worldName + @"/daytime.lgrsd");
+            DataSaver.SaveStats(new string[] { internationalTime + "" }, persistentDataPath + @"/worlds/" + worldName + @"/time.lgrsd");
             DataSaver.SaveStats(new string[] { currentPlanetName }, persistentDataPath + @"/worlds/" + worldRootName + @"/lastLocation.lgrsd");
 
             DataSaver.SaveStats(drops, persistentDataPath + @"/worlds/" + worldName + @"/dro.lgrsd");

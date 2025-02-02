@@ -198,9 +198,9 @@ public class CommandController : MonoBehaviour {
                 {
                     Screen.SetResolution(System.Convert.ToInt32(input[1]), System.Convert.ToInt32(input[2]), Screen.fullScreen);
                 }
-                else if (input[0] == "setdaytime")
+                else if (input[0] == "settime")
                 {
-                    GameManager.gameManagerReference.dayTime = System.Convert.ToInt32(input[1]);
+                    GameManager.gameManagerReference.internationalTime = System.Convert.ToSingle(input[1]);
                     LightController.lightController.AddRenderQueue(Camera.main.transform.position);
                 }
                 else if (input[0] == "sun")
