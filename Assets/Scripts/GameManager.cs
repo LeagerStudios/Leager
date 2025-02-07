@@ -373,7 +373,7 @@ public class GameManager : MonoBehaviour
         {
             PlanetMenuController.planetMenu.Simulate(PlanetMenuController.planetMenu.gameObject.activeInHierarchy);
 
-            internationalTime += Time.deltaTime / 255f;
+            internationalTime += Time.deltaTime / 255f * PlanetMenuController.planetMenu.timewarp;
 
             if (frameTimer > 2000000000)
             {
@@ -907,12 +907,11 @@ public class GameManager : MonoBehaviour
         angle += player.mainCamera.transform.position.x / (WorldWidth * 16) * 360;
 
         angle %= 360;
-        if (angle < 0) angle += 360; 
+        if (angle < 0) angle += 360;
         angle = angle / 360;
 
         float value = dayNightCycle.Evaluate(angle);
 
-        celestialBodies.eulerAngles = Vector3.forward * (angle * -180 - 45f);
 
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
 
@@ -921,6 +920,48 @@ public class GameManager : MonoBehaviour
 
 
         daytimeUpdatedSkyboxColor = skyboxColor * dayLuminosity;
+        Vector2 currentPlanetPos = PlanetMenuController.currentPlanet.physicalPlanet.anchoredPosition / PlanetMenuController.planetMenu.planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x;
+
+        for (int i = 0; i < 1/*PlanetMenuController.planetMenu.planets.Count*/; i++)
+        {
+            if (PlanetMenuController.planetMenu.planets[i].planetName != currentPlanetName)
+            {
+                GameObject skyPlanet;
+
+                if (i >= celestialBodies.childCount)
+                {
+                    skyPlanet = Instantiate(celestialBodies.GetChild(0).gameObject, celestialBodies);
+                    skyPlanet.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = PlanetMenuController.planetMenu.planetSprite;
+                    skyPlanet.transform.GetChild(0).GetComponent<SpriteRenderer>().color = PlanetMenuController.planetMenu.planets[i].planetColor.Color;
+                }
+                else
+                {
+                    skyPlanet = celestialBodies.GetChild(i).gameObject;
+                }
+
+               
+                Vector2 skyPlanetPos = PlanetMenuController.planetMenu.planets[i].physicalPlanet.anchoredPosition / PlanetMenuController.planetMenu.planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x;
+                float planetAngle = ManagingFunctions.PointToPivotUp(currentPlanetPos, skyPlanetPos);
+                Debug.Log(planetAngle);
+
+                planetAngle -= PlanetMenuController.currentPlanet.physicalPlanet.GetChild(1).GetChild(1).eulerAngles.z;
+                planetAngle -= player.mainCamera.transform.position.x / (WorldWidth * 16) * 360;
+
+                float planetDistance = Vector2.Distance(skyPlanetPos, currentPlanetPos);
+
+                skyPlanet.transform.eulerAngles = Vector3.forward * (-planetAngle);
+                skyPlanet.transform.GetChild(0).localPosition = new Vector3(0, 14, planetDistance);
+                skyPlanet.transform.GetChild(0).localScale = Vector3.one * (PlanetMenuController.planetMenu.planets[i].chunkSize / (planetDistance * 50));
+            }
+            else
+            {
+                if (i >= celestialBodies.childCount)
+                {
+                    Instantiate(celestialBodies.GetChild(0).gameObject, celestialBodies);
+                }
+                celestialBodies.GetChild(i).gameObject.SetActive(false);
+            }
+        }
     }
 
     public void DropOn(Vector2 position, float length)

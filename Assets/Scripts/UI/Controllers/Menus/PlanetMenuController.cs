@@ -8,10 +8,11 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     public ResourceLauncher targetResourceLauncher;
     public static PlanetData currentPlanet;
     public static PlanetMenuController planetMenu;
+    public float timewarp = 1f;
 
     RectTransform rectTransform;
-    [SerializeField] RectTransform planetPanelRectTransform;
-    [SerializeField] RectTransform planetPanelViewportRectTransform;
+    [SerializeField] public RectTransform planetPanelRectTransform;
+    [SerializeField] public RectTransform planetPanelViewportRectTransform;
     [SerializeField] RectTransform planetPanelPropertiesRectTransform;
     [SerializeField] RectTransform planetPanelButtonsRectTransform;
     [SerializeField] public RectTransform subPanel;
@@ -23,7 +24,12 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     [SerializeField] GameObject planetPrefab;
     public List<PlanetData> planets = new List<PlanetData>();
     public List<string> lorePlanets = new List<string> { "Korenz", "Dua", "Intersection", "Nheo", "Lurp", "Krylo" };
-    public Color[] lorePlanetsColor; 
+    public Color[] lorePlanetsColor;
+
+    public Sprite starSprite;
+    public Sprite planetSprite;
+    public Sprite moonSprite;
+
     public List<string> Items
     {
         get
@@ -53,7 +59,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
         {
-            planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 700, 0, 0, 0, 0) { canGo = false });
+            planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 2700, 0, 0, 0, 0) { canGo = false });
             planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 100f, 90f, -90f, -4f) { parent = planets[0] });
             planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 10f, 10f, 0, -50f) { parent = planets[1] });
             planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 250, 20f, 15f, 0, -80f) { parent = planets[1] });
