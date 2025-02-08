@@ -332,7 +332,7 @@ public class NetworkController : MonoBehaviour
                         else
                             Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100", "0", "0", "False/" }));
 
-                        Server.Write(userData.tcpClient, string.Join(";", new string[] { "setTime", GameManager.gameManagerReference.internationalTime + "/" }));
+                        //Server.Write(userData.tcpClient, string.Join(";", new string[] { "setTime", GameManager.gameManagerReference.internationalTime + "/" }));
 
                         if (blocksToReplace.Count > 0)
                         {
@@ -466,7 +466,7 @@ public class NetworkController : MonoBehaviour
 
                             if (input[0] == "setTime")
                             {
-                                GameManager.gameManagerReference.internationalTime = System.Convert.ToSingle(input[1]);
+                                //GameManager.gameManagerReference.internationalTime = System.Convert.ToSingle(input[1]);
                             }
                         }
                     }

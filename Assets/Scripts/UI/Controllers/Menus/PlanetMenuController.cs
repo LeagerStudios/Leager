@@ -16,6 +16,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     [SerializeField] RectTransform planetPanelPropertiesRectTransform;
     [SerializeField] RectTransform planetPanelButtonsRectTransform;
     [SerializeField] public RectTransform subPanel;
+    [SerializeField] public RectTransform timewarpPanel;
 
     [SerializeField] GameObject goToPlanetButton;
     [SerializeField] GameObject connectButton;
@@ -61,7 +62,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         {
             planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 2700, 0, 0, 0, 0) { canGo = false });
             planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 100f, 90f, -90f, -4f) { parent = planets[0] });
-            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 10f, 10f, 0, -50f) { parent = planets[1] });
+            planets.Add(new PlanetData("Dua", ManagingFunctions.HexToColor("#04CAD1"), 140, 10f, 10f, 0, -105f) { parent = planets[1] });
             planets.Add(new PlanetData("Intersection", ManagingFunctions.HexToColor("#EBD33D"), 250, 20f, 15f, 0, -80f) { parent = planets[1] });
             planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f, 0, 96f) { parent = planets[0] });
             planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f, 3f) { parent = planets[0] });
@@ -107,19 +108,39 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         Drag();
 
+        int previousSize = 0;
+        for (int i = 0; i < timewarpPanel.childCount; i++)
+        {
+            if (i != timewarpPanel.childCount - 1)
+            {
+                int size = System.Convert.ToInt32(timewarpPanel.GetChild(i).name);
+
+                float colorValue = (timewarp - previousSize) / (size - previousSize);
+
+                timewarpPanel.GetChild(i).GetComponent<Image>().color = new Color(0, colorValue, 0, colorValue);
+
+                previousSize = size;
+            }
+            else
+            {
+                timewarpPanel.GetChild(i).GetComponent<Text>().text = "x" + Mathf.Floor(timewarp);
+            }
+        }
+
         planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
     }
 
-    public void Simulate(bool drawOrbits)
+    public void Simulate(float stepTime, bool drawOrbits)
     {
         RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
         zoom += Input.mouseScrollDelta.y * 5;
-        zoom = Mathf.Clamp(zoom, 4, 100);
+        zoom = Mathf.Clamp(zoom, 2.5f, 100);
         viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
 
         foreach (PlanetData planet in planets)
         {
-            Vector2 point = planet.FindPoint(GameManager.gameManagerReference.internationalTime);
+            planet.Step(stepTime);
+            Vector2 point = planet.FindPoint(planet.oTime);
             RectTransform planetObject = viewport.GetChild(planets.IndexOf(planet)).GetComponent<RectTransform>();
             UILineRenderer orbit = viewport.GetChild(planets.IndexOf(planet)).GetChild(0).GetComponent<UILineRenderer>();
             if (drawOrbits)
@@ -132,7 +153,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             planetObject.sizeDelta = viewport.sizeDelta * (planet.chunkSize / 120f);
 
             if (planet.revolutionTime != 0)
-                planetObject.GetChild(1).GetChild(1).GetComponent<RectTransform>().eulerAngles = Vector3.forward * -(GameManager.gameManagerReference.internationalTime % planet.revolutionTime / planet.revolutionTime * 360);
+                planetObject.GetChild(1).GetChild(1).GetComponent<RectTransform>().eulerAngles = Vector3.forward * -((float)planet.rTime % planet.revolutionTime / planet.revolutionTime * 360);
 
             if (planet.parent != null)
             {
@@ -164,7 +185,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
                 if (targetResourceLauncher != null)
                 {
                     planetObject.GetChild(1).GetChild(1).GetChild(0).gameObject.SetActive(true);
-                    planetObject.GetChild(1).GetChild(1).GetChild(0).localEulerAngles = Vector3.forward * (targetResourceLauncher.transform.position.x / (GameManager.gameManagerReference.WorldWidth * 16) * 360 - 90);
+                    planetObject.GetChild(1).GetChild(1).GetChild(0).localEulerAngles = Vector3.forward * (targetResourceLauncher.transform.position.x / (GameManager.gameManagerReference.WorldWidth * 16) * 360);
                     planetObject.GetChild(1).GetChild(1).GetChild(0).GetChild(0).GetComponent<RectTransform>().sizeDelta = viewport.sizeDelta * (planet.chunkSize / 840f);
                 }
             }
@@ -304,6 +325,8 @@ public class PlanetData
     public float periapsis = Random.Range(1f, 3f);
     public float rotation = 0;
     public float revolutionTime = 4f;
+    public double oTime;
+    public double rTime;
     public bool canGo = true;
     public PlanetData parent;
     [System.NonSerialized()] public RectTransform physicalPlanet;
@@ -355,6 +378,18 @@ public class PlanetData
         return ColorUtility.ToHtmlStringRGB(planetColor.Color);
     }
 
+    public void Step(float time)
+    {
+        oTime += time;
+        rTime += time;
+
+        if (oTime > apoapsis * periapsis)
+            oTime = oTime % (apoapsis * periapsis);
+
+        if (rTime > revolutionTime)
+            rTime = rTime % revolutionTime;
+    }
+
     public void CalculateOrbitRender(int points)
     {
         float timePerRevolution = apoapsis * periapsis;
@@ -398,7 +433,7 @@ public class PlanetData
 
     }
 
-    public Vector2 FindPoint(float time)
+    public Vector2 FindPoint(double time)
     {
         if (apoapsis == 0 && periapsis == 0)
         {
@@ -408,7 +443,7 @@ public class PlanetData
         {
             Vector2 point = new Vector2();
             float timePerRevolution = apoapsis * periapsis;
-            float rotVal = time % timePerRevolution;
+            double rotVal = time % timePerRevolution;
             rotVal *= 2;
             rotVal /= timePerRevolution;
             bool inverse = false;
@@ -418,12 +453,13 @@ public class PlanetData
                 inverse = true;
             }
 
+            float rotationValue = (float)rotVal;
             float orbit = periapsis + apoapsis;
 
             float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
 
 
-            point = new Vector2(Mathf.Sin(rotVal * Mathf.PI) * halfOrbit * (inverse ? 1 : -1), Mathf.Cos(rotVal * Mathf.PI) * (orbit / 2));
+            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI) * halfOrbit * (inverse ? 1 : -1), Mathf.Cos(rotationValue * Mathf.PI) * (orbit / 2));
             point += Vector2.up * ((apoapsis - periapsis) / 2);
             if (rotation != 0)
             {
