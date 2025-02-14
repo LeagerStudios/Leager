@@ -67,6 +67,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f, 0, 96f) { parent = planets[0] });
             planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f, 3f) { parent = planets[0] });
             planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 380f, 120f, 76f, -24f) { parent = planets[0] });
+            planets.Add(new PlanetData("Ambrosio", ManagingFunctions.HexToColor("#2554264"), 345, 370f, 10f, 76f, 24f) { parent = planets[0] });
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
         else
@@ -377,11 +378,12 @@ public class PlanetData
     {
         return ColorUtility.ToHtmlStringRGB(planetColor.Color);
     }
-
+             
     public void Step(float time)
     {
         oTime += time;
-        rTime += time;
+        //rTime += time;
+        rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
 
         if (oTime > apoapsis * periapsis)
             oTime = oTime % (apoapsis * periapsis);

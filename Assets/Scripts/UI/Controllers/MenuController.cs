@@ -35,6 +35,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] GameObject FpsButton;
     [SerializeField] Dropdown FPSDropdown;
     [SerializeField] GameObject FpsText;
+    [SerializeField] Text coordinates;
     [SerializeField] GameObject VSyncButton;
     [SerializeField] GameObject LoadingPlanetScreen;
     [SerializeField] DeathScreenController deathScreenController;
@@ -169,6 +170,9 @@ public class MenuController : MonoBehaviour {
 
         FpsText.GetComponent<Text>().text = "FPS:" + Mathf.Round(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
 
+        double horizontalCoordinates = gameManager.player.transform.position.x / (gameManager.WorldWidth * 16d) * 360;
+        horizontalCoordinates = System.Math.Round(horizontalCoordinates, 4);
+        coordinates.text = horizontalCoordinates + " " + Mathf.Floor(gameManager.player.transform.position.y);
        
 
         MiniMap.SetActive(miniMapOn && gameManager.player.alive);
