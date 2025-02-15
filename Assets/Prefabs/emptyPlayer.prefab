@@ -238,6 +238,7 @@ MonoBehaviour:
   flyMode: 0
   wingTime: 0
   armCooldown: 0
+  reentry: 0
   hitSound: {fileID: 8300000, guid: e4ea25cda1e0c5e48810f576eaa065b4, type: 3}
   regenerationSound: {fileID: 8300000, guid: 6c2bf340cf3e62644ad3171b64e17dde, type: 3}
   deathSound: {fileID: 0}

@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
     public Color skyboxColor;
     public Color daytimeUpdatedSkyboxColor;
     public AnimationCurve dayNightCycle;
-    public float dayLuminosity = 1;
+    public float dayLuminosity = 0;
     public string worldName = "null";
     public string worldRootName = "null";
     public bool isLorePlanet = true;
@@ -339,7 +339,22 @@ public class GameManager : MonoBehaviour
             respawnPosition = RespawnPosition();
         }
 
-        player.Respawn(respawnPosition.x, respawnPosition.y);
+        if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newWorld")
+        {
+            player.Respawn(respawnPosition.x, respawnPosition.y);
+
+            while (dayLuminosity < 1f)
+            {
+                PlanetMenuController.planetMenu.Simulate(1f, false);
+                SetSkybox();
+            }
+
+            player.transform.position = new Vector2(respawnPosition.x, WorldHeight);
+            player.GetComponent<Rigidbody2D>().velocity = Vector2.right * Random.Range(-7f, 7f);
+            player.PutMyselfInATragicTerminalColisionCourse();
+        }
+        else
+            player.Respawn(respawnPosition.x, respawnPosition.y);
 
         inGame = true;
         playerFocused = true;

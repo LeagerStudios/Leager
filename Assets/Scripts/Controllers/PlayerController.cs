@@ -54,12 +54,16 @@ public class PlayerController : MonoBehaviour, IDamager
     public bool flyMode = false;
     public float wingTime = 0f;
     public float armCooldown = 0f;
+    public bool reentry = false;
 
     [SerializeField] AudioClip hitSound;
     [SerializeField] AudioClip regenerationSound;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip jetpack;
     [SerializeField] AudioClip swing;
+    [SerializeField] AudioClip explosion;
+
+    public GameObject explosionPrefab;
 
     public Transform accesories;
 
@@ -93,8 +97,12 @@ public class PlayerController : MonoBehaviour, IDamager
                 if (alive && gameManager.InGame)
                 {
                     transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
-                    if (onControl)
+                    if (onControl && !reentry)
                         PlayerControl();
+                    else if (reentry)
+                    {
+                        Reentry();
+                    }
                     LecterAI();
                     mainCamera.transform.eulerAngles = Mathf.LerpAngle(mainCamera.transform.eulerAngles.z, 0, 10f * Time.deltaTime) * Vector3.forward;
 
@@ -113,9 +121,16 @@ public class PlayerController : MonoBehaviour, IDamager
                     mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
                 }
 
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    PutMyselfInATragicTerminalColisionCourse();
+                }
+
                 animations.SetFloat("speedx", Mathf.Abs(rb2D.velocity.x));
                 accesories.gameObject.SetActive(alive);
                 accesories.localScale = new Vector3(GetComponent<SpriteRenderer>().flipX ? -1f : 1f, 1f, 1f);
+
+                transform.GetChild(7).gameObject.SetActive(reentry);
             }
             else
             {
@@ -146,6 +161,15 @@ public class PlayerController : MonoBehaviour, IDamager
         {
             transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
         }
+    }
+
+    public void PutMyselfInATragicTerminalColisionCourse()
+    {
+        rb2D.freezeRotation = false;
+        rb2D.drag = 0f;
+        rb2D.velocity = rb2D.velocity * 5f;
+        rb2D.angularVelocity = rb2D.velocity.x * -10;
+        reentry = true;
     }
 
     private void LateUpdate()
@@ -210,6 +234,65 @@ public class PlayerController : MonoBehaviour, IDamager
             }
 
         spawned = true;
+    }
+
+    void Reentry()
+    {
+        rb2D.drag = 0f;
+
+        CapsuleCollider2D collider2D = GetComponent<CapsuleCollider2D>();
+
+        float offsetIDX = Mathf.Abs(Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad));
+
+        float raycastDistance = 0.98f;
+        bool Grounded = false;
+
+        float offset = Mathf.Lerp(0.324f, 1.1f, offsetIDX);
+
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
+        {
+            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
+        }
+        else
+        {
+            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
+        }
+
+        pos = new Vector2(transform.position.x + offset, pos.y);
+
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
+        {
+            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
+        }
+        else
+        {
+            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
+        }
+
+        pos = new Vector2(transform.position.x - offset, transform.position.y);
+
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles)) Grounded = true;
+        if (Physics2D.Raycast(pos, Vector2.down, raycastDistance, solidTiles))
+        {
+            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.green);
+        }
+        else
+        {
+            Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
+        }
+
+        ParticleSystem particles = transform.GetChild(6).GetComponent<ParticleSystem>();
+        particles.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(Vector2.zero, rb2D.velocity);
+
+        if (!particles.isPlaying)
+            particles.Play();
+
+        ParticleSystem.MainModule main = particles.main;
+        main.startSpeed = rb2D.velocity.magnitude;
     }
 
     void PlayerControl()
@@ -350,10 +433,12 @@ public class PlayerController : MonoBehaviour, IDamager
             entityScript.swimming = 0f;
         }
 
+        ParticleSystem particles = transform.GetChild(6).GetComponent<ParticleSystem>();
+
         if (gameManager.equipedArmor[4] == 123)
         {
             Transform backflip = accesories.Find("123").GetChild(3);
-            ParticleSystem particles = accesories.Find("123").GetChild(4).GetComponent<ParticleSystem>();
+            particles.transform.localEulerAngles = Vector3.zero;
 
             if (Grounded || entityScript.entityStates.Contains(EntityState.Swimming))
             {
@@ -439,6 +524,8 @@ public class PlayerController : MonoBehaviour, IDamager
             wingTime = 0f;
             transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, 0, 720 * Time.deltaTime);
             accesories.Find("123").GetChild(3).localScale = Vector3.zero;
+            if (!particles.isStopped)
+                particles.Stop();
 
             if (gameManager.equipedArmor[4] == 124)
             {
@@ -748,6 +835,20 @@ public class PlayerController : MonoBehaviour, IDamager
         if (Mathf.Abs(contactPoint.y - (transform.position.y + collision.otherCollider.bounds.size.y / 2)) < 0.1f)
         {
             rb2D.velocity = new Vector2(lastVelocity.x, rb2D.velocity.y);
+        }
+
+        if (reentry)
+        {
+            rb2D.velocity = Vector2.zero;
+            rb2D.angularVelocity = 0;
+            gameManager.soundController.PlaySfxSound(explosion);
+            gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 3, 4, 6, false);
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
+
+            reentry = false;
+            falling = 0f;
+            rb2D.freezeRotation = true;
+            rb2D.drag = 2f;
         }
     }
 

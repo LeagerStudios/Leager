@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceLauncher : MonoBehaviour {
-
+public class ResourceLauncher : MonoBehaviour, INodeEndPoint
+{
     public GameObject packPrefab;
     public GameObject firePrefab;
     public GameObject explosion;
@@ -12,6 +12,11 @@ public class ResourceLauncher : MonoBehaviour {
     public GameObject playingCore = null;
     [SerializeField] LayerMask blockMask;
     [SerializeField] AudioClip[] explosions;
+
+    public NodeInstance nodeInstance;
+    public float lifetime;
+
+    public bool powered = false;
 
     public List<string> Items
     {
@@ -27,8 +32,10 @@ public class ResourceLauncher : MonoBehaviour {
 
 	void Start ()
     {
+        nodeInstance = GetComponent<NodeInstance>();
         transform.eulerAngles = transform.parent.eulerAngles;
         transform.localPosition = new Vector2(0, 0.5f);
+        transform.GetChild(0).localScale = new Vector3(0f, 0f, 1f);
 
         if (transform.parent.GetComponent<TileProperties>() == null)
         {
@@ -40,19 +47,19 @@ public class ResourceLauncher : MonoBehaviour {
         {
 
         }
-        StartCoroutine(PlaceAnimation());
 	}
 
 
     void Update()
     {
         if (playingCore != null)
+        {
             if (playingCore.GetComponent<SpriteRenderer>().enabled)
                 if (SendRaycast(playingCore, 0.6f, Vector2.up, Vector2.zero, true))
                 {
                     Instantiate(explosion, playingCore.transform.position, Quaternion.identity).transform.localScale = new Vector3(3f, 3f, 1f);
                     GameManager.gameManagerReference.soundController.PlaySfxSound(explosions[Random.Range(0, explosions.Length)], 1f);
-                    
+
                     StopAllCoroutines();
                     playingCore.GetComponent<SpriteRenderer>().enabled = false;
                     GameManager.gameManagerReference.TileExplosionAt((int)playingCore.transform.position.x, (int)playingCore.transform.position.y, 5, 10);
@@ -63,6 +70,22 @@ public class ResourceLauncher : MonoBehaviour {
 
                     Invoke("ReturnCamFocus", 1.5f);
                 }
+        }
+        else
+        {
+
+            if(lifetime > 0f)
+            {
+                transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.one, 0.3f);
+                lifetime -= Time.deltaTime;
+                powered = true;
+            }
+            else
+            {
+                transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, 0.3f);
+                powered = false;
+            }
+        }
     }
 
     public bool SendRaycast(GameObject obj, float raycastDist, Vector2 raycastDir, Vector2 localOffset, bool ignoreSlabs = false)
@@ -259,7 +282,7 @@ public class ResourceLauncher : MonoBehaviour {
             float t = 0f;
             while (t < 1f)
             {
-                transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(transform.eulerAngles.z, -20f, 0.4f);
+                transform.GetChild(0).eulerAngles = Vector3.forward * Mathf.LerpAngle(transform.GetChild(0).eulerAngles.z, -20f, 0.4f);
                 t += Time.deltaTime;
                 yield return new WaitForSeconds(0.016f);
             }
@@ -269,17 +292,9 @@ public class ResourceLauncher : MonoBehaviour {
     }
 
 
-    IEnumerator PlaceAnimation()
+    public void UpdateEndPoint(EndPointNode endPoint)
     {
-        transform.localScale = new Vector3(0f, 0f, 1f);
-
-        while(transform.localScale.x < 0.99f)
-        {
-            transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, 0.3f); 
-            yield return new WaitForSeconds(0.05f);
-        }
-
-        transform.localScale = Vector3.one;
+        if (endPoint.Power > 0f)
+            lifetime = 1f;
     }
-
 }
