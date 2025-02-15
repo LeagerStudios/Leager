@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour {
     {
         Screen.SetResolution(Screen.width, Screen.height, Screen.fullScreen);
     }
+
     void Update()
     {
         if (focus != null)
@@ -35,15 +36,7 @@ public class CameraController : MonoBehaviour {
             {
                 transform.position = new Vector3(focus.transform.position.x, focus.transform.position.y, -10f);
             }
-            else
-            {
-                transform.position = Vector3.Lerp(transform.position, new Vector3(focus.transform.position.x, focus.transform.position.y, -10f), Time.deltaTime * 10);
-
-                if (Vector2.Distance(transform.position, focus.transform.position) < 0.05f)
-                {
-                    lerp = false;
-                }
-            }
+          
         }
         else
         {
@@ -87,6 +80,19 @@ public class CameraController : MonoBehaviour {
                     background.color = color;
                     i++;
                 }
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (focus != null && lerp)
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(focus.transform.position.x, focus.transform.position.y, -10f), Time.fixedDeltaTime * 10);
+
+            if (Vector2.Distance(transform.position, focus.transform.position) < 0.05f)
+            {
+                lerp = false;
             }
         }
     }

@@ -135,7 +135,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     {
         RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
         zoom += Input.mouseScrollDelta.y * 5;
-        zoom = Mathf.Clamp(zoom, 2.5f, 100);
+        zoom = Mathf.Clamp(zoom, 2.4f, 100);
         viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
 
         foreach (PlanetData planet in planets)
@@ -382,8 +382,8 @@ public class PlanetData
     public void Step(float time)
     {
         oTime += time;
-        //rTime += time;
-        rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
+        rTime += time;
+        //rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
 
         if (oTime > apoapsis * periapsis)
             oTime = oTime % (apoapsis * periapsis);

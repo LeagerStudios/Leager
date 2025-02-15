@@ -46,6 +46,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider sfxSlider;
 
+    public RectTransform canvasRect;
     GameManager gameManager;
     public Coroutine travelCoroutine;
     private void Awake()
@@ -69,6 +70,7 @@ public class MenuController : MonoBehaviour {
         ResolutionDropdown.ClearOptions();
         SetResolutionDropdown();
         gameManager = GameManager.gameManagerReference;
+        canvasRect = canvas.GetComponent<RectTransform>();
 
         if (GInput.leagerInput.platform != "Mobile")
             if (DataSaver.LoadStats(Application.persistentDataPath + @"/settings/minimap.lgrsd").SavedData[0] == "on")
@@ -170,10 +172,49 @@ public class MenuController : MonoBehaviour {
 
         FpsText.GetComponent<Text>().text = "FPS:" + Mathf.Round(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
 
-        double horizontalCoordinates = gameManager.player.transform.position.x / (gameManager.WorldWidth * 16d) * 360;
-        horizontalCoordinates = System.Math.Round(horizontalCoordinates, 4);
-        coordinates.text = horizontalCoordinates + " " + Mathf.Floor(gameManager.player.transform.position.y);
-       
+        if (StackBar.stackBarController.currentItem == 82)
+        {
+            double horizontalCoordinates = gameManager.player.transform.position.x / (gameManager.WorldWidth * 16d) * 360;
+
+            if (horizontalCoordinates > 180)
+                horizontalCoordinates -= 360;
+
+            horizontalCoordinates = System.Math.Round(horizontalCoordinates, 4);
+
+            coordinates.text = horizontalCoordinates + "º";
+        }
+        else if (StackBar.stackBarController.currentItem == 83)
+        {
+            int height = Mathf.FloorToInt(gameManager.player.transform.position.y);
+
+            int seaLevel = (int)(gameManager.WorldHeight * 0.64f);
+
+            height -= seaLevel;
+
+            if (height > 0)
+                coordinates.text = height + " (above sea level)";
+            else if (height == 0)
+                coordinates.text = height + " (sea level)";
+            else
+            {
+                if (height + seaLevel > gameManager.WorldHeight * 0.5f)
+                {
+                    coordinates.text = height + " (below sea level)";
+                }
+                else if(height + seaLevel > gameManager.WorldHeight * 0.1f)
+                {
+                    coordinates.text = height + " (caves)";
+                }
+                else
+                {
+                    coordinates.text = height + " (deep caves)";
+                }
+            }
+        }
+        else
+        {
+            coordinates.text = "";
+        }
 
         MiniMap.SetActive(miniMapOn && gameManager.player.alive);
         MiniMapCamera.SetActive(miniMapOn && gameManager.player.alive);
@@ -264,6 +305,18 @@ public class MenuController : MonoBehaviour {
         int val = (int)ChunkUpdateSlider.value;
         ChunkUpdateNotifier.text = val + "";
         gameManager.tileSpawnRate = val;
+    }
+
+    private void FixedUpdate()
+    {
+        if (coordinates.text != "")
+        {
+            Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(gameManager.player.transform.position + Vector3.up * 1.4f);
+            Vector2 FollowerScreenPosition = new Vector2((ViewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f),
+                                                         (ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f));
+
+            coordinates.GetComponent<RectTransform>().anchoredPosition = FollowerScreenPosition;
+        }
     }
 
     public void MenuDeploy()

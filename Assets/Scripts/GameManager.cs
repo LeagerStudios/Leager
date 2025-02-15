@@ -941,6 +941,9 @@ public class GameManager : MonoBehaviour
 
                 skyPlanet.transform.eulerAngles = Vector3.forward * planetAngle;
                 skyPlanet.transform.GetChild(0).localPosition = new Vector3(0, 14, planetDistance);
+
+                if (PlanetMenuController.planetMenu.planets[i].revolutionTime > 0)
+                    skyPlanet.transform.GetChild(0).localEulerAngles = Vector3.forward * (float)(PlanetMenuController.planetMenu.planets[i].rTime / PlanetMenuController.planetMenu.planets[i].revolutionTime * 360);
                 skyPlanet.transform.GetChild(0).localScale = Vector3.one * (PlanetMenuController.planetMenu.planets[i].chunkSize / (planetDistance * 25));
             }
             else
