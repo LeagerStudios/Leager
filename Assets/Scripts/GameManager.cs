@@ -350,7 +350,7 @@ public class GameManager : MonoBehaviour
             }
 
             player.transform.position = new Vector2(respawnPosition.x, WorldHeight);
-            player.GetComponent<Rigidbody2D>().velocity = Vector2.right * Random.Range(-7f, 7f);
+            player.GetComponent<Rigidbody2D>().velocity = Vector2.right * -5;
             player.PutMyselfInATragicTerminalColisionCourse();
         }
         else

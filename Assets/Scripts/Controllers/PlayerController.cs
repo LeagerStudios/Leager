@@ -839,16 +839,24 @@ public class PlayerController : MonoBehaviour, IDamager
 
         if (reentry)
         {
-            rb2D.velocity = Vector2.zero;
-            rb2D.angularVelocity = 0;
-            gameManager.soundController.PlaySfxSound(explosion);
-            gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 3, 4, 6, false);
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
+            if (collision.collider.gameObject.GetComponent<PlatformEffector2D>())
+            {
+                gameManager.soundController.PlaySfxSound(hitSound);
+                rb2D.velocity = new Vector2(Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad));
+            }
+            else
+            {
+                rb2D.velocity = rb2D.velocity.normalized;
+                rb2D.angularVelocity = 0;
+                gameManager.soundController.PlaySfxSound(explosion);
+                gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 2, 4, 6, false);
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
 
-            reentry = false;
-            falling = 0f;
-            rb2D.freezeRotation = true;
-            rb2D.drag = 2f;
+                reentry = false;
+                falling = 0f;
+                rb2D.freezeRotation = true;
+                rb2D.drag = 2f;
+            }
         }
     }
 
