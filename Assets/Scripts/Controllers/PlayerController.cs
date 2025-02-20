@@ -121,11 +121,6 @@ public class PlayerController : MonoBehaviour, IDamager
                     mainCamera.GetComponent<Camera>().orthographicSize = Mathf.Clamp(mainCamera.GetComponent<Camera>().orthographicSize - 0.05f * Time.deltaTime, 2f, 5f);
                 }
 
-                if (Input.GetKeyDown(KeyCode.C))
-                {
-                    PutMyselfInATragicTerminalColisionCourse();
-                }
-
                 animations.SetFloat("speedx", Mathf.Abs(rb2D.velocity.x));
                 accesories.gameObject.SetActive(alive);
                 accesories.localScale = new Vector3(GetComponent<SpriteRenderer>().flipX ? -1f : 1f, 1f, 1f);
@@ -842,14 +837,14 @@ public class PlayerController : MonoBehaviour, IDamager
             if (collision.collider.gameObject.GetComponent<PlatformEffector2D>())
             {
                 gameManager.soundController.PlaySfxSound(hitSound);
-                rb2D.velocity = new Vector2(Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad));
+                rb2D.velocity = new Vector2(Mathf.Clamp(rb2D.velocity.x * 2, -10f, 10f), 10);
             }
-            else
+            else if(collision.collider.gameObject.layer == 8)
             {
                 rb2D.velocity = rb2D.velocity.normalized;
                 rb2D.angularVelocity = 0;
-                gameManager.soundController.PlaySfxSound(explosion);
-                gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 2, 4, 6, false);
+                gameManager.soundController.PlaySfxSound(explosion, 0.5f);
+                //gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 2, 4, 6, true);
                 Instantiate(explosionPrefab, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
 
                 reentry = false;
@@ -857,6 +852,16 @@ public class PlayerController : MonoBehaviour, IDamager
                 rb2D.freezeRotation = true;
                 rb2D.drag = 2f;
             }
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(reentry)
+        if(collision.gameObject.layer == 10)
+        {
+            rb2D.angularVelocity = rb2D.angularVelocity * (1 - Time.deltaTime);
+            rb2D.velocity = new Vector2(Mathf.Clamp(lastVelocity.x * 2, -20f, 20f), 5);
         }
     }
 

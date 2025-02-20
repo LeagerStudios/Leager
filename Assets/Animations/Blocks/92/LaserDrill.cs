@@ -122,20 +122,7 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
                                 int[] data = ManagingFunctions.ConvertStringToIntArray(item.Split(':'));
                                 int amount = data[1];
 
-                                for(int i = 0; i < data[1]; i++)
-                                {
-                                    if (!StackBar.AddItemInv(data[0]))
-                                    {
-                                        break;
-                                    }
-                                    amount--;
-                                }
-
-                                if(amount > 0)
-                                {
-                                    GameManager.gameManagerReference.player.PlayerRelativeDrop(data[0], amount);
-                                }
-                                    
+                                StartCoroutine(Drop(data[0], data[1]));
                             }
                             else
                             {
@@ -239,5 +226,17 @@ public class LaserDrill : MonoBehaviour, INodeEndPoint
     {
         if (endPoint.Power > 0f)
             lifetime = 1.5f;
+    }
+
+    public IEnumerator Drop(int item, int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            while (!GameManager.gameManagerReference.InGame)
+                yield return new WaitForEndOfFrame();
+
+            ManagingFunctions.DropItem(item, transform.position, new Vector2(Random.Range(-2f, 2f), Random.Range(8f, 12f)), 1, 2f);
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }
