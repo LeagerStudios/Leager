@@ -310,6 +310,70 @@ public static class ManagingFunctions
         }
         return new Color32(r, g, b, a);
     }
+
+    public static string SerializeAnimatorParameters(Animator animator)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            string value = "";
+
+            switch (param.type)
+            {
+                case AnimatorControllerParameterType.Float:
+                    value = animator.GetFloat(param.name).ToString();
+                    break;
+                case AnimatorControllerParameterType.Int:
+                    value = animator.GetInteger(param.name).ToString();
+                    break;
+                case AnimatorControllerParameterType.Bool:
+                    value = animator.GetBool(param.name) ? "1" : "0";
+                    break;
+                case AnimatorControllerParameterType.Trigger:
+                    value = animator.GetBool(param.name) ? "1" : "0"; // Los triggers se guardan como bool
+                    break;
+            }
+
+            sb.Append($"{param.name},{param.type},{value}:");
+        }
+
+        return sb.ToString();
+    }
+
+    public static void DeserializeAnimatorParameters(Animator animator, string data)
+    {
+        string[] parameters = data.Split(':');
+
+        foreach (string param in parameters)
+        {
+            if (string.IsNullOrEmpty(param)) continue;
+
+            string[] parts = param.Split(',');
+            if (parts.Length != 3) continue;
+
+            string name = parts[0];
+            AnimatorControllerParameterType type = (AnimatorControllerParameterType)System.Enum.Parse(typeof(AnimatorControllerParameterType), parts[1]);
+            string value = parts[2];
+
+            switch (type)
+            {
+                case AnimatorControllerParameterType.Float:
+                    animator.SetFloat(name, float.Parse(value));
+                    break;
+                case AnimatorControllerParameterType.Int:
+                    animator.SetInteger(name, int.Parse(value));
+                    break;
+                case AnimatorControllerParameterType.Bool:
+                    animator.SetBool(name, value == "1");
+                    break;
+                case AnimatorControllerParameterType.Trigger:
+                    if (value == "1") animator.SetTrigger(name);
+                    else animator.ResetTrigger(name);
+                    break;
+            }
+        }
+    }
 }
 
 class MainFunctions : MonoBehaviour
@@ -369,6 +433,7 @@ public class SerializableColor
         _a = c.a;
     }
 
+
     public void AssignColor(Color c)
     {
         _r = c.r;
@@ -377,19 +442,17 @@ public class SerializableColor
         _a = c.a;
     }
 
-    public Color Color
+    public Color GetColor()
     {
-        get
-        {
-            return new Color(_r, _g, _b, _a);
-        }
-        set
-        {
-            _r = value.r;
-            _g = value.g;
-            _b = value.b;
-            _a = value.a;
-        }
+        return new Color(_r, _g, _b, _a);
+    }
+
+    public void SetColor(Color value)
+    {
+        _r = value.r;
+        _g = value.g;
+        _b = value.b;
+        _a = value.a;
     }
 }
 

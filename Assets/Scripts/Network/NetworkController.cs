@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 
 
 public class NetworkController : MonoBehaviour
@@ -129,6 +129,17 @@ public class NetworkController : MonoBehaviour
         }
     }
 
+    public void UpdateTime(float step, float timewarp)
+    {
+        if (GameManager.gameManagerReference.isNetworkHost)
+        {
+            foreach (TcpUser user in Server.clients)
+            {
+                Server.Write(user.tcpClient, string.Join(";", new string[] { "updateTime", step.ToString(), timewarp + "/" }));
+            }
+        }
+    }
+
     public void UndropItem(string name)
     {
         if (GameManager.gameManagerReference.isNetworkHost)
@@ -180,8 +191,6 @@ public class NetworkController : MonoBehaviour
             if (Server.listener.Pending() && GameManager.gameManagerReference != null)
             {
                 string newClientUsername = Server.AceptClient(1024);
-                if (newClientUsername != "null")
-                    Debug.Log(newClientUsername + " has joined!");
             }
         }
 
@@ -194,6 +203,8 @@ public class NetworkController : MonoBehaviour
                 if (GameManager.gameManagerReference.isNetworkHost)
                 {
                     List<TcpUser> disconnectUsers = new List<TcpUser>();
+
+                    string animator = ManagingFunctions.SerializeAnimatorParameters(GameManager.gameManagerReference.player.animations);
 
                     foreach (TcpUser user in Server.clients)
                     {
@@ -220,6 +231,7 @@ public class NetworkController : MonoBehaviour
                                 {
                                     user.position = new Vector4(System.Convert.ToSingle(input[1]), System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]), System.Convert.ToSingle(input[4]));
                                     user.flipX = System.Convert.ToBoolean(input[5]);
+                                    user.animator = input[6];
                                 }
 
                                 if (input[0] == "dropItem")
@@ -282,11 +294,13 @@ public class NetworkController : MonoBehaviour
                         {
                             GameObject newDummy = Instantiate(GameManager.gameManagerReference.lecterSprite, Vector3.zero, Quaternion.identity, GameManager.gameManagerReference.dummyObjects);
                             newDummy.name = user.username;
-                            newDummy.transform.GetChild(0).GetComponent<TextMesh>().text = user.username;
+                            newDummy.transform.GetChild(8).GetComponent<TextMesh>().text = user.username;
                             float[] input = new float[] { user.position.x, user.position.y, user.position.z, user.position.w };
 
                             newDummy.transform.position = new Vector2(System.Convert.ToSingle(input[0]), System.Convert.ToSingle(input[1]));
                             newDummy.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
+                            newDummy.GetComponent<SpriteRenderer>().flipX = user.flipX;
+                            ManagingFunctions.DeserializeAnimatorParameters(newDummy.GetComponent<Animator>(), user.animator);
                         }
                         else
                         {
@@ -295,6 +309,7 @@ public class NetworkController : MonoBehaviour
                             dummyPlayer.transform.position = new Vector2(System.Convert.ToSingle(input[0]), System.Convert.ToSingle(input[1]));
                             dummyPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
                             dummyPlayer.GetComponent<SpriteRenderer>().flipX = user.flipX;
+                            ManagingFunctions.DeserializeAnimatorParameters(dummyPlayer.GetComponent<Animator>(), user.animator);
                         }
                     }
 
@@ -318,7 +333,7 @@ public class NetworkController : MonoBehaviour
                         {
                             if (user != userData)
                             {
-                                Server.Write(user.tcpClient, string.Join(";", new string[] { "playerPos", userData.username, userData.position.x.ToString(), userData.position.y.ToString(), userData.position.z.ToString(), userData.position.w + "/" }));
+                                Server.Write(user.tcpClient, string.Join(";", new string[] { "playerPos", userData.username, userData.position.x.ToString(), userData.position.y.ToString(), userData.position.z.ToString(), userData.position.w.ToString(), user.flipX.ToString(), user.animator + "/" }));
                             }
                         }
 
@@ -328,11 +343,9 @@ public class NetworkController : MonoBehaviour
                         }
 
                         if (GameManager.gameManagerReference.player.alive)
-                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y.ToString(), GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX.ToString() + "/" }));
+                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x.ToString(), GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y.ToString(), GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX.ToString(), animator + "/" }));
                         else
-                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100", "0", "0", "False/" }));
-
-                        //Server.Write(userData.tcpClient, string.Join(";", new string[] { "setTime", GameManager.gameManagerReference.internationalTime + "/" }));
+                            Server.Write(userData.tcpClient, string.Join(";", new string[] { "playerPos", Server.hostUsername, "0", "-100", "0", "0", "False", animator + "/"}));
 
                         if (blocksToReplace.Count > 0)
                         {
@@ -348,6 +361,8 @@ public class NetworkController : MonoBehaviour
                 }
                 else if (GameManager.gameManagerReference.isNetworkClient)
                 {
+                    float step = 0f;
+
                     if (Client.stream.DataAvailable)
                     {
                         string entry = "";
@@ -376,15 +391,19 @@ public class NetworkController : MonoBehaviour
                                 {
                                     GameObject newDummy = Instantiate(GameManager.gameManagerReference.lecterSprite, Vector3.zero, Quaternion.identity, GameManager.gameManagerReference.dummyObjects);
                                     newDummy.name = input[1];
-                                    newDummy.transform.GetChild(0).GetComponent<TextMesh>().text = input[1];
+                                    newDummy.transform.GetChild(8).GetComponent<TextMesh>().text = input[1];
+
                                     newDummy.transform.position = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
                                     newDummy.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[4]), System.Convert.ToSingle(input[5]));
+                                    newDummy.GetComponent<SpriteRenderer>().flipX = System.Convert.ToBoolean(input[6]);
+                                    ManagingFunctions.DeserializeAnimatorParameters(newDummy.GetComponent<Animator>(), input[7]);
                                 }
                                 else
                                 {
                                     dummyPlayer.transform.position = new Vector2(System.Convert.ToSingle(input[2]), System.Convert.ToSingle(input[3]));
                                     dummyPlayer.GetComponent<Rigidbody2D>().velocity = new Vector2(System.Convert.ToSingle(input[4]), System.Convert.ToSingle(input[5]));
                                     dummyPlayer.GetComponent<SpriteRenderer>().flipX = System.Convert.ToBoolean(input[6]);
+                                    ManagingFunctions.DeserializeAnimatorParameters(dummyPlayer.GetComponent<Animator>(), input[7]);
                                 }
                             }
 
@@ -464,17 +483,23 @@ public class NetworkController : MonoBehaviour
                                 LightController.lightController.AddRenderQueue(GameManager.gameManagerReference.player.transform.position);
                             }
 
-                            if (input[0] == "setTime")
+                            if (input[0] == "updateTime")
                             {
-                                //GameManager.gameManagerReference.internationalTime = System.Convert.ToSingle(input[1]);
+                                step += System.Convert.ToSingle(input[1]);
+
+                                if(Mathf.Abs(step) > 0.1f) Debug.Log(step);
+                                PlanetMenuController.planetMenu.timewarp = System.Convert.ToSingle(input[2]);
                             }
                         }
                     }
 
                     if (GameManager.gameManagerReference.player.alive)
-                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y.ToString(), GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX.ToString() + "/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", GameManager.gameManagerReference.player.transform.position.x.ToString(), GameManager.gameManagerReference.player.transform.position.y + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.x + "", GameManager.gameManagerReference.player.GetComponent<Rigidbody2D>().velocity.y.ToString(), GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX.ToString(), ManagingFunctions.SerializeAnimatorParameters(GameManager.gameManagerReference.player.animations) + "/" }));
                     else
-                        Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100", "0", "0", "False/" }));
+                        Client.Write(string.Join(";", new string[] { "playerPos", "0", "-100", "0", "0", "False", ManagingFunctions.SerializeAnimatorParameters(GameManager.gameManagerReference.player.animations) + "/" }));
+
+                    if (step != 0)
+                        PlanetMenuController.planetMenu.Simulate(step, PlanetMenuController.planetMenu.gameObject.activeInHierarchy);
                 }
             }
             else
@@ -589,6 +614,7 @@ public class Server
 
                 int[][] tilemaps = new int[GameManager.gameManagerReference.WorldWidth][];
                 string[][] tileprops = new string[GameManager.gameManagerReference.WorldWidth][];
+                int[][] bgtilemaps = new int[GameManager.gameManagerReference.WorldWidth][];
 
                 for (int i = 0; i < tilemaps.Length; i++)
                 {
@@ -598,8 +624,12 @@ public class Server
                 {
                     tileprops[i] = (string[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().TilePropertiesArr.Clone();
                 }
+                for (int i = 0; i < tilemaps.Length; i++)
+                {
+                    bgtilemaps[i] = (int[])GameManager.gameManagerReference.chunkContainer.transform.GetChild(i).GetComponent<ChunkController>().BackgroundTileGrid.Clone();
+                }
 
-                ThreadStart lastStuff = new ThreadStart(() => TheStuff(client, tilemaps, tileprops, message));
+                ThreadStart lastStuff = new ThreadStart(() => TheStuff(client, tilemaps, tileprops, bgtilemaps, message));
                 Thread stuff = new Thread(lastStuff);
                 stuff.Start();
 
@@ -626,10 +656,14 @@ public class Server
         stream.Write(data, 0, data.Length);
     }
 
-    public static void TheStuff(TcpClient client, int[][] tilemaps, string[][] tilepropmaps, string message)
+    public static void TheStuff(TcpClient client, int[][] tilemaps, string[][] tilepropmaps, int[][] bgtilemaps, string message)
     {
-        SendChunks(client, tilemaps, tilepropmaps);
-         
+        Debug.Log(message + " is joining...");
+
+        SendChunks(client, tilemaps, tilepropmaps, bgtilemaps);
+
+        Debug.Log(message + " is receiving biomes...");
+
         Debug.Log(3);
         Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()).Length + "");
         Read(client, 1024);
@@ -638,10 +672,26 @@ public class Server
         Write(client, string.Join(";", GameManager.gameManagerReference.GetBiomes()));
         Read(client, 1024);
 
+        Debug.Log(message + " is receiving solar system...");
+
+        string json = JsonConvert.SerializeObject(PlanetMenuController.planetMenu.planets, new JsonSerializerSettings
+        {
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            Formatting = Formatting.Indented
+        });
+
+        Write(client, json.Length + "");
+        Read(client, 1024);
+
+        Write(client, json);
+        Read(client, 1024);
+
+        Debug.Log(message + " has joined!");
+
         clients.Add(new TcpUser(client, message));
     }
 
-    public static void SendChunks(TcpClient client,int[][] tilemaps, string[][] tilepropmaps)
+    public static void SendChunks(TcpClient client,int[][] tilemaps, string[][] tilepropmaps, int[][] bgtilemaps)
     {
         for (int i = 0; i < GameManager.gameManagerReference.WorldWidth; i++)
         {
@@ -661,6 +711,15 @@ public class Server
             Write(client, export2.Length + "");
             Read(client, 1024);
             Write(client, export2);
+            Read(client, 1024);
+
+            int[] bgtilemap = tilemaps[i];
+            string[] result2 = ManagingFunctions.ConvertIntToStringArray(tilemap);
+            string export3 = string.Join(";", result) + "d";
+
+            Write(client, export3.Length + "");
+            Read(client, 1024);
+            Write(client, export3);
             Read(client, 1024);
         }
         //wait to exit
@@ -751,6 +810,7 @@ public class Client
     public static int[] backgroundMapLoad;
     public static string[] worldMapPropLoad;
     public static string[] worldBiomesLoad;
+    public static List<PlanetData> planetsLoad;
 
     public static bool Main(string ip, int portParam, string message)
     {
@@ -793,10 +853,26 @@ public class Client
             string mapBiomes = Read(biomesLenght + 8196);
             Write("Received");
 
+            i = Read(8196);
+            int planetsLenght = System.Convert.ToInt32(i);
+            Write("Received");
+            string planetsJson = "";
+
+            do
+            {
+                planetsJson += Read(planetsLenght);
+            } while (planetsJson.Length < planetsLenght);
+
+            Write("Received");
+
             Debug.Log("converting data");
 
-            //Debug.Log(mapData);
-            //worldMapLoad = ManagingFunctions.ConvertStringToIntArray(mapData.Split(';'));
+            List<PlanetData> deserializedPlanets = JsonConvert.DeserializeObject<List<PlanetData>>(planetsJson, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            });
+
+            planetsLoad = deserializedPlanets;
             worldBiomesLoad = mapBiomes.Split(';');
 
             return true;
@@ -826,6 +902,7 @@ public class Client
             Write("a weno");
 
 
+
             string mapGrid = "";
             do
             {
@@ -839,6 +916,7 @@ public class Client
                 map = string.Join(";", new string[] { map, mapGrid });
             Write("a weno");
 
+            //Debug.Log("map iteration" + i + " " + mapGrid + "," + mapGrid.Length);
 
             //tileproperties
             string ac = Read(8192);
@@ -862,6 +940,7 @@ public class Client
             int buffer3 = System.Convert.ToInt32(ad);
             Write("a weno");
 
+            //Debug.Log("prop iteration" + i + " " + mapProp + "," + mapProp.Length);
 
             string bgMapGrid = "";
             do
@@ -875,6 +954,8 @@ public class Client
             else
                 bgMap = string.Join(";", new string[] { bgMap, bgMapGrid });
             Write("a weno");
+
+            //Debug.Log("bg iteration" + i + " " + bgMapGrid + "," + bgMapGrid.Length);
         }
 
         worldMapLoad = ManagingFunctions.ConvertStringToIntArray(map.Split(';'));
@@ -906,6 +987,7 @@ public class Client
 public class TcpUser
 {
     public string username;
+    public string animator;
     public Vector4 position;
     public bool flipX;
     public TcpClient tcpClient;

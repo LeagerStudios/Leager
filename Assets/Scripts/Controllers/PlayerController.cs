@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] LayerMask tileLayer;
     [SerializeField] LayerMask nodeLayer;
     [SerializeField] public DeathScreenController deathScreenController;
-    Animator animations;
+    public Animator animations;
     Rigidbody2D rb2D;
     public Vector2 lastVelocity;
     public EntityCommonScript entityScript;
@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour, IDamager
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
         gameManager = GameManager.gameManagerReference;
         mainCamera = Camera.main.GetComponent<CameraController>();
+        transform.GetChild(4).GetComponent<DamagersCollision>().target = this;
         endPointNode = new EndPointNode
         {
             position = transform.position,
@@ -187,10 +188,11 @@ public class PlayerController : MonoBehaviour, IDamager
 
     public void Hit(int damage, EntityCommonScript procedence, bool ignoreImunity = false, float knockback = 1f, bool penetrate = false)
     {
-        if (procedence.EntityFamily != "yellow")
-        {
-            LoseHp(damage, procedence, ignoreImunity, knockback, penetrate);
-        }
+        if (isMain)
+            if (procedence.EntityFamily != "yellow")
+            {
+                LoseHp(damage, procedence, ignoreImunity, knockback, penetrate);
+            }
     }
 
     public void Respawn(float x, float y)
@@ -454,10 +456,6 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 flyMode = true;
                 wingTime = 0f;
-                if (GInput.GetKey(KeyCode.A))
-                    transform.eulerAngles = Vector3.forward * 90;
-                if (GInput.GetKey(KeyCode.D))
-                    transform.eulerAngles = Vector3.forward * -90;
             }
 
             if (!flyMode && GInput.GetKey(KeyCode.W) && FlyTime < 300 && gameManager.addedFrameThisFrame)
@@ -497,10 +495,31 @@ public class PlayerController : MonoBehaviour, IDamager
                 if (GInput.GetKey(KeyCode.D))
                     transform.eulerAngles = Vector3.forward * Mathf.MoveTowardsAngle(transform.eulerAngles.z, transform.eulerAngles.z - 90, 180 * Time.deltaTime);
 
+
+
                 float sin = Mathf.Sin((transform.eulerAngles.z) * Mathf.Deg2Rad) * -1;
                 float cos = Mathf.Cos((transform.eulerAngles.z) * Mathf.Deg2Rad);
+
+                if (Input.GetKey(KeyCode.W) && FlyTime < 300 && gameManager.addedFrameThisFrame)
+                {
+                    rb2D.AddForce(new Vector2(40 * sin, 40 * cos));
+                    wingTime += Mathf.Abs(cos) * Time.deltaTime;
+                    accesories.Find("123").GetChild(0).gameObject.SetActive(true);
+                    mainCamera.transform.eulerAngles = Random.Range(-1.5f, 1.5f) * Vector3.forward;
+                    if (FlyTime % 8 == 0)
+                    {
+                        gameManager.soundController.PlaySfxSound(jetpack);
+                    }
+                    FlyTime++;
+                }
+                else
+                {
+                    wingTime -= cos * Time.deltaTime;
+                    transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2D.velocity), 2*Time.deltaTime);
+                }
+
                 float maxVelocity = 16;
-                wingTime -= cos * Time.deltaTime;
+                
                 wingTime = Mathf.Clamp(wingTime, 0, 1000f);
                 Vector2 targetVelocity = new Vector2(sin * maxVelocity, cos * maxVelocity);
                 rb2D.velocity = Vector2.Lerp(rb2D.velocity, targetVelocity, wingTime / 3f);

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+
 public class PlanetMenuController : MonoBehaviour, IDraggable
 {
 
@@ -58,7 +60,11 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     {
         rectTransform = GetComponent<RectTransform>();
 
-        if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
+        if (GameManager.gameManagerReference.isNetworkClient)
+        {
+            planets = Client.planetsLoad;
+        }
+        else if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd"))
         {
             planets.Add(new PlanetData("Sun", ManagingFunctions.HexToColor("#FFFE00"), 2700, 0, 0, 0, 0) { canGo = false });
             planets.Add(new PlanetData("Korenz", ManagingFunctions.HexToColor("#25FF00"), 300, 100f, 90f, -90f, -4f) { parent = planets[0] });
@@ -67,7 +73,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f, 0, 96f) { parent = planets[0] });
             planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f, 3f) { parent = planets[0] });
             planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 380f, 120f, 76f, -24f) { parent = planets[0] });
-            planets.Add(new PlanetData("Ambrosio", ManagingFunctions.HexToColor("#2554264"), 345, 370f, 10f, 76f, 24f) { parent = planets[0] });
+
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
         else
@@ -84,6 +90,11 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
             planet.CalculateOrbitRender(75);
             planet.ApplyToButton(newPlanet);
+
+            if(planet.planetName == "Sun")
+            {
+                newPlanet.GetChild(1).GetChild(1).GetComponent<Image>().sprite = starSprite;
+            }
 
             if(planet.planetName == GameManager.gameManagerReference.currentPlanetName)
             {
@@ -133,6 +144,8 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
     public void Simulate(float stepTime, bool drawOrbits)
     {
+        if (GameManager.gameManagerReference.isNetworkHost) NetworkController.networkController.UpdateTime(stepTime, timewarp);
+
         RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
         zoom += Input.mouseScrollDelta.y * 5;
         zoom = Mathf.Clamp(zoom, 2.4f, 100);
@@ -220,12 +233,12 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
         RectTransform planetDataRectTransform = planetPanelPropertiesRectTransform.GetChild(0).GetComponent<RectTransform>();
 
-        planetDataRectTransform.GetChild(0).GetComponent<Image>().color = planets[idx].planetColor.Color;
+        planetDataRectTransform.GetChild(0).GetComponent<Image>().color = planets[idx].planetColor.GetColor();
         planetDataRectTransform.GetChild(1).GetComponent<Text>().text = planets[idx].planetName;
 
-        Color.RGBToHSV(planets[idx].planetColor.Color, out float h, out float s, out float v);
+        Color.RGBToHSV(planets[idx].planetColor.GetColor(), out float h, out float s, out float v);
         if(v > 0.5f)
-            planetDataRectTransform.GetChild(1).GetComponent<Text>().color = planets[idx].planetColor.Color;
+            planetDataRectTransform.GetChild(1).GetComponent<Text>().color = planets[idx].planetColor.GetColor();
         else
             planetDataRectTransform.GetChild(1).GetComponent<Text>().color = Color.white;
 
@@ -307,13 +320,11 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             PlanetData planetData = new PlanetData(planetName, Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0.7f, 1f), Random.Range(0.8f, 1f)), size, Random.Range(3f, 6f), Random.Range(1f, 3f));
             planetData.ApplyToButton(newPlanet);
             planets.Add(planetData);
-
-            DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
     }
 }
 
-
+[JsonObject(IsReference =true)]
 [System.Serializable]
 public class PlanetData
 {
@@ -376,7 +387,7 @@ public class PlanetData
 
     public string ColorToHex()
     {
-        return ColorUtility.ToHtmlStringRGB(planetColor.Color);
+        return ColorUtility.ToHtmlStringRGB(planetColor.GetColor());
     }
              
     public void Step(float time)
@@ -421,14 +432,14 @@ public class PlanetData
     public void ApplyToButton(RectTransform rectTransform)
     {
         physicalPlanet = rectTransform;
-        Color.RGBToHSV(planetColor.Color, out float h, out float s, out float v);
-        rectTransform.GetChild(1).GetChild(1).GetComponent<Image>().color = planetColor.Color;
+        Color.RGBToHSV(planetColor.GetColor(), out float h, out float s, out float v);
+        rectTransform.GetChild(1).GetChild(1).GetComponent<Image>().color = planetColor.GetColor();
         rectTransform.GetChild(1).GetComponent<Button>().interactable = canGo;
 
         rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().text = planetName;
 
         if (v > 0.4f)
-            rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().color = planetColor.Color;
+            rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().color = planetColor.GetColor();
         else
             rectTransform.GetChild(1).GetChild(0).GetComponent<Text>().color = Color.white;
 

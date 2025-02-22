@@ -73,7 +73,7 @@ public class ResourceLauncher : MonoBehaviour, INodeEndPoint
         }
         else
         {
-
+            if(GameManager.gameManagerReference.InGame)
             if(lifetime > 0f)
             {
                 transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.one, 0.3f);

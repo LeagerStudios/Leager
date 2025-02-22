@@ -373,28 +373,31 @@ public class GameManager : MonoBehaviour
     {
         mouseCurrentPosition = Camera.main.ScreenToWorldPoint(GInput.MousePosition);
         addedFrameThisFrame = false;
-        
-        if(inGame || PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
+
+        if (inGame || PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
         {
-            if (PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
+            if (!isNetworkClient)
             {
-                if (GInput.GetKey(KeyCode.Comma))
-                    if (PlanetMenuController.planetMenu.timewarp < 576869)
-                        PlanetMenuController.planetMenu.timewarp += PlanetMenuController.planetMenu.timewarp * Time.deltaTime * 2;
-                    else
-                        PlanetMenuController.planetMenu.timewarp = 576870;
-                else if (PlanetMenuController.planetMenu.timewarp > 1)
-                    PlanetMenuController.planetMenu.timewarp -= PlanetMenuController.planetMenu.timewarp * Time.deltaTime * 5;
+                if (PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
+                {
+                    if (GInput.GetKey(KeyCode.Comma))
+                        if (PlanetMenuController.planetMenu.timewarp < 576869)
+                            PlanetMenuController.planetMenu.timewarp += PlanetMenuController.planetMenu.timewarp * Time.deltaTime * 2;
+                        else
+                            PlanetMenuController.planetMenu.timewarp = 576870;
+                    else if (PlanetMenuController.planetMenu.timewarp > 1)
+                        PlanetMenuController.planetMenu.timewarp -= PlanetMenuController.planetMenu.timewarp * Time.deltaTime * 5;
 
-                if (PlanetMenuController.planetMenu.timewarp < 1)
+                    if (PlanetMenuController.planetMenu.timewarp < 1)
+                        PlanetMenuController.planetMenu.timewarp = 1;
+                }
+                else
+                {
                     PlanetMenuController.planetMenu.timewarp = 1;
-            }
-            else
-            {
-                PlanetMenuController.planetMenu.timewarp = 1;
-            }
+                }
 
-            PlanetMenuController.planetMenu.Simulate(Time.deltaTime / 255f * PlanetMenuController.planetMenu.timewarp, PlanetMenuController.planetMenu.gameObject.activeInHierarchy);
+                PlanetMenuController.planetMenu.Simulate(Time.deltaTime / 255f * PlanetMenuController.planetMenu.timewarp, PlanetMenuController.planetMenu.gameObject.activeInHierarchy);
+            }
 
             if (frameTimer > 2147483640)
             {
@@ -938,7 +941,7 @@ public class GameManager : MonoBehaviour
                 {
                     skyPlanet = Instantiate(celestialBodies.GetChild(0).gameObject, celestialBodies);
                     skyPlanet.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = PlanetMenuController.planetMenu.planetSprite;
-                    skyPlanet.transform.GetChild(0).GetComponent<SpriteRenderer>().color = PlanetMenuController.planetMenu.planets[i].planetColor.Color;
+                    skyPlanet.transform.GetChild(0).GetComponent<SpriteRenderer>().color = PlanetMenuController.planetMenu.planets[i].planetColor.GetColor();
                 }
                 else
                 {
@@ -2316,6 +2319,9 @@ public class GameManager : MonoBehaviour
     {
         switch (tile)
         {
+            case 68:
+                player.FlyTime -= 200;
+                break;
             case 78:
                 if (dayLuminosity < 0.5f && entitiesContainer.GetComponentInChildren<ENTITY_TheDestroyer>() == null)
                 {
