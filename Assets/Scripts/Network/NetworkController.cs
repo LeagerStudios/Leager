@@ -255,7 +255,7 @@ public class NetworkController : MonoBehaviour
                                     int amount = int.Parse(input[2]);
                                     string dropName = input[3];
                                     Transform drop = ManagingFunctions.dropContainer.transform.Find(dropName);
-                                    Debug.Log("Drop: " + dropName + " amm: " + amount);
+                                    //Debug.Log("Drop: " + dropName + " amm: " + amount);
 
                                     if (amount == 0)
                                     {
@@ -713,9 +713,9 @@ public class Server
             Write(client, export2);
             Read(client, 1024);
 
-            int[] bgtilemap = tilemaps[i];
-            string[] result2 = ManagingFunctions.ConvertIntToStringArray(tilemap);
-            string export3 = string.Join(";", result) + "d";
+            int[] bgtilemap = bgtilemaps[i];
+            string[] result2 = ManagingFunctions.ConvertIntToStringArray(bgtilemap);
+            string export3 = string.Join(";", result2) + "d";
 
             Write(client, export3.Length + "");
             Read(client, 1024);
