@@ -457,14 +457,7 @@ public class PlanetData
             Vector2 point = new Vector2();
             float timePerRevolution = apoapsis * periapsis;
             double rotVal = time % timePerRevolution;
-            rotVal *= 2;
             rotVal /= timePerRevolution;
-            bool inverse = false;
-            if (rotVal > 1)
-            {
-                rotVal = 0 - (rotVal - 2);
-                inverse = true;
-            }
 
             float rotationValue = (float)rotVal;
             float orbit = periapsis + apoapsis;
@@ -472,7 +465,7 @@ public class PlanetData
             float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
 
 
-            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI) * halfOrbit * (inverse ? 1 : -1), Mathf.Cos(rotationValue * Mathf.PI) * (orbit / 2));
+            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI) * halfOrbit, Mathf.Cos(rotationValue * Mathf.PI) * (orbit / 2));
             point += Vector2.up * ((apoapsis - periapsis) / 2);
             if (rotation != 0)
             {
