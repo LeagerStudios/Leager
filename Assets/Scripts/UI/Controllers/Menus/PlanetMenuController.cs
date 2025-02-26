@@ -135,7 +135,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             }
             else
             {
-                timewarpPanel.GetChild(i).GetComponent<Text>().text = "x" + Mathf.Floor(timewarp);
+                //timewarpPanel.GetChild(i).GetComponent<Text>().text = "x" + Mathf.Floor(timewarp);
             }
         }
 
@@ -147,7 +147,9 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         if (GameManager.gameManagerReference.isNetworkHost) NetworkController.networkController.UpdateTime(stepTime, timewarp);
 
         RectTransform viewport = planetPanelRectTransform.GetChild(0).GetComponent<RectTransform>();
-        zoom += Input.mouseScrollDelta.y * 5;
+
+        if (gameObject.activeInHierarchy)
+            zoom += GInput.Zoom * 5;
         zoom = Mathf.Clamp(zoom, 2.4f, 100);
         viewport.sizeDelta = Vector2.Lerp(viewport.sizeDelta, Vector2.one * zoom, Time.deltaTime * 10);
 
@@ -175,19 +177,19 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
                 planetObject.anchoredPosition = (point * viewport.sizeDelta.x) + parentPosition;
 
-                if(drawOrbits)
-                for (int i = 0; i < orbit.points.Length; i++)
-                {
-                    orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - (planetObject.anchoredPosition - parentPosition);
-                }
+                if (drawOrbits)
+                    for (int i = 0; i < orbit.points.Length; i++)
+                    {
+                        orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - (planetObject.anchoredPosition - parentPosition);
+                    }
             }
             else
             {
-                if(drawOrbits)
-                for (int i = 0; i < orbit.points.Length; i++)
-                {
-                    orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - planetObject.anchoredPosition;
-                }
+                if (drawOrbits)
+                    for (int i = 0; i < orbit.points.Length; i++)
+                    {
+                        orbit.points[i] = orbit.points[i] * viewport.sizeDelta.x - planetObject.anchoredPosition;
+                    }
             }
 
             orbit.SetAllDirty();
@@ -212,7 +214,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
     public void Drag()
     {
-        
+
     }
 
     public void FocusPlanet(int idx)
@@ -465,8 +467,8 @@ public class PlanetData
             float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
 
 
-            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI) * halfOrbit, Mathf.Cos(rotationValue * Mathf.PI) * (orbit / 2));
-            point += Vector2.up * ((apoapsis - periapsis) / 2);
+            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI * -2) * halfOrbit, Mathf.Cos(rotationValue * Mathf.PI * 2) * (orbit / 2) + ((apoapsis - periapsis) / 2));
+
             if (rotation != 0)
             {
                 point = Quaternion.AngleAxis(rotation, Vector3.forward) * point;

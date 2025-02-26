@@ -58,7 +58,10 @@ public class WorkItemController : MonoBehaviour {
     {
         if (tile == 15)
         {
-            tileObj.transform.GetComponentInChildren<Box>().ToggleItems();
+            Box box = tileObj.transform.GetComponentInChildren<Box>();
+
+            if (!box.firstFrame)
+                box.ToggleItems();
         }
 
 

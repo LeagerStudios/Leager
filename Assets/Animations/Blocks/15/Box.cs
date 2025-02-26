@@ -7,6 +7,7 @@ public class Box : MonoBehaviour
 {
     public int maxStacks = 9;
     public BoxMenu targetMenu;
+    public bool firstFrame = false;
 
     void Start()
     {
@@ -18,6 +19,9 @@ public class Box : MonoBehaviour
     {
         if (ManagingFunctions.InsideRanges(GameManager.gameManagerReference.mouseCurrentPosition, transform.position - (Vector3.one * 0.5f), transform.position + (Vector3.one * 0.5f)))
         {
+            if (firstFrame && !GInput.GetMouseButton(0))
+                firstFrame = false;
+
             if (GameManager.gameManagerReference.InGame && !StackBar.stackBarController.InventoryDeployed)
                 if (targetMenu == null)
                 {
@@ -25,10 +29,13 @@ public class Box : MonoBehaviour
                     targetMenu.targetBox = this;
                     targetMenu.gameObject.name = "BoxMenu";
                     targetMenu.UpdatePos();
+                    firstFrame = true;
                 }
         }
         else
         {
+            firstFrame = true;
+
             if (targetMenu != null)
             {
                 targetMenu.targetBox = null;
@@ -57,7 +64,25 @@ public class Box : MonoBehaviour
     public void ToggleItems()
     {
         List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
-        if(StackBar.stackBarController.currentItem == 0 && items.Count > 0)
+        bool condition = false;
+        condition = StackBar.stackBarController.currentItem == 0 && items.Count > 0;
+
+        if (!condition)
+            if (items.Count > 0)
+            {
+                int[] data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
+
+                int tile = data[0];
+                int tileAmount = data[1];
+
+
+                condition = (tile == StackBar.stackBarController.currentItem) 
+                    && (StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx] < GameManager.gameManagerReference.stackLimit[StackBar.stackBarController.currentItem])
+                    && (tileAmount < GameManager.gameManagerReference.stackLimit[tile]);
+            }
+                
+
+        if (condition)
         {
             int[] data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
 
@@ -66,7 +91,7 @@ public class Box : MonoBehaviour
 
 
             while (tileAmount > 0)
-                if (StackBar.AddItem(tile))
+                if (StackBar.AddItem(tile, StackBar.stackBarController.idx))
                     tileAmount--;
                 else break;
 

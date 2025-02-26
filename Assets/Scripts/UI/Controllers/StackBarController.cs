@@ -244,21 +244,46 @@ public static class StackBar
 
     }
 
-    public static bool AddItem(int item)
+    public static bool AddItem(int item, int index = -1)
     {
         bool typeAlreadyExists = false;
         int existingIdx = -1;
+        if (index != -1)
         {
-            for(int i = 0; i < 9; i++)
+            if ((stackBarController.StackBarGrid[index] == item || stackBarController.StackBarGrid[index] == 0) && (stackBarController.StackBarGrid[index] == 0 || stackBarController.StackItemAmount[index] < GameManager.gameManagerReference.stackLimit[stackBarController.StackBarGrid[index]]))
             {
-                if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < GameManager.gameManagerReference.stackLimit[stackBarController.StackBarGrid[i]])
+                typeAlreadyExists = true;
+                existingIdx = index;
+
+                if (stackBarController.StackBarGrid[existingIdx] == 0)
                 {
-                    typeAlreadyExists = true;
-                    existingIdx = i;
+                    stackBarController.StackBarGrid[existingIdx] = item;
+                    stackBarController.StackItemAmount[existingIdx] = 0;
                 }
+            }
+            else
+                for (int i = 0; i < 9; i++)
+                {
+                    if (!typeAlreadyExists)
+                        if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < GameManager.gameManagerReference.stackLimit[stackBarController.StackBarGrid[i]])
+                        {
+                            typeAlreadyExists = true;
+                            existingIdx = i;
+                        }
+
+                }
+        }
+        else
+            for (int i = 0; i < 9; i++)
+            {
+                if (!typeAlreadyExists)
+                    if (stackBarController.StackBarGrid[i] == item && stackBarController.StackItemAmount[i] < GameManager.gameManagerReference.stackLimit[stackBarController.StackBarGrid[i]])
+                    {
+                        typeAlreadyExists = true;
+                        existingIdx = i;
+                    }
 
             }
-        }
 
         if (typeAlreadyExists)
         {
@@ -270,7 +295,7 @@ public static class StackBar
         {
             bool nullStack = false;
             int nullStackIdx = 0;
-            for(int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
                 if (stackBarController.StackBarGrid[i] == 0)
                 {
@@ -279,7 +304,7 @@ public static class StackBar
                         nullStack = true;
                         nullStackIdx = i;
                     }
-                    
+
                 }
             }
             if (nullStack)

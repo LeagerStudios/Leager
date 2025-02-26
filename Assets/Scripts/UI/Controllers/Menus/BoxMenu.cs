@@ -14,7 +14,6 @@ public class BoxMenu : MonoBehaviour
     public Box targetBox;
     public RectTransform rectTransform;
     public RectTransform canvasRect;
-    public bool closing = false;
 
 
     void Start()
@@ -49,19 +48,13 @@ public class BoxMenu : MonoBehaviour
 
     void Update()
     {
-        if(targetBox != null && !closing)
+        if (targetBox != null)
         {
             UpdatePos();
         }
         else
         {
-            closing = true;
-
-            canvasGroup.alpha -= Time.deltaTime * 30f;
-            if(canvasGroup.alpha <= 0f)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 

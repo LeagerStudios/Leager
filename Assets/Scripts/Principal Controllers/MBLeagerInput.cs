@@ -73,6 +73,35 @@ public static class GInput
         }
     }
 
+    public static float Zoom
+    {
+        get
+        {
+            if (Input.touchSupported)
+            {
+                if (Input.touches.Length >= 2)
+                {
+                    Touch touch0 = Input.touches[0];
+                    Touch touch1 = Input.touches[1];
+
+                    Vector2 prevTouch0 = touch0.position - touch0.deltaPosition;
+                    Vector2 prevTouch1 = touch1.position - touch1.deltaPosition;
+
+                    float prevDistance = Vector2.Distance(prevTouch0, prevTouch1);
+                    float currentDistance = Vector2.Distance(touch0.position, touch1.position);
+
+                    return (currentDistance - prevDistance) / 75f;
+                }
+
+                return 0f;
+            }
+            else
+            {
+                return Input.mouseScrollDelta.y;
+            }
+        }
+    }
+
     public static bool GetKey(KeyCode key)
     {
         return Input.GetKey(key) || keys.Contains(key);
