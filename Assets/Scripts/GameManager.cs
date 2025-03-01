@@ -326,8 +326,10 @@ public class GameManager : MonoBehaviour
 
         //Generate all
         GenerateAllChunks(GenerateMap());
+        PlanetMenuController.planetMenu.Startt();
 
         Vector2 respawnPosition = Vector2.zero;
+
 
         if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/spawnpoint.lgrsd"))
         {
@@ -342,12 +344,20 @@ public class GameManager : MonoBehaviour
         if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newWorld")
         {
             player.Respawn(respawnPosition.x, respawnPosition.y);
+            SetSkybox();
+
+            while (dayLuminosity > 1f)
+            {
+                PlanetMenuController.planetMenu.Simulate(0.25f, false);
+                SetSkybox();
+            }
 
             while (dayLuminosity < 1f)
             {
-                PlanetMenuController.planetMenu.Simulate(1f, false);
+                PlanetMenuController.planetMenu.Simulate(0.25f, false);
                 SetSkybox();
             }
+
 
             player.transform.position = new Vector2(respawnPosition.x, WorldHeight);
             player.GetComponent<Rigidbody2D>().velocity = Vector2.right * -5;
@@ -491,7 +501,7 @@ public class GameManager : MonoBehaviour
                 {
                     soundController.PlaySfxSound(SoundName.select);
 
-                    int equipPiece = StackBar.stackBarController.currentItem;
+                    int equipPiece = StackBar.stackBarController.CurrentItem;
 
                     int equipReturned = EquipItem(equipPiece, equipType);
 
@@ -507,7 +517,7 @@ public class GameManager : MonoBehaviour
                 }
                 if (player.alive && canConsume)
                 {
-                    Consume(StackBar.stackBarController.currentItem);
+                    Consume(StackBar.stackBarController.CurrentItem);
                     StackBar.LoseItem();
                 }
             }

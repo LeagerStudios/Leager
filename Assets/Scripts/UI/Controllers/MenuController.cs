@@ -172,7 +172,7 @@ public class MenuController : MonoBehaviour {
 
         FpsText.GetComponent<Text>().text = "FPS:" + Mathf.Round(1.0f / Time.smoothDeltaTime * Time.timeScale) + "";
 
-        if (StackBar.stackBarController.currentItem == 82)
+        if (StackBar.stackBarController.CurrentItem == 82)
         {
             double horizontalCoordinates = gameManager.player.transform.position.x / (gameManager.WorldWidth * 16d) * 360;
 
@@ -183,7 +183,7 @@ public class MenuController : MonoBehaviour {
 
             coordinates.text = horizontalCoordinates + "º";
         }
-        else if (StackBar.stackBarController.currentItem == 83)
+        else if (StackBar.stackBarController.CurrentItem == 83)
         {
             int height = Mathf.FloorToInt(gameManager.player.transform.position.y);
 

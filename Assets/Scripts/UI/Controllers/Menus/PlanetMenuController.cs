@@ -56,7 +56,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         planetMenu = this;
     }
 
-    void Start()
+    public void Startt()
     {
         rectTransform = GetComponent<RectTransform>();
 
@@ -73,6 +73,12 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             planets.Add(new PlanetData("Lurp", ManagingFunctions.HexToColor("#878787"), 70, 20f, 20f, 0, 96f) { parent = planets[0] });
             planets.Add(new PlanetData("Nheo", ManagingFunctions.HexToColor("#FFFE00"), 235, 80f, 30f, -90f, 3f) { parent = planets[0] });
             planets.Add(new PlanetData("Krylo", ManagingFunctions.HexToColor("#252525"), 564, 380f, 120f, 76f, -24f) { parent = planets[0] });
+
+            foreach(PlanetData planet in planets)
+            {
+                planet.oTime = Random.Range(0, planet.apoapsis * planet.periapsis);
+                planet.rTime = Random.Range(0, planet.revolutionTime);
+            }
 
             DataSaver.SerializeAt(planets, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldRootName + @"/planets.lgrsd");
         }
@@ -135,7 +141,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             }
             else
             {
-                //timewarpPanel.GetChild(i).GetComponent<Text>().text = "x" + Mathf.Floor(timewarp);
+                timewarpPanel.GetChild(i).GetComponent<Text>().text = "x" + Mathf.Floor(timewarp);
             }
         }
 

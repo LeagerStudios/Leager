@@ -204,6 +204,7 @@ public class PlayerController : MonoBehaviour, IDamager
         falling = 0;
         killing = false;
         alive = true;
+        mainCamera = Camera.main.GetComponent<CameraController>();
         rb2D = GetComponent<Rigidbody2D>();
         animations = GetComponent<Animator>();
         transform.GetChild(4).GetComponent<DamagersCollision>().target = this;
@@ -614,7 +615,7 @@ public class PlayerController : MonoBehaviour, IDamager
             if (!GInput.CancelPlacing)
             {
                 StartCoroutine(ArmAnimation(gameManager.armUsing));
-                armCooldown = gameManager.tileSize[StackBar.stackBarController.currentItem].z;
+                armCooldown = gameManager.tileSize[StackBar.stackBarController.CurrentItem].z;
                 healthBar.MaxCooldown = armCooldown;
                 healthBar.cooldown = armCooldown;
 
@@ -625,14 +626,14 @@ public class PlayerController : MonoBehaviour, IDamager
                         StackBar.LoseItem(StackBar.Search(64, 1));
                         Vector2 vector = gameManager.mouseCurrentPosition - transform.position;
                         vector.x = vector.x * -1;
-                        PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.currentItem], entityScript);
+                        PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.CurrentItem], entityScript);
                     }
                     else if (InventoryBar.Search(64, 1) != -1)
                     {
                         InventoryBar.LoseItem(InventoryBar.Search(64, 1));
                         Vector2 vector = gameManager.mouseCurrentPosition - transform.position;
                         vector.x = vector.x * -1;
-                        PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.currentItem], entityScript);
+                        PROJECTILE_Arrow.StaticSpawn(ManagingFunctions.PointToPivotUp(Vector2.zero, vector), transform.position, gameManager.ToolEfficency[StackBar.stackBarController.CurrentItem], entityScript);
                     }
                 }
                 else if (gameManager.armUsing == "plasmabomb")
@@ -863,7 +864,7 @@ public class PlayerController : MonoBehaviour, IDamager
                 rb2D.velocity = rb2D.velocity.normalized;
                 rb2D.angularVelocity = 0;
                 gameManager.soundController.PlaySfxSound(explosion, 0.5f);
-                //gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 2, 4, 6, true);
+                gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 2, 4, 10, true);
                 Instantiate(explosionPrefab, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
 
                 reentry = false;
@@ -973,7 +974,7 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         if (transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite == gameManager.tiles[0])
         {
-            int tile = StackBar.stackBarController.currentItem;
+            int tile = StackBar.stackBarController.CurrentItem;
             Vector4 size = gameManager.tileSize[tile];
             transform.GetChild(0).eulerAngles = Vector3.zero;
             transform.GetChild(0).localScale = new Vector3(size.x * 0.7f, size.y * 0.7f, 1);
@@ -1015,7 +1016,7 @@ public class PlayerController : MonoBehaviour, IDamager
                 if (swordParticle != null)
                     swordParticle.Despawn();
 
-                if (gameManager.tileSize[StackBar.stackBarController.currentItem].z > 0.25f)
+                if (gameManager.tileSize[StackBar.stackBarController.CurrentItem].z > 0.25f)
                 {
                     yield return new WaitForSeconds(0.1f);
 

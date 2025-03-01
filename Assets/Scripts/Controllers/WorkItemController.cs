@@ -19,7 +19,7 @@ public class WorkItemController : MonoBehaviour {
 
     void Update()
     {
-        if (GameManager.gameManagerReference.InGame)
+        if (GameManager.gameManagerReference.InGame && GameManager.gameManagerReference.player.alive)
         {
             Vector3Int mousePos = Vector3Int.FloorToInt((Vector2)GameManager.gameManagerReference.mouseCurrentPosition + Vector2.one * 0.5f);
             int idx = mousePos.x * GameManager.gameManagerReference.WorldHeight + mousePos.y;
@@ -44,10 +44,10 @@ public class WorkItemController : MonoBehaviour {
                 {
                     if (GInput.GetMouseButton(0))
                     {
-                        Vector4 tileSize = GameManager.gameManagerReference.tileSize[StackBar.stackBarController.currentItem];
+                        Vector4 tileSize = GameManager.gameManagerReference.tileSize[StackBar.stackBarController.CurrentItem];
                         Vector3 offset = new Vector3(0.5f * (tileSize.x - 1) - tileSize.z, 0.5f * (tileSize.y - 1) - tileSize.w);
 
-                        if (!GameManager.gameManagerReference.building || (!Physics2D.OverlapBox(tile.transform.position + offset, tileSize, 0, entitiesMasks) || GameManager.gameManagerReference.TileCollisionType[StackBar.stackBarController.currentItem] != 1))
+                        if (!GameManager.gameManagerReference.building || (!Physics2D.OverlapBox(tile.transform.position + offset, tileSize, 0, entitiesMasks) || GameManager.gameManagerReference.TileCollisionType[StackBar.stackBarController.CurrentItem] != 1))
                             tile.transform.parent.GetComponent<ChunkController>().ClickedTile(tile);
                     }
                 }
@@ -90,7 +90,7 @@ public class WorkItemController : MonoBehaviour {
 
         if (tile == 125)
         {
-            if(StackBar.stackBarController.currentItem == 30)
+            if(StackBar.stackBarController.CurrentItem == 30)
             {
                 tileObj.transform.GetComponentInChildren<EnergyGenerator>().shock = true;
                 StackBar.LoseItem();

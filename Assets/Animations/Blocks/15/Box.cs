@@ -17,12 +17,12 @@ public class Box : MonoBehaviour
 
     private void Update()
     {
-        if (ManagingFunctions.InsideRanges(GameManager.gameManagerReference.mouseCurrentPosition, transform.position - (Vector3.one * 0.5f), transform.position + (Vector3.one * 0.5f)))
+        if (ManagingFunctions.InsideRanges(GameManager.gameManagerReference.mouseCurrentPosition, transform.position - (Vector3.one * 0.5f), transform.position + (Vector3.one * 0.5f)) && GameManager.gameManagerReference.player.alive && GameManager.gameManagerReference.InGame)
         {
             if (firstFrame && !GInput.GetMouseButton(0))
                 firstFrame = false;
 
-            if (GameManager.gameManagerReference.InGame && !StackBar.stackBarController.InventoryDeployed)
+            if (GameManager.gameManagerReference.InGame && !StackBar.stackBarController.InventoryDeployed && GameManager.gameManagerReference.player.alive)
                 if (targetMenu == null)
                 {
                     targetMenu = Instantiate(MenuController.menuController.boxMenu, MenuController.menuController.uiMenus).GetComponent<BoxMenu>();
@@ -65,26 +65,66 @@ public class Box : MonoBehaviour
     {
         List<string> items = transform.parent.GetComponent<TileProperties>().storedItems;
         bool condition = false;
-        condition = StackBar.stackBarController.currentItem == 0 && items.Count > 0;
+
+        int[] data = new int[0];
+
+        if (items.Count > 0)
+        {
+            data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
+
+            int tile = data[0];
+            int tileAmount = data[1];
+
+            if (tileAmount < GameManager.gameManagerReference.stackLimit[tile])
+                if (tile == StackBar.stackBarController.CurrentItem && StackBar.stackBarController.CurrentItem != 0)
+                {
+                    tileAmount += StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx];
+
+                    if(tileAmount > GameManager.gameManagerReference.stackLimit[tile])
+                    {
+                        StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx] = tileAmount - GameManager.gameManagerReference.stackLimit[tile];
+                        tileAmount = GameManager.gameManagerReference.stackLimit[tile];
+                    }
+                    else
+                    {
+                        StackBar.stackBarController.StackBarGrid[StackBar.stackBarController.idx] = 0;
+                        StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx] = 1;
+                    }
+
+                    items[items.Count - 1] = tile + ":" + tileAmount;
+                    StackBar.stackBarController.UpdateStacks();
+                    transform.parent.GetComponent<TileProperties>().CommitToChunk();
+
+                    if (targetMenu != null) targetMenu.RemoveLast();
+                    if (targetMenu != null) targetMenu.Add(tile, tileAmount, false);
+
+                    return;
+                }
+
+         
+        }
+
+        condition = StackBar.stackBarController.CurrentItem == 0 && items.Count > 0;
 
         if (!condition)
             if (items.Count > 0)
             {
-                int[] data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
+                if (data.Length == 0)
+                    data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
 
                 int tile = data[0];
                 int tileAmount = data[1];
 
 
-                condition = (tile == StackBar.stackBarController.currentItem) 
-                    && (StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx] < GameManager.gameManagerReference.stackLimit[StackBar.stackBarController.currentItem])
+                condition = (tile == StackBar.stackBarController.CurrentItem)
+                    && (StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx] < GameManager.gameManagerReference.stackLimit[StackBar.stackBarController.CurrentItem])
                     && (tileAmount < GameManager.gameManagerReference.stackLimit[tile]);
             }
-                
 
         if (condition)
         {
-            int[] data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
+            if (data.Length == 0)
+                data = ManagingFunctions.ConvertStringToIntArray(items[items.Count - 1].Split(':'));
 
             int tile = data[0];
             int tileAmount = data[1];
@@ -103,10 +143,10 @@ public class Box : MonoBehaviour
         }
         else
         {
-            if(StackBar.stackBarController.currentItem != 0 && items.Count < maxStacks)
+            if (StackBar.stackBarController.CurrentItem != 0 && items.Count < maxStacks)
             {
-                items.Add(StackBar.stackBarController.currentItem + ":" + StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx]);
-                if (targetMenu != null) targetMenu.Add(StackBar.stackBarController.currentItem, StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx], false);
+                items.Add(StackBar.stackBarController.CurrentItem + ":" + StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx]);
+                if (targetMenu != null) targetMenu.Add(StackBar.stackBarController.CurrentItem, StackBar.stackBarController.StackItemAmount[StackBar.stackBarController.idx], false);
                 StackBar.AsignNewStack(StackBar.stackBarController.idx, 0, 0);
             }
         }

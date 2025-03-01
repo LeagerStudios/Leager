@@ -211,7 +211,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                         else
                         {
                             TileGrid[e] = 0;
-                            if (StackBar.stackBarController.currentItem == 70)
+                            if (StackBar.stackBarController.CurrentItem == 70)
                                 StackBar.AddItem(70);
                             else if (!manager.isNetworkClient)
                                 ManagingFunctions.DropItem(70, TileObject[e].transform.position);
@@ -243,7 +243,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
                             else
                             {
                                 TileGrid[e] = 0;
-                                if (StackBar.stackBarController.currentItem == 88)
+                                if (StackBar.stackBarController.CurrentItem == 88)
                                     StackBar.AddItem(88);
                                 else if(!manager.isNetworkClient)
                                     ManagingFunctions.DropItem(88, TileObject[e].transform.position);

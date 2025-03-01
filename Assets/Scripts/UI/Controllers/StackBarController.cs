@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class StackBarController : MonoBehaviour {
 
     public int idx = 1;
-    public int currentItem = 0;
     public bool InventoryDeployed = false;
     public PackupMenuController planetaryLoading = null;
     public GameManager gameManager;
@@ -16,6 +15,11 @@ public class StackBarController : MonoBehaviour {
     [SerializeField] public int[] StackItemAmount = new int[9];
     RectTransform rectTransform;
     RectTransform parentRectTransform;
+
+    public int CurrentItem
+    {
+        get { return StackBarGrid[idx]; }
+    }
 
     void Start () {
         rectTransform = GetComponent<RectTransform>();
@@ -118,32 +122,31 @@ public class StackBarController : MonoBehaviour {
             {
                 { gameManager.canBuild = false; gameManager.canUseTool = false; gameManager.canAtack = false; gameManager.canEquip = false; gameManager.canConsume = false; }
 
-                currentItem = StackBarGrid[i - 1];
                 childTransform.localScale = new Vector3(1.3f, 1.3f, 1);
                 rectTransform.GetChild(0).gameObject.GetComponent<RectTransform>().position = childTransform.position;
-                if (gameManager.tileMainProperty[currentItem] == "placeable")
+                if (gameManager.tileMainProperty[CurrentItem] == "placeable")
                 {
                     gameManager.canBuild = true;
-                    gameManager.chosenBrush = currentItem;
+                    gameManager.chosenBrush = CurrentItem;
                 }
-                else if(gameManager.tileType[currentItem] == "tool")
+                else if(gameManager.tileType[CurrentItem] == "tool")
                 {
                     gameManager.canUseTool = true;
-                    gameManager.toolUsing = gameManager.tileMainProperty[currentItem];
-                    gameManager.toolUsingEfficency = gameManager.ToolEfficency[currentItem];
+                    gameManager.toolUsing = gameManager.tileMainProperty[CurrentItem];
+                    gameManager.toolUsingEfficency = gameManager.ToolEfficency[CurrentItem];
                 }
-                else if (gameManager.tileType[currentItem] == "arm")
+                else if (gameManager.tileType[CurrentItem] == "arm")
                 {
                     gameManager.canAtack = true;
-                    gameManager.armUsing = gameManager.tileMainProperty[currentItem];
-                    gameManager.armUsingDamageDeal = gameManager.ToolEfficency[currentItem];
+                    gameManager.armUsing = gameManager.tileMainProperty[CurrentItem];
+                    gameManager.armUsingDamageDeal = gameManager.ToolEfficency[CurrentItem];
                 }
-                else if(gameManager.tileType[currentItem] == "equip")
+                else if(gameManager.tileType[CurrentItem] == "equip")
                 {
                     gameManager.canEquip = true;
-                    gameManager.equipType = gameManager.tileMainProperty[currentItem];
+                    gameManager.equipType = gameManager.tileMainProperty[CurrentItem];
                 }
-                else if (gameManager.tileType[currentItem] == "item" && gameManager.tileMainProperty[currentItem] == "usable")
+                else if (gameManager.tileType[CurrentItem] == "item" && gameManager.tileMainProperty[CurrentItem] == "usable")
                 {
                     gameManager.canConsume = true;
                 }

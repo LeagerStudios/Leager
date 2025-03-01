@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class WorldPanelController : MonoBehaviour {
 
@@ -59,10 +60,10 @@ public class WorldPanelController : MonoBehaviour {
         if (newWorldName.GetComponent<InputField>().text == "" ||
             ManagingFunctions.ConvertStringToIntArray(saveObject.LoadData("newWorldDifficulty"))[0] < 1 ||
             GameObject.Find("Transition").GetComponent<Animator>().GetBool("Open") == false ||
-            listOfLoadedWorlds.Contains(newWorldName.GetComponent<InputField>().text) || !CheckWorldChars(newWorldName.GetComponent<InputField>().text))
+            listOfLoadedWorlds.Contains(newWorldName.GetComponent<InputField>().text, System.StringComparer.OrdinalIgnoreCase) || !CheckWorldChars(newWorldName.GetComponent<InputField>().text))
         {
             newWorldButton.GetComponent<Button>().interactable = false;
-            if (listOfLoadedWorlds.Contains(newWorldName.GetComponent<InputField>().text))
+            if (listOfLoadedWorlds.Contains(newWorldName.GetComponent<InputField>().text, System.StringComparer.OrdinalIgnoreCase))
             {
                 AdvertText1.SetActive(true);
             }

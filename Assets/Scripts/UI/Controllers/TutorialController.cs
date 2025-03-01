@@ -58,7 +58,7 @@ public class TutorialController : MonoBehaviour
         bool canExit = false;
         while(!canExit)
         {
-            if(StackBar.stackBarController.currentItem == 24)
+            if(StackBar.stackBarController.CurrentItem == 24)
             {
                 if (GameManager.gameManagerReference.usingTool)
                 {
