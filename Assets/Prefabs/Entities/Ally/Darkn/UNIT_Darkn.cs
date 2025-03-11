@@ -17,6 +17,7 @@ public class UNIT_Darkn : UnitBase, IDamager
     UnitTool control;
     float HpMax = 32;
     float HP = 32;
+    public float maxVelocity;
 
     public override int Hp
     {
@@ -66,7 +67,7 @@ public class UNIT_Darkn : UnitBase, IDamager
 
     public override string[] GenerateArgs()
     {
-        return null;
+        return new string[] { maxVelocity + "" };
     }
 
     void Start()
@@ -76,21 +77,20 @@ public class UNIT_Darkn : UnitBase, IDamager
 
     public override void AiFrame()
     {
+        if(!control)
+        targetPosition = GameManager.gameManagerReference.player.transform.position + Vector3.up * (maxVelocity / 5 - 3);
+
         if (Vector2.Distance(targetPosition, transform.position) > 0.5)
-            targetVelocity = Vector2.ClampMagnitude((targetPosition - (Vector2)transform.position) * 20, 30);
+            targetVelocity = Vector2.ClampMagnitude((targetPosition - (Vector2)transform.position) * 20, maxVelocity);
         else
             targetVelocity = Vector2.zero;
         rb2d.velocity = Vector2.Lerp(rb2d.velocity, targetVelocity, 0.8f * Time.deltaTime);
         transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(transform.eulerAngles.z, ManagingFunctions.PointToPivotUp(Vector2.zero, rb2d.velocity), 0.3f));
 
-        if (rb2d.velocity.magnitude > 0.1f && fireZone.transform.childCount == 0)
+        if (fireZone.transform.childCount == 0)
         {
             Instantiate(fireParticle, fireZone.transform);
         }
-        else if (rb2d.velocity.magnitude < 0.1f)
-            if (fireZone.transform.childCount > 0)
-                if (!fireZone.transform.GetChild(0).GetComponent<CoreFire>().endOnNext)
-                    fireZone.transform.GetChild(0).GetComponent<CoreFire>().endOnNext = true;
     }
 
 
@@ -103,11 +103,13 @@ public class UNIT_Darkn : UnitBase, IDamager
 
         if(args != null)
         {
-
+            Debug.Log(args[0]);
+            maxVelocity = System.Convert.ToSingle(args[0]);
         }
         else
         {
             targetPosition = transform.position;
+            maxVelocity = Random.Range(25f, 35f);
         }
 
         return this;

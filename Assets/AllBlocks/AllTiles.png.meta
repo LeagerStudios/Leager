@@ -2,31 +2,31 @@ fileFormatVersion: 2
 guid: c3425cfd2f16cf64687196d88c09b5e6
 TextureImporter:
   fileIDToRecycleName:
-    21300000: AllTiles_0
-    21300002: AllTiles_1
-    21300004: AllTiles_2
-    21300006: AllTiles_3
-    21300008: AllTiles_4
-    21300010: AllTiles_5
-    21300012: AllTiles_6
-    21300014: AllTiles_7
-    21300016: AllTiles_8
-    21300018: AllTiles_9
-    21300020: AllTiles_10
-    21300022: AllTiles_11
-    21300024: AllTiles_12
-    21300026: AllTiles_13
-    21300028: AllTiles_14
-    21300030: AllTiles_15
-    21300032: AllTiles_16
-    21300034: AllTiles_17
-    21300036: AllTiles_18
-    21300038: AllTiles_19
-    21300040: AllTiles_20
-    21300042: AllTiles_21
-    21300044: AllTiles_22
-    21300046: AllTiles_23
-    21300048: AllTiles_24
+    21300000: 1
+    21300002: 2
+    21300004: 3
+    21300006: 4
+    21300008: 5
+    21300010: 6
+    21300012: 7
+    21300014: 8
+    21300016: 9
+    21300018: 10
+    21300020: 11
+    21300022: 12
+    21300024: 13
+    21300026: 14
+    21300028: 15
+    21300030: 16
+    21300032: 17
+    21300034: 18
+    21300036: 19
+    21300038: 20
+    21300040: 21
+    21300042: 22
+    21300044: 23
+    21300046: 24
+    21300048: 25
     21300050: AllTiles_25
     21300052: AllTiles_26
     21300054: AllTiles_27
@@ -97,11 +97,11 @@ TextureImporter:
     21300184: AllTiles_92
     21300186: AllTiles_93
     21300188: AllTiles_94
-    21300190: AllTiles_95
-    21300192: AllTiles_96
-    21300194: AllTiles_97
-    21300196: AllTiles_98
-    21300198: AllTiles_99
+    21300190: 96
+    21300192: 97
+    21300194: 98
+    21300196: 99
+    21300198: 100
     21300200: AllTiles_100
     21300202: AllTiles_101
     21300204: AllTiles_102
@@ -225,7 +225,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AllTiles_0
+      name: 1
       rect:
         serializedVersion: 2
         x: 0
@@ -245,7 +245,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_1
+      name: 2
       rect:
         serializedVersion: 2
         x: 33
@@ -265,7 +265,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_2
+      name: 3
       rect:
         serializedVersion: 2
         x: 66
@@ -285,7 +285,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_3
+      name: 4
       rect:
         serializedVersion: 2
         x: 99
@@ -305,7 +305,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_4
+      name: 5
       rect:
         serializedVersion: 2
         x: 132
@@ -325,7 +325,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_5
+      name: 6
       rect:
         serializedVersion: 2
         x: 165
@@ -345,7 +345,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_6
+      name: 7
       rect:
         serializedVersion: 2
         x: 198
@@ -365,7 +365,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_7
+      name: 8
       rect:
         serializedVersion: 2
         x: 231
@@ -385,7 +385,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_8
+      name: 9
       rect:
         serializedVersion: 2
         x: 264
@@ -405,7 +405,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_9
+      name: 10
       rect:
         serializedVersion: 2
         x: 297
@@ -425,7 +425,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_10
+      name: 11
       rect:
         serializedVersion: 2
         x: 330
@@ -445,7 +445,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_11
+      name: 12
       rect:
         serializedVersion: 2
         x: 363
@@ -465,7 +465,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_12
+      name: 13
       rect:
         serializedVersion: 2
         x: 396
@@ -485,7 +485,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_13
+      name: 14
       rect:
         serializedVersion: 2
         x: 429
@@ -505,7 +505,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_14
+      name: 15
       rect:
         serializedVersion: 2
         x: 462
@@ -525,7 +525,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_15
+      name: 16
       rect:
         serializedVersion: 2
         x: 495
@@ -545,7 +545,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_16
+      name: 17
       rect:
         serializedVersion: 2
         x: 528
@@ -565,7 +565,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_17
+      name: 18
       rect:
         serializedVersion: 2
         x: 561
@@ -585,7 +585,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_18
+      name: 19
       rect:
         serializedVersion: 2
         x: 594
@@ -605,7 +605,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_19
+      name: 20
       rect:
         serializedVersion: 2
         x: 627
@@ -625,7 +625,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_20
+      name: 21
       rect:
         serializedVersion: 2
         x: 660
@@ -645,7 +645,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_21
+      name: 22
       rect:
         serializedVersion: 2
         x: 693
@@ -665,10 +665,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_22
+      name: 23
       rect:
         serializedVersion: 2
-        x: 726
+        x: 725
         y: 165
         width: 32
         height: 32
@@ -685,7 +685,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_23
+      name: 24
       rect:
         serializedVersion: 2
         x: 759
@@ -705,7 +705,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_24
+      name: 25
       rect:
         serializedVersion: 2
         x: 792
@@ -2125,7 +2125,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_95
+      name: 96
       rect:
         serializedVersion: 2
         x: 660
@@ -2145,7 +2145,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_96
+      name: 97
       rect:
         serializedVersion: 2
         x: 693
@@ -2165,7 +2165,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_97
+      name: 98
       rect:
         serializedVersion: 2
         x: 726
@@ -2185,7 +2185,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_98
+      name: 99
       rect:
         serializedVersion: 2
         x: 759
@@ -2205,7 +2205,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AllTiles_99
+      name: 100
       rect:
         serializedVersion: 2
         x: 792
@@ -2813,7 +2813,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

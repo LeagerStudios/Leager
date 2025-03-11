@@ -348,12 +348,14 @@ public class GameManager : MonoBehaviour
 
             while (dayLuminosity > 1f)
             {
+                Debug.Log("a" + dayLuminosity);
                 PlanetMenuController.planetMenu.Simulate(0.25f, false);
                 SetSkybox();
             }
 
             while (dayLuminosity < 1f)
             {
+                Debug.Log("b" + dayLuminosity);
                 PlanetMenuController.planetMenu.Simulate(0.25f, false);
                 SetSkybox();
             }
@@ -364,7 +366,7 @@ public class GameManager : MonoBehaviour
             player.PutMyselfInATragicTerminalColisionCourse();
         }
         else
-            player.Respawn(respawnPosition.x, respawnPosition.y);
+            player.Respawn(respawnPosition.x, respawnPosition.y + 1);
 
         inGame = true;
         playerFocused = true;
@@ -376,6 +378,16 @@ public class GameManager : MonoBehaviour
 
         if (!isNetworkClient)
             LoadEntities();
+
+        try
+        {
+            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("connectionViaAntenna");
+            StaticController.self.Trigger(1.5f, false);
+        }
+        catch
+        {
+
+        }
     }
 
 
@@ -743,28 +755,38 @@ public class GameManager : MonoBehaviour
     {
         try
         {
-            string resources = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("resources")[0];
+            string[] data = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("resources");
+            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("resources");
 
-            foreach (string resource in resources.Split(';'))
+            string resources = data[0];
+            Debug.Log(resources);
+
+            if(resources != "null")
             {
-                if (resource != "")
+                foreach (string resource in resources.Split(';'))
                 {
-                    int tile = System.Convert.ToInt32(resource.Split(':')[0]);
-                    int tileAmount = System.Convert.ToInt32(resource.Split(':')[1]);
-
-                    for (int e = 0; e < tileAmount; e++)
+                    if (resource != "")
                     {
-                        if (!StackBar.AddItemInv(tile))
+                        int tile = System.Convert.ToInt32(resource.Split(':')[0]);
+                        int tileAmount = System.Convert.ToInt32(resource.Split(':')[1]);
+
+                        for (int e = 0; e < tileAmount; e++)
                         {
-                            ManagingFunctions.DropItem(tile, player.transform.position);
+                            if (!StackBar.AddItemInv(tile))
+                            {
+                                ManagingFunctions.DropItem(tile, player.transform.position);
+                            }
                         }
                     }
                 }
             }
+
+            CoreReentryController.self.StartAnimation(System.Convert.ToInt32(data[1]));
         }
-        catch
+        catch(System.Exception ex)
         {
             Debug.Log("==DIDNT IMPORT RESOURCES==");
+            Destroy(CoreReentryController.self.gameObject);
         }
     }
 
@@ -1037,9 +1059,7 @@ public class GameManager : MonoBehaviour
                     {
                         string[] args = entity.entityBase.GenerateArgs();
 
-                        if (args == null)
-                            toEncrypt.Add(string.Join("#", new string[] { "" }));
-                        else
+                        if (args != null)
                             toEncrypt.Add(string.Join("#", entity.entityBase.GenerateArgs()));
                     }
 

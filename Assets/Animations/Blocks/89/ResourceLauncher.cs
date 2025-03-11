@@ -76,13 +76,13 @@ public class ResourceLauncher : MonoBehaviour, INodeEndPoint
             if(GameManager.gameManagerReference.InGame)
             if(lifetime > 0f)
             {
-                transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.one, 0.3f);
-                lifetime -= Time.deltaTime;
+                    transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.one, 0.3f);
+                    lifetime -= Time.deltaTime;
                 powered = true;
             }
             else
             {
-                transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, 0.3f);
+                transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.one, 0.3f);
                 powered = false;
             }
         }
@@ -286,6 +286,16 @@ public class ResourceLauncher : MonoBehaviour, INodeEndPoint
                 t += Time.deltaTime;
                 yield return new WaitForSeconds(0.016f);
             }
+
+            yield return new WaitForSeconds(0.5f);
+            StaticController.self.Trigger(99, false);
+
+            while (StaticController.self.staticAudio.volume < 0.5f)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            yield return new WaitForSeconds(0.5f);
         }
 
         animationPlayed = true;

@@ -2,7 +2,7 @@ fileFormatVersion: 2
 guid: 32a5924ecf1dee94e856ff59b2bb378b
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Air_0
+    21300000: 0
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -96,7 +96,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Air_0
+      name: 0
       rect:
         serializedVersion: 2
         x: 9
@@ -118,7 +118,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 40faeea42f3a0144997a821fbc62242b
     vertices: []
     indices: 
     edges: []

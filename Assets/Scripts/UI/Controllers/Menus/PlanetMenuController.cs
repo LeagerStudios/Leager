@@ -293,7 +293,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
                 resources = resources + Items[i];
             }
 
-        MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher, GameManager.gameManagerReference.tiles[subPanel.GetComponent<PackupMenuController>().currentCore]);
+        MenuController.menuController.PlanetaryTravel(planets[planetFocused], resources, targetResourceLauncher, GameManager.gameManagerReference.tiles[subPanel.GetComponent<PackupMenuController>().currentCore], subPanel.GetComponent<PackupMenuController>().currentCore);
         subPanel.GetComponent<PackupMenuController>().currentCore = 0;
         Items = new List<string>();
 

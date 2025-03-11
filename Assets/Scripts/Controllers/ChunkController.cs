@@ -1175,7 +1175,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
         {
             if (rendering)
             {
-                if(Mathf.Abs(GameManager.gameManagerReference.player.transform.position.x - transform.position.x) > LightController.lightController.lightDist)
+                if(Mathf.Abs(GameManager.gameManagerReference.player.mainCamera.transform.position.x - transform.position.x) > LightController.lightController.lightDist)
                 {
                     SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
 
@@ -1188,7 +1188,7 @@ public class ChunkController : MonoBehaviour, ITimerCall
             }
             else
             {
-                if (Mathf.Abs(GameManager.gameManagerReference.player.transform.position.x - transform.position.x) < LightController.lightController.lightDist)
+                if (Mathf.Abs(GameManager.gameManagerReference.player.mainCamera.transform.position.x - transform.position.x) < LightController.lightController.lightDist)
                 {
                     SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
 
@@ -1301,23 +1301,5 @@ public class ChunkController : MonoBehaviour, ITimerCall
         }
 
         UpdateChunk();
-    }
-
-    private void OnBecameVisible()
-    {
-        print("kuak2");
-        for (int i = 0; i < TileObject.Length; i++)
-        {
-            TileObject[i].GetComponent<SpriteRenderer>().enabled = true;
-        }
-    }
-
-    private void OnBecameInvisible()
-    {
-        print("kuak1");
-        for (int i = 0; i < TileObject.Length; i++)
-        {
-            TileObject[i].GetComponent<SpriteRenderer>().enabled = false;
-        }
     }
 }

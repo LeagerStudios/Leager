@@ -51,22 +51,26 @@ public class InventoryArrowController : MonoBehaviour
                         tilePortingAmount = InventoryBar.inventoryBarController.InventoryItemAmount[idxPos - 9];
                     }
 
-                    string returnn = StackBar.stackBarController.planetaryLoading.AddToPackup(tilePorting, tilePortingAmount);
-                    string[] decomposed = returnn.Split(':');
-                    int finalItem = System.Convert.ToInt32(decomposed[0]);
-                    int finalAmount = System.Convert.ToInt32(decomposed[1]);
-
-                    if (finalAmount == 0)
-                        finalItem = 0;
-
-                    if (idxPos < 9)
+                    if(tilePorting != 0)
                     {
-                        StackBar.AsignNewStack(idxPos, finalItem, finalAmount);
+                        string returnn = StackBar.stackBarController.planetaryLoading.AddToPackup(tilePorting, tilePortingAmount);
+                        string[] decomposed = returnn.Split(':');
+                        int finalItem = System.Convert.ToInt32(decomposed[0]);
+                        int finalAmount = System.Convert.ToInt32(decomposed[1]);
+
+                        if (finalAmount == 0)
+                            finalItem = 0;
+
+                        if (idxPos < 9)
+                        {
+                            StackBar.AsignNewStack(idxPos, finalItem, finalAmount);
+                        }
+                        else
+                        {
+                            InventoryBar.AsignNewStack(idxPos - 9, finalItem, finalAmount);
+                        }
                     }
-                    else
-                    {
-                        InventoryBar.AsignNewStack(idxPos - 9, finalItem, finalAmount);
-                    }
+                    
                     tilePorting = -1;
                     tilePortingAmount = 0;
                 }

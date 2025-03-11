@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 
+
 public class MenuController : MonoBehaviour {
 
     public static MenuController menuController;
@@ -345,9 +346,9 @@ public class MenuController : MonoBehaviour {
         }
     }
 
-    public void PlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite core)
+    public void PlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite coreSprite, int core)
     {
-        travelCoroutine = StartCoroutine(IEPlanetaryTravel(planet, resources, from, core));
+        travelCoroutine = StartCoroutine(IEPlanetaryTravel(planet, resources, from, coreSprite, core));
     }
 
     public void CancelTravel()
@@ -356,15 +357,16 @@ public class MenuController : MonoBehaviour {
             StopCoroutine(travelCoroutine);
     }
 
-    public IEnumerator IEPlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite core)
+    public IEnumerator IEPlanetaryTravel(PlanetData planet, string resources, ResourceLauncher from, Sprite coreSprite, int core)
     {
         yield return new WaitForSeconds(1);
         Debug.Log("==GOING TO LOCATION: " + planet.planetName + " WITH " + resources + " RESOURCES");
         string state = "null";
 
-        if ((DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName) || planet.planetName == "Korenz") && core == gameManager.tiles[0])
+        if ((DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName) || planet.planetName == "Korenz") && coreSprite == gameManager.tiles[0])
         {
             state = "antenna";
+            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "jose luis" }, "connectionViaAntenna");
         }
         else
         {
@@ -380,14 +382,13 @@ public class MenuController : MonoBehaviour {
 
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { state }, "worldEnterAnimation");
 
-        from.TriggerAnimation(state, core);
+        from.TriggerAnimation(state, coreSprite);
 
         while (!from.animationPlayed)
         {
             yield return new WaitForSeconds(0.016f);
         }
 
-        LoadingPlanetScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
 
         GameManager.gameManagerReference.SaveGameData(false);
@@ -417,33 +418,41 @@ public class MenuController : MonoBehaviour {
             }
             catch { Debug.Log("==SKIPPED DELETING RESOURCES FROM SAVEOBJECT=="); }
 
-            if(resources != "null")
-            {
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources }, "resources");
-            }
-
+            if (state == "packagelaunch")
+                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources, core + "" }, "resources");
 
             string[] loadType = new string[] { "existentWorld" };
             string[] worldLoadName = new string[] { gameManager.worldRootName };
             GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(loadType, "worldLoadType");
             GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(worldLoadName, "worldName");
 
+            while (gameManager.isSavingData)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+
             SceneManager.LoadScene("Game");
         }
         else
         {
+            while (gameManager.isSavingData)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
             if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName))
             {
-                LoadExistentPlanet(planet, resources);
+                LoadExistentPlanet(planet, resources, core, state);
             }
             else
             {
-                LoadNewPlanet(planet, resources);
+                LoadNewPlanet(planet, resources, core, state);
             }
         }
     }
 
-    void LoadNewPlanet(PlanetData planet, string resources)
+    void LoadNewPlanet(PlanetData planet, string resources, int core, string state)
     {
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldName");
         try
@@ -466,10 +475,8 @@ public class MenuController : MonoBehaviour {
         }
         catch { Debug.Log("==SKIPPED DELETING RESOURCES FROM SAVEOBJECT=="); }
 
-        if (resources != "null")
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources }, "resources");
-        }
+        if (state == "packagelaunch")
+            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources, core + "" }, "resources");
 
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldLoadType");
 
@@ -481,11 +488,10 @@ public class MenuController : MonoBehaviour {
 
         DataSaver.CreateFolder(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName);
 
-
         SceneManager.LoadScene("Game");
     }
 
-    void LoadExistentPlanet(PlanetData planet, string resources)
+    void LoadExistentPlanet(PlanetData planet, string resources, int core, string state)
     {
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldName");
         try
@@ -508,10 +514,8 @@ public class MenuController : MonoBehaviour {
         }
         catch { Debug.Log("==SKIPPED DELETING RESOURCES FROM SAVEOBJECT=="); }
 
-        if (resources != "null")
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources }, "resources");
-        }
+        if (state == "packagelaunch")
+            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources, core + "" }, "resources");
 
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldLoadType");
 
@@ -519,6 +523,7 @@ public class MenuController : MonoBehaviour {
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.ColorToHex() }, "planetColor");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.planetName }, "planetName");
         GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "existingPlanet" }, "worldLoadType");
+
 
 
         SceneManager.LoadScene("Game");
@@ -540,7 +545,7 @@ public class MenuController : MonoBehaviour {
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", false);
         yield return new WaitForSeconds(1);
         Vector2 respawnPos = gameManager.RespawnPosition();
-        gameManager.player.Respawn(respawnPos.x, respawnPos.y);
+        gameManager.player.Respawn(respawnPos.x, respawnPos.y + 1);
         gameManager.UpdateChunksActive();
         yield return new WaitForSeconds(Mathf.Clamp(secs - 1, 0, 100));
         deathScreenController.ResetScreen();
@@ -574,6 +579,12 @@ public class MenuController : MonoBehaviour {
             Client.Disconnect();
             Destroy(NetworkController.networkController.gameObject);
         }
+
+        while (gameManager.isSavingData)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
         Debug.Log("===EXITED TO MAIN MENU===");
         Destroy(GameObject.Find("SaveObject"));
         SceneManager.LoadScene("MainMenu");
