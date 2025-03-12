@@ -783,7 +783,7 @@ public class GameManager : MonoBehaviour
 
             CoreReentryController.self.StartAnimation(System.Convert.ToInt32(data[1]));
         }
-        catch(System.Exception ex)
+        catch
         {
             Debug.Log("==DIDNT IMPORT RESOURCES==");
             Destroy(CoreReentryController.self.gameObject);

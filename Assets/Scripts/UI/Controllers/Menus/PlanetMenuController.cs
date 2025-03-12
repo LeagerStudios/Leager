@@ -76,7 +76,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
 
             foreach(PlanetData planet in planets)
             {
-                planet.oTime = Random.Range(0, planet.apoapsis * planet.periapsis);
+                planet.oTime = Random.Range(0, planet.Apoapsis * planet.Periapsis);
                 planet.rTime = Random.Range(0, planet.revolutionTime);
             }
 
@@ -94,10 +94,12 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
             int idx = planets.IndexOf(planet);
             newPlanet.GetChild(1).GetComponent<Button>().onClick.AddListener(() => FocusPlanet(idx));
 
-            planet.CalculateOrbitRender(75);
             planet.ApplyToButton(newPlanet);
 
-            if(planet.planetName == "Sun")
+            planet.Recalculate();
+            planet.CalculateOrbitRender(75);
+
+            if (planet.planetName == "Sun")
             {
                 newPlanet.GetChild(1).GetChild(1).GetComponent<Image>().sprite = starSprite;
             }
@@ -332,7 +334,7 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
     }
 }
 
-[JsonObject(IsReference =true)]
+[JsonObject(IsReference = true)]
 [System.Serializable]
 public class PlanetData
 {
@@ -341,16 +343,45 @@ public class PlanetData
     public SerializableColor planetColor = new SerializableColor();
     public int chunkSize;
     public string wordSize;
-    public float apoapsis = Random.Range(3f, 6f);
-    public float periapsis = Random.Range(1f, 3f);
+    [SerializeField] private float apoapsis = Random.Range(3f, 6f);
+    [SerializeField] private float periapsis = Random.Range(1f, 3f);
     public float rotation = 0;
     public float revolutionTime = 4f;
     public double oTime;
     public double rTime;
     public bool canGo = true;
     public PlanetData parent;
+
+    public float orbitalPeriod;
     [System.NonSerialized()] public RectTransform physicalPlanet;
     [System.NonSerialized()] public Vector2[] puntos_de_orbita_dos_puntos_D;
+
+    public float Apoapsis
+    {
+        get { return apoapsis; }
+        set 
+        {
+            apoapsis = value;
+            Recalculate();
+            CalculateOrbitRender(75);
+        }
+    }
+
+    public float Periapsis
+    {
+        get { return periapsis; }
+        set
+        {
+            periapsis = value;
+            Recalculate();
+            CalculateOrbitRender(75);
+        }
+    }
+
+    public float semiMajorAxis = 0;
+    public float eccentricity = 0;
+    public float meanMotion = 0;
+
 
     public PlanetData(string name, Color color, int sizeInChunks, float apo, float per, float rot = 0, float rev = 4f)
     {
@@ -397,44 +428,21 @@ public class PlanetData
     {
         return ColorUtility.ToHtmlStringRGB(planetColor.GetColor());
     }
-             
+
     public void Step(float time)
     {
-        oTime += time;
-        rTime += time;
-        //rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
-
-        if (oTime > apoapsis * periapsis)
-            oTime = oTime % (apoapsis * periapsis);
-
-        if (rTime > revolutionTime)
-            rTime = rTime % revolutionTime;
-    }
-
-    public void CalculateOrbitRender(int points)
-    {
-        float timePerRevolution = apoapsis * periapsis;
-
-
-        if (timePerRevolution > 0)
+        if (orbitalPeriod > 0)
         {
-            List<Vector2> pointList = new List<Vector2>();
+            oTime += time;
+            rTime += time;
+            //rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
 
-            for (int i = 0; i < points; i++)
-            {
-                float time = (timePerRevolution / points) * i;
-                pointList.Add(FindPoint(time));
-            }
-            pointList.Add(FindPoint(0));
-            pointList.Add(FindPoint(timePerRevolution / points));
+            if (oTime > orbitalPeriod)
+                oTime = oTime % orbitalPeriod;
 
-            puntos_de_orbita_dos_puntos_D = pointList.ToArray();
+            if (rTime > revolutionTime)
+                rTime = rTime % revolutionTime;
         }
-        else
-        {
-            puntos_de_orbita_dos_puntos_D = new Vector2[0];
-        }
-       
     }
 
     public void ApplyToButton(RectTransform rectTransform)
@@ -454,6 +462,50 @@ public class PlanetData
 
     }
 
+    public void CalculateOrbitRender(int points)
+    {
+        if (apoapsis > 0 && periapsis > 0)
+        {
+            List<Vector2> pointList = new List<Vector2>();
+
+            for (int i = 0; i < points; i++)
+            {
+                float time = (orbitalPeriod / points) * i;
+                pointList.Add(FindPoint(time));
+            }
+
+            pointList.Add(FindPoint(0));
+            pointList.Add(FindPoint(orbitalPeriod / points));
+
+            puntos_de_orbita_dos_puntos_D = pointList.ToArray();
+        }
+        else
+        {
+            puntos_de_orbita_dos_puntos_D = new Vector2[0];
+        }
+
+    }
+
+    public void Recalculate()
+    {
+        if (apoapsis > 0 && periapsis > 0)
+        {
+            semiMajorAxis = (apoapsis + periapsis) / 2;
+            eccentricity = (apoapsis - periapsis) / (apoapsis + periapsis);
+            meanMotion = Mathf.Sqrt(1 / (semiMajorAxis * semiMajorAxis * semiMajorAxis));
+
+            orbitalPeriod = Mathf.Sqrt(Mathf.PI * Mathf.PI * 4 * Mathf.Pow(semiMajorAxis, 3));
+        }
+        else
+        {
+            semiMajorAxis = 0;
+            eccentricity = 0;
+            meanMotion = 0;
+
+            orbitalPeriod = 0;
+        }
+    }
+
     public Vector2 FindPoint(double time)
     {
         if (apoapsis == 0 && periapsis == 0)
@@ -462,18 +514,18 @@ public class PlanetData
         }
         else
         {
-            Vector2 point = new Vector2();
-            float timePerRevolution = apoapsis * periapsis;
-            double rotVal = time % timePerRevolution;
-            rotVal /= timePerRevolution;
+            double meanAnomaly = meanMotion * time;
 
-            float rotationValue = (float)rotVal;
-            float orbit = periapsis + apoapsis;
+            double eccentricAnomaly = meanAnomaly;
+            for (int i = 0; i < 5; i++)
+            {
+                eccentricAnomaly = meanAnomaly + eccentricity * Mathf.Sin((float)eccentricAnomaly);
+            }
 
-            float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
+            float x = semiMajorAxis * (Mathf.Cos((float)eccentricAnomaly) - eccentricity);
+            float y = semiMajorAxis * Mathf.Sqrt(1 - eccentricity * eccentricity) * -Mathf.Sin((float)eccentricAnomaly);
 
-
-            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI * -2) * halfOrbit, Mathf.Cos(rotationValue * Mathf.PI * 2) * (orbit / 2) + ((apoapsis - periapsis) / 2));
+            Vector2 point = new Vector2(-y, -x);
 
             if (rotation != 0)
             {
