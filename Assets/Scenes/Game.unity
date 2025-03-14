@@ -17191,9 +17191,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sounds:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: e4ea25cda1e0c5e48810f576eaa065b4, type: 3}
   - {fileID: 8300000, guid: f2026bc767da975479f53693611ccfaf, type: 3}
   - {fileID: 8300000, guid: 280ba9ac26d405d4cb51eb050db7d3de, type: 3}
+  - {fileID: 8300000, guid: 11e84e835b1312a4f91e62468e0ce7ac, type: 3}
+  - {fileID: 8300000, guid: 2e09a781eb2be5b46954ae9cee2c1c5c, type: 3}
   Themes:
   - {fileID: 0}
 --- !u!114 &864
@@ -23276,11 +23278,15 @@ MonoBehaviour:
   tileLayer:
     serializedVersion: 2
     m_Bits: 395008
+  interactableTilesLayer:
+    serializedVersion: 2
+    m_Bits: 132352
   nodeLayer:
     serializedVersion: 2
     m_Bits: 4194304
   deathScreenController: {fileID: 777}
   animations: {fileID: 0}
+  rb2D: {fileID: 0}
   lastVelocity: {x: 0, y: 0}
   entityScript: {fileID: 0}
   mainCamera: {fileID: 0}
@@ -25968,6 +25974,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ae9cafc1cf47a4b884adba21f93cd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionHeight: 10
+  explosionPrefab: {fileID: 1564098840317786, guid: abd96f05004ee9e41a2e45f84bb9b52c,
+    type: 3}
 --- !u!4 &138957143
 Transform:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamager
@@ -11,12 +12,13 @@ public class PlayerController : MonoBehaviour, IDamager
     [SerializeField] float JumpForce;
     [SerializeField] HealthBarController healthBar;
     [SerializeField] GameObject particle;
-    [SerializeField] LayerMask solidTiles;
-    [SerializeField] LayerMask tileLayer;
+    [SerializeField] public LayerMask solidTiles;
+    [SerializeField] public LayerMask tileLayer;
+    [SerializeField] public LayerMask interactableTilesLayer;
     [SerializeField] LayerMask nodeLayer;
     [SerializeField] public DeathScreenController deathScreenController;
     public Animator animations;
-    Rigidbody2D rb2D;
+    public Rigidbody2D rb2D;
     public Vector2 lastVelocity;
     public EntityCommonScript entityScript;
     public CameraController mainCamera;
@@ -97,7 +99,7 @@ public class PlayerController : MonoBehaviour, IDamager
             {
                 if (alive && gameManager.InGame)
                 {
-                    transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), 1, 1);
+                    transform.GetChild(2).localScale = new Vector3(ManagingFunctions.ParseBoolToInt(!GetComponent<SpriteRenderer>().flipX), transform.GetChild(2).localScale.y, 1);
                     if (onControl && !reentry)
                         PlayerControl();
                     else if (reentry)
@@ -211,10 +213,8 @@ public class PlayerController : MonoBehaviour, IDamager
         healthBar.SetMaxHealth(HP);
         healthBar.SetHealth(HP);
         animations.SetBool("killed", false);
-        GetComponent<SpriteRenderer>().enabled = true;
+        Show = true;
         entityScript = GetComponent<EntityCommonScript>();
-        transform.GetChild(1).localScale = new Vector3(1, 1, 1);
-        transform.GetChild(2).localScale = new Vector3(1, 1, 1);
         rb2D.bodyType = RigidbodyType2D.Dynamic;
         entityScript.entityStates = new List<EntityState>();
         transform.position = new Vector2(x, y);
@@ -232,6 +232,25 @@ public class PlayerController : MonoBehaviour, IDamager
             }
 
         spawned = true;
+    }
+
+    public bool Show
+    {
+        set
+        {
+            if (value)
+            {
+                GetComponent<SpriteRenderer>().enabled = true;
+                transform.GetChild(1).localScale = new Vector3(1, 1, 1);
+                transform.GetChild(2).localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().enabled = false;
+                transform.GetChild(1).localScale = new Vector3(0, 0, 0);
+                transform.GetChild(2).localScale = new Vector3(0, 0, 0);
+            }
+        }
     }
 
     void Reentry()
@@ -775,7 +794,6 @@ public class PlayerController : MonoBehaviour, IDamager
             if (hpLost > 0)
             {
                 hpLost *= (int)gameManager.gameDifficulty;
-                soundController.PlaySfxSound(SoundName.damage);
 
                 if (!penetrate)
                 {
@@ -877,12 +895,20 @@ public class PlayerController : MonoBehaviour, IDamager
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(reentry)
-        if(collision.gameObject.layer == 10)
-        {
-            rb2D.angularVelocity = rb2D.angularVelocity * (1 - Time.deltaTime);
-            rb2D.velocity = new Vector2(Mathf.Clamp(lastVelocity.x * 2, -20f, 20f), 5);
-        }
+        if (reentry)
+            if (collision.gameObject.layer == 10)
+            {
+                rb2D.velocity = rb2D.velocity.normalized;
+                rb2D.angularVelocity = 0;
+                gameManager.soundController.PlaySfxSound(explosion, 0.5f);
+                gameManager.TileExplosionAt((int)transform.position.x, (int)transform.position.y + 2, 4, 10, true);
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity).transform.localScale = new Vector3(6f, 6f, 1f);
+
+                reentry = false;
+                falling = 0f;
+                rb2D.freezeRotation = true;
+                rb2D.drag = 2f;
+            }
     }
 
     IEnumerator Kill(EntityCommonScript procedence)
@@ -905,10 +931,8 @@ public class PlayerController : MonoBehaviour, IDamager
     {
         Time.timeScale = 1f;
         killing = false;
-        GetComponent<SpriteRenderer>().enabled = false;
-        transform.GetChild(1).localScale = new Vector3(0, 1, 1);
-        transform.GetChild(2).localScale = new Vector3(0, 1, 1);
-        transform.GetChild(3).GetComponent<SpriteRenderer>().enabled = false;
+        Show = false;
+
 
         rb2D.bodyType = RigidbodyType2D.Static;
         for (int i = 0; i < 20; i++)

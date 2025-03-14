@@ -281,7 +281,7 @@ public class InventoryArrowController : MonoBehaviour
                 tilePortingAmount = 1;
                 reference.SetAt(idx, 0, 0);
 
-                GameManager.gameManagerReference.soundController.PlaySfxSound(SoundName.select);
+                GameManager.gameManagerReference.soundController.PlaySfxSound(SoundName.Select);
                 transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
                 transform.GetChild(1).GetComponent<Image>().enabled = true;
                 transform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[tilePorting];
@@ -298,7 +298,7 @@ public class InventoryArrowController : MonoBehaviour
                     tilePorting = tilePortingTemp;
                     tilePortingAmount = 1;
 
-                    GameManager.gameManagerReference.soundController.PlaySfxSound(SoundName.select);
+                    GameManager.gameManagerReference.soundController.PlaySfxSound(SoundName.Select);
                     transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
                     transform.GetChild(1).GetComponent<Image>().enabled = true;
                     transform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[tilePorting];
@@ -309,7 +309,7 @@ public class InventoryArrowController : MonoBehaviour
                     tilePorting = -1;
                     tilePortingAmount = 0;
 
-                    GameManager.gameManagerReference.soundController.PlaySfxSound(SoundName.select);
+                    GameManager.gameManagerReference.soundController.PlaySfxSound(SoundName.Select);
                     rectTransform.GetChild(1).GetComponent<Image>().sprite = gameManager.tiles[0];
                     rectTransform.GetChild(0).GetComponent<Image>().enabled = false;
                     rectTransform.GetChild(0).GetComponent<Image>().color = Color.white;

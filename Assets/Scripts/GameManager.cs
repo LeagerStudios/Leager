@@ -361,9 +361,7 @@ public class GameManager : MonoBehaviour
             }
 
 
-            player.transform.position = new Vector2(respawnPosition.x, WorldHeight);
-            player.GetComponent<Rigidbody2D>().velocity = Vector2.right * -5;
-            player.PutMyselfInATragicTerminalColisionCourse();
+            CoreReentryController.self.StartAnimation(96);
         }
         else
             player.Respawn(respawnPosition.x, respawnPosition.y + 1);
@@ -454,8 +452,6 @@ public class GameManager : MonoBehaviour
                 frameTimer++;
             }
 
-
-
             if (Input.GetMouseButtonUp(0))
             {
                 breakingTime = -1;
@@ -511,7 +507,7 @@ public class GameManager : MonoBehaviour
                 }
                 if (player.alive && canEquip)
                 {
-                    soundController.PlaySfxSound(SoundName.select);
+                    soundController.PlaySfxSound(SoundName.Select);
 
                     int equipPiece = StackBar.stackBarController.CurrentItem;
 
@@ -760,7 +756,7 @@ public class GameManager : MonoBehaviour
 
             string resources = data[0];
             Debug.Log(resources);
-
+            
             if(resources != "null")
             {
                 foreach (string resource in resources.Split(';'))
@@ -786,7 +782,6 @@ public class GameManager : MonoBehaviour
         catch
         {
             Debug.Log("==DIDNT IMPORT RESOURCES==");
-            Destroy(CoreReentryController.self.gameObject);
         }
     }
 
@@ -2196,9 +2191,15 @@ public class GameManager : MonoBehaviour
                 if (extraDrop)
                     ManagingFunctions.DropItem(6, tilePos);
                 break;
+            case 21:
+                returnItem = 0;
+                break;
             case 55:
                 if (Random.Range(0, 99) == 0) returnItem = 51;
                 else returnItem = 0;
+                break;
+            case 62:
+                returnItem = 0;
                 break;
             case 83:
                 returnItem = 82;
@@ -2356,13 +2357,13 @@ public class GameManager : MonoBehaviour
                 if (dayLuminosity < 0.5f && entitiesContainer.GetComponentInChildren<ENTITY_TheDestroyer>() == null)
                 {
                     ENTITY_TheDestroyer.StaticSpawn(null, new Vector2(player.transform.position.x + Random.Range(-10f, 10f), 0));
-                    soundController.PlaySfxSound(SoundName.select);
+                    soundController.PlaySfxSound(SoundName.Select);
                 }
                 else StackBar.AddItemInv(78);
                 break;
             case 122:
                 player.entityScript.AddState(EntityState.FireResistance, 90f);
-                soundController.PlaySfxSound(SoundName.select);
+                soundController.PlaySfxSound(SoundName.Select);
                 break;
         }
     }

@@ -63,7 +63,7 @@ public class ActionIconController : MonoBehaviour
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         rectTransform.anchoredPosition = origPos;
-        soundController.PlaySfxSound(SoundName.select);
+        soundController.PlaySfxSound(SoundName.Select);
 
         Vector3 posVector = rectTransform.position;
         for (int frame = 0; frame < 2; frame++)

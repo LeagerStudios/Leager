@@ -484,6 +484,7 @@ public class PlanetData
             puntos_de_orbita_dos_puntos_D = new Vector2[0];
         }
 
+
     }
 
     public void Recalculate()

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MainSoundController : MonoBehaviour
 {
-
     [SerializeField] public AudioClip[] Sounds;
     [SerializeField] public AudioClip[] Themes;
 
@@ -45,9 +44,11 @@ public class MainSoundController : MonoBehaviour
 
 public enum SoundName : int
 {
-    damage = 0,
-    grabSound = 1,
-    select = 2,
+    Damage = 0,
+    GrabSound = 1,
+    Select = 2,
+    Explosion1 = 3,
+    Explosion2 = 4,
 }
 
 public enum ThemeName : int
