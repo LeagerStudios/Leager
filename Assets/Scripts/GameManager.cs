@@ -343,28 +343,13 @@ public class GameManager : MonoBehaviour
 
         if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newWorld")
         {
-            player.Respawn(respawnPosition.x, respawnPosition.y);
-            SetSkybox();
-
-            while (dayLuminosity > 1f)
-            {
-                Debug.Log("a" + dayLuminosity);
-                PlanetMenuController.planetMenu.Simulate(0.25f, false);
-                SetSkybox();
-            }
-
-            while (dayLuminosity < 1f)
-            {
-                Debug.Log("b" + dayLuminosity);
-                PlanetMenuController.planetMenu.Simulate(0.25f, false);
-                SetSkybox();
-            }
-
-
+            player.Respawn(respawnPosition.x, respawnPosition.y + 1);
+            PlanetMenuController.planetMenu.CalibratePlanetRotation();
             CoreReentryController.self.StartAnimation(96);
         }
         else
             player.Respawn(respawnPosition.x, respawnPosition.y + 1);
+
 
         inGame = true;
         playerFocused = true;
@@ -452,12 +437,15 @@ public class GameManager : MonoBehaviour
                 frameTimer++;
             }
 
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                PlanetMenuController.currentPlanet.rTime = (-ManagingFunctions.PointToPivotUp(PlanetMenuController.currentPlanet.FindPoint(PlanetMenuController.currentPlanet.oTime), Vector2.zero)) / 360f * PlanetMenuController.currentPlanet.revolutionTime + (PlanetMenuController.currentPlanet.revolutionTime * (player.transform.position.x / (WorldWidth * 16)));
+            }
             if (Input.GetMouseButtonUp(0))
             {
                 breakingTime = -1;
                 tileBreaking = -1;
             }
-
             if (GInput.GetMouseButton(0))
             {
                 mouseUp = 0;
@@ -467,7 +455,6 @@ public class GameManager : MonoBehaviour
                 brush = -1;
             }
             mouseUp++;
-
             chunksLimits.GetChild(2).transform.position = new Vector2(player.transform.position.x, WorldHeight + 2);
 
             if (GInput.GetKeyDown(KeyCode.V))
@@ -948,7 +935,6 @@ public class GameManager : MonoBehaviour
         angle = angle / 360;
 
         float value = dayNightCycle.Evaluate(angle);
-
 
         dayLuminosity = Mathf.Clamp(value, 0.1f, 1);
 

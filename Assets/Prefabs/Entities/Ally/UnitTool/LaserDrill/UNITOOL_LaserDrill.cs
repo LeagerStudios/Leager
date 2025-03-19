@@ -72,12 +72,12 @@ public class UNITOOL_LaserDrill : UnitTool
                     if (nearest < 100f)
                     {
                         targetPos = targetPosi;
-                        if (!unit.Control == this)
+                        if (unit.Control == null)
                         {
                             unit.SetTargetPosition(nearesT);
                             unit.Control = this;
-                            blockAlive = true;
                         }
+                        blockAlive = true;
                     }
                 }
             }

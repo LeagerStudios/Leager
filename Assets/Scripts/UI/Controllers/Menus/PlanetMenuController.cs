@@ -150,6 +150,11 @@ public class PlanetMenuController : MonoBehaviour, IDraggable
         planetPanelPropertiesRectTransform.gameObject.SetActive(!planetSelectionFocused);
     }
 
+    public void CalibratePlanetRotation()
+    {
+        currentPlanet.rTime = (-ManagingFunctions.PointToPivotUp(currentPlanet.FindPoint(currentPlanet.oTime), Vector2.zero)) / 360f * currentPlanet.revolutionTime + (currentPlanet.revolutionTime * (GameManager.gameManagerReference.player.transform.position.x / (GameManager.gameManagerReference.WorldWidth * 16)));
+    }
+
     public void Simulate(float stepTime, bool drawOrbits)
     {
         if (GameManager.gameManagerReference.isNetworkHost) NetworkController.networkController.UpdateTime(stepTime, timewarp);
