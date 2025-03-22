@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9115139505576673568}
   - component: {fileID: 7099890847994999616}
   - component: {fileID: 3340087945840558394}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DamageBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,6 +206,7 @@ MonoBehaviour:
   - {fileID: 7791379123384516720}
   targetVelocity: {x: 0, y: 0}
   targetPosition: {x: 0, y: 0}
+  maxVelocity: 0
 --- !u!114 &2662883963005854071
 MonoBehaviour:
   m_ObjectHideFlags: 0

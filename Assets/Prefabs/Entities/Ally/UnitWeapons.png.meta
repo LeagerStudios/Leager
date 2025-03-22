@@ -182,12 +182,12 @@ TextureImporter:
       name: UnitWeapons_5
       rect:
         serializedVersion: 2
-        x: 17
-        y: 57
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 18
+        y: 56
+        width: 5
+        height: 2
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

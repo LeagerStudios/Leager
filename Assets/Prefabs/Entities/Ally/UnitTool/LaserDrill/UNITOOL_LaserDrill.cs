@@ -9,11 +9,12 @@ public class UNITOOL_LaserDrill : UnitTool
     public Vector2Int targetPos;
     public bool blockAlive = false;
     public int resourceAmount = 0;
-
+    public ParticleSystem particleSystem;
 
     private void Start()
     {
         unit = GetComponentInParent<UnitBase>();
+        particleSystem = transform.GetChild(1).GetChild(0).GetComponent<ParticleSystem>();
     }
 
     private void Update()
@@ -23,8 +24,10 @@ public class UNITOOL_LaserDrill : UnitTool
 
     public void AiFrame()
     {
-        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+        if (unit.Control == null)
+        {
+            unit.Control = this;
+        }
 
         if (resourceToMine != -1)
         {
@@ -80,6 +83,14 @@ public class UNITOOL_LaserDrill : UnitTool
                         blockAlive = true;
                     }
                 }
+
+                transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+                if (!particleSystem.isStopped)
+                {
+                    particleSystem.Stop();
+                }
             }
             else
             {
@@ -91,12 +102,25 @@ public class UNITOOL_LaserDrill : UnitTool
                     {
                         unit.Control = null;
                     }
+
+                    transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                    transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+                    if (!particleSystem.isStopped)
+                    {
+                        particleSystem.Stop();
+                    }
                 }
                 else
                 {
                     if (unit.Control == this)
                     {
-                        unit.SetTargetPosition((Vector3)(Vector2)targetPos - Vector3.left * 2f);
+                        if (Vector2.Distance(targetPos, unit.transform.position) > 2.5f)
+                        {
+                            Vector2 targetPosition = new Vector2(targetPos.x, targetPos.y) - new Vector2(Mathf.Sin(unit.transform.eulerAngles.z * Mathf.Deg2Rad) * -2, Mathf.Cos(unit.transform.eulerAngles.z * Mathf.Deg2Rad) * 2);
+                            unit.SetTargetPosition(targetPosition);
+                        }
+
                         unit.transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(unit.transform.position, targetPos);
                         transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPos);
                     }
@@ -104,21 +128,33 @@ public class UNITOOL_LaserDrill : UnitTool
                     {
                         transform.eulerAngles = Vector3.forward * ManagingFunctions.PointToPivotUp(transform.position, targetPos);
 
-                        transform.GetChild(0).localScale = new Vector3(1, Vector2.Distance(transform.GetChild(0).position, targetPos));
-                        transform.GetChild(1).localPosition = new Vector2(0, Vector2.Distance(transform.GetChild(0).position, targetPos) + 0.421f);
+                        if (Vector2.Distance(targetPos, unit.transform.position) > 5f)
+                        {
+                            blockAlive = false;
+                        }
                     }
 
                     if (Vector2.Distance(targetPos, transform.position) < 5)
                     {
                         transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
                         transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = true;
-                        transform.GetChild(0).localScale = new Vector3(1, Vector2.Distance(transform.GetChild(0).position, targetPos));
-                        transform.GetChild(1).localPosition = new Vector2(0, Vector2.Distance(transform.GetChild(0).position, targetPos) + 0.421f);
+                        transform.GetChild(0).localScale = new Vector3(1, Vector2.Distance(transform.GetChild(0).position, targetPos) - 0.5f);
+                        transform.GetChild(1).localPosition = new Vector2(0, Vector2.Distance(transform.GetChild(0).position, targetPos) - 0.121f);
+
+                        if (!particleSystem.isPlaying)
+                        {
+                            particleSystem.Play();
+                        }
                     }
                     else
                     {
                         transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
                         transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+                        if (!particleSystem.isStopped)
+                        {
+                            particleSystem.Stop();
+                        }
                     }
                 }
             }
@@ -130,6 +166,14 @@ public class UNITOOL_LaserDrill : UnitTool
             if (unit.Control == this)
             {
                 unit.Control = null;
+            }
+
+            transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+            transform.GetChild(1).GetComponent<SpriteRenderer>().enabled = false;
+
+            if (!particleSystem.isStopped)
+            {
+                particleSystem.Stop();
             }
         }
     }

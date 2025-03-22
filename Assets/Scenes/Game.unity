@@ -7342,8 +7342,8 @@ MonoBehaviour:
   entityBase: {fileID: 0}
   EntityType: lecter
   EntityFamily: yellow
-  height: 0.66
-  width: 0.25
+  height: 0.93
+  width: 0.325
   raycastHeight: 0
   saveToFile: 0
   canBeNetworked: 0
