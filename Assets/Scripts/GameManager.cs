@@ -381,6 +381,8 @@ public class GameManager : MonoBehaviour
 
         if (inGame || PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
         {
+            //PlanetMenuController.currentPlanet.rTime = (-ManagingFunctions.PointToPivotUp(PlanetMenuController.currentPlanet.FindPoint(PlanetMenuController.currentPlanet.oTime), Vector2.zero)) / 360f * PlanetMenuController.currentPlanet.revolutionTime + (PlanetMenuController.currentPlanet.revolutionTime * (player.transform.position.x / (WorldWidth * 16)));
+
             if (!isNetworkClient)
             {
                 if (PlanetMenuController.planetMenu.gameObject.activeInHierarchy)
@@ -436,11 +438,7 @@ public class GameManager : MonoBehaviour
                 addedFrameThisFrame = true;
                 frameTimer++;
             }
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                PlanetMenuController.currentPlanet.rTime = (-ManagingFunctions.PointToPivotUp(PlanetMenuController.currentPlanet.FindPoint(PlanetMenuController.currentPlanet.oTime), Vector2.zero)) / 360f * PlanetMenuController.currentPlanet.revolutionTime + (PlanetMenuController.currentPlanet.revolutionTime * (player.transform.position.x / (WorldWidth * 16)));
-            }
+            
             if (Input.GetMouseButtonUp(0))
             {
                 breakingTime = -1;

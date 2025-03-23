@@ -487,7 +487,6 @@ public class NetworkController : MonoBehaviour
                             {
                                 step += System.Convert.ToSingle(input[1]);
 
-                                if(Mathf.Abs(step) > 0.1f) Debug.Log(step);
                                 PlanetMenuController.planetMenu.timewarp = System.Convert.ToSingle(input[2]);
                             }
                         }

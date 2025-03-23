@@ -362,16 +362,18 @@ public class PlayerController : MonoBehaviour, IDamager
             Debug.DrawRay(pos, Vector3.down * raycastDistance, Color.red);
         }
 
-        if (rb2D.velocity.y > 0.01f && rb2D.velocity.y < 1f && Grounded && (!GInput.GetKeyDown(KeyCode.W) && !GInput.GetKeyDown(KeyCode.Space)))
-        {
-            float altitude = (transform.position.y - 0.93f) % 1 - 0.5f;
-
-            if (altitude > 0f && altitude < 0.15f)
+        if (!entityScript.cancelSticking)
+            if (rb2D.velocity.y > 0.01f && rb2D.velocity.y < 1f && Grounded && (!GInput.GetKeyDown(KeyCode.W) && !GInput.GetKeyDown(KeyCode.Space)))
             {
-                rb2D.velocity = Vector2.right * rb2D.velocity.x;
-                transform.position = new Vector2(transform.position.x, transform.position.y - altitude + 0.01f);
+                float altitude = (transform.position.y - 0.93f) % 1 - 0.5f;
+
+                if (altitude > 0f && altitude < 0.15f)
+                {
+                    rb2D.velocity = Vector2.right * rb2D.velocity.x;
+                    transform.position = new Vector2(transform.position.x, transform.position.y - altitude + 0.01f);
+                }
             }
-        }
+        entityScript.cancelSticking = false;
 
         animations.SetBool("walking", false);
 

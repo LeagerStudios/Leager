@@ -28,7 +28,7 @@ public class EntityCommonScript : MonoBehaviour
     public float swimming = 0;
     public float ladderVelocity = 0;
     public LayerMask blockMask;
-
+    public bool cancelSticking = false;
 
 
     private void OnValidate()
@@ -187,40 +187,40 @@ public class EntityCommonScript : MonoBehaviour
         if (collider.gameObject.layer == 17)
         {
             float head = transform.position.y + height;
-            float relativex = transform.position.x + width - collider.transform.position.x + 0.6f;
-            float ladderPoint = Mathf.Clamp(relativex, -0.1f, 1) + collider.transform.position.y - 0.5f;
+            float relativex = transform.position.x + width - collider.transform.position.x + 0.5f;
+            float ladderPoint = Mathf.Clamp(relativex, 0f, 1) + collider.transform.position.y - 0.5f;
             float feet = transform.position.y - height;
 
-            if (feet > ladderPoint + Mathf.Clamp(rb2D.velocity.y, -99f, 0f) * 2 - 0.05f)
+
+            if (head > collider.transform.position.y - 0.5f && feet < collider.transform.position.y - 0.6f && relativex < 1.5f && relativex > 0)
             {
-                Debug.Log(relativex + " - " + ladderPoint);
+                print("Head");
+                transform.position = new Vector2(transform.position.x, collider.transform.position.y - 0.5f - height - 0.05f);
+                rb2D.velocity = Vector2.zero;
+            }
+            else if (relativex > 1.5f && feet < collider.transform.position.y + 0.45f)
+            {
+                print("Left");
+                transform.position = new Vector2(collider.transform.position.x + 0.52f + width, transform.position.y);
+                rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
+            }
+            else if (relativex < 0 && feet < collider.transform.position.y - 0.55f)
+            {
+                print("Right");
+                transform.position = new Vector2(collider.transform.position.x - 0.52f - width, transform.position.y);
+                rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
+            }
+            else if(relativex < 1.5f && relativex > 0)
+            {
                 if (feet < ladderPoint)
                 {
+                    print("Feet");
+                    cancelSticking = true;
+                    float ySave = transform.position.y;
                     transform.position = new Vector2(transform.position.x, ladderPoint + height);
-                    rb2D.velocity = new Vector2(rb2D.velocity.x * 0.9f, 0f);
+                    rb2D.velocity = new Vector2(rb2D.velocity.x * 0.9f, transform.position.y - ySave);
                 }
             }
-            else
-            {
-                if(head < ladderPoint)
-                {
-                    transform.position = new Vector2(transform.position.x, collider.transform.position.y - 0.5f - height);
-                    rb2D.velocity = Vector2.zero;
-                }
-                else if(transform.position.x < collider.transform.position.x - 0.5f)
-                {
-                    transform.position = new Vector2(collider.transform.position.x - 0.5f - width, transform.position.y);
-                    rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
-                }
-                else
-                {
-                    transform.position = new Vector2(collider.transform.position.x + 0.5f + width, transform.position.y);
-                    rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
-                }
-            }
-
-
-
         }
         
     }
