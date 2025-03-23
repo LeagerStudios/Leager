@@ -191,20 +191,23 @@ public class EntityCommonScript : MonoBehaviour
             float ladderPoint = Mathf.Clamp(relativex, 0f, 1) + collider.transform.position.y - 0.5f;
             float feet = transform.position.y - height;
             float doubleWidth = width * 2;
+            Vector2 lastPosition = (Vector2)transform.position - rb2D.velocity * Time.fixedDeltaTime;
+            float lastRelativex = lastPosition.x + width - collider.transform.position.x + 0.5f;
 
-            if (head > collider.transform.position.y - 0.5f && feet < collider.transform.position.y - 0.5f && relativex < 1f + doubleWidth && relativex > 0 && rb2D.velocity.y > 0f)
+            if (head > collider.transform.position.y - 0.5f && lastPosition.y + height < collider.transform.position.y - 0.5f && relativex < 1f + doubleWidth && relativex > 0)
             {
-                print("Head");
+                print("Head" + transform.position.y);
                 transform.position = new Vector2(transform.position.x, collider.transform.position.y - 0.5f - height - 0.05f);
                 rb2D.velocity = Vector2.zero;
+                print("Head2" + transform.position.y);
             }
-            else if (relativex > 1f + doubleWidth && feet < collider.transform.position.y + 0.45f && rb2D.velocity.x < 0f)
+            else if (lastRelativex > 1f + doubleWidth && feet < collider.transform.position.y + 0.5f && rb2D.velocity.x < 0f)
             {
                 print("Left" + relativex);
                 transform.position = new Vector2(collider.transform.position.x + 0.5f + width, transform.position.y);
                 rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
             }
-            else if (relativex < 0 && feet < collider.transform.position.y - 0.55f && rb2D.velocity.x > 0f)
+            else if (lastRelativex < 0 && feet < collider.transform.position.y - 0.5f && rb2D.velocity.x > 0f)
             {
                 print("Right" + relativex);
                 transform.position = new Vector2(collider.transform.position.x - 0.5f - width, transform.position.y);
