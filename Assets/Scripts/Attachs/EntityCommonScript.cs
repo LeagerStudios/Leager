@@ -190,31 +190,31 @@ public class EntityCommonScript : MonoBehaviour
             float relativex = transform.position.x + width - collider.transform.position.x + 0.5f;
             float ladderPoint = Mathf.Clamp(relativex, 0f, 1) + collider.transform.position.y - 0.5f;
             float feet = transform.position.y - height;
+            float doubleWidth = width * 2;
 
-
-            if (head > collider.transform.position.y - 0.5f && feet < collider.transform.position.y - 0.6f && relativex < 1.5f && relativex > 0)
+            if (head > collider.transform.position.y - 0.5f && feet < collider.transform.position.y - 0.5f && relativex < 1f + doubleWidth && relativex > 0 && rb2D.velocity.y > 0f)
             {
                 print("Head");
                 transform.position = new Vector2(transform.position.x, collider.transform.position.y - 0.5f - height - 0.05f);
                 rb2D.velocity = Vector2.zero;
             }
-            else if (relativex > 1.5f && feet < collider.transform.position.y + 0.45f)
+            else if (relativex > 1f + doubleWidth && feet < collider.transform.position.y + 0.45f && rb2D.velocity.x < 0f)
             {
-                print("Left");
-                transform.position = new Vector2(collider.transform.position.x + 0.52f + width, transform.position.y);
+                print("Left" + relativex);
+                transform.position = new Vector2(collider.transform.position.x + 0.5f + width, transform.position.y);
                 rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
             }
-            else if (relativex < 0 && feet < collider.transform.position.y - 0.55f)
+            else if (relativex < 0 && feet < collider.transform.position.y - 0.55f && rb2D.velocity.x > 0f)
             {
-                print("Right");
-                transform.position = new Vector2(collider.transform.position.x - 0.52f - width, transform.position.y);
+                print("Right" + relativex);
+                transform.position = new Vector2(collider.transform.position.x - 0.5f - width, transform.position.y);
                 rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
             }
-            else if(relativex < 1.5f && relativex > 0)
+            else if(relativex < 1f + doubleWidth && relativex > 0)
             {
                 if (feet < ladderPoint)
                 {
-                    print("Feet");
+                    print("Feet" + relativex + "-" + ladderPoint);
                     cancelSticking = true;
                     float ySave = transform.position.y;
                     transform.position = new Vector2(transform.position.x, ladderPoint + height);
