@@ -373,7 +373,6 @@ public class PlayerController : MonoBehaviour, IDamager
                     transform.position = new Vector2(transform.position.x, transform.position.y - altitude + 0.01f);
                 }
             }
-        entityScript.cancelSticking = false;
 
         animations.SetBool("walking", false);
 

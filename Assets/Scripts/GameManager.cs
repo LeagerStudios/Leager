@@ -438,7 +438,12 @@ public class GameManager : MonoBehaviour
                 addedFrameThisFrame = true;
                 frameTimer++;
             }
-            
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                if (CoreReentryController.self != null) CoreReentryController.self.StartAnimation(100);
+            }
+
             if (Input.GetMouseButtonUp(0))
             {
                 breakingTime = -1;

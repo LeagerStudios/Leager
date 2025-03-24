@@ -19,6 +19,7 @@ public class EntityCommonScript : MonoBehaviour
     public bool saveToFile = false;
     public bool canBeNetworked = true;
     public Rigidbody2D rb2D;
+    public Vector2 lastPosition;
 
     [Header("States")]
     public List<EntityState> entityStates = new List<EntityState>();
@@ -182,6 +183,14 @@ public class EntityCommonScript : MonoBehaviour
             }
     }
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (affectedBySolids)
+        {
+            SlopePhysics(collision);
+        }
+    }
+
     private void SlopePhysics(Collider2D collider)
     {
         if (collider.gameObject.layer == 17)
@@ -191,31 +200,30 @@ public class EntityCommonScript : MonoBehaviour
             float ladderPoint = Mathf.Clamp(relativex, 0f, 1) + collider.transform.position.y - 0.5f;
             float feet = transform.position.y - height;
             float doubleWidth = width * 2;
-            Vector2 lastPosition = (Vector2)transform.position - rb2D.velocity * Time.fixedDeltaTime;
             float lastRelativex = lastPosition.x + width - collider.transform.position.x + 0.5f;
 
-            if (head > collider.transform.position.y - 0.5f && lastPosition.y + height < collider.transform.position.y - 0.5f && relativex < 1f + doubleWidth && relativex > 0)
+            if (lastPosition.y + height < collider.transform.position.y - 0.49f && rb2D.velocity.y > 0f)
             {
                 print("Head" + transform.position.y);
-                transform.position = new Vector2(transform.position.x, collider.transform.position.y - 0.5f - height - 0.05f);
+                transform.position = new Vector2(transform.position.x, collider.transform.position.y - 0.5f - height);
                 rb2D.velocity = Vector2.zero;
                 print("Head2" + transform.position.y);
             }
             else if (lastRelativex > 1f + doubleWidth && feet < collider.transform.position.y + 0.5f && rb2D.velocity.x < 0f)
             {
-                print("Left" + relativex);
+                print("Right" + relativex);
                 transform.position = new Vector2(collider.transform.position.x + 0.5f + width, transform.position.y);
                 rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
             }
-            else if (lastRelativex < 0 && feet < collider.transform.position.y - 0.5f && rb2D.velocity.x > 0f)
+            else if (lastRelativex < 0 && feet < collider.transform.position.y - 0.52f && rb2D.velocity.x > 0f)
             {
-                print("Right" + relativex);
+                print("Left" + relativex);
                 transform.position = new Vector2(collider.transform.position.x - 0.5f - width, transform.position.y);
                 rb2D.velocity = new Vector2(0f, rb2D.velocity.y);
             }
             else if(relativex < 1f + doubleWidth && relativex > 0)
             {
-                if (feet < ladderPoint)
+                if (feet < ladderPoint && head > ladderPoint)
                 {
                     print("Feet" + relativex + "-" + ladderPoint);
                     cancelSticking = true;
@@ -226,6 +234,16 @@ public class EntityCommonScript : MonoBehaviour
             }
         }
         
+    }
+
+    private void FixedUpdate()
+    {
+        cancelSticking = false;
+    }
+
+    private void LateUpdate()
+    {
+        lastPosition = transform.position;
     }
 }
 
