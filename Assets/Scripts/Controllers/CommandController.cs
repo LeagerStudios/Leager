@@ -215,6 +215,10 @@ public class CommandController : MonoBehaviour {
                     showcaseMode = true;
 
                 }
+                else if (input[0] == "corona")
+                {
+                    ((ENTITY_NanoBotT3)ENTITY_NanoBotT3.StaticSpawn(null, GameManager.gameManagerReference.player.transform.position)).Boom();
+                }
                 else
                 {
                     Debug.Log("unrecognized");

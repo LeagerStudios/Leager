@@ -160,7 +160,7 @@ public class CoreReentryController : MonoBehaviour
 
         tVelocity = hit.distance - 0.4f;
 
-        while (t < 1)
+        while (t < 1 && tVelocity > 0)
         {
             transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(initialAngle, 0f, t * 1.2f);
 
