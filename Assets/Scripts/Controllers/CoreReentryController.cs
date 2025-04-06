@@ -44,7 +44,7 @@ public class CoreReentryController : MonoBehaviour
         {
             transform.localScale = Vector2.one * 2;
             yield return StartCoroutine(FallAndLand());
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
 
 
@@ -130,7 +130,7 @@ public class CoreReentryController : MonoBehaviour
         coreFire.transform.eulerAngles = Vector3.zero;
         coreFire.transform.localPosition = new Vector2(0, -0.25f);
 
-        while (hit.distance > 1f || !hit)
+        while (hit.distance > 2f || !hit)
         {
             if (hit)
             {
@@ -152,19 +152,21 @@ public class CoreReentryController : MonoBehaviour
         }
 
         Vector2 initial = transform.position;
+        float initialAngle = transform.localEulerAngles.z;
         int x = (int)hit.point.x;
         int y = (int)hit.point.y + 1;
         float t = 0f;
         float tVelocity = 0f;
 
+        tVelocity = hit.distance - 0.4f;
+
         while (t < 1)
         {
-            transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(transform.eulerAngles.z, 0f, Time.deltaTime * 10);
+            transform.eulerAngles = Vector3.forward * Mathf.LerpAngle(initialAngle, 0f, t * 1.2f);
 
-            if (t < 0.55f)
-                tVelocity = Mathf.Clamp(tVelocity + Time.deltaTime, 0, 1);
-            else
+            if (tVelocity > 1.05f - t)
                 tVelocity = Mathf.Clamp(tVelocity - Time.deltaTime, 0, 1);
+
             t += tVelocity * Time.deltaTime;
             transform.position = Vector2.Lerp(initial, new Vector2(x + 0.5f, y), t);
 
@@ -175,6 +177,9 @@ public class CoreReentryController : MonoBehaviour
 
         while(coreFire != null)
             yield return new WaitForEndOfFrame();
+
+        GameManager.gameManagerReference.SetTileAt(ManagingFunctions.CreateIndex(new Vector2Int(x, y)), 98, false, true);
+        GameManager.gameManagerReference.SetTileAt(ManagingFunctions.CreateIndex(new Vector2Int(x + 1, y)), 99, false, true);
 
         SpriteRenderer renderer1 = transform.GetChild(0).GetComponent<SpriteRenderer>();
         Transform scanLine = transform.GetChild(0).GetChild(0);
@@ -191,9 +196,6 @@ public class CoreReentryController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        GameManager.gameManagerReference.SetTileAt(ManagingFunctions.CreateIndex(new Vector2Int(x, y)), 98, false, true);
-        GameManager.gameManagerReference.SetTileAt(ManagingFunctions.CreateIndex(new Vector2Int(x + 1, y)), 99, false, true);
-
         transform.eulerAngles = Vector3.zero;
         GameManager.gameManagerReference.player.mainCamera.lerp = true;
         GameManager.gameManagerReference.player.Respawn(transform.position.x, transform.position.y + 0.5f + GameManager.gameManagerReference.player.entityScript.height);
@@ -201,6 +203,8 @@ public class CoreReentryController : MonoBehaviour
         GameManager.gameManagerReference.player.damagedCooldown = 0f;
         GameManager.gameManagerReference.player.Show = true;
         GameManager.gameManagerReference.player.onControl = true;
+        GameManager.gameManagerReference.player.GetComponent<SpriteRenderer>().flipX = false;
+        renderer1.color = new Color(1, 1, 1, 0);
     }
 
     private void EjectPlayer()
