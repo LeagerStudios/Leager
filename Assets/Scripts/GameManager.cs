@@ -2396,9 +2396,9 @@ public class GameManager : MonoBehaviour
 
                     if (Random.Range(0, 2) == 0 && dropBlocks)
                     {
-                        float velocity = radius - Vector2.Distance(Vector2.zero, new Vector2(dx - x, dy - y)) + radius * 3;
+                        float velocity = radius - Vector2.Distance(Vector2.zero, new Vector2(dx - x, dy - y)) + radius * strength * 2;
                         
-                        ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2Int(dx, dy)), new Vector2(dx, dy), new Vector2(dx-x,dy-y).normalized * velocity, 1,0);
+                        ManagingFunctions.DropItem(SwitchTroughBlockBroke(getTile, new Vector2Int(dx, dy)), new Vector2(dx, dy), new Vector2(dx-x,Mathf.Abs(dy-y)).normalized * velocity, 1,0);
                     }
                 }
             }

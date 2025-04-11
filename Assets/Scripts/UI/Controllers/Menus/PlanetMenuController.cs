@@ -439,8 +439,8 @@ public class PlanetData
         if (orbitalPeriod > 0)
         {
             oTime += time;
-            rTime += time;
-            //rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
+            //rTime += time;
+            rTime = (-ManagingFunctions.PointToPivotUp(FindPoint(oTime), Vector2.zero)) / 360f * revolutionTime;
 
             if (oTime > orbitalPeriod)
                 oTime = oTime % orbitalPeriod;

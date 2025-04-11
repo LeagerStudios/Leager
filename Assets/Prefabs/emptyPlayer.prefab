@@ -5886,11 +5886,15 @@ MonoBehaviour:
   tileLayer:
     serializedVersion: 2
     m_Bits: 395008
+  interactableTilesLayer:
+    serializedVersion: 2
+    m_Bits: 0
   nodeLayer:
     serializedVersion: 2
     m_Bits: 4194304
   deathScreenController: {fileID: 0}
   animations: {fileID: 0}
+  rb2D: {fileID: 0}
   lastVelocity: {x: 0, y: 0}
   entityScript: {fileID: 0}
   mainCamera: {fileID: 0}
@@ -5959,6 +5963,7 @@ MonoBehaviour:
   saveToFile: 0
   canBeNetworked: 0
   rb2D: {fileID: 804209026578053562}
+  lastPosition: {x: 0, y: 0}
   entityStates: 
   stateDuration: []
   affectedByLiquids: 1
@@ -5968,6 +5973,7 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 0
+  cancelSticking: 0
 --- !u!1 &804209026578053316
 GameObject:
   m_ObjectHideFlags: 0

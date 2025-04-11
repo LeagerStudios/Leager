@@ -227,6 +227,7 @@ MonoBehaviour:
   saveToFile: 0
   canBeNetworked: 1
   rb2D: {fileID: 50730676017698402}
+  lastPosition: {x: 0, y: 0}
   entityStates: 
   stateDuration: []
   affectedByLiquids: 1
@@ -236,3 +237,4 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 0
+  cancelSticking: 0
