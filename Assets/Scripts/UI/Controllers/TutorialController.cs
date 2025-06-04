@@ -86,6 +86,11 @@ public class TutorialController : MonoBehaviour
 
         SetState(5);
 
+        while (state < 6)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
     }
 
 

@@ -473,14 +473,24 @@ public class PlanetData
         {
             List<Vector2> pointList = new List<Vector2>();
 
-            for (int i = 0; i < points; i++)
+            for (int i = 0; i < points + 2; i++)
             {
-                float time = (orbitalPeriod / points) * i;
-                pointList.Add(FindPointWithoutVelocity(time));
-            }
+                float angle = (360f / points) * i; // Divide the circle into equal angles  
+                float radians = angle * Mathf.Deg2Rad;
 
-            pointList.Add(FindPointWithoutVelocity(0));
-            pointList.Add(FindPointWithoutVelocity(orbitalPeriod / points));
+                // Calculate the x and y coordinates based on the semi-major axis and eccentricity  
+                float x = semiMajorAxis * (Mathf.Cos(radians) - eccentricity);
+                float y = semiMajorAxis * Mathf.Sqrt(1 - eccentricity * eccentricity) * Mathf.Sin(radians);
+
+                Vector2 point = new Vector2(-y, -x);
+
+                if (rotation != 0)
+                {
+                    point = Quaternion.AngleAxis(rotation, Vector3.forward) * point;
+                }
+
+                pointList.Add(point);
+            }
 
             puntos_de_orbita_dos_puntos_D = pointList.ToArray();
         }
@@ -488,8 +498,6 @@ public class PlanetData
         {
             puntos_de_orbita_dos_puntos_D = new Vector2[0];
         }
-
-
     }
 
     public void Recalculate()
@@ -532,36 +540,6 @@ public class PlanetData
             float y = semiMajorAxis * Mathf.Sqrt(1 - eccentricity * eccentricity) * -Mathf.Sin((float)eccentricAnomaly);
 
             Vector2 point = new Vector2(-y, -x);
-
-            if (rotation != 0)
-            {
-                point = Quaternion.AngleAxis(rotation, Vector3.forward) * point;
-            }
-
-            return point;
-        }
-    }
-
-    public Vector2 FindPointWithoutVelocity(double time)
-    {
-        if (apoapsis == 0 && periapsis == 0)
-        {
-            return Vector2.zero;
-        }
-        else
-        {
-            Vector2 point = new Vector2();
-            float timePerRevolution = apoapsis * periapsis;
-            double rotVal = time % timePerRevolution;
-            rotVal /= timePerRevolution;
-
-            float rotationValue = (float)rotVal;
-            float orbit = periapsis + apoapsis;
-
-            float halfOrbit = Mathf.Lerp(apoapsis, periapsis, 0.8f);
-
-
-            point = new Vector2(Mathf.Sin(rotationValue * Mathf.PI * -2) * halfOrbit, Mathf.Cos(rotationValue * Mathf.PI * 2) * (orbit / 2) + ((apoapsis - periapsis) / 2));
 
             if (rotation != 0)
             {

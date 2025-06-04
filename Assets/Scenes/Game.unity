@@ -25045,7 +25045,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 25}
-  m_SizeDelta: {x: 320, y: 100}
+  m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &76308454
 MonoBehaviour:
@@ -25095,7 +25095,7 @@ MonoBehaviour:
     m_LineSpacing: 1.2
   m_Text: 'Move with WASD
 
-    Climb with Spacebar'
+    Climb ladders with Spacebar'
 --- !u!222 &76308456
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29528,7 +29528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &326247663
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30486,7 +30486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &377062711
 RectTransform:
   m_ObjectHideFlags: 0
@@ -62423,7 +62423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2096191223
 RectTransform:
   m_ObjectHideFlags: 0
@@ -62793,7 +62793,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
-  m_Text: Select your axe with the mouse wheel or with numeric keys
+  m_Text: Select your axe with the mouse wheel or with the number keys
 --- !u!222 &2119053812
 CanvasRenderer:
   m_ObjectHideFlags: 0
