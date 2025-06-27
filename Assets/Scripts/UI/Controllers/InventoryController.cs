@@ -75,8 +75,8 @@ public static class InventoryBar
     {
         if (!GameManager.gameManagerReference.isNetworkClient)
         {
-            int[] sg = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/ig.lgrsd").SavedData);
-            int[] sa = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/ia.lgrsd").SavedData); ;
+            int[] sg = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/ig.lgrsd").SavedData);
+            int[] sa = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/ia.lgrsd").SavedData); ;
             inventoryBarController.InventoryBarGrid = sg;
             inventoryBarController.InventoryItemAmount = sa;
         }

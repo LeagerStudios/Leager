@@ -183,8 +183,9 @@ public class GameManager : MonoBehaviour
     {
         gameManagerReference = this;
         OnWorldRounding = delegate { };
+        string[] arr;
 
-        worldName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0];
+        ComponetSaver.self.Load("worldName", out arr); worldName = arr[0];
         int rootPlanetIdx = worldName.IndexOf("/");
         if (rootPlanetIdx >= 0)
         {
@@ -204,20 +205,24 @@ public class GameManager : MonoBehaviour
         skyboxColor = Camera.main.backgroundColor;
         Time.timeScale = 1.0f;
         soundController = GameObject.Find("Audio").GetComponent<MainSoundController>();
+        string[] arr;
 
-        if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("isNetworkLoad")[0] == "true") isNetworkClient = true;
+        ComponetSaver.self.Load("isNetworkLoad", out arr);
+        if (arr[0] == "true") isNetworkClient = true;
         if (Server.isOpen) isNetworkHost = true;
 
 
 
         if (!isNetworkClient)
         {
-            if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newWorld")
+            ComponetSaver.self.Load("worldLoadType", out arr);
+            if (arr[0] == "newWorld")
             {
                 try
                 {
-                    Random.InitState(System.Convert.ToInt32(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("seed")[0]));
-                    seed = System.Convert.ToInt32(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("seed")[0]);
+                    ComponetSaver.self.Load("seed", out arr);
+                    Random.InitState(System.Convert.ToInt32(arr[0]));
+                    seed = System.Convert.ToInt32(arr[0]);
                 }
                 catch
                 {
@@ -226,57 +231,57 @@ public class GameManager : MonoBehaviour
                     seed = random;
                 }
             }
-            else if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newPlanet")
+            else if ((ComponetSaver.self.Load("worldLoadType", out arr), arr[0]).Item2 == "newPlanet")
             {
-                currentHexPlanetColor = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetColor")[0];
-                currentPlanetName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetName")[0];
+                currentHexPlanetColor = (ComponetSaver.self.Load("planetColor", out arr), arr[0]).Item2;
+                currentPlanetName = (ComponetSaver.self.Load("planetName", out arr), arr[0]).Item2;
                 isLorePlanet = false;
 
                 seed = Random.Range(-99999999, 999999999);
             }
-            else if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "existingPlanet")
+            else if ((ComponetSaver.self.Load("worldLoadType", out arr), arr[0]).Item2 == "existingPlanet")
             {
-                currentPlanetName = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetName")[0];
+                currentPlanetName = (ComponetSaver.self.Load("planetName", out arr), arr[0]).Item2;
                 if (DataSaver.CheckIfFileExists(persistentDataPath + @"/worlds/" + worldName + @"/planetColor.lgrsd"))
                     currentHexPlanetColor = DataSaver.LoadStats(persistentDataPath + @"/worlds/" + worldName + @"/planetColor.lgrsd").SavedData[0];
                 else
-                    currentHexPlanetColor = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("planetColor")[0];
+                    currentHexPlanetColor = (ComponetSaver.self.Load("planetColor", out arr), arr[0]).Item2;
 
                 isLorePlanet = false;
 
                 try
                 {
-                    seed = System.Convert.ToInt32(DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd")[0]);
+                    seed = System.Convert.ToInt32(DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + worldName + @"/seed.lgrsd")[0]);
                 }
                 catch
                 {
                     seed = 000000000;
-                    DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd", new string[] { seed + "" });
+                    DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + worldName + @"/seed.lgrsd", new string[] { seed + "" });
                 }
             }
             else
             {
                 try
                 {
-                    seed = System.Convert.ToInt32(DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd")[0]);
+                    seed = System.Convert.ToInt32(DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + worldName + @"/seed.lgrsd")[0]);
                 }
                 catch
                 {
                     seed = 000000000;
-                    DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd", new string[] { seed + "" });
+                    DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + worldName + @"/seed.lgrsd", new string[] { seed + "" });
                 }
             }
 
-            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/equips.lgrsd"))
+            if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/equips.lgrsd"))
             {
-                equipedArmor = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/equips.lgrsd").SavedData);
+                equipedArmor = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldName + @"/equips.lgrsd").SavedData);
             }
             else
             {
-                DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/equips.lgrsd");
+                DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), Application.persistentDataPath + @"/worlds/" + worldName + @"/equips.lgrsd");
             }
 
-            if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] != "newWorld")
+            if ((ComponetSaver.self.Load("worldLoadType", out arr), arr[0]).Item2 != "newWorld")
                 if (DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd"))
                 {
                     gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + worldRootName + @"/difficulty.lgrsd").SavedData)[0];
@@ -287,7 +292,7 @@ public class GameManager : MonoBehaviour
                 }
             else
             {
-                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldDifficulty"))[0];
+                gameDifficulty = (Difficulty)ManagingFunctions.ConvertStringToIntArray((ComponetSaver.self.Load("newWorldDifficulty", out arr), arr).Item2)[0];
             }
         }
         else
@@ -341,7 +346,7 @@ public class GameManager : MonoBehaviour
             respawnPosition = RespawnPosition();
         }
 
-        if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newWorld")
+        if ((ComponetSaver.self.Load("worldLoadType", out arr), arr).Item2[0] == "newWorld")
         {
             player.Respawn(respawnPosition.x, respawnPosition.y + 1);
             PlanetMenuController.planetMenu.CalibratePlanetRotation();
@@ -362,15 +367,8 @@ public class GameManager : MonoBehaviour
         if (!isNetworkClient)
             LoadEntities();
 
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("connectionViaAntenna");
+        if (ComponetSaver.self.DeleteData("connectionViaAntenna"))
             StaticController.self.Trigger(1.5f, false);
-        }
-        catch
-        {
-
-        }
     }
 
 
@@ -739,10 +737,12 @@ public class GameManager : MonoBehaviour
 
     public void ImportResources()
     {
+        string[] arr;
+
         try
         {
-            string[] data = GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("resources");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("resources");
+            string[] data = (ComponetSaver.self.Load("resources", out arr), arr).Item2;
+            ComponetSaver.self.DeleteData("resources");
 
             string resources = data[0];
             Debug.Log(resources);
@@ -1122,6 +1122,7 @@ public class GameManager : MonoBehaviour
     int[] GenerateMap()
     {
         int[] mapGrid;
+        string[] arr;
 
         if (isNetworkClient)
         {
@@ -1133,20 +1134,20 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newWorld") mapGrid = GenerateNewMapGrid();
-            else if (GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldLoadType")[0] == "newPlanet") mapGrid = GenerateNewMapGrid();
+            if ((ComponetSaver.self.Load("worldLoadType", out arr), arr[0]).Item2 == "newWorld") mapGrid = GenerateNewMapGrid();
+            else if ((ComponetSaver.self.Load("worldLoadType", out arr), arr).Item2[0] == "newPlanet") mapGrid = GenerateNewMapGrid();
             else
             {
-                if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapBiomes.lgrsd"))
+                if (!DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + worldName + @"/mapBiomes.lgrsd"))
                 {
-                    string[] wB = new string[System.Convert.ToInt32(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/wp.lgrsd").SavedData[0])];
+                    string[] wB = new string[System.Convert.ToInt32(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/wp.lgrsd").SavedData[0])];
                     for (int i = 0; i < wB.Length; i++)
                     {
                         wB[i] = "unknownBiome";
                     }
-                    DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapBiomes.lgrsd", wB);
+                    DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/mapBiomes.lgrsd", wB);
                 }
-                mapGrid = LoadMapGrid(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0]);
+                mapGrid = LoadMapGrid(GameManager.gameManagerReference.worldName);
             }
         }
 
@@ -1157,8 +1158,10 @@ public class GameManager : MonoBehaviour
 
     int[] GenerateNewMapGrid()
     {
-        WorldWidth = ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldSize"))[0];
-        WorldHeight = ManagingFunctions.ConvertStringToIntArray(GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("newWorldSize"))[1];
+        string[] arr;
+
+        WorldWidth = ManagingFunctions.ConvertStringToIntArray((ComponetSaver.self.Load("newWorldSize", out arr), arr).Item2)[0];
+        WorldHeight = ManagingFunctions.ConvertStringToIntArray((ComponetSaver.self.Load("newWorldSize", out arr), arr).Item2)[1];
 
         DataSaver.SaveStats(new string[] { (int)gameDifficulty + "" }, Application.persistentDataPath + @"/worlds/" + worldName + @"/difficulty.lgrsd");
 
@@ -1800,9 +1803,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapBiomes.lgrsd", mapBiomes);
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(buildedMapGrid), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/map.lgrsd");
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(allBackgroundGrid), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/bgmap.lgrsd");
+
+        DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/mapBiomes.lgrsd", mapBiomes);
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(buildedMapGrid), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/map.lgrsd");
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(allBackgroundGrid), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/bgmap.lgrsd");
 
 
         int[] sg = { 24, 16, 0, 0, 0, 0, 0, 0, 0 };
@@ -1811,16 +1815,16 @@ public class GameManager : MonoBehaviour
         int[] ia = new int[36];
         int[] wp = { WorldWidth, WorldHeight };
 
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sg), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/sbg.lgrsd");
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sa), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/sba.lgrsd");
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(ig), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/ig.lgrsd");
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(ia), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/ia.lgrsd");
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(wp), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/wp.lgrsd");
-        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/equips.lgrsd");
-        DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/seed.lgrsd", new string[] { seed + "" });
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sg), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/sbg.lgrsd");
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(sa), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/sba.lgrsd");
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(ig), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/ig.lgrsd");
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(ia), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/ia.lgrsd");
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(wp), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/wp.lgrsd");
+        DataSaver.SaveStats(ManagingFunctions.ConvertIntToStringArray(equipedArmor), Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/equips.lgrsd");
+        DataSaver.CreateTxt(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/seed.lgrsd", new string[] { seed + "" });
 
         allMapGrid = buildedMapGrid;
-        DataSaver.SaveStats(allMapProp, Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapprop.lgrsd");
+        DataSaver.SaveStats(allMapProp, Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/mapprop.lgrsd");
 
         return buildedMapGrid;
     }
@@ -1869,7 +1873,7 @@ public class GameManager : MonoBehaviour
         string[] worldBiomes;
 
         if (!isNetworkClient)
-            worldBiomes = DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/mapBiomes.lgrsd");
+            worldBiomes = DataSaver.ReadTxt(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/mapBiomes.lgrsd");
         else
             worldBiomes = Client.worldBiomesLoad;
 

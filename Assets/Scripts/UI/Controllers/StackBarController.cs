@@ -180,8 +180,8 @@ public static class StackBar
     {
         if (!GameManager.gameManagerReference.isNetworkClient)
         {
-            int[] sg = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/sbg.lgrsd").SavedData);
-            int[] sa = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameObject.Find("SaveObject").GetComponent<ComponetSaver>().LoadData("worldName")[0] + @"/sba.lgrsd").SavedData); ;
+            int[] sg = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/sbg.lgrsd").SavedData);
+            int[] sa = ManagingFunctions.ConvertStringToIntArray(DataSaver.LoadStats(Application.persistentDataPath + @"/worlds/" + GameManager.gameManagerReference.worldName + @"/sba.lgrsd").SavedData);
             stackBarController.StackBarGrid = sg;
             stackBarController.StackItemAmount = sa;
         }

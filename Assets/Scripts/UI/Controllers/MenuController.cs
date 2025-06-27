@@ -366,7 +366,7 @@ public class MenuController : MonoBehaviour {
         if ((DataSaver.CheckIfFileExists(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName) || planet.planetName == "Korenz") && coreSprite == gameManager.tiles[0])
         {
             state = "antenna";
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "jose luis" }, "connectionViaAntenna");
+            ComponetSaver.self.Save(new string[] { "jose luis" }, "connectionViaAntenna");
         }
         else
         {
@@ -374,13 +374,9 @@ public class MenuController : MonoBehaviour {
             UIActive = false;
         }
 
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldEnterAnimation");
-        }
-        catch { Debug.Log("==SKIPPED DELETING WORLD ENTER ANIMATION=="); }
+        ComponetSaver.self.DeleteData("worldEnterAnimation");
 
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { state }, "worldEnterAnimation");
+        ComponetSaver.self.Save(new string[] { state }, "worldEnterAnimation");
 
         from.TriggerAnimation(state, coreSprite);
 
@@ -395,36 +391,21 @@ public class MenuController : MonoBehaviour {
 
         if (planet.planetName == "Korenz")
         {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldLoadType");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldName");
-
-            try
-            {
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldSize");
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("seed");
-            }
-            catch { Debug.Log("==SKIPPED DELETING SEED AND SIZE FROM SAVEOBJECT=="); }
-
-            try
-            {
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("planetName");
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("planetColor");
-            }
-            catch { Debug.Log("==SKIPPED DELETING PLANET COLOR AND NAME FROM SAVEOBJECT=="); }
-
-            try
-            {
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("resources");
-            }
-            catch { Debug.Log("==SKIPPED DELETING RESOURCES FROM SAVEOBJECT=="); }
+            ComponetSaver.self.DeleteData("worldLoadType");
+            ComponetSaver.self.DeleteData("worldName");
+            ComponetSaver.self.DeleteData("newWorldSize");
+            ComponetSaver.self.DeleteData("seed");
+            ComponetSaver.self.DeleteData("planetName");
+            ComponetSaver.self.DeleteData("planetColor");
+            ComponetSaver.self.DeleteData("resources");
 
             if (state == "packagelaunch")
-                GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources, core + "" }, "resources");
+                ComponetSaver.self.Save(new string[] { resources, core + "" }, "resources");
 
             string[] loadType = new string[] { "existentWorld" };
             string[] worldLoadName = new string[] { gameManager.worldRootName };
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(loadType, "worldLoadType");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(worldLoadName, "worldName");
+            ComponetSaver.self.Save(loadType, "worldLoadType");
+            ComponetSaver.self.Save(worldLoadName, "worldName");
 
             while (gameManager.isSavingData)
             {
@@ -454,37 +435,23 @@ public class MenuController : MonoBehaviour {
 
     void LoadNewPlanet(PlanetData planet, string resources, int core, string state)
     {
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldName");
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldSize");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("seed");
-        }
-        catch { Debug.Log("==SKIPPED DELETING SEED AND SIZE FROM SAVEOBJECT=="); }
-
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("planetName");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("planetColor");
-        }
-        catch { Debug.Log("==SKIPPED DELETING PLANET COLOR AND NAME FROM SAVEOBJECT=="); }
-
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("resources");
-        }
-        catch { Debug.Log("==SKIPPED DELETING RESOURCES FROM SAVEOBJECT=="); }
+        ComponetSaver.self.DeleteData("worldName");
+        ComponetSaver.self.DeleteData("newWorldSize");
+        ComponetSaver.self.DeleteData("seed");
+        ComponetSaver.self.DeleteData("planetName");
+        ComponetSaver.self.DeleteData("planetColor");
+        ComponetSaver.self.DeleteData("resources");
 
         if (state == "packagelaunch")
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources, core + "" }, "resources");
+            ComponetSaver.self.Save(new string[] { resources, core + "" }, "resources");
 
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldLoadType");
+        ComponetSaver.self.DeleteData("worldLoadType");
 
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { gameManager.worldRootName + "/" + planet.planetName }, "worldName");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "newPlanet" }, "worldLoadType");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.chunkSize + "", "160" }, "newWorldSize");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.ColorToHex() }, "planetColor");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.planetName }, "planetName");
+        ComponetSaver.self.Save(new string[] { gameManager.worldRootName + "/" + planet.planetName }, "worldName");
+        ComponetSaver.self.Save(new string[] { "newPlanet" }, "worldLoadType");
+        ComponetSaver.self.Save(new string[] { planet.chunkSize + "", "160" }, "newWorldSize");
+        ComponetSaver.self.Save(new string[] { planet.ColorToHex() }, "planetColor");
+        ComponetSaver.self.Save(new string[] { planet.planetName }, "planetName");
 
         DataSaver.CreateFolder(Application.persistentDataPath + @"/worlds/" + gameManager.worldRootName + "/" + planet.planetName);
 
@@ -493,38 +460,23 @@ public class MenuController : MonoBehaviour {
 
     void LoadExistentPlanet(PlanetData planet, string resources, int core, string state)
     {
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldName");
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldSize");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("seed");
-        }
-        catch { Debug.Log("==SKIPPED DELETING SEED AND SIZE FROM SAVEOBJECT=="); }
+        ComponetSaver.self.DeleteData("worldName");
+        ComponetSaver.self.DeleteData("newWorldSize");
+        ComponetSaver.self.DeleteData("seed");
+        ComponetSaver.self.DeleteData("planetName");
+        ComponetSaver.self.DeleteData("planetColor");
+        ComponetSaver.self.DeleteData("resources");
 
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("planetName");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("planetColor");
-        }
-        catch { Debug.Log("==SKIPPED DELETING PLANET COLOR AND NAME FROM SAVEOBJECT=="); }
-
-        try
-        {
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("resources");
-        }
-        catch { Debug.Log("==SKIPPED DELETING RESOURCES FROM SAVEOBJECT=="); }
 
         if (state == "packagelaunch")
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { resources, core + "" }, "resources");
+            ComponetSaver.self.Save(new string[] { resources, core + "" }, "resources");
 
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("worldLoadType");
+        ComponetSaver.self.DeleteData("worldLoadType");
 
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { gameManager.worldRootName + "/" + planet.planetName }, "worldName");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.ColorToHex() }, "planetColor");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planet.planetName }, "planetName");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "existingPlanet" }, "worldLoadType");
-
-
+        ComponetSaver.self.Save(new string[] { gameManager.worldRootName + "/" + planet.planetName }, "worldName");
+        ComponetSaver.self.Save(new string[] { planet.ColorToHex() }, "planetColor");
+        ComponetSaver.self.Save(new string[] { planet.planetName }, "planetName");
+        ComponetSaver.self.Save(new string[] { "existingPlanet" }, "worldLoadType");
 
         SceneManager.LoadScene("Game");
     }
@@ -586,9 +538,11 @@ public class MenuController : MonoBehaviour {
         }
 
         Debug.Log("===EXITED TO MAIN MENU===");
-        Destroy(GameObject.Find("SaveObject"));
-        SceneManager.LoadScene("MainMenu");
+        ComponetSaver.self.SavedData = new List<string[]>();
+        ComponetSaver.self.SavedDataName = new List<string>();
 
+
+        SceneManager.LoadScene("MainMenu");
     }
 
 

@@ -2,33 +2,62 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComponetSaver : MonoBehaviour {
+public class ComponetSaver : MonoBehaviour
+{
 
+    public static ComponetSaver self;
     public List<string[]> SavedData = new List<string[]>();
     public List<string> SavedDataName = new List<string>();
 
-	void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
-
-    public void SaveData(string[] data, string dataName)
+    void Start()
     {
-        SavedData.Add(data);
-        SavedDataName.Add(dataName);
+        if (self != null) Destroy(gameObject);
+        else
+        {
+            self = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
-    public string[] LoadData(string dataName)
+    public void Save(string[] data, string dataName)
     {
-        return SavedData[SavedDataName.IndexOf(dataName)];
+        if (SavedDataName.Contains(dataName))
+        {
+            SavedData[SavedDataName.IndexOf(dataName)] = data;
+        }
+        else
+        {
+            SavedData.Add(data);
+            SavedDataName.Add(dataName);
+        }
     }
 
-    public void DeleteData(string dataName)
+    public bool Load(string dataName, out string[] data)
     {
-        SavedData.Remove(SavedData[SavedDataName.IndexOf(dataName)]);
-        SavedDataName.Remove(dataName);
+        if (SavedDataName.Contains(dataName))
+        {
+            data = SavedData[SavedDataName.IndexOf(dataName)];
+            return true;
+        }
+        else
+        {
+            data = null;
+            return false;
+        }
+
+    }
+
+    public bool DeleteData(string dataName)
+    {
+        if (SavedDataName.Contains(dataName))
+        {
+            SavedData.Remove(SavedData[SavedDataName.IndexOf(dataName)]);
+            SavedDataName.Remove(dataName);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

@@ -6,7 +6,6 @@ using System.Linq;
 
 public class WorldPanelController : MonoBehaviour {
 
-    ComponetSaver saveObject;
     public static WorldPanelController worldPanelController;
     [SerializeField] public GameObject dropdown;
     [SerializeField] public GameObject playButton;
@@ -34,7 +33,6 @@ public class WorldPanelController : MonoBehaviour {
         worldPanelController = this;
 
         GameObject.Find("MenuManager").GetComponent<PushPlay>().CreateMainSaves();
-        saveObject = GameObject.Find("SaveObject").GetComponent<ComponetSaver>();
         Dropdown worldsDropdown = dropdown.GetComponent<Dropdown>();
         worldsDropdown.ClearOptions();
         multiplayerIp.text = NetworkController.GetLocalIP();
@@ -43,6 +41,7 @@ public class WorldPanelController : MonoBehaviour {
     }
 
     void Update() {
+        string[] arr;
 
         newWorldMenuButton.interactable = !networkWorldSelection;
 
@@ -58,7 +57,7 @@ public class WorldPanelController : MonoBehaviour {
         }
 
         if (newWorldName.GetComponent<InputField>().text == "" ||
-            ManagingFunctions.ConvertStringToIntArray(saveObject.LoadData("newWorldDifficulty"))[0] < 1 ||
+            ManagingFunctions.ConvertStringToIntArray((ComponetSaver.self.Load("newWorldDifficulty", out arr), arr).Item2)[0] < 1 ||
             GameObject.Find("Transition").GetComponent<Animator>().GetBool("Open") == false ||
             listOfLoadedWorlds.Contains(newWorldName.GetComponent<InputField>().text, System.StringComparer.OrdinalIgnoreCase) || !CheckWorldChars(newWorldName.GetComponent<InputField>().text))
         {

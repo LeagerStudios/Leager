@@ -19,18 +19,6 @@ public class PushPlay : MonoBehaviour
     [SerializeField] AudioSource menuThemeAudio;
     bool gettingData = false;
 
-    private void Awake()
-    {
-        if (!GameObject.Find("SaveObject"))
-        {
-            GameObject saveObject = Instantiate(new GameObject("NewObject"));
-            saveObject.name = "SaveObject";
-            DontDestroyOnLoad(saveObject);
-            GameObject.Find("SaveObject").AddComponent<ComponetSaver>();
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>();
-        }
-    }
-
     void Start()
     {
         GameManager.gameManagerReference = null;
@@ -54,8 +42,8 @@ public class PushPlay : MonoBehaviour
         menuThemeAudio.Play();
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", true);
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0", "0" }, "newWorldSize");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "0" }, "newWorldDifficulty");
+        ComponetSaver.self.Save(new string[] { "0", "0" }, "newWorldSize");
+        ComponetSaver.self.Save(new string[] { "0" }, "newWorldDifficulty");
     }
 
     public void OpenSocialMedia(string link)
@@ -169,13 +157,13 @@ public class PushPlay : MonoBehaviour
 
         string[] loadType = new string[] { "newWorld" };
         string[] worldLoadName = new string[] { worldName };
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "false" }, "isNetworkLoad");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(loadType, "worldLoadType");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(worldLoadName, "worldName");
+        ComponetSaver.self.Save(new string[] { "false" }, "isNetworkLoad");
+        ComponetSaver.self.Save(loadType, "worldLoadType");
+        ComponetSaver.self.Save(worldLoadName, "worldName");
         if (worldPanel.newWorldSeed.GetComponent<InputField>().text != null)
         {
             string[] seed = { worldPanel.newWorldSeed.GetComponent<InputField>().text };
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(seed, "seed");
+            ComponetSaver.self.Save(seed, "seed");
         }
 
         DataSaver.CreateFolder(Application.persistentDataPath + @"/worlds/" + worldName);
@@ -199,9 +187,9 @@ public class PushPlay : MonoBehaviour
         {
             string[] loadType = new string[] { "existentWorld" };
             string[] worldLoadName = new string[] { worldName };
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "false" }, "isNetworkLoad");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(loadType, "worldLoadType");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(worldLoadName, "worldName");
+            ComponetSaver.self.Save(new string[] { "false" }, "isNetworkLoad");
+            ComponetSaver.self.Save(loadType, "worldLoadType");
+            ComponetSaver.self.Save(worldLoadName, "worldName");
 
             GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", false);
             yield return new WaitForSeconds(secs);
@@ -210,10 +198,10 @@ public class PushPlay : MonoBehaviour
         {
             string[] loadType = new string[] { "existingPlanet" };
             string[] worldLoadName = new string[] { worldName + "/" + planetName };
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "false" }, "isNetworkLoad");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(loadType, "worldLoadType");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(worldLoadName, "worldName");
-            GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { planetName }, "planetName");
+            ComponetSaver.self.Save(new string[] { "false" }, "isNetworkLoad");
+            ComponetSaver.self.Save(loadType, "worldLoadType");
+            ComponetSaver.self.Save(worldLoadName, "worldName");
+            ComponetSaver.self.Save(new string[] { planetName }, "planetName");
 
             GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", false);
             yield return new WaitForSeconds(secs);
@@ -228,9 +216,9 @@ public class PushPlay : MonoBehaviour
         worldPanel.newWorldName.GetComponent<InputField>().interactable = false;
 
         string[] loadType = new string[] { "existentWorld" };
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { "true" }, "isNetworkLoad");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(loadType, "worldLoadType");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { port + "" }, "worldName");
+        ComponetSaver.self.Save(new string[] { "true" }, "isNetworkLoad");
+        ComponetSaver.self.Save(loadType, "worldLoadType");
+        ComponetSaver.self.Save(new string[] { port + "" }, "worldName");
 
         GameObject.Find("Transition").GetComponent<Animator>().SetBool("Open", false);
         yield return new WaitForSeconds(secs);
@@ -241,14 +229,12 @@ public class PushPlay : MonoBehaviour
     public void SetWorldSize(int width)
     {
         int[] wp = { width, 160 };
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldSize");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(ManagingFunctions.ConvertIntToStringArray(wp), "newWorldSize");
+        ComponetSaver.self.Save(ManagingFunctions.ConvertIntToStringArray(wp), "newWorldSize");
     }
 
     public void SetGameDifficulty(int difficulty)
     {
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().DeleteData("newWorldDifficulty");
-        GameObject.Find("SaveObject").GetComponent<ComponetSaver>().SaveData(new string[] { difficulty + "" }, "newWorldDifficulty");
+        ComponetSaver.self.Save(new string[] { difficulty + "" }, "newWorldDifficulty");
         Debug.Log("Difficulty selected: " + (Difficulty)difficulty);
     }
 

@@ -16,11 +16,6 @@ public class MainCameraController : MonoBehaviour {
     [SerializeField] Transform stars;
     [SerializeField] SpriteRenderer[] landscapes;
 
-    void Start () {
-		
-	}
-
-
     void Update()
     {
         SetSkybox();
